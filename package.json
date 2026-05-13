@@ -1,30 +1,31 @@
 {
-    "name":  "sklep-projekty-domow",
-    "version":  "0.5.0",
-    "private":  true,
-    "scripts":  {
-                    "dev":  "next dev",
-                    "build":  "next build",
-                    "start":  "next start",
-                    "typecheck":  "tsc --noEmit",
-                    "verify:content":  "node scripts/check-content-source.cjs",
-                    "verify":  "npm run verify:real-admin-projects \u0026\u0026 npm run verify:supabase-foundation \u0026\u0026 npm run verify:legacy \u0026\u0026 npm run typecheck \u0026\u0026 npm run verify:content \u0026\u0026 npm run build",
-                    "verify:legacy":  "node scripts/check-no-legacy-demo-components.cjs",
-                    "verify:supabase-foundation":  "node scripts/check-supabase-foundation.cjs",
-                    "verify:real-admin-projects":  "node scripts/check-real-admin-projects.cjs"
-                },
-    "dependencies":  {
-                         "next":  "^15.0.0",
-                         "react":  "^19.0.0",
-                         "react-dom":  "^19.0.0",
-                         "lucide-react":  "^0.468.0",
-                         "@supabase/supabase-js":  "^2.86.0",
-                         "@supabase/ssr":  "^0.8.0"
-                     },
-    "devDependencies":  {
-                            "@types/node":  "^22.10.2",
-                            "@types/react":  "^19.0.1",
-                            "@types/react-dom":  "^19.0.1",
-                            "typescript":  "^5.7.2"
-                        }
+  "name": "sklep-projekty-domow",
+  "version": "0.5.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "verify:content": "node scripts/check-content-source.cjs",
+    "verify": "npm run verify:no-static-supabase && npm run verify:real-admin-projects && npm run verify:supabase-foundation && npm run verify:legacy && npm run typecheck && npm run verify:content && npm run build",
+    "verify:legacy": "node scripts/check-no-legacy-demo-components.cjs",
+    "verify:supabase-foundation": "node scripts/check-supabase-foundation.cjs",
+    "verify:real-admin-projects": "node scripts/check-real-admin-projects.cjs",
+    "verify:no-static-supabase": "node scripts/check-no-supabase-static-params.cjs"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.468.0",
+    "@supabase/supabase-js": "^2.86.0",
+    "@supabase/ssr": "^0.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1",
+    "typescript": "^5.7.2"
+  }
 }
