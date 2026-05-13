@@ -32,7 +32,7 @@ export function ProjectGallery({ project }: { project: Project }) {
             <Image src={src} alt={`${project.name} miniatura ${index + 1}`} fill sizes="140px" />
           </button>
         ))}
-        <button className="more-thumb">+12<br /><span>więcej</span></button>
+        <button className="more-thumb">+{project.media.gallery.length}<br /><span>więcej</span></button>
       </div>
     </div>
   );

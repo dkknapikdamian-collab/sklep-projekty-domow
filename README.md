@@ -1,27 +1,75 @@
-# Sklep z projektami domów — dynamiczny szablon V3
+# Sklep z projektami domów — production shell V4
 
-Ten etap wdraża jedną dynamiczną kartę projektu dla wielu projektów.
+To jest produkcyjny shell sklepu z projektami domów.
 
-## Co zostało zrobione
+## Najważniejsza zmiana V4
 
-- `/` jako lekka strona startowa,
-- `/projekty` jako katalog projektów demo,
-- `/projekty/[slug]` jako dynamiczna karta projektu,
-- minimum 3 projekty demo,
-- foldery mediów po kodzie projektu:
-  - `public/projects/DP-AUR-014/`
-  - `public/projects/DP-MAL-006/`
-  - `public/projects/DP-KLE-029/`
-- stałe nazwy plików:
-  - `hero.jpg`
-  - `thumbnail.jpg`
-  - `gallery-01.jpg`
-  - `floor-plan-ground.jpg`
-  - `section-aa.jpg`
-  - `elevation-front.jpg`
-- komponenty karty projektu,
-- dodatki, w tym `PDF_EMAIL_PACKAGE`,
-- zachowany kierunek wizualny karty referencyjnej.
+Nie publikujemy żadnych fikcyjnych projektów, opisów ani zdjęć jako oferty.
+
+Wygenerowane wcześniej obrazy są tylko referencją wizualną i są zapisane w:
+
+```txt
+docs/design/references/
+```
+
+Nie są używane jako realne zdjęcia projektów w katalogu.
+
+## Jak działają projekty
+
+Katalog pokazuje tylko projekty dodane w źródle danych ze statusem:
+
+```txt
+active
+```
+
+Na start:
+
+```ts
+export const projects: Project[] = [];
+```
+
+Czyli produkcyjnie katalog jest pusty, dopóki nie dodasz prawdziwego projektu.
+
+## Jak dodać projekt na tym etapie
+
+Do czasu wdrożenia panelu admina dodajesz projekt ręcznie:
+
+1. Dodaj folder mediów:
+
+```txt
+public/projects/DP-AUR-014/
+```
+
+2. Dodaj pliki o stałych nazwach:
+
+```txt
+hero.jpg
+thumbnail.jpg
+gallery-01.jpg
+gallery-02.jpg
+floor-plan-ground.jpg
+floor-plan-roof.jpg
+section-aa.jpg
+elevation-front.jpg
+```
+
+3. Dodaj rekord projektu w:
+
+```txt
+data/projects.ts
+```
+
+4. Ustaw:
+
+```txt
+status: "active"
+```
+
+Wtedy projekt pojawi się w katalogu i pod adresem:
+
+```txt
+/projekty/[slug]
+```
 
 ## Uruchomienie
 
@@ -30,19 +78,19 @@ npm install
 npm run dev
 ```
 
-Adresy:
+## Weryfikacja
 
-```txt
-http://localhost:3000
-http://localhost:3000/projekty
-http://localhost:3000/projekty/dom-w-aurorach-14
-http://localhost:3000/projekty/dom-w-malinowkach-6
-http://localhost:3000/projekty/dom-klejnot-29
+```powershell
+npm run verify
 ```
 
-## Co dalej
+## Kolejny etap
 
-Następny etap:
-- dopracowanie katalogu wizualnie pod design lock,
-- potem koszyk i checkout na dynamicznych danych,
-- potem baza i panel admina.
+Następny etap produkcyjny:
+- panel admina do dodawania projektów,
+- storage mediów,
+- koszyk,
+- checkout,
+- zapis zamówienia,
+- płatności,
+- e-mail z PDF/linkiem.

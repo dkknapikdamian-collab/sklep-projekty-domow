@@ -4,6 +4,10 @@ import { Project } from "@/data/projects";
 import { ChevronRight, Heart } from "lucide-react";
 
 export function RelatedProjects({ projects }: { projects: Project[] }) {
+  if (projects.length === 0) {
+    return null;
+  }
+
   return (
     <section className="related">
       <div className="related-head">

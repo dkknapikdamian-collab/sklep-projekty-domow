@@ -5,7 +5,7 @@ import { Project } from "@/data/projects";
 import { BadgeCheck, ChevronRight, Mail, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
 
 export function ProjectPurchaseBox({ project }: { project: Project }) {
-  const [selectedAddons, setSelectedAddons] = useState<string[]>(["PDF_EMAIL_PACKAGE"]);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
   const addonsTotal = useMemo(() => {
     return project.addons
@@ -65,7 +65,7 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
       <button className="ask-btn"><Mail size={17} /> ZAPYTAJ O PROJEKT</button>
 
       <div className="micro-trust">
-        <span><Truck size={16} /> Darmowa dostawa projektu</span>
+        <span><Truck size={16} /> Dostawa zgodnie z zamówieniem</span>
         <span><ShieldCheck size={16} /> Bezpieczne płatności online</span>
         <span><BadgeCheck size={16} /> PDF/link po płatności</span>
       </div>

@@ -1,47 +1,47 @@
-# DESIGN LOCK — zamrożony kierunek wizualny
+# Design lock
 
 ## Status
 
-Wygląd zaakceptowany przez użytkownika jest wzorem 1:1.
+Wygenerowana karta projektu jest wzorem wizualnym.
 
-Referencje są w folderze: `docs/design/references/`
+Referencja:
 
-## Kierunek wizualny
+```txt
+docs/design/references/reference-project-page.png
+```
+
+## Zasada
+
+Obraz referencyjny jest wzorem stylu, a nie treścią produkcyjną.
+
+Nie używać wygenerowanych zdjęć jako realnych projektów w katalogu.
+
+## Kierunek
 
 - ciemny grafit,
 - szarości,
-- czarne/grafitowe tła,
 - złoto-beżowe akcenty,
-- proste karty,
-- duże wizualizacje,
-- czytelne parametry,
-- premium, ale bez przesady,
-- zrozumiałe w kilka minut.
+- prosty premium layout,
+- duża galeria,
+- prawy box zakupowy,
+- pasek parametrów,
+- zakładki,
+- czytelne rzuty i podobne projekty,
+- brak kolorowego chaosu.
 
-## Zakaz bez zgody
+## Zakaz
 
-Nie wolno zmieniać bez osobnej decyzji:
+Bez osobnej decyzji nie zmieniać:
 
-- ciemnej kolorystyki,
-- złoto-beżowych CTA,
-- proporcji kart,
-- dużych wizualizacji,
+- układu karty projektu,
 - prawego boxa zakupowego,
-- stylu kafli parametrów,
-- głównej typografii,
-- zaokrągleń,
+- kolorystyki,
 - stylu przycisków,
-- ogólnego premium charakteru.
+- stylu kafli parametrów,
+- głównego rytmu strony.
 
-## Kontrola wyglądu
+## Wymóg produkcyjny
 
-Przy każdym większym wdrożeniu trzeba sprawdzić:
+Katalog i karty projektów pokazują tylko realne projekty dodane przez użytkownika/admina.
 
-- czy strona nadal wygląda jak referencja,
-- czy kolory się nie rozjechały,
-- czy nie powstały nowe przypadkowe style,
-- czy przyciski są spójne,
-- czy karty projektów są spójne,
-- czy formularze pasują do reszty.
-
-Największe ryzyko: każdy ekran z własnym CSS i własną wersją przycisków, kart oraz inputów. Dlatego muszą istnieć design tokens i komponenty wspólne.
+Brak projektów = pusty stan, nie fikcyjne oferty.

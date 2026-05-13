@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { ProjectDetailPage } from "@/components/project/ProjectDetailPage";
-import { getProjectBySlug, projects } from "@/data/projects";
+import { getProjectBySlug, getPublishedProjects } from "@/data/projects";
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  return getPublishedProjects().map((project) => ({ slug: project.slug }));
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {

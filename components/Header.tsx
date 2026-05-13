@@ -23,7 +23,7 @@ export function Header() {
 
         <div className="dp-actions">
           <a><Heart size={21} /> <span>ULUBIONE</span></a>
-          <Link href="/koszyk" className="cart-action"><ShoppingCart size={21} /> <span>KOSZYK</span><em>2</em></Link>
+          <Link href="/koszyk" className="cart-action"><ShoppingCart size={21} /> <span>KOSZYK</span><em>0</em></Link>
           <a><Search size={21} /></a>
           <a className="mobile-user"><User size={21} /></a>
         </div>

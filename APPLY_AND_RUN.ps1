@@ -13,8 +13,8 @@ if (!(Test-Path ".git")) {
 }
 
 git add .
-git commit -m "Implement dynamic project template with project asset folders" | Out-Host
+git commit -m "Convert storefront to production shell without fake projects" | Out-Host
 
 npm install
-npm run build
+npm run verify
 npm run dev
