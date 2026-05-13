@@ -4,9 +4,21 @@ import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
 import { createProjectAction, initialState } from "@/app/admin/projekty/nowy/actions";
 import { CheckCircle2, FileText, ImagePlus, ListPlus, Save, UploadCloud, X } from "lucide-react";
+import { SelectWithCustom } from "./SelectWithCustom";
+import {
+  badgeOptions,
+  floorsCountOptions,
+  garageOptions,
+  projectTypeOptions,
+  roofOptions,
+  roomFloorOptions,
+  styleOptions,
+  technologyOptions
+} from "./admin-project-options";
 
 type RoomRow = {
   floor: string;
+  customFloor?: string;
   number: string;
   name: string;
   area: string;
@@ -25,6 +37,8 @@ type AddonRow = {
   description: string;
   deliveryAction?: string;
 };
+
+const CUSTOM_FLOOR = "__custom__";
 
 const defaultRooms: RoomRow[] = [
   { floor: "Parter", number: "1.01", name: "", area: "", dimensions: "" }
@@ -70,6 +84,13 @@ function currentCodePreview() {
   return `DP-${year}-0001`;
 }
 
+function normalizedRooms(rows: RoomRow[]) {
+  return rows.map((room) => ({
+    ...room,
+    floor: room.floor === CUSTOM_FLOOR ? room.customFloor || "" : room.floor
+  }));
+}
+
 export function AdminProjectCreateForm() {
   const [state, formAction, pending] = useActionState(createProjectAction, initialState);
   const [name, setName] = useState("");
@@ -95,7 +116,7 @@ export function AdminProjectCreateForm() {
 
   return (
     <form className="admin-form-layout" action={formAction}>
-      <input type="hidden" name="roomsJson" value={JSON.stringify(rooms)} />
+      <input type="hidden" name="roomsJson" value={JSON.stringify(normalizedRooms(rooms))} />
       <input type="hidden" name="variantsJson" value={JSON.stringify(variants)} />
       <input type="hidden" name="addonsJson" value={JSON.stringify(addons)} />
 
@@ -173,17 +194,12 @@ export function AdminProjectCreateForm() {
                 <option value="archived">archived</option>
               </select>
             </label>
-            <label>
-              Badge główny
-              <input name="badgePrimary" placeholder="np. Nowość" />
-            </label>
-            <label>
-              Badge dodatkowy
-              <input name="badgeSecondary" placeholder="np. Bestseller" />
-            </label>
+            <SelectWithCustom name="badgePrimary" label="Badge główny" options={badgeOptions} placeholder="Brak badge" />
+            <SelectWithCustom name="badgeSecondary" label="Badge dodatkowy" options={badgeOptions} placeholder="Brak badge" />
             <label>
               Podobne projekty
-              <input name="relatedSlugs" placeholder="slug-1, slug-2" />
+              <input name="relatedSlugs" placeholder="Ręczne nadpisanie: slug-1, slug-2" />
+              <small className="admin-field-help">Docelowo: automatyczny dobór po parametrach + ręczna nadpiska.</small>
             </label>
           </div>
         </section>
@@ -202,15 +218,15 @@ export function AdminProjectCreateForm() {
             <label>Powierzchnia zabudowy<input name="buildingArea" placeholder="m²" inputMode="decimal" /></label>
             <label>Liczba pokoi<input name="roomsCount" placeholder="np. 5" inputMode="numeric" /></label>
             <label>Łazienki<input name="bathroomsCount" placeholder="np. 2" inputMode="numeric" /></label>
-            <label>Garaż<input name="garage" placeholder="np. 2 stanowiska" /></label>
-            <label>Kondygnacje<input name="type" placeholder="np. Parterowy" /></label>
-            <label>Dach<input name="roof" placeholder="np. Czterospadowy" /></label>
-            <label>Technologia<input name="technology" placeholder="np. Murowana" /></label>
+            <SelectWithCustom name="garage" label="Garaż" options={garageOptions} placeholder="Wybierz garaż" />
+            <SelectWithCustom name="type" label="Typ / kondygnacja" options={projectTypeOptions} placeholder="Wybierz typ" />
+            <SelectWithCustom name="roof" label="Dach" options={roofOptions} placeholder="Wybierz dach" />
+            <SelectWithCustom name="technology" label="Technologia" options={technologyOptions} placeholder="Wybierz technologię" />
             <label>Szerokość działki<input name="minPlotWidth" placeholder="m" inputMode="decimal" /></label>
             <label>Długość działki<input name="minPlotLength" placeholder="m" inputMode="decimal" /></label>
             <label>Wysokość budynku<input name="buildingHeight" placeholder="m" inputMode="decimal" /></label>
-            <label>Styl<input name="style" placeholder="np. Nowoczesny" /></label>
-            <label>Kondygnacje liczba<input name="floorsCount" placeholder="np. 1" inputMode="numeric" /></label>
+            <SelectWithCustom name="style" label="Styl" options={styleOptions} placeholder="Wybierz styl" />
+            <SelectWithCustom name="floorsCount" label="Kondygnacje liczba" options={floorsCountOptions} placeholder="Wybierz" />
           </div>
 
           <label>
@@ -239,7 +255,21 @@ export function AdminProjectCreateForm() {
             </div>
             {rooms.map((room, index) => (
               <div className="admin-edit-row" key={index}>
-                <input value={room.floor} onChange={(event) => setRooms(updateRow(rooms, index, { floor: event.target.value }))} />
+                <div className="admin-room-floor">
+                  <select value={room.floor} onChange={(event) => setRooms(updateRow(rooms, index, { floor: event.target.value }))}>
+                    {roomFloorOptions.map((option) => (
+                      <option value={option.value} key={option.value}>{option.label}</option>
+                    ))}
+                    <option value={CUSTOM_FLOOR}>Dodaj ręcznie</option>
+                  </select>
+                  {room.floor === CUSTOM_FLOOR && (
+                    <input
+                      value={room.customFloor || ""}
+                      onChange={(event) => setRooms(updateRow(rooms, index, { customFloor: event.target.value }))}
+                      placeholder="Własna kondygnacja"
+                    />
+                  )}
+                </div>
                 <input value={room.number} onChange={(event) => setRooms(updateRow(rooms, index, { number: event.target.value }))} />
                 <input value={room.name} onChange={(event) => setRooms(updateRow(rooms, index, { name: event.target.value }))} />
                 <input value={room.area} onChange={(event) => setRooms(updateRow(rooms, index, { area: event.target.value }))} />

@@ -1,0 +1,10 @@
+/* ADMIN SELECT OPTIONS V14 */
+
+.admin-custom-value-input {
+  margin-top: 8px;
+}
+
+.admin-room-floor {
+  display: grid;
+  gap: 7px;
+}
