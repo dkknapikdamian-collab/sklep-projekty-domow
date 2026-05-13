@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { getAdminProjects } from "@/lib/admin/projects-admin";
-import { FolderPlus, ImageIcon, Pencil, Search } from "lucide-react";
+import { AdminProjectsTable } from "@/components/admin/AdminProjectsTable";
+import { FolderPlus, Search } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export default async function AdminProjectsPage() {
           <div>
             <span>ADMIN / PROJEKTY</span>
             <h1>Projekty</h1>
-            <p>Lista projektów zapisana w Supabase.</p>
+            <p>Lista projektów zapisana w Supabase. Z tego poziomu możesz zmienić status, wejść w edycję albo usunąć projekt.</p>
           </div>
           <Link href="/admin/projekty/nowy" className="admin-primary-button">
             <FolderPlus size={18} /> Dodaj projekt
@@ -33,41 +34,12 @@ export default async function AdminProjectsPage() {
             <option>Draft</option>
             <option>Active</option>
             <option>Hidden</option>
+            <option>Archived</option>
           </select>
         </section>
 
         {projects.length > 0 ? (
-          <section className="admin-table-card">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Kod</th>
-                  <th>Nazwa</th>
-                  <th>Status</th>
-                  <th>Cena</th>
-                  <th>Media</th>
-                  <th>Akcje</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((project) => (
-                  <tr key={project.id}>
-                    <td><strong>{project.code}</strong></td>
-                    <td>{project.name}</td>
-                    <td><span className={`status-pill ${project.status}`}>{project.status}</span></td>
-                    <td>{project.priceGross.toLocaleString("pl-PL")} zł</td>
-                    <td><span className="media-count"><ImageIcon size={15} />{project.mediaCount}</span></td>
-                    <td>
-                      <div className="admin-row-actions">
-                        {project.status === "active" && <Link href={`/projekty/${project.slug}`}>Publicznie</Link>}
-                        <button><Pencil size={15} /> Edycja później</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
+          <AdminProjectsTable projects={projects} />
         ) : (
           <section className="admin-empty">
             <h2>Nie ma jeszcze żadnych projektów.</h2>

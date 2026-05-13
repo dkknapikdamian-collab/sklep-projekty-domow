@@ -1,0 +1,95 @@
+/* ADMIN PROJECT MANAGEMENT V18 */
+
+.admin-project-name {
+  display: block;
+  color: #fff;
+}
+
+.admin-projects-table td small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.admin-status-form {
+  display: grid;
+  grid-template-columns: minmax(105px, 1fr) auto;
+  gap: 7px;
+  align-items: center;
+}
+
+.admin-status-form select {
+  min-height: 34px;
+  background: #11181d;
+  color: #f4f1ea;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 5px;
+  padding: 0 8px;
+}
+
+.admin-status-form select option {
+  background: #11181d;
+  color: #f4f1ea;
+}
+
+.admin-status-form button,
+.admin-row-actions a,
+.admin-row-actions button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.045);
+  color: #f4f1ea;
+  padding: 0 10px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.admin-danger-button {
+  border-color: rgba(255,97,97,.38) !important;
+  background: rgba(255,97,97,.12) !important;
+  color: #ffd1d1 !important;
+}
+
+.admin-head-actions,
+.admin-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-edit-project-form {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-danger-zone {
+  border-color: rgba(255,97,97,.24) !important;
+  background: linear-gradient(135deg, rgba(255,97,97,.08), rgba(255,255,255,.025)) !important;
+}
+
+.admin-danger-zone p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 980px) {
+  .admin-status-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-row-actions {
+    display: grid;
+  }
+}
