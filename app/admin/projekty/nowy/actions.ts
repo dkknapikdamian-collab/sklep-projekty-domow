@@ -33,13 +33,6 @@ type AddonInput = {
   deliveryAction?: string;
 };
 
-const initialState: CreateProjectState = {
-  ok: false,
-  message: ""
-};
-
-export { initialState };
-
 function str(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
 }

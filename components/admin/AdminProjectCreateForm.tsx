@@ -2,17 +2,29 @@
 
 import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
-import { createProjectAction, initialState } from "@/app/admin/projekty/nowy/actions";
+import { createProjectAction } from "@/app/admin/projekty/nowy/actions";
 import { CheckCircle2, FileText, ImagePlus, ListPlus, Save, UploadCloud, X } from "lucide-react";
 import { SelectWithCustom } from "./SelectWithCustom";
 import { FeaturePicker } from "./FeaturePicker";
 import { badgeOptions, floorsCountOptions, garageOptions, projectTypeOptions, roofOptions, roomFloorOptions, styleOptions, technologyOptions } from "./admin-project-options";
+
+type CreateProjectState = {
+  ok: boolean;
+  message: string;
+  existingProjectHref?: string;
+  existingProjectLabel?: string;
+};
 
 type RoomRow = { floor: string; customFloor?: string; number: string; name: string; area: string; dimensions: string; };
 type VariantRow = { name: string; priceGross: string; };
 type AddonRow = { code: string; name: string; priceGross: string; description: string; deliveryAction?: string; };
 
 const CUSTOM_FLOOR = "__custom__";
+
+const initialState: CreateProjectState = {
+  ok: false,
+  message: ""
+};
 const defaultRooms: RoomRow[] = [{ floor: "Parter", number: "1.01", name: "", area: "", dimensions: "" }];
 const defaultVariants: VariantRow[] = [{ name: "Odbicie lustrzane", priceGross: "390" }, { name: "Odbicie lustrzane + zmiany", priceGross: "690" }];
 const defaultAddons: AddonRow[] = [
