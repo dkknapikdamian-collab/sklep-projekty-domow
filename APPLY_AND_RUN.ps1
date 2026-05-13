@@ -13,7 +13,7 @@ if (!(Test-Path ".git")) {
 }
 
 git add .
-git commit -m "Create first Next.js storefront prototype" | Out-Host
+git commit -m "Implement project page visual reference v2" | Out-Host
 
 npm install
 npm run dev

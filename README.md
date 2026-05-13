@@ -1,19 +1,23 @@
-# Sklep z projektami domów — Next.js V1
+# Sklep z projektami domów — karta projektu V2
 
-Pierwsza działająca wersja frontu sklepu z projektami domów.
+Wersja wdrożeniowa skupiona na odwzorowaniu zaakceptowanej karty projektu.
 
 ## Co zawiera
 
-- Strona główna
-- Katalog projektów
-- Karta projektu
-- Koszyk wizualny
-- Checkout wizualny
-- Panel admina wizualny
-- Dane demo
-- Dark premium design lock
-- Wyszukiwarka demo z normalizacją
-- Dodatek `Pakiet PDF na e-mail +250 zł`
+- layout bardzo bliski referencji,
+- header,
+- breadcrumbs,
+- tytuł projektu,
+- galerię,
+- prawy box zakupowy,
+- warianty i dodatki,
+- pakiet PDF na e-mail +250 zł,
+- pasek parametrów,
+- zakładki,
+- opis,
+- rzuty,
+- podobne projekty,
+- dane demo.
 
 ## Uruchomienie
 
@@ -22,14 +26,12 @@ npm install
 npm run dev
 ```
 
-Potem wejdź:
+Adres:
 
 ```txt
 http://localhost:3000
 ```
 
-## Ważne
+## Uwaga
 
-To jest front V1 na danych demo.  
-Nie ma jeszcze bazy, płatności, prawdziwych e-maili ani storage.  
-Struktura jest jednak przygotowana tak, żeby później podpiąć backend.
+To nadal frontend demo. Następne etapy: baza, admin, koszyk, checkout, płatności, e-maile, PDF/link po płatności.

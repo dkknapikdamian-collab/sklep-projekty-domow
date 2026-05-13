@@ -1,6 +1,6 @@
 {
-  "name": "sklep-projekty-domow",
-  "version": "0.1.0",
+  "name": "sklep-projekty-domow-project-page-v2",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -18,8 +18,6 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
-    "typescript": "^5.7.2",
-    "eslint": "^9.17.0",
-    "eslint-config-next": "^15.0.0"
+    "typescript": "^5.7.2"
   }
 }
