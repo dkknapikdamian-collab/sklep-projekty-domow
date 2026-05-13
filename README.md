@@ -1,39 +1,35 @@
-# Sklep z projektami domów
+# Sklep z projektami domów — Next.js V1
 
-Repozytorium produkcyjne dla sklepu/katalogu projektów domów.
+Pierwsza działająca wersja frontu sklepu z projektami domów.
 
-## Rekomendowana nazwa repo
+## Co zawiera
 
-`sklep-projekty-domow`
+- Strona główna
+- Katalog projektów
+- Karta projektu
+- Koszyk wizualny
+- Checkout wizualny
+- Panel admina wizualny
+- Dane demo
+- Dark premium design lock
+- Wyszukiwarka demo z normalizacją
+- Dodatek `Pakiet PDF na e-mail +250 zł`
 
-Docelowo: `dkknapikdamian-collab/sklep-projekty-domow`
+## Uruchomienie
 
-## Cel
+```powershell
+npm install
+npm run dev
+```
 
-Zbudować prostą, nowoczesną, produkcyjną stronę/sklep do sprzedaży projektów domów.
+Potem wejdź:
 
-Kierunek wizualny:
-- ciemny grafit,
-- szarości,
-- złoto-beżowe akcenty,
-- prosty premium layout,
-- duże wizualizacje,
-- czytelna karta projektu,
-- prawy box zakupowy,
-- brak chaosu kolorystycznego,
-- wygląd zamrożony 1:1 względem zaakceptowanych referencji.
+```txt
+http://localhost:3000
+```
 
-## Stos produkcyjny
+## Ważne
 
-- Next.js
-- React
-- TypeScript
-- PostgreSQL / Supabase
-- Storage: Supabase Storage / Cloudflare R2 / Google Cloud Storage / własny serwer
-- Płatności: Przelewy24, Stripe opcjonalnie później
-- E-mail: SMTP/API provider
-- Panel admina: własny prosty panel
-
-## Najważniejsza zasada
-
-Najpierw pilnujemy wyglądu i modelu danych. Nie zaczynamy od przypadkowego kodowania ekranów, bo wtedy styl i logika szybko się rozjadą.
+To jest front V1 na danych demo.  
+Nie ma jeszcze bazy, płatności, prawdziwych e-maili ani storage.  
+Struktura jest jednak przygotowana tak, żeby później podpiąć backend.
