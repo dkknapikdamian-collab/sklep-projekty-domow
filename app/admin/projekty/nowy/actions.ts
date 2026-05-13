@@ -8,6 +8,8 @@ import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 export type CreateProjectState = {
   ok: boolean;
   message: string;
+  existingProjectHref?: string;
+  existingProjectLabel?: string;
 };
 
 type RoomInput = {
@@ -77,6 +79,24 @@ function slugify(input: string) {
     .replace(/ł/g, "l")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+async function generateProjectCode(supabase: ReturnType<typeof createSupabaseServiceRoleClient>) {
+  if (!supabase) {
+    throw new Error("Brak klienta Supabase do wygenerowania kodu projektu.");
+  }
+
+  const { data, error } = await supabase.rpc("next_project_code", {
+    code_prefix: "DP"
+  });
+
+  if (error || !data) {
+    throw new Error(
+      "Nie udało się wygenerować kodu projektu. Uruchom migrację 0012_project_code_generation.sql w Supabase."
+    );
+  }
+
+  return String(data).toUpperCase();
 }
 
 async function uploadPublicMedia(params: {
@@ -208,6 +228,21 @@ async function uploadPrivateFiles(params: {
   }
 }
 
+function duplicateState(kind: "code" | "slug", existing: { code?: string; slug?: string; name?: string; status?: string }) {
+  const label = existing.code && existing.name ? `${existing.code} — ${existing.name}` : existing.name || existing.code || "Istniejący projekt";
+  const href = existing.status === "active" && existing.slug ? `/projekty/${existing.slug}` : "/admin/projekty";
+
+  return {
+    ok: false,
+    message:
+      kind === "code"
+        ? `Projekt o kodzie ${existing.code} już istnieje. Nie można dodać drugiego projektu z tym samym kodem.`
+        : `Projekt o adresie/slug ${existing.slug} już istnieje. Zmień nazwę lub slug, albo przejdź do istniejącego projektu.`,
+    existingProjectHref: href,
+    existingProjectLabel: label
+  };
+}
+
 export async function createProjectAction(
   _prevState: CreateProjectState,
   formData: FormData
@@ -231,14 +266,13 @@ export async function createProjectAction(
   }
 
   const name = str(formData, "name");
-  const code = str(formData, "code").toUpperCase();
   const slug = str(formData, "slug") || slugify(name);
   const status = str(formData, "status") || "draft";
 
-  if (!name || !code || !slug) {
+  if (!name || !slug) {
     return {
       ok: false,
-      message: "Uzupełnij minimum: kod projektu, nazwę i slug."
+      message: "Uzupełnij minimum: nazwę i slug. Kod projektu wygeneruje się automatycznie."
     };
   }
 
@@ -247,6 +281,42 @@ export async function createProjectAction(
       ok: false,
       message: "Niepoprawny status projektu."
     };
+  }
+
+  const { data: existingSlugProject, error: existingSlugError } = await supabase
+    .from("projects")
+    .select("id, code, name, slug, status")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (existingSlugError) {
+    return {
+      ok: false,
+      message: `Nie udało się sprawdzić unikalności slug: ${existingSlugError.message}`
+    };
+  }
+
+  if (existingSlugProject) {
+    return duplicateState("slug", existingSlugProject);
+  }
+
+  const code = await generateProjectCode(supabase);
+
+  const { data: existingCodeProject, error: existingCodeError } = await supabase
+    .from("projects")
+    .select("id, code, name, slug, status")
+    .eq("code", code)
+    .maybeSingle();
+
+  if (existingCodeError) {
+    return {
+      ok: false,
+      message: `Nie udało się sprawdzić unikalności kodu: ${existingCodeError.message}`
+    };
+  }
+
+  if (existingCodeProject) {
+    return duplicateState("code", existingCodeProject);
   }
 
   const features = str(formData, "features")
@@ -298,6 +368,15 @@ export async function createProjectAction(
       .single();
 
     if (projectError || !project) {
+      if (projectError?.code === "23505") {
+        return {
+          ok: false,
+          message: "Projekt o takim kodzie lub slug już istnieje. Zmień slug albo sprawdź listę projektów.",
+          existingProjectHref: "/admin/projekty",
+          existingProjectLabel: "Przejdź do listy projektów"
+        };
+      }
+
       return {
         ok: false,
         message: projectError?.message || "Nie udało się utworzyć projektu."

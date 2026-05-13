@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
 import { createProjectAction, initialState } from "@/app/admin/projekty/nowy/actions";
 import { CheckCircle2, FileText, ImagePlus, ListPlus, Save, UploadCloud, X } from "lucide-react";
@@ -54,21 +55,43 @@ function updateRow<T>(rows: T[], index: number, patch: Partial<T>) {
   return rows.map((row, currentIndex) => (currentIndex === index ? { ...row, ...patch } : row));
 }
 
+function makeSlug(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ł/g, "l")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function currentCodePreview() {
+  const year = new Date().getFullYear();
+  return `DP-${year}-0001`;
+}
+
 export function AdminProjectCreateForm() {
   const [state, formAction, pending] = useActionState(createProjectAction, initialState);
   const [name, setName] = useState("");
-  const [code, setCode] = useState("");
   const [slug, setSlug] = useState("");
+  const [slugTouched, setSlugTouched] = useState(false);
   const [status, setStatus] = useState("draft");
   const [rooms, setRooms] = useState<RoomRow[]>(defaultRooms);
   const [variants, setVariants] = useState<VariantRow[]>(defaultVariants);
   const [addons, setAddons] = useState<AddonRow[]>(defaultAddons);
 
   const completion = useMemo(() => {
-    const fields = [name, code, slug, status];
+    const fields = [name, slug, status];
     const done = fields.filter(Boolean).length;
     return Math.round((done / fields.length) * 100);
-  }, [name, code, slug, status]);
+  }, [name, slug, status]);
+
+  function handleNameChange(value: string) {
+    setName(value);
+    if (!slugTouched) {
+      setSlug(makeSlug(value));
+    }
+  }
 
   return (
     <form className="admin-form-layout" action={formAction}>
@@ -82,26 +105,37 @@ export function AdminProjectCreateForm() {
             <FileText size={22} />
             <div>
               <h2>1. Dane podstawowe</h2>
-              <p>Kod, nazwa, slug, opis i status projektu.</p>
+              <p>Kod generuje system. Ty uzupełniasz nazwę, opis i dane projektu.</p>
             </div>
           </div>
 
           <div className="form-grid two">
             <label>
-              Kod projektu *
-              <input name="code" value={code} onChange={(event) => setCode(event.target.value)} placeholder="np. DP-AUR-014" required />
+              Kod projektu
+              <input value={`Automatycznie, np. ${currentCodePreview()}`} readOnly />
+              <small className="admin-field-help">Format: DP-YYYY-NNNN. Finalny numer nada Supabase przy zapisie.</small>
             </label>
             <label>
               Krótki kod
-              <input name="shortCode" placeholder="np. AW14" />
+              <input name="shortCode" placeholder="Opcjonalnie, np. katalogowy skrót" />
             </label>
             <label>
               Nazwa projektu *
-              <input name="name" value={name} onChange={(event) => setName(event.target.value)} placeholder="np. Dom w Aurorach 14" required />
+              <input name="name" value={name} onChange={(event) => handleNameChange(event.target.value)} placeholder="np. Dom w Aurorach 14" required />
             </label>
             <label>
               Slug *
-              <input name="slug" value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="np. dom-w-aurorach-14" required />
+              <input
+                name="slug"
+                value={slug}
+                onChange={(event) => {
+                  setSlugTouched(true);
+                  setSlug(makeSlug(event.target.value));
+                }}
+                placeholder="np. dom-w-aurorach-14"
+                required
+              />
+              <small className="admin-field-help">Slug generuje się z nazwy, ale możesz go poprawić ręcznie.</small>
             </label>
           </div>
 
@@ -112,7 +146,7 @@ export function AdminProjectCreateForm() {
 
           <label>
             Opis projektu
-            <textarea name="description" placeholder="Wpisz realny opis projektu. Nie publikujemy opisów roboczych jako oferty." />
+            <textarea name="description" placeholder="Wpisz realny opis projektu. Ten tekst wyświetli się w zakładce OPIS PROJEKTU na karcie projektu." />
           </label>
         </section>
 
@@ -274,60 +308,15 @@ export function AdminProjectCreateForm() {
           </div>
 
           <div className="media-upload-grid">
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Hero</strong>
-              <span>hero.jpg</span>
-              <input type="file" name="heroFile" accept="image/*" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Miniatura</strong>
-              <span>thumbnail.jpg</span>
-              <input type="file" name="thumbnailFile" accept="image/*" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Galeria</strong>
-              <span>gallery-01, gallery-02...</span>
-              <input type="file" name="galleryFiles" accept="image/*" multiple />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Rzut parteru</strong>
-              <span>floor-plan-ground.jpg</span>
-              <input type="file" name="floorPlanGroundFile" accept="image/*,.pdf" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Rzut dachu</strong>
-              <span>floor-plan-roof.jpg</span>
-              <input type="file" name="floorPlanRoofFile" accept="image/*,.pdf" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Przekrój A-A</strong>
-              <span>section-aa.jpg</span>
-              <input type="file" name="sectionAaFile" accept="image/*,.pdf" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Przekrój B-B</strong>
-              <span>section-bb.jpg</span>
-              <input type="file" name="sectionBbFile" accept="image/*,.pdf" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Elewacja frontowa</strong>
-              <span>elevation-front.jpg</span>
-              <input type="file" name="elevationFrontFile" accept="image/*,.pdf" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Elewacja ogrodowa</strong>
-              <span>elevation-garden.jpg</span>
-              <input type="file" name="elevationGardenFile" accept="image/*,.pdf" />
-            </label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Hero</strong><span>hero.jpg</span><input type="file" name="heroFile" accept="image/*" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Miniatura</strong><span>thumbnail.jpg</span><input type="file" name="thumbnailFile" accept="image/*" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Galeria</strong><span>gallery-01, gallery-02...</span><input type="file" name="galleryFiles" accept="image/*" multiple /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Rzut parteru</strong><span>floor-plan-ground.jpg</span><input type="file" name="floorPlanGroundFile" accept="image/*,.pdf" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Rzut dachu</strong><span>floor-plan-roof.jpg</span><input type="file" name="floorPlanRoofFile" accept="image/*,.pdf" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Przekrój A-A</strong><span>section-aa.jpg</span><input type="file" name="sectionAaFile" accept="image/*,.pdf" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Przekrój B-B</strong><span>section-bb.jpg</span><input type="file" name="sectionBbFile" accept="image/*,.pdf" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Elewacja frontowa</strong><span>elevation-front.jpg</span><input type="file" name="elevationFrontFile" accept="image/*,.pdf" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Elewacja ogrodowa</strong><span>elevation-garden.jpg</span><input type="file" name="elevationGardenFile" accept="image/*,.pdf" /></label>
           </div>
         </section>
 
@@ -341,24 +330,9 @@ export function AdminProjectCreateForm() {
           </div>
 
           <div className="media-upload-grid private">
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Dokumentacja PDF</strong>
-              <span>documentation-v1.pdf</span>
-              <input type="file" name="documentationFile" accept=".pdf" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>Pełna paczka ZIP</strong>
-              <span>full-package-v1.zip</span>
-              <input type="file" name="fullPackageFile" accept=".zip" />
-            </label>
-            <label className="upload-box">
-              <UploadCloud size={25} />
-              <strong>PDF na e-mail</strong>
-              <span>pdf-email-package-v1.pdf</span>
-              <input type="file" name="pdfEmailPackageFile" accept=".pdf" />
-            </label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Dokumentacja PDF</strong><span>documentation-v1.pdf</span><input type="file" name="documentationFile" accept=".pdf" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>Pełna paczka ZIP</strong><span>full-package-v1.zip</span><input type="file" name="fullPackageFile" accept=".zip" /></label>
+            <label className="upload-box"><UploadCloud size={25} /><strong>PDF na e-mail</strong><span>pdf-email-package-v1.pdf</span><input type="file" name="pdfEmailPackageFile" accept=".pdf" /></label>
           </div>
         </section>
 
@@ -374,6 +348,11 @@ export function AdminProjectCreateForm() {
           {state.message && (
             <div className={state.ok ? "admin-form-success" : "admin-form-error"}>
               {state.message}
+              {state.existingProjectHref && (
+                <p className="admin-error-link">
+                  <Link href={state.existingProjectHref}>{state.existingProjectLabel || "Zobacz istniejący projekt"}</Link>
+                </p>
+              )}
             </div>
           )}
 
@@ -387,9 +366,15 @@ export function AdminProjectCreateForm() {
 
       <aside className="admin-form-sidebar">
         <div className="admin-side-card">
+          <span>KOD PROJEKTU</span>
+          <strong>Auto</strong>
+          <p>System nada kod w formacie DP-YYYY-NNNN i zapisze go w projekcie. Nie musisz nic pamiętać.</p>
+        </div>
+
+        <div className="admin-side-card">
           <span>KOMPLETNOŚĆ</span>
           <strong>{completion}%</strong>
-          <p>Projekt powinien mieć przynajmniej kod, nazwę, slug, cenę, opis, podstawowe parametry i media.</p>
+          <p>Projekt powinien mieć przynajmniej nazwę, slug, cenę, opis, podstawowe parametry i media.</p>
         </div>
 
         <div className="admin-side-card">

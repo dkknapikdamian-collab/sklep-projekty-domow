@@ -1,0 +1,19 @@
+/* ADMIN PROJECT CODE POLICY V13 */
+
+.admin-field-help {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.admin-error-link {
+  margin: 10px 0 0;
+}
+
+.admin-error-link a {
+  color: #ffe2a9;
+  font-weight: 900;
+  text-decoration: underline;
+}
