@@ -1,38 +1,29 @@
-import Image from "next/image";
-import { Project } from "@/data/projects";
-import { ChevronLeft, ChevronRight, Heart, Share2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import type { Project } from "@/types/project";
+import { MediaSlot } from "@/components/MediaSlot";
 
 export function ProjectGallery({ project }: { project: Project }) {
+  const thumbs = project.media.gallery.slice(0, 4);
+
   return (
-    <div className="gallery-side">
-      <div className="title-row">
-        <div>
-          <h1>{project.name}</h1>
-          <div className="badges">
-            {project.badgePrimary && <span className="badge green">{project.badgePrimary}</span>}
-            {project.badgeSecondary && <span className="badge grey">{project.badgeSecondary}</span>}
-          </div>
-        </div>
-        <div className="title-tools">
-          <button><Heart size={18} /> Dodaj do ulubionych</button>
-          <button><Share2 size={18} /> Udostępnij</button>
-        </div>
+    <div className="project-gallery">
+      <div className="main-photo">
+        <button className="gallery-arrow left"><ChevronLeft size={24} /></button>
+        <MediaSlot src={project.media.hero} alt={project.name} label="Dodaj hero.jpg w folderze projektu" sizes="760px" />
+        <button className="gallery-arrow right"><ChevronRight size={24} /></button>
+        <button className="heart-floating"><Heart size={35} /></button>
       </div>
 
-      <div className="main-gallery">
-        <button className="slider-arrow left"><ChevronLeft size={23} /></button>
-        <Image src={project.media.hero} alt={project.name} fill priority sizes="760px" />
-        <button className="slider-arrow right"><ChevronRight size={23} /></button>
-        <button className="heart-float"><Heart size={35} /></button>
-      </div>
-
-      <div className="thumbs">
-        {project.media.gallery.map((src, index) => (
-          <button className={index === 0 ? "active" : ""} key={src}>
-            <Image src={src} alt={`${project.name} miniatura ${index + 1}`} fill sizes="140px" />
+      <div className="thumbnail-row">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <button className={index === 0 ? "active" : ""} key={index}>
+            <MediaSlot src={thumbs[index]} alt={`${project.name} miniatura ${index + 1}`} label={`gallery-${String(index + 1).padStart(2, "0")}.jpg`} sizes="140px" />
           </button>
         ))}
-        <button className="more-thumb">+{project.media.gallery.length}<br /><span>więcej</span></button>
+        <button className="more-photos">
+          +{Math.max(project.media.gallery.length, 0)}
+          <span>więcej</span>
+        </button>
       </div>
     </div>
   );

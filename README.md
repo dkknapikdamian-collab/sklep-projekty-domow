@@ -1,46 +1,44 @@
-# Sklep z projektami domów — production shell V4
+# Sklep z projektami domów — production pages V5
 
-To jest produkcyjny shell sklepu z projektami domów.
+To jest produkcyjny format strony sklepu z projektami domów, bez fikcyjnych zdjęć i bez fikcyjnych aktywnych projektów.
 
-## Najważniejsza zmiana V4
+## Co zawiera
 
-Nie publikujemy żadnych fikcyjnych projektów, opisów ani zdjęć jako oferty.
+- strona główna zgodna z obranym kierunkiem wizualnym,
+- katalog projektów,
+- dynamiczna karta projektu `/projekty/[slug]`,
+- koszyk pusty/produkcyjny shell,
+- checkout produkcyjny shell,
+- folder `content/projects/` do dodawania realnych projektów,
+- folder `public/projects/` do dodawania mediów projektu po kodzie,
+- szablon JSON projektu,
+- placeholdery wizualne zamiast zdjęć, jeśli nie dodasz plików,
+- guard sprawdzający źródło danych.
 
-Wygenerowane wcześniej obrazy są tylko referencją wizualną i są zapisane w:
+## Najważniejsza zasada
+
+Nie ma aktywnych projektów przykładowych.  
+Projekt pojawi się na stronie dopiero, gdy dodasz folder w `content/projects/`, wypełnisz prawdziwe dane i ustawisz:
+
+```json
+"status": "active"
+```
+
+## Jak dodać projekt
+
+1. Utwórz folder danych:
 
 ```txt
-docs/design/references/
+content/projects/DP-AUR-014/project.json
 ```
 
-Nie są używane jako realne zdjęcia projektów w katalogu.
-
-## Jak działają projekty
-
-Katalog pokazuje tylko projekty dodane w źródle danych ze statusem:
-
-```txt
-active
-```
-
-Na start:
-
-```ts
-export const projects: Project[] = [];
-```
-
-Czyli produkcyjnie katalog jest pusty, dopóki nie dodasz prawdziwego projektu.
-
-## Jak dodać projekt na tym etapie
-
-Do czasu wdrożenia panelu admina dodajesz projekt ręcznie:
-
-1. Dodaj folder mediów:
+2. Utwórz folder mediów:
 
 ```txt
 public/projects/DP-AUR-014/
 ```
 
-2. Dodaj pliki o stałych nazwach:
+3. Dodaj pliki mediów, jeśli je masz:
 
 ```txt
 hero.jpg
@@ -53,23 +51,24 @@ section-aa.jpg
 elevation-front.jpg
 ```
 
-3. Dodaj rekord projektu w:
+4. Uruchom:
 
-```txt
-data/projects.ts
+```powershell
+npm run dev
 ```
 
-4. Ustaw:
-
-```txt
-status: "active"
-```
-
-Wtedy projekt pojawi się w katalogu i pod adresem:
+5. Projekt pojawi się pod:
 
 ```txt
 /projekty/[slug]
 ```
+
+oraz w katalogu `/projekty`.
+
+## Bez zdjęć
+
+Jeżeli dodasz projekt bez zdjęć, strona pokaże eleganckie placeholdery w docelowym układzie.  
+Dzięki temu można testować dane bez wrzucania obrazów.
 
 ## Uruchomienie
 
@@ -83,14 +82,3 @@ npm run dev
 ```powershell
 npm run verify
 ```
-
-## Kolejny etap
-
-Następny etap produkcyjny:
-- panel admina do dodawania projektów,
-- storage mediów,
-- koszyk,
-- checkout,
-- zapis zamówienia,
-- płatności,
-- e-mail z PDF/linkiem.

@@ -1,8 +1,10 @@
-import Image from "next/image";
-import { Project } from "@/data/projects";
 import { Car, ChevronDown, Construction, Grid3X3, House, Layers, Sun, ZoomIn } from "lucide-react";
+import type { Project } from "@/types/project";
+import { MediaSlot } from "@/components/MediaSlot";
 
 export function ProjectTabs({ project }: { project: Project }) {
+  const icons = [House, Grid3X3, Car, Layers, Sun, Construction];
+
   return (
     <div className="tabs-card">
       <div className="tabs">
@@ -19,31 +21,35 @@ export function ProjectTabs({ project }: { project: Project }) {
         </div>
 
         <div className="feature-grid">
-          {project.features.map((feature, index) => {
-            const featureIcons = [House, Grid3X3, Car, Layers, Sun, Construction];
-            const Icon = featureIcons[index] || House;
+          {project.features.length > 0 ? project.features.map((feature, index) => {
+            const Icon = icons[index] || House;
             return (
               <div className="feature" key={feature}>
                 <Icon size={34} strokeWidth={1.25} />
                 <span>{feature}</span>
               </div>
             );
-          })}
+          }) : (
+            <p className="muted-note">Cechy projektu dodasz w danych projektu.</p>
+          )}
         </div>
       </div>
 
       <div className="plans-block">
         <h3>Rzuty i przekroje</h3>
         <div className="plans-grid">
-          {project.media.plans.map((plan) => (
-            <article className="plan-card" key={plan.url}>
-              <div>
-                <Image src={plan.url} alt={plan.title} fill sizes="260px" />
-                <button><ZoomIn size={16} /></button>
-              </div>
-              <strong>{plan.title}</strong>
-            </article>
-          ))}
+          {Array.from({ length: 4 }).map((_, index) => {
+            const plan = project.media.plans[index];
+            return (
+              <article className="plan-card" key={index}>
+                <div>
+                  <MediaSlot src={plan?.url} alt={plan?.title || `Rzut ${index + 1}`} label={plan?.fileName || "Dodaj rzut/przekrój"} sizes="260px" />
+                  <button><ZoomIn size={16} /></button>
+                </div>
+                <strong>{plan?.title || "Rzut / przekrój"}</strong>
+              </article>
+            );
+          })}
         </div>
       </div>
     </div>

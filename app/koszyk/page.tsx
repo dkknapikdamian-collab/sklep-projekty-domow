@@ -5,12 +5,10 @@ export default function CartPage() {
     <>
       <Header />
       <main className="page-shell">
-        <section className="catalog-page-head">
+        <section className="catalog-header">
           <span>KOSZYK</span>
           <h1>Koszyk jest pusty.</h1>
-          <p>
-            Projekty i dodatki trafią tutaj dopiero po dodaniu realnego projektu do katalogu.
-          </p>
+          <p>Po dodaniu realnego projektu i wdrożeniu koszyka wybrane projekty oraz dodatki pojawią się tutaj.</p>
         </section>
       </main>
     </>

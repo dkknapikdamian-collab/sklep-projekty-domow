@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
-import { getPublishedProjects } from "@/data/projects";
-import { ProjectCard } from "@/components/project/ProjectCard";
 import { EmptyProjectsState } from "@/components/EmptyProjectsState";
+import { ProjectCard } from "@/components/project/ProjectCard";
+import { getPublishedProjects } from "@/lib/projects";
+import { Search } from "lucide-react";
 
 export default function ProjectsPage() {
   const projects = getPublishedProjects();
@@ -10,48 +11,32 @@ export default function ProjectsPage() {
     <>
       <Header />
       <main className="page-shell">
-        <section className="catalog-page-head">
+        <section className="catalog-header">
           <span>KATALOG PROJEKTÓW</span>
           <h1>Projekty domów</h1>
-          <p>
-            Katalog pokazuje wyłącznie projekty dodane i oznaczone jako opublikowane.
-          </p>
+          <p>Katalog pokazuje wyłącznie projekty dodane do `content/projects` i oznaczone jako aktywne.</p>
+        </section>
+
+        <section className="catalog-search">
+          <input placeholder="Szukaj po nazwie, kodzie, metrażu, działce..." />
+          <button><Search size={20} /> Szukaj</button>
         </section>
 
         {projects.length > 0 ? (
-          <section className="catalog-layout-v4">
-            <aside className="catalog-filter">
+          <section className="catalog-layout">
+            <aside className="filters">
               <h3>Filtry</h3>
-              <label>
-                Szukaj
-                <input placeholder="np. 100m2, garaż, działka 20x30" />
-              </label>
-              <label>
-                Typ
-                <select>
-                  <option>Dowolny</option>
-                  <option>Parterowy</option>
-                  <option>Z poddaszem</option>
-                </select>
-              </label>
-              <label>
-                Garaż
-                <select>
-                  <option>Dowolnie</option>
-                  <option>Brak</option>
-                  <option>1 stanowisko</option>
-                  <option>2 stanowiska</option>
-                </select>
-              </label>
-              <button>Filtruj</button>
+              <label>Styl domu<select><option>Wszystkie style</option></select></label>
+              <label>Powierzchnia<input placeholder="od – do" /></label>
+              <label>Garaż<select><option>Dowolnie</option></select></label>
+              <label>Kondygnacje<select><option>Dowolnie</option></select></label>
             </aside>
-
             <div>
               <div className="catalog-toolbar">
                 <strong>{projects.length} projektów</strong>
                 <span>Sortowanie: polecane</span>
               </div>
-              <div className="catalog-grid">
+              <div className="project-grid">
                 {projects.map((project) => <ProjectCard key={project.code} project={project} />)}
               </div>
             </div>

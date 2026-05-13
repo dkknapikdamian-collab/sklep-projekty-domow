@@ -5,12 +5,10 @@ export default function CheckoutPage() {
     <>
       <Header />
       <main className="page-shell">
-        <section className="catalog-page-head">
+        <section className="catalog-header">
           <span>ZAMÓWIENIE</span>
-          <h1>Checkout zostanie podłączony po wdrożeniu koszyka i zamówień.</h1>
-          <p>
-            Produkcyjnie ten etap będzie tworzył rekord zamówienia z klientem, projektem, dodatkami, statusem płatności i statusem wysyłki.
-          </p>
+          <h1>Checkout produkcyjny będzie tworzył rekord zamówienia.</h1>
+          <p>Kolejny etap: koszyk, dane klienta, zgody, płatność, e-mail i dostawa PDF/linku po płatności.</p>
         </section>
       </main>
     </>

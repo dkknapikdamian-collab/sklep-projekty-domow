@@ -1,47 +1,22 @@
 # Design lock
 
-## Status
+Wzorem są dwa ekrany przekazane przez użytkownika:
 
-Wygenerowana karta projektu jest wzorem wizualnym.
+1. Strona główna z hero, wyszukiwarką, polecanymi projektami, kategoriami, procesem i stopką.
+2. Karta projektu z dużą galerią, prawym boxem zakupowym, parametrami, zakładkami, rzutami i podobnymi projektami.
 
-Referencja:
+## Twarda zasada
 
-```txt
-docs/design/references/reference-project-page.png
-```
+Zdjęcia ze wzorów nie są treścią produkcyjną.  
+Są tylko kierunkiem wizualnym.
 
-## Zasada
-
-Obraz referencyjny jest wzorem stylu, a nie treścią produkcyjną.
-
-Nie używać wygenerowanych zdjęć jako realnych projektów w katalogu.
-
-## Kierunek
+## Styl
 
 - ciemny grafit,
-- szarości,
 - złoto-beżowe akcenty,
-- prosty premium layout,
-- duża galeria,
-- prawy box zakupowy,
-- pasek parametrów,
-- zakładki,
-- czytelne rzuty i podobne projekty,
-- brak kolorowego chaosu.
-
-## Zakaz
-
-Bez osobnej decyzji nie zmieniać:
-
-- układu karty projektu,
-- prawego boxa zakupowego,
-- kolorystyki,
-- stylu przycisków,
-- stylu kafli parametrów,
-- głównego rytmu strony.
-
-## Wymóg produkcyjny
-
-Katalog i karty projektów pokazują tylko realne projekty dodane przez użytkownika/admina.
-
-Brak projektów = pusty stan, nie fikcyjne oferty.
+- prosty, czytelny premium layout,
+- brak kolorowego chaosu,
+- szerokie karty,
+- mocne CTA,
+- duże zdjęcia po dodaniu mediów,
+- placeholdery bez zdjęć do czasu dodania realnych plików.

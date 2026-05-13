@@ -1,11 +1,12 @@
-import { Project, getRelatedProjects } from "@/data/projects";
+import { ChevronRight } from "lucide-react";
+import type { Project } from "@/types/project";
+import { getRelatedProjects } from "@/lib/projects";
 import { Header } from "@/components/Header";
 import { ProjectGallery } from "./ProjectGallery";
 import { ProjectPurchaseBox } from "./ProjectPurchaseBox";
-import { ProjectStatsStrip } from "./ProjectStatsStrip";
+import { ProjectStats } from "./ProjectStats";
 import { ProjectTabs } from "./ProjectTabs";
 import { RelatedProjects } from "./RelatedProjects";
-import { ChevronRight } from "lucide-react";
 
 export function ProjectDetailPage({ project }: { project: Project }) {
   const related = getRelatedProjects(project);
@@ -14,7 +15,7 @@ export function ProjectDetailPage({ project }: { project: Project }) {
     <>
       <Header />
       <main className="page-shell">
-        <section className="hero-project">
+        <section className="project-top">
           <div className="breadcrumbs">
             <span>Strona główna</span>
             <ChevronRight size={13} />
@@ -25,13 +26,29 @@ export function ProjectDetailPage({ project }: { project: Project }) {
             <strong>{project.name}</strong>
           </div>
 
+          <div className="project-title-mobile">
+            <h1>{project.name}</h1>
+          </div>
+
           <div className="top-grid">
-            <ProjectGallery project={project} />
+            <div>
+              <div className="project-title">
+                <div>
+                  <h1>{project.name}</h1>
+                  <div className="badges">
+                    {project.badgePrimary && <span className="badge green">{project.badgePrimary}</span>}
+                    {project.badgeSecondary && <span className="badge grey">{project.badgeSecondary}</span>}
+                  </div>
+                </div>
+              </div>
+              <ProjectGallery project={project} />
+            </div>
+
             <ProjectPurchaseBox project={project} />
           </div>
         </section>
 
-        <ProjectStatsStrip project={project} />
+        <ProjectStats project={project} />
         <ProjectTabs project={project} />
         <RelatedProjects projects={related} />
       </main>

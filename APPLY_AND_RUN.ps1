@@ -13,7 +13,7 @@ if (!(Test-Path ".git")) {
 }
 
 git add .
-git commit -m "Convert storefront to production shell without fake projects" | Out-Host
+git commit -m "Implement production pages with file based project content source" | Out-Host
 
 npm install
 npm run verify

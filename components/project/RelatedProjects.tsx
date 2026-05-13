@@ -1,12 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Project } from "@/data/projects";
-import { ChevronRight, Heart } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import type { Project } from "@/types/project";
+import { ProjectCard } from "./ProjectCard";
 
 export function RelatedProjects({ projects }: { projects: Project[] }) {
-  if (projects.length === 0) {
-    return null;
-  }
+  if (projects.length === 0) return null;
 
   return (
     <section className="related">
@@ -15,19 +13,7 @@ export function RelatedProjects({ projects }: { projects: Project[] }) {
         <Link href="/projekty">ZOBACZ WSZYSTKIE <ChevronRight size={15} /></Link>
       </div>
       <div className="related-grid">
-        {projects.map((project) => (
-          <article className="related-card" key={project.code}>
-            <Link href={`/projekty/${project.slug}`} className="related-image">
-              <Image src={project.media.thumbnail} alt={project.name} fill sizes="260px" />
-              <button><Heart size={20} /></button>
-            </Link>
-            <div className="related-body">
-              <h3>{project.name}</h3>
-              <p>{project.usableArea.toLocaleString("pl-PL")} m² <span>|</span> {project.roomsCount} pokoi <span>|</span> {project.type}</p>
-              <strong>{project.priceGross.toLocaleString("pl-PL")} zł</strong>
-            </div>
-          </article>
-        ))}
+        {projects.map((project) => <ProjectCard key={project.code} project={project} />)}
       </div>
     </section>
   );

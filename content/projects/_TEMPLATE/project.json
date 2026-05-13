@@ -1,0 +1,55 @@
+{
+  "code": "DP-TWOJ-KOD",
+  "shortCode": "KOD",
+  "slug": "twoj-slug-projektu",
+  "name": "REALNA NAZWA PROJEKTU",
+  "subtitle": "REALNY PODTYTUŁ PROJEKTU",
+  "description": "REALNY OPIS PROJEKTU. Nie wpisuj opisów roboczych jako aktywnej oferty.",
+  "priceGross": 0,
+  "badgePrimary": "",
+  "badgeSecondary": "",
+  "status": "draft",
+  "type": "Parterowy",
+  "style": "Nowoczesny",
+  "roof": "Dwuspadowy",
+  "garage": "Brak",
+  "technology": "Murowana",
+  "usableArea": 0,
+  "buildingArea": 0,
+  "roomsCount": 0,
+  "bathroomsCount": 0,
+  "floorsCount": 1,
+  "buildingHeight": 0,
+  "minPlotWidth": 0,
+  "minPlotLength": 0,
+  "mediaBase": "/projects/DP-TWOJ-KOD",
+  "variants": [
+    {
+      "name": "Odbicie lustrzane",
+      "priceGross": 390
+    }
+  ],
+  "addons": [
+    {
+      "code": "PDF_EMAIL_PACKAGE",
+      "name": "Pakiet PDF na e-mail",
+      "priceGross": 250,
+      "description": "Dodatkowa wersja projektu w formacie PDF wysłana bezpośrednio na e-mail po zaksięgowaniu płatności. Przy dużych plikach wyślemy bezpieczny link do pobrania.",
+      "deliveryAction": "send_pdf_email"
+    }
+  ],
+  "rooms": [
+    {
+      "floor": "Parter",
+      "number": "1.01",
+      "name": "Wiatrołap",
+      "area": 0,
+      "dimensions": ""
+    }
+  ],
+  "features": [
+    "CECHA PROJEKTU 1",
+    "CECHA PROJEKTU 2"
+  ],
+  "relatedSlugs": []
+}

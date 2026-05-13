@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Project } from "@/data/projects";
-import { BadgeCheck, ChevronRight, Mail, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { BadgeCheck, ChevronRight, Info, Mail, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import type { Project } from "@/types/project";
+import { money } from "@/lib/format";
 
 export function ProjectPurchaseBox({ project }: { project: Project }) {
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
@@ -25,44 +26,49 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
     <aside className="purchase-card">
       <div className="code-line">KOD PROJEKTU: <strong>{project.shortCode}</strong></div>
 
-      <div className="price">
-        <strong>{total.toLocaleString("pl-PL")} zł</strong>
+      <div className="price-line">
+        <strong>{money(total)}</strong>
         <span>z VAT</span>
       </div>
 
-      <div className="available"><BadgeCheck size={16} /> Dostępny</div>
+      <div className="available-line"><BadgeCheck size={16} /> Dostępny</div>
 
-      <div className="purchase-section">
-        <div className="section-row">
+      <div className="purchase-block">
+        <div className="block-header">
           <h4>WERSJA PROJEKTU</h4>
           <a>Porównaj wersje <ChevronRight size={14} /></a>
         </div>
-        {project.variants.map((variant) => (
-          <button className="option-row" key={variant.name}>
-            <span>{variant.name}</span>
-            <strong>+{variant.priceGross} zł</strong>
-          </button>
-        ))}
+
+        {project.variants.length > 0 ? (
+          project.variants.map((variant) => (
+            <button className="variant-row" key={variant.name}>
+              <span>{variant.name}</span>
+              <strong>+{money(variant.priceGross)}</strong>
+            </button>
+          ))
+        ) : (
+          <p className="muted-note">Warianty dodasz w danych projektu.</p>
+        )}
       </div>
 
-      <div className="purchase-section">
+      <div className="purchase-block">
         <h4>DODATKI</h4>
         {project.addons.map((addon) => (
-          <label className="checkbox-row" key={addon.code} title={addon.description}>
+          <label className="addon-row" key={addon.code} title={addon.description}>
             <input
               type="checkbox"
               checked={selectedAddons.includes(addon.code)}
               onChange={() => toggleAddon(addon.code)}
             />
             <span>{addon.name}</span>
-            <strong>+{addon.priceGross} zł</strong>
-            <i>ⓘ</i>
+            <strong>+{money(addon.priceGross)}</strong>
+            <Info size={14} />
           </label>
         ))}
       </div>
 
-      <button className="main-buy"><ShoppingCart size={18} /> DODAJ DO KOSZYKA</button>
-      <button className="ask-btn"><Mail size={17} /> ZAPYTAJ O PROJEKT</button>
+      <button className="buy-button"><ShoppingCart size={18} /> DODAJ DO KOSZYKA</button>
+      <button className="ask-button"><Mail size={17} /> ZAPYTAJ O PROJEKT</button>
 
       <div className="micro-trust">
         <span><Truck size={16} /> Dostawa zgodnie z zamówieniem</span>
