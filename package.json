@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "verify:content": "node scripts/check-content-source.cjs",
-    "verify": "npm run typecheck && npm run verify:content && npm run build"
+    "verify": "npm run verify:legacy && npm run typecheck && npm run verify:content && npm run build",
+    "verify:legacy": "node scripts/check-no-legacy-demo-components.cjs"
   },
   "dependencies": {
     "next": "^15.0.0",
