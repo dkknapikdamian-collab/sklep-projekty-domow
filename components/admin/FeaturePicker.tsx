@@ -8,6 +8,7 @@ const CUSTOM_FEATURES_KEY = "admin-project-custom-features";
 
 function uniqueValues(values: string[]) {
   const seen = new Set<string>();
+
   return values
     .map((value) => value.trim())
     .filter((value) => {
@@ -32,9 +33,13 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
     try {
       const raw = window.localStorage.getItem(CUSTOM_FEATURES_KEY);
       if (!raw) return;
+
       const parsed = JSON.parse(raw);
+
       if (Array.isArray(parsed)) {
-        setCustomFeatures(uniqueValues(parsed.filter((item): item is string => typeof item === "string")));
+        setCustomFeatures(
+          uniqueValues(parsed.filter((item): item is string => typeof item === "string"))
+        );
       }
     } catch {
       // Ignore invalid local storage.
@@ -44,6 +49,7 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
   function saveCustomFeatures(values: string[]) {
     const next = uniqueValues(values);
     setCustomFeatures(next);
+
     try {
       window.localStorage.setItem(CUSTOM_FEATURES_KEY, JSON.stringify(next));
     } catch {
@@ -54,6 +60,7 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
   function addFeature(value: string) {
     const clean = value.trim();
     if (!clean) return;
+
     setSelected((current) => uniqueValues([...current, clean]));
   }
 
@@ -64,8 +71,13 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
   function addManualFeature() {
     const clean = manualFeature.trim();
     if (!clean) return;
+
     addFeature(clean);
-    if (!allPresetFeatures.includes(clean)) saveCustomFeatures([...customFeatures, clean]);
+
+    if (!allPresetFeatures.includes(clean)) {
+      saveCustomFeatures([...customFeatures, clean]);
+    }
+
     setManualFeature("");
   }
 
@@ -76,8 +88,7 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
 
   return (
     <div className="feature-picker">
-      <input type="hidden" name={name} value={selected.join("
-")} />
+      <input type="hidden" name={name} value={selected.join("\n")} />
 
       <div className="feature-picker-grid">
         {featureGroups.map((group) => (
@@ -86,16 +97,29 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
             <div className="feature-group-row">
               <select
                 value={groupSelections[group.label] || ""}
-                onChange={(event) => setGroupSelections((current) => ({ ...current, [group.label]: event.target.value }))}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setGroupSelections((current) => ({
+                    ...current,
+                    [group.label]: value
+                  }));
+                }}
               >
                 <option value="">Wybierz cechę</option>
-                {group.options.map((option) => <option value={option} key={option}>{option}</option>)}
+                {group.options.map((option) => (
+                  <option value={option} key={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
               <button
                 type="button"
                 onClick={() => {
                   addFeature(groupSelections[group.label] || "");
-                  setGroupSelections((current) => ({ ...current, [group.label]: "" }));
+                  setGroupSelections((current) => ({
+                    ...current,
+                    [group.label]: ""
+                  }));
                 }}
               >
                 <Plus size={15} />
@@ -106,8 +130,14 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
       </div>
 
       <div className="manual-feature-row">
-        <input value={manualFeature} onChange={(event) => setManualFeature(event.target.value)} placeholder="Dodaj własną cechę projektu" />
-        <button type="button" onClick={addManualFeature}>Dodaj ręcznie</button>
+        <input
+          value={manualFeature}
+          onChange={(event) => setManualFeature(event.target.value)}
+          placeholder="Dodaj własną cechę projektu"
+        />
+        <button type="button" onClick={addManualFeature}>
+          Dodaj ręcznie
+        </button>
       </div>
 
       {customFeatures.length > 0 && (
@@ -116,7 +146,12 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
           {customFeatures.map((feature) => (
             <button type="button" key={feature} onClick={() => addFeature(feature)}>
               {feature}
-              <span onClick={(event) => { event.stopPropagation(); removeCustomFeature(feature); }}>
+              <span
+                onClick={(event) => {
+                  event.stopPropagation();
+                  removeCustomFeature(feature);
+                }}
+              >
                 <X size={12} />
               </span>
             </button>
@@ -129,14 +164,20 @@ export function FeaturePicker({ name = "features" }: { name?: string }) {
           {selected.map((feature) => (
             <span key={feature}>
               {feature}
-              <button type="button" onClick={() => removeFeature(feature)} aria-label={`Usuń ${feature}`}>
+              <button
+                type="button"
+                onClick={() => removeFeature(feature)}
+                aria-label={`Usuń ${feature}`}
+              >
                 <X size={12} />
               </button>
             </span>
           ))}
         </div>
       ) : (
-        <p className="admin-field-help">Wybierz cechy z grup albo dodaj własną. Pojawią się w zakładce OPIS PROJEKTU.</p>
+        <p className="admin-field-help">
+          Wybierz cechy z grup albo dodaj własną. Pojawią się w zakładce OPIS PROJEKTU.
+        </p>
       )}
     </div>
   );

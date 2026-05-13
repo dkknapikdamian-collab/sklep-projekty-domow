@@ -8,14 +8,15 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "verify:content": "node scripts/check-content-source.cjs",
-    "verify": "npm run verify:admin-selects-features && npm run verify:admin-select-options && npm run verify:project-code-policy && npm run verify:no-static-supabase && npm run verify:real-admin-projects && npm run verify:supabase-foundation && npm run verify:legacy && npm run typecheck && npm run verify:content && npm run build",
+    "verify": "npm run verify:featurepicker-v15b && npm run verify:admin-selects-features && npm run verify:admin-select-options && npm run verify:project-code-policy && npm run verify:no-static-supabase && npm run verify:real-admin-projects && npm run verify:supabase-foundation && npm run verify:legacy && npm run typecheck && npm run verify:content && npm run build",
     "verify:legacy": "node scripts/check-no-legacy-demo-components.cjs",
     "verify:supabase-foundation": "node scripts/check-supabase-foundation.cjs",
     "verify:real-admin-projects": "node scripts/check-real-admin-projects.cjs",
     "verify:no-static-supabase": "node scripts/check-no-supabase-static-params.cjs",
     "verify:project-code-policy": "node scripts/check-project-code-policy.cjs",
     "verify:admin-select-options": "node scripts/check-admin-select-options.cjs",
-    "verify:admin-selects-features": "node scripts/check-admin-selects-features.cjs"
+    "verify:admin-selects-features": "node scripts/check-admin-selects-features.cjs",
+    "verify:featurepicker-v15b": "node scripts/check-featurepicker-v15b.cjs"
   },
   "dependencies": {
     "next": "^15.0.0",
