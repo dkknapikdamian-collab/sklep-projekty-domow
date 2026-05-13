@@ -1,4 +1,5 @@
-﻿@import "./admin-v8.css";
+﻿@import "./admin-supabase-v10.css";
+@import "./admin-v8.css";
 @import "./footer-end-v6.css";
 :root {
   --bg: #0f1417;
@@ -1173,5 +1174,6 @@ button, input, select, textarea { font: inherit; }
   .more-photos { height: 83px; }
   .micro-trust { grid-template-columns: 1fr; }
 }
+
 
 
