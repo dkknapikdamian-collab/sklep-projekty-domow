@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { AdminProjectFormPreview } from "@/components/admin/AdminProjectFormPreview";
+import { AdminProjectCreateForm } from "@/components/admin/AdminProjectCreateForm";
+
+export const dynamic = "force-dynamic";
 
 export default function NewAdminProjectPage() {
   return (
@@ -12,13 +14,13 @@ export default function NewAdminProjectPage() {
             <span>ADMIN / NOWY PROJEKT</span>
             <h1>Dodaj projekt</h1>
             <p>
-              To jest produkcyjny formularz pod docelowy panel. Na razie nie zapisuje do bazy, ale jego struktura zostaje pod Supabase.
+              Projekt zostanie zapisany w Supabase. Media publiczne trafią do `project-media`, a pliki prywatne do `project-private-files`.
             </p>
           </div>
           <Link href="/admin/projekty/podglad" className="admin-secondary-button">Podgląd karty</Link>
         </section>
 
-        <AdminProjectFormPreview />
+        <AdminProjectCreateForm />
       </main>
     </>
   );

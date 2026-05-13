@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { getAllProjects } from "@/lib/projects";
+import { getAdminProjects } from "@/lib/admin/projects-admin";
 import { FolderPlus, ImageIcon, Pencil, Search } from "lucide-react";
 
-export default function AdminProjectsPage() {
-  const projects = getAllProjects();
+export const dynamic = "force-dynamic";
+
+export default async function AdminProjectsPage() {
+  const projects = await getAdminProjects();
 
   return (
     <>
@@ -14,7 +16,7 @@ export default function AdminProjectsPage() {
           <div>
             <span>ADMIN / PROJEKTY</span>
             <h1>Projekty</h1>
-            <p>Na razie lista czyta lokalne foldery `content/projects`. Docelowo będzie to lista z Supabase.</p>
+            <p>Lista projektów zapisana w Supabase.</p>
           </div>
           <Link href="/admin/projekty/nowy" className="admin-primary-button">
             <FolderPlus size={18} /> Dodaj projekt
@@ -49,21 +51,16 @@ export default function AdminProjectsPage() {
               </thead>
               <tbody>
                 {projects.map((project) => (
-                  <tr key={project.code}>
+                  <tr key={project.id}>
                     <td><strong>{project.code}</strong></td>
                     <td>{project.name}</td>
                     <td><span className={`status-pill ${project.status}`}>{project.status}</span></td>
                     <td>{project.priceGross.toLocaleString("pl-PL")} zł</td>
-                    <td>
-                      <span className="media-count">
-                        <ImageIcon size={15} />
-                        {project.media.gallery.length + (project.media.hero ? 1 : 0)}
-                      </span>
-                    </td>
+                    <td><span className="media-count"><ImageIcon size={15} />{project.mediaCount}</span></td>
                     <td>
                       <div className="admin-row-actions">
-                        <Link href={`/projekty/${project.slug}`}>Podgląd publiczny</Link>
-                        <button><Pencil size={15} /> Edytuj później</button>
+                        {project.status === "active" && <Link href={`/projekty/${project.slug}`}>Publicznie</Link>}
+                        <button><Pencil size={15} /> Edycja później</button>
                       </div>
                     </td>
                   </tr>
@@ -74,9 +71,7 @@ export default function AdminProjectsPage() {
         ) : (
           <section className="admin-empty">
             <h2>Nie ma jeszcze żadnych projektów.</h2>
-            <p>
-              To jest poprawne. Dodawanie przez panel jest przygotowywane. Na teraz możesz zobaczyć formularz i podgląd karty projektu.
-            </p>
+            <p>Dodaj pierwszy projekt. Najbezpieczniej zacząć od statusu draft, sprawdzić dane i dopiero potem ustawić active.</p>
             <div>
               <Link href="/admin/projekty/nowy" className="admin-primary-button">Dodaj projekt</Link>
               <Link href="/admin/projekty/podglad" className="admin-secondary-button">Zobacz podgląd karty</Link>

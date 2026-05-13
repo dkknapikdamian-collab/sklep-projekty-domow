@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import type { Project } from "@/types/project";
-import { getRelatedProjects } from "@/lib/projects";
+import { getRelatedPublicProjects } from "@/lib/project-repository";
 import { Header } from "@/components/Header";
 import { ProjectGallery } from "./ProjectGallery";
 import { ProjectPurchaseBox } from "./ProjectPurchaseBox";
@@ -8,8 +8,8 @@ import { ProjectStats } from "./ProjectStats";
 import { ProjectTabs } from "./ProjectTabs";
 import { RelatedProjects } from "./RelatedProjects";
 
-export function ProjectDetailPage({ project }: { project: Project }) {
-  const related = getRelatedProjects(project);
+export async function ProjectDetailPage({ project }: { project: Project }) {
+  const related = await getRelatedPublicProjects(project);
 
   return (
     <>

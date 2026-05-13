@@ -1,11 +1,13 @@
 import { Header } from "@/components/Header";
 import { EmptyProjectsState } from "@/components/EmptyProjectsState";
 import { ProjectCard } from "@/components/project/ProjectCard";
-import { getPublishedProjects } from "@/lib/projects";
+import { getPublicProjects } from "@/lib/project-repository";
 import { Search } from "lucide-react";
 
-export default function ProjectsPage() {
-  const projects = getPublishedProjects();
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
+  const projects = await getPublicProjects();
 
   return (
     <>
@@ -14,7 +16,7 @@ export default function ProjectsPage() {
         <section className="catalog-header">
           <span>KATALOG PROJEKTÓW</span>
           <h1>Projekty domów</h1>
-          <p>Katalog pokazuje wyłącznie projekty dodane do `content/projects` i oznaczone jako aktywne.</p>
+          <p>Katalog pokazuje wyłącznie projekty dodane w adminie i oznaczone jako aktywne.</p>
         </section>
 
         <section className="catalog-search">

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { EmptyProjectsState } from "@/components/EmptyProjectsState";
 import { ProjectCard } from "@/components/project/ProjectCard";
-import { getPublishedProjects } from "@/lib/projects";
+import { getPublicProjects } from "@/lib/project-repository";
 import {
   Facebook,
   FileCheck2,
@@ -26,8 +26,10 @@ import {
   ChevronRight
 } from "lucide-react";
 
-export default function HomePage() {
-  const projects = getPublishedProjects();
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const projects = await getPublicProjects();
 
   return (
     <>
@@ -102,30 +104,10 @@ export default function HomePage() {
           <div className="how-block">
             <h2>Jak to działa?</h2>
             <div className="steps-line">
-              <div className="step-item">
-                <strong>1</strong>
-                <span><Search size={42} /></span>
-                <h3>Wybierz projekt</h3>
-                <p>Przeglądaj projekty i znajdź idealny dla siebie.</p>
-              </div>
-              <div className="step-item">
-                <strong>2</strong>
-                <span><SlidersHorizontal size={42} /></span>
-                <h3>Dopasuj do siebie</h3>
-                <p>Skorzystaj z opcji adaptacji i zmian w projekcie.</p>
-              </div>
-              <div className="step-item">
-                <strong>3</strong>
-                <span><ShoppingCart size={42} /></span>
-                <h3>Kup projekt online</h3>
-                <p>Szybka i bezpieczna płatność. Projekt otrzymasz mailem.</p>
-              </div>
-              <div className="step-item">
-                <strong>4</strong>
-                <span><Home size={42} /></span>
-                <h3>Buduj z nami</h3>
-                <p>Zrealizuj marzenie o własnym domu z naszym wsparciem.</p>
-              </div>
+              <div className="step-item"><strong>1</strong><span><Search size={42} /></span><h3>Wybierz projekt</h3><p>Przeglądaj projekty i znajdź idealny dla siebie.</p></div>
+              <div className="step-item"><strong>2</strong><span><SlidersHorizontal size={42} /></span><h3>Dopasuj do siebie</h3><p>Skorzystaj z opcji adaptacji i zmian w projekcie.</p></div>
+              <div className="step-item"><strong>3</strong><span><ShoppingCart size={42} /></span><h3>Kup projekt online</h3><p>Szybka i bezpieczna płatność. Projekt otrzymasz mailem.</p></div>
+              <div className="step-item"><strong>4</strong><span><Home size={42} /></span><h3>Buduj z nami</h3><p>Zrealizuj marzenie o własnym domu z naszym wsparciem.</p></div>
             </div>
           </div>
 
@@ -133,17 +115,9 @@ export default function HomePage() {
             <h3>Co mówią nasi klienci</h3>
             <div className="rating">4,9 / 5 <span>★★★★★</span></div>
             <p className="review-count">Na podstawie 1243 opinii</p>
-            <blockquote>
-              „Świetny wybór projektów i fachowe doradztwo. Adaptacja przebiegła sprawnie, a projekt spełnił wszystkie nasze oczekiwania.”
-            </blockquote>
+            <blockquote>„Świetny wybór projektów i fachowe doradztwo. Adaptacja przebiegła sprawnie, a projekt spełnił wszystkie nasze oczekiwania.”</blockquote>
             <p className="review-author">— Anna i Piotr, Kraków</p>
-            <div className="review-nav">
-              <button><ChevronLeft size={18} /></button>
-              <span />
-              <span />
-              <span />
-              <button><ChevronRight size={18} /></button>
-            </div>
+            <div className="review-nav"><button><ChevronLeft size={18} /></button><span /><span /><span /><button><ChevronRight size={18} /></button></div>
           </aside>
         </section>
 
@@ -156,72 +130,22 @@ export default function HomePage() {
             </div>
           </div>
           <form className="newsletter-form">
-            <div>
-              <input placeholder="Twój adres e-mail" />
-              <button type="button">Zapisz się</button>
-            </div>
+            <div><input placeholder="Twój adres e-mail" /><button type="button">Zapisz się</button></div>
             <label><input type="checkbox" /> Wyrażam zgodę na przetwarzanie danych osobowych. <u>Polityka prywatności</u></label>
           </form>
         </section>
 
         <footer className="full-footer">
           <div className="footer-brand">
-            <Link href="/" className="footer-logo">
-              <span><Home size={30} strokeWidth={1.4} /></span>
-              <strong>PROJEKTY<br />DOMÓW</strong>
-            </Link>
+            <Link href="/" className="footer-logo"><span><Home size={30} strokeWidth={1.4} /></span><strong>PROJEKTY<br />DOMÓW</strong></Link>
             <p>Gotowe projekty domów jednorodzinnych dopasowane do Twoich potrzeb.</p>
-            <div className="social-row">
-              <a><Facebook size={18} /></a>
-              <a><Instagram size={18} /></a>
-              <a><Youtube size={18} /></a>
-              <a>p</a>
-            </div>
+            <div className="social-row"><a><Facebook size={18} /></a><a><Instagram size={18} /></a><a><Youtube size={18} /></a><a>p</a></div>
           </div>
-
-          <div className="footer-col">
-            <h3>PROJEKTY</h3>
-            <a>Wszystkie projekty</a>
-            <a>Nowości</a>
-            <a>Bestsellery</a>
-            <a>Promocje</a>
-            <a>Ostatnie zmiany</a>
-          </div>
-
-          <div className="footer-col">
-            <h3>KATEGORIE</h3>
-            <a>Nowoczesne domy</a>
-            <a>Małe domy</a>
-            <a>Domy z garażem</a>
-            <a>Parterowe</a>
-            <a>Piętrowe</a>
-            <a>Z poddaszem</a>
-          </div>
-
-          <div className="footer-col">
-            <h3>INFORMACJE</h3>
-            <a>Jak kupować?</a>
-            <a>Dostawa projektu</a>
-            <a>Adaptacja projektu</a>
-            <a>Zwroty i reklamacje</a>
-            <a>Regulamin</a>
-            <a>Polityka prywatności</a>
-          </div>
-
-          <div className="footer-col">
-            <h3>POMOC</h3>
-            <a>Najczęściej pytania</a>
-            <a>Poradnik budowy</a>
-            <a>Kontakt</a>
-          </div>
-
-          <div className="footer-col contact-col">
-            <h3>KONTAKT</h3>
-            <a><Phone size={15} /> 22 123 45 67</a>
-            <a><Mail size={15} /> biuro@projektydomow.pl</a>
-            <a><HelpCircle size={15} /> Pon. - Pt.: 9:00 - 17:00</a>
-            <a><MapPin size={15} /> ul. Projektowa 10<br />05-500 Piaseczno</a>
-          </div>
+          <div className="footer-col"><h3>PROJEKTY</h3><a>Wszystkie projekty</a><a>Nowości</a><a>Bestsellery</a><a>Promocje</a><a>Ostatnie zmiany</a></div>
+          <div className="footer-col"><h3>KATEGORIE</h3><a>Nowoczesne domy</a><a>Małe domy</a><a>Domy z garażem</a><a>Parterowe</a><a>Piętrowe</a><a>Z poddaszem</a></div>
+          <div className="footer-col"><h3>INFORMACJE</h3><a>Jak kupować?</a><a>Dostawa projektu</a><a>Adaptacja projektu</a><a>Zwroty i reklamacje</a><a>Regulamin</a><a>Polityka prywatności</a></div>
+          <div className="footer-col"><h3>POMOC</h3><a>Najczęściej pytania</a><a>Poradnik budowy</a><a>Kontakt</a></div>
+          <div className="footer-col contact-col"><h3>KONTAKT</h3><a><Phone size={15} /> 22 123 45 67</a><a><Mail size={15} /> biuro@projektydomow.pl</a><a><HelpCircle size={15} /> Pon. - Pt.: 9:00 - 17:00</a><a><MapPin size={15} /> ul. Projektowa 10<br />05-500 Piaseczno</a></div>
         </footer>
 
         <div className="copyright">© 2024 ProjektyDomow.pl – Wszelkie prawa zastrzeżone.</div>
