@@ -1,0 +1,52 @@
+/* ADMIN SELECT UX AND FEATURE PICKER V15 */
+.admin-project-form select,
+.admin-login-card select,
+.admin-edit-row select,
+.feature-picker select {
+  background-color: #11181d;
+  color: #f4f1ea;
+  border-color: rgba(255,255,255,.18);
+}
+.admin-project-form select option,
+.admin-login-card select option,
+.admin-edit-row select option,
+.feature-picker select option {
+  background-color: #11181d;
+  color: #f4f1ea;
+}
+.admin-project-form select option:checked,
+.admin-edit-row select option:checked,
+.feature-picker select option:checked {
+  background-color: #cda463;
+  color: #17110b;
+}
+.admin-custom-option-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 8px; }
+.admin-custom-option-row button,
+.feature-group-row button,
+.manual-feature-row button {
+  min-height: 38px; border: 1px solid rgba(205,164,99,.38); background: rgba(205,164,99,.14); color: #ffe4b5; border-radius: 4px; font-weight: 800; padding: 0 12px;
+}
+.admin-custom-option-chips,
+.selected-feature-chips,
+.custom-feature-bank { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+.admin-custom-option-chips span,
+.selected-feature-chips span,
+.custom-feature-bank button {
+  min-height: 28px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.05); color: #f4f1ea; border-radius: 999px; padding: 0 9px; font-size: 12px;
+}
+.admin-custom-option-chips button,
+.selected-feature-chips button,
+.custom-feature-bank button span {
+  width: 18px; height: 18px; border: 0; background: rgba(255,255,255,.08); color: #f4f1ea; border-radius: 999px; display: grid; place-items: center; padding: 0; cursor: pointer;
+}
+.admin-feature-section { margin-top: 18px; }
+.admin-feature-section h3 { margin: 0 0 6px; font-size: 18px; }
+.admin-feature-section p { margin: 0 0 14px; color: var(--muted); line-height: 1.5; }
+.feature-picker { display: grid; gap: 14px; }
+.feature-picker-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.feature-group { border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.025); border-radius: 6px; padding: 12px; }
+.feature-group strong { display: block; margin-bottom: 8px; color: #fff; }
+.feature-group-row { display: grid; grid-template-columns: 1fr 40px; gap: 8px; }
+.manual-feature-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.custom-feature-bank > span { color: var(--muted); display: inline-flex; align-items: center; margin-right: 4px; }
+@media (max-width: 980px) { .feature-picker-grid, .manual-feature-row, .admin-custom-option-row { grid-template-columns: 1fr; } }

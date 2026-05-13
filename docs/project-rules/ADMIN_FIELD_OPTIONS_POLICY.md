@@ -2,7 +2,7 @@
 
 ## Status
 
-Obowiązuje od V14.
+Obowiązuje od V14, zaktualizowane w V15.
 
 ## Decyzja
 
@@ -13,6 +13,7 @@ Powinny mieć:
 ```txt
 lista wyboru
 + opcja Dodaj ręcznie
++ możliwość usunięcia własnej opcji
 ```
 
 ## Dlaczego
@@ -29,9 +30,7 @@ technologia murowana
 
 Dla człowieka to prawie to samo. Dla filtra to kilka różnych wartości.
 
-## Pola, które powinny być wybieralne
-
-### Obowiązkowo jako lista
+## Pola jako lista
 
 - status
 - badge główny
@@ -43,27 +42,41 @@ Dla człowieka to prawie to samo. Dla filtra to kilka różnych wartości.
 - styl
 - liczba kondygnacji
 - kondygnacja pomieszczenia
-
-### Zostają jako liczby
-
-- cena
-- powierzchnia użytkowa
-- powierzchnia zabudowy
-- liczba pokoi
-- liczba łazienek
-- szerokość działki
-- długość działki
-- wysokość budynku
-- powierzchnia pomieszczenia
-
-### Zostają jako tekst
-
-- nazwa projektu
-- slug
-- podtytuł
-- opis projektu
 - cechy projektu
-- wymiary pomieszczenia
+
+## Cechy projektu
+
+Cechy projektu nie powinny być jednym tekstowym polem.
+
+Właściwy model:
+
+```txt
+kilka grup tematycznych
++ wybór gotowych cech
++ dodaj ręcznie
++ usuń wybrane / własne cechy
+```
+
+Grupy:
+
+- układ i funkcja
+- salon / kuchnia / strefa dzienna
+- strefa nocna
+- garaż i techniczne
+- energooszczędność i komfort
+- działka / taras / ogród
+- efekt sprzedażowy
+
+## Własne opcje
+
+W V15 własne opcje są zapamiętywane lokalnie w przeglądarce admina przez `localStorage`.
+
+Docelowo, gdy panel będzie miał więcej adminów albo większą skalę, własne słowniki opcji powinny trafić do Supabase, np.:
+
+```txt
+admin_option_dictionaries
+admin_option_values
+```
 
 ## Podobne projekty
 
@@ -75,19 +88,3 @@ Właściwy model:
 1. system automatycznie dobiera podobne projekty po parametrach
 2. admin może ręcznie dopiąć albo nadpisać listę
 ```
-
-Parametry do automatycznego doboru:
-
-- typ / kondygnacja
-- powierzchnia użytkowa
-- liczba pokoi
-- garaż
-- dach
-- styl
-- technologia
-- minimalna szerokość działki
-- cena
-
-## Zasada wdrożeniowa
-
-Nowe pola stałe dodawane w przyszłości powinny iść do wspólnego źródła opcji, a nie jako przypadkowy tekst w komponencie.
