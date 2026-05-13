@@ -300,7 +300,19 @@ export async function createProjectAction(
     return duplicateState("slug", existingSlugProject);
   }
 
-  const code = await generateProjectCode(supabase);
+  let code = "";
+
+  try {
+    code = await generateProjectCode(supabase);
+  } catch (error) {
+    return {
+      ok: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Nie udało się wygenerować kodu projektu. Sprawdź migrację 0012_project_code_generation.sql w Supabase."
+    };
+  }
 
   const { data: existingCodeProject, error: existingCodeError } = await supabase
     .from("projects")
