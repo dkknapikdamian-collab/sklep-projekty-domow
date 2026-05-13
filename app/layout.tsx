@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Dom w Aurorach 14 | DomProjekt",
-  description: "Karta projektu domu w ciemnym stylu premium"
+  title: "DomProjekt | Projekty domów",
+  description: "Sklep z projektami domów"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,6 @@
 {
-  "name": "sklep-projekty-domow-project-page-v2",
-  "version": "0.2.0",
+  "name": "sklep-projekty-domow-dynamic-template",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

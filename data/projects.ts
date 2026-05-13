@@ -1,8 +1,15 @@
+export type ProjectPlan = {
+  title: string;
+  type: "floor_plan" | "roof_plan" | "section" | "elevation";
+  url: string;
+};
+
 export type ProjectAddon = {
   code: string;
   name: string;
+  priceGross: number;
   description: string;
-  price: number;
+  deliveryAction?: "send_pdf_email";
 };
 
 export type ProjectRoom = {
@@ -13,65 +20,119 @@ export type ProjectRoom = {
   dimensions: string;
 };
 
+export type ProjectMedia = {
+  hero: string;
+  thumbnail: string;
+  gallery: string[];
+  plans: ProjectPlan[];
+  elevations: ProjectPlan[];
+};
+
 export type Project = {
   code: string;
+  shortCode: string;
   slug: string;
   name: string;
-  shortDescription: string;
-  longDescription: string;
-  price: number;
-  promoPrice?: number;
+  subtitle: string;
+  description: string;
+  priceGross: number;
+  badgePrimary?: string;
+  badgeSecondary?: string;
+  status: "active" | "draft" | "hidden";
   type: string;
   style: string;
   roof: string;
   garage: string;
-  rooms: number;
-  bathrooms: number;
-  floors: number;
+  technology: string;
   usableArea: number;
   buildingArea: number;
+  roomsCount: number;
+  bathroomsCount: number;
+  floorsCount: number;
+  buildingHeight: number;
   minPlotWidth: number;
   minPlotLength: number;
-  height: number;
-  tags: string[];
-  badge?: string;
+  variants: Array<{ name: string; priceGross: number }>;
   addons: ProjectAddon[];
-  roomList: ProjectRoom[];
+  rooms: ProjectRoom[];
+  features: string[];
+  media: ProjectMedia;
+  relatedSlugs: string[];
 };
 
-export const PDF_EMAIL_ADDON: ProjectAddon = {
+const pdfAddon: ProjectAddon = {
   code: "PDF_EMAIL_PACKAGE",
   name: "Pakiet PDF na e-mail",
+  priceGross: 250,
   description:
     "Dodatkowa wersja projektu w formacie PDF wysłana bezpośrednio na e-mail po zaksięgowaniu płatności. Przy dużych plikach wyślemy bezpieczny link do pobrania.",
-  price: 250
+  deliveryAction: "send_pdf_email"
 };
+
+function media(code: string): ProjectMedia {
+  const base = `/projects/${code}`;
+  return {
+    hero: `${base}/hero.jpg`,
+    thumbnail: `${base}/thumbnail.jpg`,
+    gallery: [
+      `${base}/gallery-01.jpg`,
+      `${base}/gallery-02.jpg`,
+      `${base}/gallery-03.jpg`,
+      `${base}/gallery-04.jpg`
+    ],
+    plans: [
+      { title: "Rzut parteru", type: "floor_plan", url: `${base}/floor-plan-ground.jpg` },
+      { title: "Rzut dachu", type: "roof_plan", url: `${base}/floor-plan-roof.jpg` },
+      { title: "Przekrój A-A", type: "section", url: `${base}/section-aa.jpg` },
+      { title: "Przekrój B-B", type: "section", url: `${base}/section-bb.jpg` }
+    ],
+    elevations: [
+      { title: "Elewacja frontowa", type: "elevation", url: `${base}/elevation-front.jpg` },
+      { title: "Elewacja ogrodowa", type: "elevation", url: `${base}/elevation-garden.jpg` },
+      { title: "Elewacja lewa", type: "elevation", url: `${base}/elevation-left.jpg` },
+      { title: "Elewacja prawa", type: "elevation", url: `${base}/elevation-right.jpg` }
+    ]
+  };
+}
 
 export const projects: Project[] = [
   {
     code: "DP-AUR-014",
+    shortCode: "AW14",
     slug: "dom-w-aurorach-14",
     name: "Dom w Aurorach 14",
-    shortDescription: "Nowoczesny dom parterowy z dużym salonem, prostą bryłą i garażem.",
-    longDescription:
-      "Projekt dla osób, które chcą prostego, eleganckiego domu bez zbędnych komplikacji. Układ dzienny otwiera się na ogród, a część prywatna jest wyraźnie oddzielona od strefy wejściowej.",
-    price: 4290,
+    subtitle: "Nowoczesny dom parterowy z garażem dwustanowiskowym",
+    description:
+      "Dom w Aurorach 14 to nowoczesny, parterowy projekt domu z dwustanowiskowym garażem, który łączy funkcjonalność z estetyką. Przemyślany układ pomieszczeń zapewnia komfort codziennego życia dla 4–5 osobowej rodziny. Strefa dzienna to przestronny salon z jadalnią, otwarta kuchnia oraz bezpośrednie wyjście na taras.",
+    priceGross: 3590,
+    badgePrimary: "Nowość",
+    badgeSecondary: "Bestseller",
+    status: "active",
     type: "Parterowy",
     style: "Nowoczesny",
-    roof: "Dwuspadowy",
-    garage: "1 stanowisko",
-    rooms: 4,
-    bathrooms: 2,
-    floors: 1,
-    usableArea: 104.6,
-    buildingArea: 132.4,
-    minPlotWidth: 20,
+    roof: "Czterospadowy",
+    garage: "2 stanowiska",
+    technology: "Murowana",
+    usableArea: 131.24,
+    buildingArea: 172.25,
+    roomsCount: 5,
+    bathroomsCount: 2,
+    floorsCount: 1,
+    buildingHeight: 7.2,
+    minPlotWidth: 22.6,
     minPlotLength: 28,
-    height: 7.2,
-    tags: ["parterowy", "nowoczesny", "garaż", "100m2", "działka 20x28"],
-    badge: "Bestseller",
-    addons: [PDF_EMAIL_ADDON],
-    roomList: [
+    variants: [
+      { name: "Odbicie lustrzane", priceGross: 390 },
+      { name: "Odbicie lustrzane + zmiany", priceGross: 690 }
+    ],
+    addons: [
+      { code: "COST_ESTIMATE", name: "Kosztorys inwestorski", priceGross: 490, description: "Orientacyjny kosztorys inwestorski." },
+      { code: "MECH_VENT", name: "Projekt wentylacji mechanicznej", priceGross: 650, description: "Dodatkowy projekt wentylacji." },
+      { code: "RECUPERATION", name: "Projekt rekuperacji", priceGross: 890, description: "Dodatkowy projekt rekuperacji." },
+      { code: "BUILD_BOARD", name: "Tablica budowy", priceGross: 49, description: "Tablica informacyjna budowy." },
+      pdfAddon
+    ],
+    rooms: [
       { floor: "Parter", number: "1.01", name: "Wiatrołap", area: 4.2, dimensions: "2,10 × 2,00 m" },
       { floor: "Parter", number: "1.02", name: "Hol", area: 8.1, dimensions: "3,60 × 2,25 m" },
       { floor: "Parter", number: "1.03", name: "Salon z jadalnią", area: 32.5, dimensions: "6,20 × 5,10 m" },
@@ -79,76 +140,132 @@ export const projects: Project[] = [
       { floor: "Parter", number: "1.05", name: "Spiżarnia", area: 2.4, dimensions: "1,60 × 1,50 m" },
       { floor: "Parter", number: "1.06", name: "Łazienka", area: 5.6, dimensions: "2,80 × 2,00 m" },
       { floor: "Parter", number: "1.07", name: "Sypialnia", area: 13.9, dimensions: "3,80 × 3,65 m" },
-      { floor: "Parter", number: "1.08", name: "Garaż", area: 18.4, dimensions: "3,20 × 5,75 m" }
-    ]
+      { floor: "Parter", number: "1.08", name: "Garaż", area: 34, dimensions: "6,00 × 5,65 m" }
+    ],
+    features: [
+      "Przestronny salon z wyjściem na taras",
+      "Duża kuchnia ze spiżarnią",
+      "Garaż na 2 auta + kotłownia",
+      "Funkcjonalny układ strefy nocnej",
+      "Optymalne doświetlenie wnętrz",
+      "Nowoczesna bryła i elegancka elewacja"
+    ],
+    media: media("DP-AUR-014"),
+    relatedSlugs: ["dom-w-malinowkach-6", "dom-klejnot-29"]
   },
   {
     code: "DP-MAL-006",
+    shortCode: "ML06",
     slug: "dom-w-malinowkach-6",
     name: "Dom w Malinówkach 6",
-    shortDescription: "Kompaktowy dom około 100 m² z trzema pokojami i czytelną strefą dzienną.",
-    longDescription:
-      "Prosty projekt pod inwestycję lub rodzinne osiedle. Bryła jest oszczędna, łatwa do powielenia i dobrze nadaje się pod działki o regularnych wymiarach.",
-    price: 3890,
+    subtitle: "Kompaktowy dom parterowy do 100 m²",
+    description:
+      "Dom w Malinówkach 6 to prosty, ekonomiczny projekt dla osób szukających czytelnego układu i niewielkiej powierzchni. Dobrze sprawdza się na regularnych działkach oraz jako projekt do powtarzalnej inwestycji osiedlowej.",
+    priceGross: 3290,
+    badgePrimary: "Nowość",
+    status: "active",
     type: "Parterowy",
     style: "Minimalistyczny",
     roof: "Dwuspadowy",
     garage: "Brak",
-    rooms: 3,
-    bathrooms: 1,
-    floors: 1,
+    technology: "Murowana",
     usableArea: 98.8,
     buildingArea: 118.2,
+    roomsCount: 4,
+    bathroomsCount: 1,
+    floorsCount: 1,
+    buildingHeight: 6.8,
     minPlotWidth: 18,
     minPlotLength: 26,
-    height: 6.8,
-    tags: ["100m2", "parterowy", "bez garażu", "osiedle", "działka 18x26"],
-    badge: "Nowość",
-    addons: [PDF_EMAIL_ADDON],
-    roomList: [
+    variants: [
+      { name: "Odbicie lustrzane", priceGross: 290 },
+      { name: "Wersja z małymi zmianami", priceGross: 590 }
+    ],
+    addons: [
+      { code: "COST_ESTIMATE", name: "Kosztorys inwestorski", priceGross: 390, description: "Orientacyjny kosztorys inwestorski." },
+      { code: "BUILD_BOARD", name: "Tablica budowy", priceGross: 49, description: "Tablica informacyjna budowy." },
+      pdfAddon
+    ],
+    rooms: [
       { floor: "Parter", number: "1.01", name: "Wiatrołap", area: 3.9, dimensions: "2,00 × 1,95 m" },
       { floor: "Parter", number: "1.02", name: "Salon z kuchnią", area: 34.2, dimensions: "6,80 × 5,00 m" },
       { floor: "Parter", number: "1.03", name: "Pokój", area: 12.1, dimensions: "3,40 × 3,55 m" },
       { floor: "Parter", number: "1.04", name: "Pokój", area: 11.8, dimensions: "3,30 × 3,55 m" },
       { floor: "Parter", number: "1.05", name: "Sypialnia", area: 13.4, dimensions: "3,70 × 3,60 m" },
       { floor: "Parter", number: "1.06", name: "Łazienka", area: 5.2, dimensions: "2,60 × 2,00 m" }
-    ]
+    ],
+    features: [
+      "Kompaktowa powierzchnia użytkowa",
+      "Prosta bryła pod tanią budowę",
+      "Czytelny układ dzienny",
+      "Dobra propozycja na mniejszą działkę",
+      "Wygodna kuchnia otwarta",
+      "Łatwe dopasowanie pod inwestycję"
+    ],
+    media: media("DP-MAL-006"),
+    relatedSlugs: ["dom-w-aurorach-14", "dom-klejnot-29"]
   },
   {
     code: "DP-KLE-029",
+    shortCode: "KL29",
     slug: "dom-klejnot-29",
     name: "Dom Klejnot 29",
-    shortDescription: "Elegancki dom z poddaszem, garażem dwustanowiskowym i dużą strefą nocną.",
-    longDescription:
-      "Projekt dla większej rodziny. Parter jest reprezentacyjny, a poddasze daje prywatną strefę sypialnianą z wygodnym układem pomieszczeń.",
-    price: 5190,
-    promoPrice: 4890,
+    subtitle: "Rodzinny dom z poddaszem i garażem dwustanowiskowym",
+    description:
+      "Dom Klejnot 29 to większy projekt rodzinny z czytelnym podziałem stref. Parter pełni funkcję dzienną, a poddasze daje prywatną część nocną. To projekt dla klienta, który potrzebuje większego domu i mocniejszego efektu wizualnego.",
+    priceGross: 4890,
+    badgeSecondary: "Promocja",
+    status: "active",
     type: "Z poddaszem",
     style: "Elegancki",
     roof: "Wielospadowy",
     garage: "2 stanowiska",
-    rooms: 5,
-    bathrooms: 3,
-    floors: 2,
+    technology: "Murowana",
     usableArea: 158.4,
     buildingArea: 146.9,
+    roomsCount: 5,
+    bathroomsCount: 3,
+    floorsCount: 2,
+    buildingHeight: 8.6,
     minPlotWidth: 24,
     minPlotLength: 30,
-    height: 8.6,
-    tags: ["poddasze", "garaż 2", "rodzinny", "160m2", "działka 24x30"],
-    badge: "Promocja",
-    addons: [PDF_EMAIL_ADDON],
-    roomList: [
+    variants: [
+      { name: "Odbicie lustrzane", priceGross: 390 },
+      { name: "Odbicie lustrzane + zmiany", priceGross: 790 }
+    ],
+    addons: [
+      { code: "COST_ESTIMATE", name: "Kosztorys inwestorski", priceGross: 590, description: "Orientacyjny kosztorys inwestorski." },
+      { code: "MECH_VENT", name: "Projekt wentylacji mechanicznej", priceGross: 650, description: "Dodatkowy projekt wentylacji." },
+      { code: "RECUPERATION", name: "Projekt rekuperacji", priceGross: 890, description: "Dodatkowy projekt rekuperacji." },
+      pdfAddon
+    ],
+    rooms: [
       { floor: "Parter", number: "1.01", name: "Wiatrołap", area: 5.2, dimensions: "2,30 × 2,25 m" },
       { floor: "Parter", number: "1.02", name: "Salon", area: 36.4, dimensions: "7,00 × 5,20 m" },
       { floor: "Parter", number: "1.03", name: "Kuchnia", area: 12.8, dimensions: "4,00 × 3,20 m" },
       { floor: "Poddasze", number: "2.01", name: "Sypialnia główna", area: 18.2, dimensions: "4,70 × 3,85 m" },
       { floor: "Poddasze", number: "2.02", name: "Pokój", area: 13.6, dimensions: "3,70 × 3,65 m" },
       { floor: "Poddasze", number: "2.03", name: "Pokój", area: 13.1, dimensions: "3,65 × 3,60 m" }
-    ]
+    ],
+    features: [
+      "Duża strefa dzienna",
+      "Poddasze z prywatną częścią nocną",
+      "Garaż na 2 auta",
+      "Reprezentacyjna bryła",
+      "Dobra propozycja dla większej rodziny",
+      "Możliwość wersji premium"
+    ],
+    media: media("DP-KLE-029"),
+    relatedSlugs: ["dom-w-aurorach-14", "dom-w-malinowkach-6"]
   }
 ];
 
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
+}
+
+export function getRelatedProjects(project: Project) {
+  return project.relatedSlugs
+    .map((slug) => getProjectBySlug(slug))
+    .filter((item): item is Project => Boolean(item));
 }

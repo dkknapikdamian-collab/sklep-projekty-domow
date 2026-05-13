@@ -13,7 +13,8 @@ if (!(Test-Path ".git")) {
 }
 
 git add .
-git commit -m "Implement project page visual reference v2" | Out-Host
+git commit -m "Implement dynamic project template with project asset folders" | Out-Host
 
 npm install
+npm run build
 npm run dev

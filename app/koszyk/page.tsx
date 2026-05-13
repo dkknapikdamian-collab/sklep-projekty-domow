@@ -1,43 +1,34 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { projects, PDF_EMAIL_ADDON } from "@/data/projects";
+import { projects } from "@/data/projects";
 
 export default function CartPage() {
   const project = projects[0];
-  const total = project.price + PDF_EMAIL_ADDON.price;
+  const pdfAddon = project.addons.find((addon) => addon.code === "PDF_EMAIL_PACKAGE");
+  const total = project.priceGross + (pdfAddon?.priceGross ?? 0);
 
   return (
     <>
       <Header />
-      <main>
-        <section className="page-hero slim">
-          <span className="eyebrow">Koszyk demo</span>
-          <h1>Projekt i dodatki przed zamówieniem</h1>
-          <p>To jest widok demonstracyjny. Docelowo koszyk będzie zapisywany w sesji/local storage.</p>
+      <main className="page-shell">
+        <section className="catalog-page-head">
+          <span>KOSZYK DEMO</span>
+          <h1>Koszyk będzie korzystał z dynamicznych danych projektu</h1>
+          <p>Na razie pokazujemy przykład z dodatkiem PDF na e-mail.</p>
         </section>
-        <section className="cart-layout">
-          <div className="cart-items">
-            <article className="cart-item">
-              <div>
-                <span className="project-code">{project.code}</span>
-                <h3>{project.name}</h3>
-                <p>{project.shortDescription}</p>
-                <div className="addon-preview">Dodatek: {PDF_EMAIL_ADDON.name} +250 zł</div>
-              </div>
-              <strong>{total.toLocaleString("pl-PL")} zł</strong>
-            </article>
-          </div>
-          <aside className="purchase-box static">
-            <span className="eyebrow">Podsumowanie</span>
-            <div className="summary-line"><span>Projekt</span><strong>{project.price.toLocaleString("pl-PL")} zł</strong></div>
-            <div className="summary-line"><span>PDF na e-mail</span><strong>250 zł</strong></div>
+
+        <section className="checkout-demo-grid">
+          <article className="checkout-demo-card">
+            <span>{project.code}</span>
+            <h2>{project.name}</h2>
+            <p>{project.subtitle}</p>
+            <div className="summary-line"><span>Projekt</span><strong>{project.priceGross.toLocaleString("pl-PL")} zł</strong></div>
+            {pdfAddon && <div className="summary-line"><span>{pdfAddon.name}</span><strong>{pdfAddon.priceGross.toLocaleString("pl-PL")} zł</strong></div>}
             <div className="summary-total"><span>Razem</span><strong>{total.toLocaleString("pl-PL")} zł</strong></div>
-            <Link className="primary-cta" href="/zamowienie">Przejdź do zamówienia</Link>
-          </aside>
+            <Link href="/zamowienie" className="home-cta">Przejdź do zamówienia</Link>
+          </article>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

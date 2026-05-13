@@ -1,30 +1,31 @@
 import Link from "next/link";
-import { Home, Search, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingCart, Search, User, ChevronDown, House } from "lucide-react";
 
 export function Header() {
   return (
-    <header className="site-header">
-      <div className="top-strip">
-        <span>Projekty domów premium</span>
-        <span>Pomoc przy wyborze projektu: +48 000 000 000</span>
-      </div>
-      <div className="nav-shell">
-        <Link href="/" className="brand">
-          <span className="brand-mark"><Home size={20} /></span>
-          <span>
-            <strong>DomyProjekt</strong>
-            <small>nowoczesne projekty domów</small>
-          </span>
+    <header className="dp-header">
+      <div className="dp-header-inner">
+        <Link href="/" className="dp-logo">
+          <div className="dp-logo-mark"><House size={26} strokeWidth={1.6} /></div>
+          <div>
+            <strong>DOMPROJEKT</strong>
+            <span>PROJEKTY DOMÓW</span>
+          </div>
         </Link>
-        <nav>
-          <Link href="/projekty">Projekty</Link>
-          <Link href="/projekty">Domy parterowe</Link>
-          <Link href="/projekty">Z garażem</Link>
-          <Link href="/admin">Admin demo</Link>
+
+        <nav className="dp-nav">
+          <Link href="/projekty">PROJEKTY <ChevronDown size={13} /></Link>
+          <a>USŁUGI <ChevronDown size={13} /></a>
+          <a>JAK KUPIĆ?</a>
+          <a>O NAS</a>
+          <a>KONTAKT</a>
         </nav>
-        <div className="nav-actions">
-          <Link href="/projekty" className="ghost-icon"><Search size={18} /></Link>
-          <Link href="/koszyk" className="cart-pill"><ShoppingBag size={18} /> Koszyk</Link>
+
+        <div className="dp-actions">
+          <a><Heart size={21} /> <span>ULUBIONE</span></a>
+          <Link href="/koszyk" className="cart-action"><ShoppingCart size={21} /> <span>KOSZYK</span><em>2</em></Link>
+          <a><Search size={21} /></a>
+          <a className="mobile-user"><User size={21} /></a>
         </div>
       </div>
     </header>
