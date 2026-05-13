@@ -1,3 +1,4 @@
+﻿@import "./footer-end-v6.css";
 :root {
   --bg: #0f1417;
   --bg-soft: #151b1f;
@@ -284,7 +285,7 @@ button, input, select, textarea { font: inherit; }
 }
 
 .section-head h2::before {
-  content: "–";
+  content: "â€“";
   color: var(--gold);
   margin-right: 12px;
 }
@@ -1171,3 +1172,4 @@ button, input, select, textarea { font: inherit; }
   .more-photos { height: 83px; }
   .micro-trust { grid-template-columns: 1fr; }
 }
+
