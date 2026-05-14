@@ -7,11 +7,12 @@ import type { AdminProjectListItem } from "@/lib/admin/projects-admin";
 import { AdminProjectsTable } from "./AdminProjectsTable";
 
 const STATUS_FILTER_OPTIONS = [
-  { value: "all", label: "Wszystkie statusy" },
-  { value: "draft", label: "Draft" },
-  { value: "active", label: "Active" },
-  { value: "hidden", label: "Hidden" },
-  { value: "archived", label: "Archived" }
+  { value: "all", label: "Wszystkie" },
+  { value: "active", label: "Aktywne" },
+  { value: "draft", label: "Drafty" },
+  { value: "incomplete", label: "Niekompletne" },
+  { value: "no-media", label: "Bez zdjec" },
+  { value: "no-rooms", label: "Bez pomieszczen" }
 ];
 
 function normalize(value: unknown) {
@@ -29,7 +30,10 @@ function projectMatchesSearch(project: AdminProjectListItem, query: string) {
     project.name,
     project.code,
     project.slug,
-    project.status
+    project.status,
+    project.canPublish ? "gotowy" : "niekompletny",
+    project.mediaCount <= 0 ? "bez zdjec" : "",
+    project.projectRoomsCount <= 0 ? "bez pomieszczen" : ""
   ].map(normalize).join(" ");
 
   return haystack.includes(query);
@@ -44,10 +48,14 @@ export function AdminProjectsListClient({ projects }: { projects: AdminProjectLi
 
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
-      const matchesStatus = statusFilter === "all" || project.status === statusFilter;
-      const matchesSearch = projectMatchesSearch(project, normalizedSearchTerm);
+          const matchesStatus = statusFilter === "all" || project.status === statusFilter;
+          const matchesExtendedStatus =
+            (statusFilter === "incomplete" && !project.canPublish) ||
+            (statusFilter === "no-media" && project.mediaCount <= 0) ||
+            (statusFilter === "no-rooms" && project.projectRoomsCount <= 0);
+          const matchesSearch = projectMatchesSearch(project, normalizedSearchTerm);
 
-      return matchesStatus && matchesSearch;
+      return (matchesStatus || matchesExtendedStatus) && matchesSearch;
     });
   }, [projects, normalizedSearchTerm, statusFilter]);
 
@@ -71,7 +79,7 @@ export function AdminProjectsListClient({ projects }: { projects: AdminProjectLi
         </div>
         <select
           data-admin-project-status-filter="true"
-          aria-label="Filtruj projekty po statusie"
+          aria-label="Filtruj projekty po gotowosci i statusie"
           value={statusFilter}
           onChange={(event) => setStatusFilter(event.target.value)}
         >
@@ -89,7 +97,7 @@ export function AdminProjectsListClient({ projects }: { projects: AdminProjectLi
       <section className="admin-filter-summary" data-admin-project-filter-summary="true" aria-live="polite">
         <strong>{filteredProjects.length}</strong>
         <span>z {projects.length} projektów</span>
-        {hasFilters && <em>Aktywny filtr: {statusFilter === "all" ? "dowolny status" : statusFilter}{normalizedSearchTerm ? ` / ${searchTerm}` : ""}</em>}
+        {hasFilters && <em>Aktywny filtr: {statusFilter === "all" ? "wszystkie" : statusFilter}{normalizedSearchTerm ? ` / ${searchTerm}` : ""}</em>}
       </section>
 
       {projects.length === 0 ? (

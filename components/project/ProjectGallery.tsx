@@ -1,4 +1,7 @@
-﻿import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import type { Project } from "@/types/project";
 import { MediaSlot } from "@/components/MediaSlot";
 
@@ -83,37 +86,65 @@ function buildProjectGalleryImages(project: Project): GalleryImage[] {
 
 export function ProjectGallery({ project }: { project: Project }) {
   const images = buildProjectGalleryImages(project);
-  const mainImage = images[0];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const mainImage = images[activeIndex] || images[0];
   const thumbs = images.slice(0, 4);
   const extraCount = Math.max(images.length - thumbs.length, 0);
+  const hasMultipleImages = images.length > 1;
+
+  if (!mainImage) return null;
+
+  function move(direction: 1 | -1) {
+    setActiveIndex((current) => {
+      const next = current + direction;
+      if (next < 0) return images.length - 1;
+      if (next >= images.length) return 0;
+      return next;
+    });
+  }
 
   return (
     <div className="project-gallery" data-project-gallery-v30="true">
       <div className="main-photo">
-        <button className="gallery-arrow left" type="button"><ChevronLeft size={24} /></button>
-        <MediaSlot src={mainImage?.url} alt={project.name} label="Dodaj zdjecie glowne projektu" />
-        <button className="gallery-arrow right" type="button"><ChevronRight size={24} /></button>
-        <button className="heart-floating" type="button"><Heart size={35} /></button>
+        {hasMultipleImages && (
+          <button className="gallery-arrow left" type="button" onClick={() => move(-1)} aria-label="Poprzednie zdjecie">
+            <ChevronLeft size={24} />
+          </button>
+        )}
+        <MediaSlot src={mainImage.url} alt={project.name} label={mainImage.label} />
+        {hasMultipleImages && (
+          <button className="gallery-arrow right" type="button" onClick={() => move(1)} aria-label="Nastepne zdjecie">
+            <ChevronRight size={24} />
+          </button>
+        )}
+        <button className="heart-floating" type="button" aria-label="Dodaj do ulubionych"><Heart size={35} /></button>
       </div>
 
-      <div className="thumbnail-row">
-        {Array.from({ length: 4 }).map((_, index) => {
-          const image = thumbs[index];
-          return (
-            <button className={index === 0 ? "active" : ""} key={index} type="button">
+      {thumbs.length > 1 && (
+        <div className="thumbnail-row">
+          {thumbs.map((image, index) => (
+            <button
+              className={index === activeIndex ? "active" : ""}
+              key={image.url}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Pokaz ${image.label}`}
+            >
               <MediaSlot
-                src={image?.url}
+                src={image.url}
                 alt={`${project.name} miniatura ${index + 1}`}
-                label={image?.label || `gallery-${String(index + 1).padStart(2, "0")}.jpg`}
+                label={image.label}
               />
             </button>
-          );
-        })}
-        <button className="more-photos" type="button">
-          +{extraCount}
-          <span>wiecej</span>
-        </button>
-      </div>
+          ))}
+          {extraCount > 0 && (
+            <button className="more-photos" type="button" onClick={() => setActiveIndex(thumbs.length)} aria-label="Pokaz wiecej zdjec">
+              +{extraCount}
+              <span>wiecej</span>
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

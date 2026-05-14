@@ -68,11 +68,16 @@ if (!slugPage.includes("notFound()")) {
 }
 
 const tabs = read("components/project/ProjectTabs.tsx");
-for (const needle of ["project.rooms.length > 0", "Kondygnacja", "Tabela pomieszczen zostanie uzupelniona", "project.privateFilesInfo"]) {
+for (const needle of ["project.rooms.length > 0", "Kondygnacja", "Tabela pomieszczen zostanie uzupelniona", "Suma powierzchni pomieszczen"]) {
   if (!tabs.includes(needle)) {
     console.error(`FAIL: ProjectTabs missing V22 rooms/files rendering: ${needle}`);
     process.exit(1);
   }
+}
+
+if (tabs.includes("project.privateFilesInfo")) {
+  console.error("FAIL: ProjectTabs must not render private project file info publicly after V37.");
+  process.exit(1);
 }
 
 const purchase = read("components/project/ProjectPurchaseBox.tsx");

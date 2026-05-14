@@ -3,6 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/admin";
+import {
+  getProjectPublicationErrorMessage,
+  getProjectPublicationReadiness,
+  PROJECT_PUBLICATION_MISSING_LABELS
+} from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 export type UpdateProjectState = {
@@ -44,11 +49,6 @@ function num(formData: FormData, key: string) {
 
 function intNum(formData: FormData, key: string) {
   return Math.round(num(formData, key));
-}
-
-function toNumber(value: unknown) {
-  const numeric = Number(value);
-  return Number.isFinite(numeric) ? numeric : 0;
 }
 
 function slugify(input: string) {
@@ -106,96 +106,26 @@ function assertStatus(status: string) {
   }
 }
 
-const PUBLICATION_MISSING_LABELS: Record<string, string> = {
-  name: "nazwy projektu",
-  slug: "slug",
-  price: "ceny > 0",
-  usable_area: "powierzchni uzytkowej > 0",
-  rooms_count: "liczby pokoi > 0",
-  media_main: "zdjecia glownego (hero albo thumbnail)",
-  rooms_table: "tabeli pomieszczen"
-};
-
-type PublicationValidationPayload = {
-  name?: string;
-  slug?: string;
-  priceGross?: number;
-  usableArea?: number;
-  roomsCount?: number;
-  roomRowsCount?: number;
-  hasMainMedia?: boolean;
-};
-
-function buildPublicationErrorMessage(missing: string[]) {
-  const lines = missing.map((key) => `- ${PUBLICATION_MISSING_LABELS[key] || key}`);
-  return `Nie mozna opublikowac projektu. Brakuje:\n${lines.join("\n")}`;
-}
-
-async function validateProjectPublication(params: {
-  supabase: NonNullable<ReturnType<typeof createSupabaseServiceRoleClient>>;
-  projectId: string;
-  payload?: PublicationValidationPayload;
-}) {
-  const { supabase, projectId, payload } = params;
-
-  const { data: project, error: projectError } = await supabase
-    .from("projects")
-    .select("name, slug, price_gross, usable_area, rooms_count")
-    .eq("id", projectId)
-    .maybeSingle();
-
-  if (projectError) {
-    throw new Error(`Nie udalo sie sprawdzic danych publikacji: ${projectError.message}`);
-  }
-
-  if (!project) {
-    throw new Error("Nie znaleziono projektu do publikacji.");
-  }
-
-  const { count: roomsCountDb, error: roomsCountError } = await supabase
-    .from("project_rooms")
-    .select("id", { count: "exact", head: true })
-    .eq("project_id", projectId);
-
-  if (roomsCountError) {
-    throw new Error(`Nie udalo sie sprawdzic tabeli pomieszczen: ${roomsCountError.message}`);
-  }
-
-  const { data: mediaRows, error: mediaError } = await supabase
-    .from("project_media")
-    .select("media_type")
-    .eq("project_id", projectId);
+async function getProjectPublicationContext(
+  supabase: NonNullable<ReturnType<typeof createSupabaseServiceRoleClient>>,
+  projectId: string
+) {
+  const [{ data: mediaRows, error: mediaError }, { data: roomRows, error: roomsError }] = await Promise.all([
+    supabase.from("project_media").select("media_type").eq("project_id", projectId),
+    supabase.from("project_rooms").select("name").eq("project_id", projectId)
+  ]);
 
   if (mediaError) {
     throw new Error(`Nie udalo sie sprawdzic mediow projektu: ${mediaError.message}`);
   }
 
-  const hasMainMediaInDb = (mediaRows || []).some((item) => {
-    const type = String(item.media_type || "");
-    return type === "hero" || type === "thumbnail";
-  });
-
-  const finalName = (payload?.name ?? String(project.name || "")).trim();
-  const finalSlug = (payload?.slug ?? String(project.slug || "")).trim();
-  const finalPrice = payload?.priceGross ?? toNumber(project.price_gross);
-  const finalUsableArea = payload?.usableArea ?? toNumber(project.usable_area);
-  const finalRoomsCount = payload?.roomsCount ?? toNumber(project.rooms_count);
-  const finalRoomRowsCount = payload?.roomRowsCount ?? toNumber(roomsCountDb);
-  const finalHasMainMedia = payload?.hasMainMedia ?? hasMainMediaInDb;
-
-  const missing: string[] = [];
-  if (!finalName) missing.push("name");
-  if (!finalSlug) missing.push("slug");
-  if (finalPrice <= 0) missing.push("price");
-  if (finalUsableArea <= 0) missing.push("usable_area");
-  if (finalRoomsCount <= 0) missing.push("rooms_count");
-  if (!finalHasMainMedia) missing.push("media_main");
-  if (finalRoomRowsCount <= 0) missing.push("rooms_table");
+  if (roomsError) {
+    throw new Error(`Nie udalo sie sprawdzic tabeli pomieszczen: ${roomsError.message}`);
+  }
 
   return {
-    ok: missing.length === 0,
-    missing,
-    message: missing.length ? buildPublicationErrorMessage(missing) : ""
+    mediaRows: mediaRows || [],
+    roomRows: roomRows || []
   };
 }
 
@@ -343,15 +273,35 @@ export async function updateProjectStatusAction(formData: FormData) {
   }
 
   if (status === "active") {
-    const publication = await validateProjectPublication({
-      supabase,
-      projectId
+    const { data: project, error: projectError } = await supabase
+      .from("projects")
+      .select("name, slug, price_gross, usable_area, rooms_count")
+      .eq("id", projectId)
+      .maybeSingle();
+
+    if (projectError) {
+      redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(projectError.message)}`);
+    }
+
+    if (!project) {
+      redirect("/admin/projekty?status=error&reason=Nie%20znaleziono%20projektu%20do%20publikacji");
+    }
+
+    const { mediaRows, roomRows } = await getProjectPublicationContext(supabase, projectId);
+    const readiness = getProjectPublicationReadiness({
+      name: String(project.name || ""),
+      slug: String(project.slug || ""),
+      priceGross: Number(project.price_gross || 0),
+      usableArea: Number(project.usable_area || 0),
+      roomsCount: Number(project.rooms_count || 0),
+      media: mediaRows,
+      rooms: roomRows
     });
 
-    if (!publication.ok) {
-      const reason = encodeURIComponent(publication.message);
+    if (!readiness.canPublish) {
+      const reason = encodeURIComponent(getProjectPublicationErrorMessage(readiness.missing));
       const missing = encodeURIComponent(
-        publication.missing.map((item) => PUBLICATION_MISSING_LABELS[item] || item).join(",")
+        readiness.missing.map((item) => PROJECT_PUBLICATION_MISSING_LABELS[item] || item).join(",")
       );
       redirect(`/admin/projekty?status=error&reason=${reason}&missing=${missing}`);
     }
@@ -607,27 +557,21 @@ export async function updateProjectAction(
       .filter(Boolean);
 
     if (status === "active") {
-      const roomRowsCount = rooms.filter((room) => room.name && String(room.name).trim()).length;
       const hasHeroUpload = isRealFile(formData.get("heroFile"));
       const hasThumbnailUpload = isRealFile(formData.get("thumbnailFile"));
-      const hasMainMediaUpload = hasHeroUpload || hasThumbnailUpload;
-
-      const publication = await validateProjectPublication({
-        supabase,
-        projectId,
-        payload: {
-          name,
-          slug,
-          priceGross: num(formData, "priceGross"),
-          usableArea: num(formData, "usableArea"),
-          roomsCount: intNum(formData, "roomsCount"),
-          roomRowsCount,
-          ...(hasMainMediaUpload ? { hasMainMedia: true } : {})
-        }
+      const { mediaRows, roomRows } = await getProjectPublicationContext(supabase, projectId);
+      const readiness = getProjectPublicationReadiness({
+        name,
+        slug,
+        priceGross: num(formData, "priceGross"),
+        usableArea: num(formData, "usableArea"),
+        roomsCount: intNum(formData, "roomsCount"),
+        media: hasHeroUpload || hasThumbnailUpload ? [{ media_type: "hero" }, ...mediaRows] : mediaRows,
+        rooms: rooms.length ? rooms.map((room) => ({ name: room.name })) : roomRows
       });
 
-      if (!publication.ok) {
-        return { ok: false, message: publication.message };
+      if (!readiness.canPublish) {
+        return { ok: false, message: getProjectPublicationErrorMessage(readiness.missing) };
       }
     }
 
