@@ -4,9 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/admin";
 import {
-  getProjectPublicationErrorMessage,
-  getProjectPublicationReadiness,
-  PROJECT_PUBLICATION_MISSING_LABELS
+  getProjectPublicationReadiness
 } from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
@@ -84,6 +82,13 @@ function isRealFile(value: FormDataEntryValue | null): value is File {
   return value instanceof File && value.size > 0 && value.name !== "";
 }
 
+function revalidatePublicProjectPaths(slug?: string) {
+  revalidatePath("/");
+  revalidatePath("/projekty");
+  revalidatePath("/projekty/[slug]");
+  if (slug) revalidatePath(`/projekty/${slug}`);
+}
+
 async function requireAdminAndClient() {
   const admin = await getAdminSession();
 
@@ -127,6 +132,13 @@ async function getProjectPublicationContext(
     mediaRows: mediaRows || [],
     roomRows: roomRows || []
   };
+}
+
+function hasMainMedia(rows: Array<{ media_type?: string | null }>) {
+  return rows.some((item) => {
+    const mediaType = String(item.media_type || "").trim();
+    return mediaType === "hero" || mediaType === "thumbnail";
+  });
 }
 
 async function uploadPublicMedia(params: {
@@ -294,15 +306,13 @@ export async function updateProjectStatusAction(formData: FormData) {
       priceGross: Number(project.price_gross || 0),
       usableArea: Number(project.usable_area || 0),
       roomsCount: Number(project.rooms_count || 0),
-      media: mediaRows,
-      rooms: roomRows
+      roomRowsCount: roomRows.filter((room) => String(room.name || "").trim().length > 0).length,
+      hasMainMedia: hasMainMedia(mediaRows)
     });
 
     if (!readiness.canPublish) {
-      const reason = encodeURIComponent(getProjectPublicationErrorMessage(readiness.missing));
-      const missing = encodeURIComponent(
-        readiness.missing.map((item) => PROJECT_PUBLICATION_MISSING_LABELS[item] || item).join(",")
-      );
+      const reason = encodeURIComponent(readiness.message);
+      const missing = encodeURIComponent(readiness.missingLabels.join(","));
       redirect(`/admin/projekty?status=error&reason=${reason}&missing=${missing}`);
     }
   }
@@ -316,9 +326,7 @@ export async function updateProjectStatusAction(formData: FormData) {
     redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(error.message)}`);
   }
 
-  revalidatePath("/");
-  revalidatePath("/projekty");
-  if (slug) revalidatePath(`/projekty/${slug}`);
+  revalidatePublicProjectPaths(slug);
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
 
@@ -351,9 +359,7 @@ export async function deleteProjectAction(formData: FormData) {
   const { error } = await supabase.from("projects").delete().eq("id", projectId);
   if (error) throw new Error(`Nie udalo sie usunac projektu: ${error.message}`);
 
-  revalidatePath("/");
-  revalidatePath("/projekty");
-  if (project?.slug) revalidatePath(`/projekty/${project.slug}`);
+  revalidatePublicProjectPaths(project?.slug || undefined);
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
 
@@ -384,9 +390,7 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
 
   if (error) throw new Error(`Nie udalo sie usunac media: ${error.message}`);
 
-  revalidatePath("/");
-  revalidatePath("/projekty");
-  if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
+  revalidatePublicProjectPaths(projectSlug || undefined);
   revalidatePath("/admin/projekty");
   if (projectId) revalidatePath(`/admin/projekty/${projectId}/edytuj`);
 
@@ -432,9 +436,7 @@ export async function setProjectMediaTypeAction(formData: FormData) {
 
   if (updateError) throw new Error(`Nie udalo sie ustawic typu ${targetType}: ${updateError.message}`);
 
-  revalidatePath("/");
-  revalidatePath("/projekty");
-  if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
+  revalidatePublicProjectPaths(projectSlug || undefined);
   revalidatePath("/admin/projekty");
   revalidatePath(`/admin/projekty/${projectId}/edytuj`);
 
@@ -566,12 +568,14 @@ export async function updateProjectAction(
         priceGross: num(formData, "priceGross"),
         usableArea: num(formData, "usableArea"),
         roomsCount: intNum(formData, "roomsCount"),
-        media: hasHeroUpload || hasThumbnailUpload ? [{ media_type: "hero" }, ...mediaRows] : mediaRows,
-        rooms: rooms.length ? rooms.map((room) => ({ name: room.name })) : roomRows
+        roomRowsCount: rooms.length
+          ? rooms.filter((room) => String(room.name || "").trim().length > 0).length
+          : roomRows.filter((room) => String(room.name || "").trim().length > 0).length,
+        hasMainMedia: hasHeroUpload || hasThumbnailUpload || hasMainMedia(mediaRows)
       });
 
       if (!readiness.canPublish) {
-        return { ok: false, message: getProjectPublicationErrorMessage(readiness.missing) };
+        return { ok: false, message: readiness.message };
       }
     }
 
@@ -660,10 +664,8 @@ export async function updateProjectAction(
     await uploadPublicMedia({ supabase, projectId, projectCode: oldProject.code, formData });
     await uploadPrivateFiles({ supabase, projectId, projectCode: oldProject.code, formData });
 
-    revalidatePath("/");
-    revalidatePath("/projekty");
-    if (oldProject.slug) revalidatePath(`/projekty/${oldProject.slug}`);
-    revalidatePath(`/projekty/${slug}`);
+    revalidatePublicProjectPaths(oldProject.slug || undefined);
+    revalidatePublicProjectPaths(slug || undefined);
     revalidatePath("/admin");
     revalidatePath("/admin/projekty");
     revalidatePath(`/admin/projekty/${projectId}/edytuj`);
@@ -751,8 +753,7 @@ export async function createSampleProjectAction() {
     throw new Error(`Nie udalo sie utworzyc przykladowego projektu: ${error.message}`);
   }
 
-  revalidatePath("/");
-  revalidatePath("/projekty");
+  revalidatePublicProjectPaths();
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
 

@@ -1,26 +1,28 @@
 export type ProjectPublicationReadiness = {
   canPublish: boolean;
   missing: string[];
+  missingLabels: string[];
+  message: string;
 };
 
-type PublicationReadinessInput = {
+type ProjectPublicationReadinessInput = {
   name?: string;
   slug?: string;
   priceGross?: number;
   usableArea?: number;
   roomsCount?: number;
-  rooms?: Array<{ name?: string | null }>;
-  media?: Array<{ mediaType?: string | null; media_type?: string | null }>;
+  roomRowsCount?: number;
+  hasMainMedia?: boolean;
 };
 
 export const PROJECT_PUBLICATION_MISSING_LABELS: Record<string, string> = {
   name: "nazwy projektu",
   slug: "slug",
-  priceGross: "ceny brutto > 0",
+  priceGross: "ceny brutto",
   usableArea: "powierzchni uzytkowej",
   roomsCount: "liczby pokoi",
-  mainMedia: "zdjecia glownego lub miniatury",
-  projectRooms: "pomieszczen"
+  hasMainMedia: "zdjecia glownego lub miniatury",
+  roomRowsCount: "pomieszczen"
 };
 
 function toNumber(value: unknown) {
@@ -28,20 +30,7 @@ function toNumber(value: unknown) {
   return Number.isFinite(numeric) ? numeric : 0;
 }
 
-function hasMainMedia(media: Array<{ mediaType?: string | null; media_type?: string | null }>) {
-  return media.some((item) => {
-    const type = String(item.mediaType ?? item.media_type ?? "").trim();
-    return type === "hero" || type === "thumbnail";
-  });
-}
-
-function countNamedRooms(rooms: Array<{ name?: string | null }>) {
-  return rooms.filter((room) => String(room.name || "").trim().length > 0).length;
-}
-
-export function getProjectPublicationReadiness(input: PublicationReadinessInput): ProjectPublicationReadiness {
-  const rooms = input.rooms || [];
-  const media = input.media || [];
+export function getProjectPublicationReadiness(input: ProjectPublicationReadinessInput): ProjectPublicationReadiness {
   const missing: string[] = [];
 
   if (!String(input.name || "").trim()) missing.push("name");
@@ -49,16 +38,23 @@ export function getProjectPublicationReadiness(input: PublicationReadinessInput)
   if (toNumber(input.priceGross) <= 0) missing.push("priceGross");
   if (toNumber(input.usableArea) <= 0) missing.push("usableArea");
   if (toNumber(input.roomsCount) <= 0) missing.push("roomsCount");
-  if (!hasMainMedia(media)) missing.push("mainMedia");
-  if (countNamedRooms(rooms) <= 0) missing.push("projectRooms");
+  if (!input.hasMainMedia) missing.push("hasMainMedia");
+  if (toNumber(input.roomRowsCount) <= 0) missing.push("roomRowsCount");
+
+  const missingLabels = missing.map((key) => PROJECT_PUBLICATION_MISSING_LABELS[key] || key);
+  const message = missing.length
+    ? `Nie mozna opublikowac projektu. Brakuje:\n- ${missingLabels.join("\n- ")}`
+    : "Projekt gotowy do publikacji.";
 
   return {
     canPublish: missing.length === 0,
-    missing
+    missing,
+    missingLabels,
+    message
   };
 }
 
 export function getProjectPublicationErrorMessage(missing: string[]) {
-  const labels = missing.map((key) => PROJECT_PUBLICATION_MISSING_LABELS[key] || key);
-  return `Nie mozna opublikowac projektu. Brakuje:\n- ${labels.join("\n- ")}`;
+  const missingLabels = missing.map((key) => PROJECT_PUBLICATION_MISSING_LABELS[key] || key);
+  return `Nie mozna opublikowac projektu. Brakuje:\n- ${missingLabels.join("\n- ")}`;
 }

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/admin";
-import { getProjectPublicationErrorMessage, getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
+import { getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 export type CreateProjectState = {
@@ -348,14 +348,14 @@ export async function createProjectAction(
       priceGross: num(formData, "priceGross"),
       usableArea: num(formData, "usableArea"),
       roomsCount: intNum(formData, "roomsCount"),
-      media: hasHeroUpload || hasThumbnailUpload ? [{ media_type: "hero" }] : [],
-      rooms: rooms.map((room) => ({ name: room.name }))
+      roomRowsCount: rooms.filter((room) => String(room.name || "").trim().length > 0).length,
+      hasMainMedia: hasHeroUpload || hasThumbnailUpload
     });
 
     if (!readiness.canPublish) {
       return {
         ok: false,
-        message: getProjectPublicationErrorMessage(readiness.missing)
+        message: readiness.message
       };
     }
   }

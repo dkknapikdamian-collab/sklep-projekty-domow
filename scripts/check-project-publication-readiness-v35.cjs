@@ -20,7 +20,7 @@ if (missingFiles.length) {
 }
 
 const readiness = read("lib/admin/project-publication-readiness.ts");
-for (const needle of ["canPublish", "missing", "getProjectPublicationReadiness"]) {
+for (const needle of ["canPublish", "missing", "missingLabels", "message", "getProjectPublicationReadiness"]) {
   if (!readiness.includes(needle)) {
     console.error(`FAIL: readiness module missing required field: ${needle}`);
     process.exit(1);
@@ -36,7 +36,7 @@ const adminActions = read("app/admin/projekty/actions.ts");
 for (const needle of [
   "getProjectPublicationReadiness",
   "if (status === \"active\")",
-  "getProjectPublicationErrorMessage"
+  "if (!readiness.canPublish)"
 ]) {
   if (!adminActions.includes(needle)) {
     console.error(`FAIL: updateProjectAction missing publication readiness flow: ${needle}`);
@@ -44,8 +44,8 @@ for (const needle of [
   }
 }
 
-if (!adminActions.includes("if (status === \"active\")")) {
-  console.error("FAIL: Missing active-status publication guard.");
+if (!adminActions.includes("const status = str(formData, \"status\") || \"draft\"")) {
+  console.error("FAIL: draft status fallback missing in updateProjectAction.");
   process.exit(1);
 }
 
@@ -53,7 +53,7 @@ const createActions = read("app/admin/projekty/nowy/actions.ts");
 for (const needle of [
   "if (status === \"active\")",
   "getProjectPublicationReadiness",
-  "getProjectPublicationErrorMessage"
+  "if (!readiness.canPublish)"
 ]) {
   if (!createActions.includes(needle)) {
     console.error(`FAIL: createProjectAction missing active publication readiness guard: ${needle}`);

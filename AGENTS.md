@@ -1,15 +1,15 @@
-# AGENTS.md — AI Working Contract
+﻿# AGENTS.md ÔÇö AI Working Contract
 
-## Najważniejsza zasada
+## Najwa┼╝niejsza zasada
 
-Repozytorium jest źródłem prawdy dla tego projektu. Czat nie jest źródłem prawdy. Jeśli decyzja, etap, test albo ryzyko ma mieć znaczenie dla dalszej pracy, musi trafić do repo.
+Repozytorium jest ┼║r├│d┼éem prawdy dla tego projektu. Czat nie jest ┼║r├│d┼éem prawdy. Je┼Ťli decyzja, etap, test albo ryzyko ma mie─ç znaczenie dla dalszej pracy, musi trafi─ç do repo.
 
 Projekt: `sklep-projekty-domow`.
-Typ: aplikacja webowa / sklep-katalog projektów domów oparty o Next.js, React, TypeScript i Supabase.
+Typ: aplikacja webowa / sklep-katalog projekt├│w dom├│w oparty o Next.js, React, TypeScript i Supabase.
 
-## Pliki obowiązkowe przed pracą
+## Pliki obowi─ůzkowe przed prac─ů
 
-Każdy agent AI, Codex, ChatGPT albo inny model przed zmianami ma przeczytać:
+Ka┼╝dy agent AI, Codex, ChatGPT albo inny model przed zmianami ma przeczyta─ç:
 
 - `AGENTS.md`
 - `_project/00_PROJECT_STATUS.md`
@@ -21,7 +21,7 @@ Każdy agent AI, Codex, ChatGPT albo inny model przed zmianami ma przeczytać:
 - `_project/06_GUARDS_AND_TESTS.md`
 - `_project/07_NEXT_STEPS.md`
 
-Dodatkowo po pracy ma aktualizować:
+Dodatkowo po pracy ma aktualizowa─ç:
 
 - `_project/03_CURRENT_STAGE.md`
 - `_project/05_MANUAL_TESTS.md`
@@ -33,55 +33,55 @@ Dodatkowo po pracy ma aktualizować:
 
 Agent ma:
 
-- najpierw sprawdzić aktualny stan repo,
-- pracować tylko w zakresie aktualnego zadania,
-- nie robić dużych refaktorów bez potrzeby,
-- nie usuwać działających funkcji bez wyraźnej decyzji,
-- nie zmieniać UI, routingu, komponentów ani styli bez zakresu zadania,
-- nie dodawać fikcyjnych projektów, zdjęć ani ofert jako aktywnych danych produkcyjnych,
-- dopisywać testy albo guardy do istotnych zmian,
-- aktualizować pamięć projektu po zakończeniu większej pracy.
+- najpierw sprawdzi─ç aktualny stan repo,
+- pracowa─ç tylko w zakresie aktualnego zadania,
+- nie robi─ç du┼╝ych refaktor├│w bez potrzeby,
+- nie usuwa─ç dzia┼éaj─ůcych funkcji bez wyra┼║nej decyzji,
+- nie zmienia─ç UI, routingu, komponent├│w ani styli bez zakresu zadania,
+- nie dodawa─ç fikcyjnych projekt├│w, zdj─Ö─ç ani ofert jako aktywnych danych produkcyjnych,
+- dopisywa─ç testy albo guardy do istotnych zmian,
+- aktualizowa─ç pami─Ö─ç projektu po zako┼äczeniu wi─Ökszej pracy.
 
-## Zasada guardów
+## Zasada guard├│w
 
-Jeśli agent dodaje funkcję, przycisk, przepływ, panel, status, ważny tekst, źródło danych albo krytyczną logikę, ma dodać guard/test.
+Je┼Ťli agent dodaje funkcj─Ö, przycisk, przep┼éyw, panel, status, wa┼╝ny tekst, ┼║r├│d┼éo danych albo krytyczn─ů logik─Ö, ma doda─ç guard/test.
 
-Jeśli agent usuwa funkcję, przycisk, tekst albo stary mechanizm, ma też usunąć albo zaktualizować guard/test, który tego pilnował.
+Je┼Ťli agent usuwa funkcj─Ö, przycisk, tekst albo stary mechanizm, ma te┼╝ usun─ů─ç albo zaktualizowa─ç guard/test, kt├│ry tego pilnowa┼é.
 
-Nie wolno zostawiać martwych guardów, które sprawdzają coś, czego już nie ma.
+Nie wolno zostawia─ç martwych guard├│w, kt├│re sprawdzaj─ů co┼Ť, czego ju┼╝ nie ma.
 
-## Zasada oszczędzania tokenów
+## Zasada oszcz─Ödzania token├│w
 
 Agent ma:
 
-- czytać najpierw pliki pamięci projektu,
-- używać wyszukiwania po repo zamiast zgadywać,
-- nie przepisywać dużych plików bez potrzeby,
-- robić małe, kontrolowane zmiany,
-- podawać konkretne pliki i konkretne wyniki testów,
-- nie produkować długich opisów bez wartości.
+- czyta─ç najpierw pliki pami─Öci projektu,
+- u┼╝ywa─ç wyszukiwania po repo zamiast zgadywa─ç,
+- nie przepisywa─ç du┼╝ych plik├│w bez potrzeby,
+- robi─ç ma┼ée, kontrolowane zmiany,
+- podawa─ç konkretne pliki i konkretne wyniki test├│w,
+- nie produkowa─ç d┼éugich opis├│w bez warto┼Ťci.
 
-## Po każdej większej zmianie
+## Po ka┼╝dej wi─Ökszej zmianie
 
-Po większej zmianie agent musi:
+Po wi─Ökszej zmianie agent musi:
 
-1. Zaktualizować `_project/03_CURRENT_STAGE.md`.
-2. Zaktualizować `_project/05_MANUAL_TESTS.md`.
-3. Zaktualizować `_project/06_GUARDS_AND_TESTS.md`.
-4. Dopisać wpis w `_project/08_CHANGELOG_AI.md`.
-5. Dodać raport w `_project/runs/YYYY-MM-DD_HHMM_stage-name.md`.
-6. Uruchomić adekwatne checki, szczególnie `npm run check:project-memory`, jeśli dotyczy pamięci projektu.
+1. Zaktualizowa─ç `_project/03_CURRENT_STAGE.md`.
+2. Zaktualizowa─ç `_project/05_MANUAL_TESTS.md`.
+3. Zaktualizowa─ç `_project/06_GUARDS_AND_TESTS.md`.
+4. Dopisa─ç wpis w `_project/08_CHANGELOG_AI.md`.
+5. Doda─ç raport w `_project/runs/YYYY-MM-DD_HHMM_stage-name.md`.
+6. Uruchomi─ç adekwatne checki, szczeg├│lnie `npm run check:project-memory`, je┼Ťli dotyczy pami─Öci projektu.
 
-## Czego nie wolno robić bez decyzji
+## Czego nie wolno robi─ç bez decyzji
 
 - Nie zmieniaj logiki sklepu poza zakresem zadania.
 - Nie zmieniaj UI bez decyzji.
 - Nie ruszaj routingu bez decyzji.
-- Nie usuwaj istniejących testów ani guardów bez uzasadnienia.
+- Nie usuwaj istniej─ůcych test├│w ani guard├│w bez uzasadnienia.
 - Nie dodawaj aktywnych fikcyjnych ofert.
-- Nie ukrywaj błędów testów.
-- Nie oznaczaj etapu jako zakończonego, jeśli testy wymagane dla etapu nie przeszły.
+- Nie ukrywaj b┼é─Öd├│w test├│w.
+- Nie oznaczaj etapu jako zako┼äczonego, je┼Ťli testy wymagane dla etapu nie przesz┼éy.
 
 ## Obsidian
 
-`_project/09_CONTEXT_FOR_OBSIDIAN.md` jest indeksem/dashboardem dla Obsidiana. Nie jest nadrzędnym źródłem prawdy. Źródłem prawdy pozostaje repo.
+`_project/09_CONTEXT_FOR_OBSIDIAN.md` jest indeksem/dashboardem dla Obsidiana. Nie jest nadrz─Ödnym ┼║r├│d┼éem prawdy. ┼╣r├│d┼éem prawdy pozostaje repo.

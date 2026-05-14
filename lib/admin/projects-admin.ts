@@ -154,8 +154,8 @@ export async function getAdminProjects(): Promise<AdminProjectListItem[]> {
       priceGross: toNumber(project.price_gross),
       usableArea: toNumber(project.usable_area),
       roomsCount: toNumber(project.rooms_count),
-      media: mediaTypes.map((mediaType) => ({ mediaType })),
-      rooms: Array.from({ length: projectRoomsCount }, () => ({ name: "room" }))
+      roomRowsCount: projectRoomsCount,
+      hasMainMedia: mediaTypes.some((mediaType) => mediaType === "hero" || mediaType === "thumbnail")
     });
 
     return {
@@ -208,8 +208,11 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
         priceGross: toNumber(project.price_gross),
         usableArea: toNumber(project.usable_area),
         roomsCount: toNumber(project.rooms_count),
-        media: (media || []).map((item) => ({ mediaType: String(item.media_type || "") })),
-        rooms: (rooms || []).map((room) => ({ name: String(room.name || "") }))
+        roomRowsCount: (rooms || []).filter((room) => String(room.name || "").trim()).length,
+        hasMainMedia: (media || []).some((item) => {
+          const mediaType = String(item.media_type || "").trim();
+          return mediaType === "hero" || mediaType === "thumbnail";
+        })
       });
 
       return {
