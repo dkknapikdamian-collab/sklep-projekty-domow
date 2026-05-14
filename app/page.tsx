@@ -35,11 +35,22 @@ export default async function HomePage() {
     getHomepageHeroContent()
   ]);
 
+  const heroBackgroundImage = hero.imageUrl
+    ? [
+        "linear-gradient(90deg, rgba(8,12,14,.96) 0%, rgba(8,12,14,.82) 27%, rgba(8,12,14,.38) 58%, rgba(8,12,14,.64) 100%)",
+        "linear-gradient(180deg, rgba(8,12,14,.08) 0%, rgba(8,12,14,.70) 100%)",
+        `url("${hero.imageUrl}")`
+      ].join(", ")
+    : undefined;
+
   return (
     <>
       <Header />
       <main>
-        <section className="home-hero">
+        <section
+          className={`home-hero ${hero.imageUrl ? "home-hero--image-bg" : "home-hero--no-image"}`}
+          style={heroBackgroundImage ? { backgroundImage: heroBackgroundImage } : undefined}
+        >
           <div className="hero-overlay">
             <div className="hero-copy">
               <h1>{hero.title}</h1>
@@ -52,17 +63,6 @@ export default async function HomePage() {
                 <span><SlidersHorizontal size={28} /> Dostosuj projekt do swoich potrzeb</span>
                 <span><ShieldCheck size={28} /> Bezpieczne zakupy i gwarancja jakości</span>
               </div>
-            </div>
-
-            <div className="hero-image-placeholder">
-              {hero.imageUrl ? (
-                <img src={hero.imageUrl} alt={hero.imageAlt} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
-              ) : (
-                <>
-                  <Home size={70} strokeWidth={1.2} />
-                  <span>Baner strony głównej ustawisz w /admin/strona-glowna</span>
-                </>
-              )}
             </div>
           </div>
 

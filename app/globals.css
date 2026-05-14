@@ -1207,3 +1207,84 @@ button, input, select, textarea { font: inherit; }
   display: block;
   object-fit: cover;
 }
+
+
+/* STAGE32_HOMEPAGE_HERO_FULL_BLEED_BG
+   Banner is the full-width hero background. Text/buttons/search stay as real HTML overlays. */
+.home-hero.home-hero--image-bg {
+  min-height: 520px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center right;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.home-hero.home-hero--image-bg .hero-overlay {
+  min-height: 520px;
+  display: block;
+  padding: 68px 26px 128px;
+}
+
+.home-hero.home-hero--image-bg .hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+}
+
+.home-hero.home-hero--image-bg .hero-copy h1 {
+  max-width: 620px;
+  font-size: clamp(38px, 4.5vw, 58px);
+  line-height: .96;
+  letter-spacing: -.055em;
+  text-shadow: 0 18px 45px rgba(0,0,0,.62);
+}
+
+.home-hero.home-hero--image-bg .hero-copy p {
+  max-width: 490px;
+  font-size: 17px;
+  color: rgba(255,255,255,.90);
+  text-shadow: 0 14px 36px rgba(0,0,0,.70);
+}
+
+.home-hero.home-hero--image-bg .hero-points {
+  max-width: 650px;
+  margin-top: 38px;
+}
+
+.home-hero.home-hero--image-bg .hero-points span {
+  color: rgba(255,255,255,.88);
+  text-shadow: 0 12px 26px rgba(0,0,0,.68);
+}
+
+.home-hero.home-hero--image-bg .hero-image-placeholder {
+  display: none;
+}
+
+.home-hero.home-hero--no-image .hero-overlay {
+  display: block;
+  max-width: 1280px;
+  min-height: 440px;
+  padding: 70px 26px 120px;
+}
+
+.home-hero.home-hero--no-image .hero-copy {
+  max-width: 620px;
+}
+
+@media (max-width: 900px) {
+  .home-hero.home-hero--image-bg {
+    min-height: 560px;
+    background-position: 62% center;
+  }
+
+  .home-hero.home-hero--image-bg .hero-overlay {
+    min-height: 560px;
+    padding: 48px 22px 142px;
+  }
+
+  .home-hero.home-hero--image-bg .hero-points {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 360px;
+  }
+}
