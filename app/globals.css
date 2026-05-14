@@ -892,6 +892,11 @@ button, input, select, textarea { font: inherit; }
 
 .variant-row strong { font-size: 12px; }
 
+.variant-row.active {
+  border-color: rgba(240,223,197,.78);
+  background: rgba(240,223,197,.08);
+}
+
 .addon-row {
   min-height: 31px;
   display: grid;
@@ -993,12 +998,15 @@ button, input, select, textarea { font: inherit; }
 
 .tabs {
   height: 78px;
-  display: grid;
-  grid-template-columns: 1.1fr 1.25fr .9fr 1.1fr 1.4fr .8fr 1.2fr;
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
   border-bottom: 1px solid rgba(255,255,255,.075);
 }
 
 .tabs a {
+  min-width: 150px;
+  padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1090,7 +1098,8 @@ button, input, select, textarea { font: inherit; }
   background: #fff;
 }
 
-.plan-card button {
+.plan-card button,
+.plan-card a {
   position: absolute;
   right: 9px;
   bottom: 9px;
@@ -1108,6 +1117,113 @@ button, input, select, textarea { font: inherit; }
   display: block;
   margin-top: 10px;
   font-size: 14px;
+}
+
+.project-sales-detail {
+  scroll-margin-top: 110px;
+}
+
+.project-rooms-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 5px;
+}
+
+.project-rooms-table th,
+.project-rooms-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  text-align: left;
+  font-size: 13px;
+}
+
+.project-rooms-table th {
+  color: #f0dfc5;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.project-rooms-table td {
+  color: #dde2e4;
+}
+
+.project-rooms-table tfoot td {
+  color: #fff;
+  font-weight: 900;
+  background: rgba(255,255,255,.035);
+}
+
+.project-sales-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  margin: 0 26px 28px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.project-sales-section {
+  padding: 26px 28px 26px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.project-sales-section:nth-child(2n) {
+  padding-left: 28px;
+  border-left: 1px solid rgba(255,255,255,.08);
+}
+
+.project-sales-section h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.technical-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+}
+
+.technical-list div {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.technical-list dt {
+  color: #aeb6ba;
+  font-size: 12px;
+}
+
+.technical-list dd {
+  margin: 5px 0 0;
+  color: #fff;
+  font-weight: 850;
+}
+
+.offer-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+}
+
+.offer-list span {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  color: #e5e8e9;
+  line-height: 1.35;
+  font-size: 13px;
+}
+
+.offer-list svg {
+  color: var(--gold-2);
+}
+
+.offer-list strong {
+  color: #fff;
+  white-space: nowrap;
 }
 
 .related { margin-top: 32px; }
@@ -1152,6 +1268,155 @@ button, input, select, textarea { font: inherit; }
   margin: 10px 0;
 }
 
+.cart-layout,
+.checkout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 22px;
+  align-items: start;
+}
+
+.cart-items {
+  display: grid;
+  gap: 16px;
+}
+
+.cart-item,
+.cart-summary,
+.checkout-form,
+.checkout-summary,
+.checkout-success {
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 6px;
+  background: linear-gradient(160deg, rgba(255,255,255,.045), rgba(255,255,255,.015)), var(--panel);
+  padding: 22px;
+}
+
+.cart-item {
+  display: grid;
+  gap: 18px;
+}
+
+.cart-item h2,
+.cart-summary h2,
+.checkout-summary h2,
+.checkout-success h2 {
+  margin: 6px 0 8px;
+}
+
+.cart-item span,
+.checkout-summary-item span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.cart-price-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.cart-addons {
+  display: grid;
+  gap: 10px;
+}
+
+.cart-addons h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.cart-addons label {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  color: #e5e8e9;
+}
+
+.cart-addons input,
+.checkout-checkbox input {
+  accent-color: var(--gold);
+}
+
+.cart-remove {
+  width: fit-content;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 5px;
+  background: rgba(255,255,255,.025);
+  color: #f4d0d0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-summary {
+  position: sticky;
+  top: 112px;
+  display: grid;
+  gap: 12px;
+}
+
+.cart-summary > strong,
+.checkout-total {
+  display: block;
+  color: #fff;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.checkout-form {
+  display: grid;
+  gap: 14px;
+}
+
+.checkout-form label {
+  display: grid;
+  gap: 7px;
+  color: #dce0e2;
+  font-weight: 800;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 5px;
+  background: rgba(0,0,0,.18);
+  color: var(--text);
+  padding: 10px 12px;
+}
+
+.checkout-form textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.checkout-checkbox {
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+}
+
+.checkout-summary {
+  display: grid;
+  gap: 14px;
+}
+
+.checkout-summary-item {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.checkout-success {
+  display: grid;
+  gap: 10px;
+}
+
 @media (max-width: 1100px) {
   .main-nav { grid-template-columns: 200px 1fr 230px 90px; }
   .main-nav nav { gap: 16px; }
@@ -1174,6 +1439,15 @@ button, input, select, textarea { font: inherit; }
   .tabs { display: flex; overflow-x: auto; }
   .tabs a { min-width: 180px; }
   .feature-grid, .plans-grid, .related-grid { grid-template-columns: repeat(2, 1fr); }
+  .project-sales-grid, .technical-list, .offer-list { grid-template-columns: 1fr; }
+  .cart-layout,
+  .checkout-layout { grid-template-columns: 1fr; }
+  .cart-summary { position: static; }
+  .project-sales-section,
+  .project-sales-section:nth-child(2n) {
+    padding: 22px 0;
+    border-left: 0;
+  }
 }
 
 @media (max-width: 620px) {
@@ -1189,6 +1463,10 @@ button, input, select, textarea { font: inherit; }
   .thumbnail-row { grid-template-columns: repeat(2, 1fr); }
   .more-photos { height: 83px; }
   .micro-trust { grid-template-columns: 1fr; }
+  .project-rooms-table {
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 

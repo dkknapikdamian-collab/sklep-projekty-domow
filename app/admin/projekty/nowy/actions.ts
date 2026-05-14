@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/admin";
+import { getProjectPublicationErrorMessage, getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 export type CreateProjectState = {
@@ -337,6 +338,27 @@ export async function createProjectAction(
   const rooms = parseJsonArray<RoomInput>(formData, "roomsJson");
   const variants = parseJsonArray<VariantInput>(formData, "variantsJson");
   const addons = parseJsonArray<AddonInput>(formData, "addonsJson");
+
+  if (status === "active") {
+    const hasHeroUpload = isRealFile(formData.get("heroFile"));
+    const hasThumbnailUpload = isRealFile(formData.get("thumbnailFile"));
+    const readiness = getProjectPublicationReadiness({
+      name,
+      slug,
+      priceGross: num(formData, "priceGross"),
+      usableArea: num(formData, "usableArea"),
+      roomsCount: intNum(formData, "roomsCount"),
+      media: hasHeroUpload || hasThumbnailUpload ? [{ media_type: "hero" }] : [],
+      rooms: rooms.map((room) => ({ name: room.name }))
+    });
+
+    if (!readiness.canPublish) {
+      return {
+        ok: false,
+        message: getProjectPublicationErrorMessage(readiness.missing)
+      };
+    }
+  }
 
   try {
     const { data: project, error: projectError } = await supabase

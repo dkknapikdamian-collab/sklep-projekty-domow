@@ -3,11 +3,55 @@
 import Link from "next/link";
 import { updateProjectStatusAction } from "@/app/admin/projekty/actions";
 import type { AdminProjectListItem } from "@/lib/admin/projects-admin";
-import { Eye, ImageIcon, Pencil } from "lucide-react";
+import { PROJECT_PUBLICATION_MISSING_LABELS } from "@/lib/admin/project-publication-readiness";
 import { AdminProjectDeleteForm } from "./AdminProjectDeleteForm";
 import { AdminSubmitButton } from "./AdminSubmitButton";
 
-const STATUS_OPTIONS = ["draft", "active", "hidden", "archived"];
+function formatPrice(value: number) {
+  return `${value.toLocaleString("pl-PL")} zl`;
+}
+
+function formatDate(value: string) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+  return date.toLocaleString("pl-PL");
+}
+
+function missingList(project: AdminProjectListItem) {
+  return project.publicationMissing.map((key) => PROJECT_PUBLICATION_MISSING_LABELS[key] || key);
+}
+
+function statusBadges(project: AdminProjectListItem) {
+  const badges: string[] = [];
+  if (project.status === "draft") badges.push("Draft");
+  if (project.status === "active") badges.push("Publiczny");
+  if (project.canPublish) badges.push("Gotowy");
+  if (!project.canPublish) badges.push("Niekompletny");
+  if (project.mediaCount <= 0) badges.push("Brak zdjec");
+  if (project.projectRoomsCount <= 0) badges.push("Brak pomieszczen");
+  return badges;
+}
+
+function StatusActionForm({ project, targetStatus }: { project: AdminProjectListItem; targetStatus: string }) {
+  const disabled = targetStatus === "active" && !project.canPublish;
+  const disabledReason = disabled ? `Braki: ${missingList(project).join(", ")}` : "";
+
+  return (
+    <form action={updateProjectStatusAction} className="admin-inline-form" title={disabledReason}>
+      <input type="hidden" name="projectId" value={project.id} />
+      <input type="hidden" name="slug" value={project.slug} />
+      <input type="hidden" name="status" value={targetStatus} />
+      <AdminSubmitButton
+        idleLabel={targetStatus === "active" ? "Ustaw active" : "Ustaw draft"}
+        pendingLabel="Zapis..."
+        className="admin-status-submit"
+        iconSize={14}
+        disabled={disabled}
+      />
+    </form>
+  );
+}
 
 export function AdminProjectsTable({ projects }: { projects: AdminProjectListItem[] }) {
   return (
@@ -19,47 +63,64 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
             <th>Nazwa</th>
             <th>Status</th>
             <th>Cena</th>
+            <th>Pow.</th>
+            <th>Pokoje</th>
             <th>Media</th>
+            <th>Pomieszczenia</th>
+            <th>Gotowosc</th>
+            <th>Publiczny link</th>
+            <th>Aktualizacja</th>
             <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
-          {projects.map((project) => (
-            <tr key={project.id}>
-              <td><strong>{project.code}</strong></td>
-              <td>
-                <strong className="admin-project-name">{project.name}</strong>
-                <small>{project.slug}</small>
-              </td>
-              <td>
-                <form action={updateProjectStatusAction} className="admin-status-form">
-                  <input type="hidden" name="projectId" value={project.id} />
-                  <input type="hidden" name="slug" value={project.slug} />
-                  <select name="status" defaultValue={project.status} aria-label={`Status projektu ${project.code}`}>
-                    {STATUS_OPTIONS.map((status) => (
-                      <option value={status} key={status}>{status}</option>
+          {projects.map((project) => {
+            const missing = missingList(project);
+
+            return (
+              <tr key={project.id}>
+                <td><strong>{project.code}</strong></td>
+                <td>
+                  <strong className="admin-project-name">{project.name}</strong>
+                  <small>{project.slug}</small>
+                </td>
+                <td>
+                  <div className="admin-project-badges">
+                    {statusBadges(project).map((badge) => (
+                      <span key={`${project.id}-${badge}`} className="admin-project-badge">{badge}</span>
                     ))}
-                  </select>
-                  <AdminSubmitButton idleLabel="Zmień" pendingLabel="Zapis..." className="admin-status-submit" iconSize={14} />
-                </form>
-              </td>
-              <td>{project.priceGross.toLocaleString("pl-PL")} zł</td>
-              <td><span className="media-count"><ImageIcon size={15} />{project.mediaCount}</span></td>
-              <td>
-                <div className="admin-row-actions">
-                  {project.status === "active" && (
-                    <Link href={`/projekty/${project.slug}`} target="_blank">
-                      <Eye size={15} /> Publicznie
-                    </Link>
+                  </div>
+                </td>
+                <td>{formatPrice(project.priceGross)}</td>
+                <td>{project.usableArea > 0 ? `${project.usableArea} m2` : "-"}</td>
+                <td>{project.roomsCount > 0 ? project.roomsCount : "-"}</td>
+                <td>{project.mediaCount}</td>
+                <td>{project.projectRoomsCount}</td>
+                <td>
+                  {project.canPublish ? (
+                    <span className="admin-project-ready">Gotowy</span>
+                  ) : (
+                    <span className="admin-project-missing">Braki: {missing.join(", ") || "-"}</span>
                   )}
-                  <Link href={`/admin/projekty/${project.id}/edytuj`}>
-                    <Pencil size={15} /> Edytuj
+                </td>
+                <td>
+                  <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">
+                    /projekty/{project.slug}
                   </Link>
-                  <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td>{formatDate(project.updatedAt)}</td>
+                <td>
+                  <div className="admin-row-actions">
+                    <Link href={`/admin/projekty/${project.id}/edytuj`}>Edytuj</Link>
+                    <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">Podglad publiczny</Link>
+                    <StatusActionForm project={project} targetStatus="draft" />
+                    <StatusActionForm project={project} targetStatus="active" />
+                    <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>

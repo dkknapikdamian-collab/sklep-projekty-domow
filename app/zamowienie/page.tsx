@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { CheckoutForm } from "@/components/order/CheckoutForm";
 
 export default function CheckoutPage() {
   return (
@@ -6,10 +7,11 @@ export default function CheckoutPage() {
       <Header />
       <main className="page-shell">
         <section className="catalog-header">
-          <span>ZAMÓWIENIE</span>
-          <h1>Checkout produkcyjny będzie tworzył rekord zamówienia.</h1>
-          <p>Kolejny etap: koszyk, dane klienta, zgody, płatność, e-mail i dostawa PDF/linku po płatności.</p>
+          <span>ZAMOWIENIE</span>
+          <h1>Zamowienie testowe</h1>
+          <p>W V1 nie uruchamiamy automatycznej platnosci. Po wyslaniu formularza rekord trafi do Supabase.</p>
         </section>
+        <CheckoutForm />
       </main>
     </>
   );

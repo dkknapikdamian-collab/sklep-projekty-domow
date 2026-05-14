@@ -55,6 +55,9 @@ for (const needle of [
   "statusFilter",
   "setStatusFilter",
   "filteredProjects",
+  "project.canPublish",
+  "project.mediaCount <= 0",
+  "project.projectRoomsCount <= 0",
   "data-admin-project-search",
   "data-admin-project-status-filter",
   "value={searchTerm}",
@@ -66,6 +69,9 @@ for (const needle of [
   "project.slug",
   "project.status",
   "statusFilter === \"all\" || project.status === statusFilter",
+  "statusFilter === \"incomplete\"",
+  "statusFilter === \"no-media\"",
+  "statusFilter === \"no-rooms\"",
   "AdminProjectsTable projects={filteredProjects}",
   "clearFilters"
 ]) {
@@ -75,7 +81,7 @@ for (const needle of [
   }
 }
 
-for (const status of ["draft", "active", "hidden", "archived"]) {
+for (const status of ["active", "draft", "incomplete", "no-media", "no-rooms"]) {
   if (!client.includes(`value: \"${status}\"`)) {
     console.error(`FAIL: AdminProjectsListClient missing status option: ${status}`);
     process.exit(1);

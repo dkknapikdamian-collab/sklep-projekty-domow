@@ -59,7 +59,7 @@ for (const marker of [
   "from(\"project_media\")",
   "targetType",
   "redirect(`/admin/projekty/${projectId}/edytuj",
-  "...(hasMainMediaUpload ? { hasMainMedia: true } : {})"
+  "getProjectPublicationReadiness"
 ]) {
   if (!actions.includes(marker)) fail(`Admin media action missing marker: ${marker}`);
 }

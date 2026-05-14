@@ -18,7 +18,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <Link href={`/projekty/${project.slug}`} className="project-image">
         {project.badgePrimary && <span className="card-badge">{project.badgePrimary}</span>}
         <MediaSlot src={cardImageSrc} alt={project.name} label="Dodaj miniature projektu" sizes="360px" />
-        <button aria-label="Dodaj do ulubionych"><Heart size={20} /></button>
+        <button type="button" aria-label="Dodaj do ulubionych"><Heart size={20} /></button>
       </Link>
 
       <div className="project-body">
@@ -26,7 +26,7 @@ export function ProjectCard({ project }: { project: Project }) {
         <p>{area(project.usableArea)} <span>-</span> {project.roomsCount} pokoi <span>-</span> {project.garage}</p>
         <strong>{money(project.priceGross)}</strong>
         <div className="project-actions">
-          <button><FileText size={17} /></button>
+          <button type="button" aria-label="Dokumentacja projektu"><FileText size={17} /></button>
           <Link href={`/projekty/${project.slug}`}>Zobacz projekt</Link>
         </div>
       </div>

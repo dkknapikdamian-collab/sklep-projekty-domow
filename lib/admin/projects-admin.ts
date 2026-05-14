@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 
 export type AdminProjectListItem = {
   id: string;
@@ -7,7 +8,12 @@ export type AdminProjectListItem = {
   name: string;
   status: string;
   priceGross: number;
+  usableArea: number;
+  roomsCount: number;
   mediaCount: number;
+  projectRoomsCount: number;
+  canPublish: boolean;
+  publicationMissing: string[];
   updatedAt: string;
 };
 
@@ -103,7 +109,7 @@ export async function getAdminProjects(): Promise<AdminProjectListItem[]> {
 
   const { data: projects, error } = await supabase
     .from("projects")
-    .select("id, code, slug, name, status, price_gross, updated_at")
+    .select("id, code, slug, name, status, price_gross, usable_area, rooms_count, updated_at")
     .order("updated_at", { ascending: false });
 
   if (error || !projects) {
@@ -113,32 +119,61 @@ export async function getAdminProjects(): Promise<AdminProjectListItem[]> {
 
   const ids = projects.map((project) => project.id);
 
-  let mediaCounts = new Map<string, number>();
+  let mediaByProject = new Map<string, string[]>();
+  let roomCounts = new Map<string, number>();
 
   if (ids.length) {
-    const { data: media } = await supabase
-      .from("project_media")
-      .select("project_id")
-      .in("project_id", ids);
+    const [{ data: media }, { data: rooms }] = await Promise.all([
+      supabase.from("project_media").select("project_id, media_type").in("project_id", ids),
+      supabase.from("project_rooms").select("project_id, name").in("project_id", ids)
+    ]);
 
-    mediaCounts = new Map<string, number>();
+    mediaByProject = new Map<string, string[]>();
+    roomCounts = new Map<string, number>();
 
     for (const item of media || []) {
       const key = item.project_id as string;
-      mediaCounts.set(key, (mediaCounts.get(key) || 0) + 1);
+      mediaByProject.set(key, [...(mediaByProject.get(key) || []), String(item.media_type || "")]);
+    }
+
+    for (const room of rooms || []) {
+      const key = String(room.project_id || "");
+      const roomName = String(room.name || "").trim();
+      if (!key || !roomName) continue;
+      roomCounts.set(key, (roomCounts.get(key) || 0) + 1);
     }
   }
 
-  return projects.map((project) => ({
-    id: project.id as string,
-    code: project.code as string,
-    slug: project.slug as string,
-    name: project.name as string,
-    status: project.status as string,
-    priceGross: toNumber(project.price_gross),
-    mediaCount: mediaCounts.get(project.id as string) || 0,
-    updatedAt: String(project.updated_at || "")
-  }));
+  return projects.map((project) => {
+    const projectId = project.id as string;
+    const mediaTypes = mediaByProject.get(projectId) || [];
+    const projectRoomsCount = roomCounts.get(projectId) || 0;
+    const publication = getProjectPublicationReadiness({
+      name: String(project.name || ""),
+      slug: String(project.slug || ""),
+      priceGross: toNumber(project.price_gross),
+      usableArea: toNumber(project.usable_area),
+      roomsCount: toNumber(project.rooms_count),
+      media: mediaTypes.map((mediaType) => ({ mediaType })),
+      rooms: Array.from({ length: projectRoomsCount }, () => ({ name: "room" }))
+    });
+
+    return {
+      id: projectId,
+      code: project.code as string,
+      slug: project.slug as string,
+      name: project.name as string,
+      status: project.status as string,
+      priceGross: toNumber(project.price_gross),
+      usableArea: toNumber(project.usable_area),
+      roomsCount: toNumber(project.rooms_count),
+      mediaCount: mediaTypes.length,
+      projectRoomsCount,
+      canPublish: publication.canPublish,
+      publicationMissing: publication.missing,
+      updatedAt: String(project.updated_at || "")
+    };
+  });
 }
 
 export async function getAdminProjectById(id: string): Promise<AdminProjectEditItem | null> {
@@ -166,6 +201,23 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
   ]);
 
   return {
+    ...(() => {
+      const publication = getProjectPublicationReadiness({
+        name: String(project.name || ""),
+        slug: String(project.slug || ""),
+        priceGross: toNumber(project.price_gross),
+        usableArea: toNumber(project.usable_area),
+        roomsCount: toNumber(project.rooms_count),
+        media: (media || []).map((item) => ({ mediaType: String(item.media_type || "") })),
+        rooms: (rooms || []).map((room) => ({ name: String(room.name || "") }))
+      });
+
+      return {
+        projectRoomsCount: (rooms || []).filter((room) => String(room.name || "").trim()).length,
+        canPublish: publication.canPublish,
+        publicationMissing: publication.missing
+      };
+    })(),
     id: project.id as string,
     code: project.code as string,
     shortCode: String(project.short_code || project.code || ""),

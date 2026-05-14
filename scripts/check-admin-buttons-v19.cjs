@@ -56,7 +56,7 @@ for (const needle of [
   "AdminProjectDeleteForm",
   "`/admin/projekty/${project.id}/edytuj`",
   "`/projekty/${project.slug}`",
-  "project.status === \"active\""
+  "Ustaw active"
 ]) {
   if (!table.includes(needle)) {
     console.error(`FAIL: AdminProjectsTable missing working control: ${needle}`);
@@ -84,7 +84,7 @@ for (const needle of [
   '"use client"',
   "useFormStatus",
   "type=\"submit\"",
-  "disabled={pending}",
+  "disabled={finalDisabled}",
   "aria-busy={pending}"
 ]) {
   if (!submitButton.includes(needle)) {
