@@ -51,6 +51,15 @@ function getAdminListMessage(searchParams: Record<string, string | string[] | un
     };
   }
 
+  if (firstParam(searchParams.status) === "error") {
+    const reason = firstParam(searchParams.reason);
+    const decodedReason = reason ? decodeURIComponent(reason) : "Nieznany blad";
+    return {
+      tone: "neutral" as const,
+      text: `Nie udalo sie zapisac statusu projektu: ${decodedReason}`
+    };
+  }
+
   return null;
 }
 

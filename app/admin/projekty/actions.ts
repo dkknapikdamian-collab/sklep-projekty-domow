@@ -224,17 +224,34 @@ export async function updateProjectStatusAction(formData: FormData) {
   const status = str(formData, "status");
   const slug = str(formData, "slug");
 
-  if (!projectId) throw new Error("Brak ID projektu.");
-  assertStatus(status);
+  if (!projectId) {
+    redirect("/admin/projekty?status=error&reason=missing_project_id");
+  }
 
-  const { supabase } = await requireAdminAndClient();
+  try {
+    assertStatus(status);
+  } catch {
+    redirect("/admin/projekty?status=error&reason=invalid_status");
+  }
+
+  let supabase: ReturnType<typeof createSupabaseServiceRoleClient> | null = null;
+
+  try {
+    const resolved = await requireAdminAndClient();
+    supabase = resolved.supabase;
+  } catch (error) {
+    const reason = error instanceof Error ? encodeURIComponent(error.message) : "auth_or_env_error";
+    redirect(`/admin/projekty?status=error&reason=${reason}`);
+  }
 
   const { error } = await supabase
     .from("projects")
     .update({ status, updated_at: new Date().toISOString() })
     .eq("id", projectId);
 
-  if (error) throw new Error(`Nie udalo sie zmienic statusu projektu: ${error.message}`);
+  if (error) {
+    redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(error.message)}`);
+  }
 
   revalidatePath("/");
   revalidatePath("/projekty");
