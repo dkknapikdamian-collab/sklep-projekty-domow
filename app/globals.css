@@ -1216,7 +1216,7 @@ button, input, select, textarea { font: inherit; }
 /* STAGE32_HOMEPAGE_HERO_FULL_BLEED_BG
    Banner is the full-width hero background. Text/buttons/search stay as real HTML overlays. */
 .home-hero.home-hero--image-bg {
-  min-height: 520px;
+  min-height: 560px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center right;
@@ -1224,7 +1224,7 @@ button, input, select, textarea { font: inherit; }
 }
 
 .home-hero.home-hero--image-bg .hero-overlay {
-  min-height: 520px;
+  min-height: 560px;
   display: block;
   padding: 68px 26px 128px;
 }
@@ -1267,7 +1267,7 @@ button, input, select, textarea { font: inherit; }
 .home-hero.home-hero--no-image .hero-overlay {
   display: block;
   max-width: 1280px;
-  min-height: 440px;
+  min-height: 540px;
   padding: 70px 26px 120px;
 }
 
