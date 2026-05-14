@@ -62,73 +62,125 @@ function StatusActionForm({ project, targetStatus }: { project: AdminProjectList
 export function AdminProjectsTable({ projects }: { projects: AdminProjectListItem[] }) {
   return (
     <section className="admin-table-card">
-      <table className="admin-table admin-projects-table">
-        <thead>
-          <tr>
-            <th>Kod</th>
-            <th>Nazwa</th>
-            <th>Status</th>
-            <th>Cena</th>
-            <th>Pow.</th>
-            <th>Pokoje</th>
-            <th>Media</th>
-            <th>Pomieszczenia</th>
-            <th>Gotowosc</th>
-            <th>Publiczny link</th>
-            <th>Aktualizacja</th>
-            <th>Akcje</th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((project) => {
-            const missing = missingList(project);
+      <div className="admin-projects-table-wrap">
+        <table className="admin-table admin-projects-table">
+          <thead>
+            <tr>
+              <th>Kod</th>
+              <th>Nazwa</th>
+              <th>Status</th>
+              <th>Cena</th>
+              <th>Pow.</th>
+              <th>Pokoje</th>
+              <th>Media</th>
+              <th>Pomieszczenia</th>
+              <th>Gotowosc</th>
+              <th>Publiczny link</th>
+              <th>Aktualizacja</th>
+              <th>Akcje</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((project) => {
+              const missing = missingList(project);
 
-            return (
-              <tr key={project.id}>
-                <td><strong>{project.code}</strong></td>
-                <td>
-                  <strong className="admin-project-name">{project.name}</strong>
-                  <small>{project.slug}</small>
-                </td>
-                <td>
-                  <div className="admin-project-badges">
-                    {statusBadges(project).map((badge) => (
-                      <span key={`${project.id}-${badge}`} className="admin-project-badge">{badge}</span>
-                    ))}
-                  </div>
-                </td>
-                <td>{formatPrice(project.priceGross)}</td>
-                <td>{project.usableArea > 0 ? `${project.usableArea} m2` : "-"}</td>
-                <td>{project.roomsCount > 0 ? project.roomsCount : "-"}</td>
-                <td>{project.mediaCount}</td>
-                <td>{project.projectRoomsCount}</td>
-                <td>
-                  {project.canPublish ? (
-                    <span className="admin-project-ready">Gotowy</span>
-                  ) : (
-                    <span className="admin-project-missing">Braki: {missing.join(", ") || "-"}</span>
-                  )}
-                </td>
-                <td>
-                  <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">
-                    /projekty/{project.slug}
-                  </Link>
-                </td>
-                <td>{formatDate(project.updatedAt)}</td>
-                <td>
-                  <div className="admin-row-actions" data-admin-project-row-actions="true">
-                    <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
-                    <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
-                    <StatusActionForm project={project} targetStatus="draft" />
-                    <StatusActionForm project={project} targetStatus="active" />
-                    <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={project.id}>
+                  <td><strong>{project.code}</strong></td>
+                  <td>
+                    <strong className="admin-project-name">{project.name}</strong>
+                    <small>{project.slug}</small>
+                  </td>
+                  <td>
+                    <div className="admin-project-badges">
+                      {statusBadges(project).map((badge) => (
+                        <span key={`${project.id}-${badge}`} className="admin-project-badge">{badge}</span>
+                      ))}
+                    </div>
+                  </td>
+                  <td>{formatPrice(project.priceGross)}</td>
+                  <td>{project.usableArea > 0 ? `${project.usableArea} m2` : "-"}</td>
+                  <td>{project.roomsCount > 0 ? project.roomsCount : "-"}</td>
+                  <td>{project.mediaCount}</td>
+                  <td>{project.projectRoomsCount}</td>
+                  <td>
+                    {project.canPublish ? (
+                      <span className="admin-project-ready">Gotowy</span>
+                    ) : (
+                      <span className="admin-project-missing">Braki: {missing.join(", ") || "-"}</span>
+                    )}
+                  </td>
+                  <td>
+                    <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">
+                      /projekty/{project.slug}
+                    </Link>
+                  </td>
+                  <td>{formatDate(project.updatedAt)}</td>
+                  <td>
+                    <div className="admin-row-actions" data-admin-project-row-actions="true">
+                      <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
+                      <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                      <StatusActionForm project={project} targetStatus="draft" />
+                      <StatusActionForm project={project} targetStatus="active" />
+                      <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="admin-project-mobile-list">
+        {projects.map((project) => {
+          const missing = missingList(project);
+          return (
+            <article key={`mobile-${project.id}`} className="admin-project-mobile-card">
+              <header>
+                <strong>{project.code}</strong>
+                <span>{project.name}</span>
+                <small>{project.slug}</small>
+              </header>
+              <div className="admin-project-mobile-badges">
+                {statusBadges(project).map((badge) => (
+                  <span key={`mobile-badge-${project.id}-${badge}`} className="admin-project-badge">{badge}</span>
+                ))}
+              </div>
+              <dl>
+                <div><dt>Cena</dt><dd>{formatPrice(project.priceGross)}</dd></div>
+                <div><dt>Pow.</dt><dd>{project.usableArea > 0 ? `${project.usableArea} m2` : "-"}</dd></div>
+                <div><dt>Pokoje</dt><dd>{project.roomsCount > 0 ? project.roomsCount : "-"}</dd></div>
+                <div><dt>Media</dt><dd>{project.mediaCount}</dd></div>
+                <div><dt>Pomieszczenia</dt><dd>{project.projectRoomsCount}</dd></div>
+                <div><dt>Aktualizacja</dt><dd>{formatDate(project.updatedAt)}</dd></div>
+                <div className="admin-project-mobile-readiness">
+                  <dt>Gotowosc</dt>
+                  <dd>
+                    {project.canPublish ? (
+                      <span className="admin-project-ready">Gotowy</span>
+                    ) : (
+                      <span className="admin-project-missing">Braki: {missing.join(", ") || "-"}</span>
+                    )}
+                  </dd>
+                </div>
+              </dl>
+              <p className="admin-project-mobile-link">
+                <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">
+                  /projekty/{project.slug}
+                </Link>
+              </p>
+              <div className="admin-row-actions" data-admin-project-row-actions="true">
+                <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
+                <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                <StatusActionForm project={project} targetStatus="draft" />
+                <StatusActionForm project={project} targetStatus="active" />
+                <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 }
