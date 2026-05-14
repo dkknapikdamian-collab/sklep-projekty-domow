@@ -15,6 +15,19 @@ import { AdminProjectMediaManager } from "./AdminProjectMediaManager";
 
 const initialState: UpdateProjectState = { ok: false, message: "" };
 
+function collectDraftFields(form: HTMLFormElement) {
+  const fields: Record<string, string> = {};
+  const formData = new FormData(form);
+
+  for (const [key, value] of formData.entries()) {
+    if (value instanceof File) continue;
+    if (key.endsWith("Json")) continue;
+    if (!fields[key]) fields[key] = String(value || "");
+  }
+
+  return fields;
+}
+
 function makeSlug(value: string) {
   return value
     .toLowerCase()
@@ -58,6 +71,28 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
   function handleNameChange(value: string) {
     setName(value);
     if (!slugTouched) setSlug(makeSlug(value));
+  }
+
+  function saveDraft() {
+    const form = formRef.current;
+    if (!form) return;
+
+    const payload = {
+      name,
+      slug,
+      slugTouched,
+      status,
+      rooms,
+      variants,
+      addons,
+      fields: collectDraftFields(form)
+    };
+
+    try {
+      window.localStorage.setItem(editDraftKey, JSON.stringify(payload));
+    } catch {
+      // ignore storage limits
+    }
   }
 
   useEffect(() => {
@@ -105,34 +140,21 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
   }, [editDraftKey]);
 
   useEffect(() => {
+    saveDraft();
+  }, [editDraftKey, name, slug, slugTouched, status, rooms, variants, addons]);
+
+  useEffect(() => {
     const form = formRef.current;
     if (!form) return;
 
-    const fields: Record<string, string> = {};
-    const formData = new FormData(form);
+    const handleChange = () => saveDraft();
+    form.addEventListener("input", handleChange);
+    form.addEventListener("change", handleChange);
 
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) continue;
-      if (key.endsWith("Json")) continue;
-      if (!fields[key]) fields[key] = String(value || "");
-    }
-
-    const payload = {
-      name,
-      slug,
-      slugTouched,
-      status,
-      rooms,
-      variants,
-      addons,
-      fields
+    return () => {
+      form.removeEventListener("input", handleChange);
+      form.removeEventListener("change", handleChange);
     };
-
-    try {
-      window.localStorage.setItem(editDraftKey, JSON.stringify(payload));
-    } catch {
-      // ignore storage limits
-    }
   }, [editDraftKey, name, slug, slugTouched, status, rooms, variants, addons]);
 
   return (

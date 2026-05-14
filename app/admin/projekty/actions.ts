@@ -610,6 +610,7 @@ export async function updateProjectAction(
       const roomRowsCount = rooms.filter((room) => room.name && String(room.name).trim()).length;
       const hasHeroUpload = isRealFile(formData.get("heroFile"));
       const hasThumbnailUpload = isRealFile(formData.get("thumbnailFile"));
+      const hasMainMediaUpload = hasHeroUpload || hasThumbnailUpload;
 
       const publication = await validateProjectPublication({
         supabase,
@@ -621,7 +622,7 @@ export async function updateProjectAction(
           usableArea: num(formData, "usableArea"),
           roomsCount: intNum(formData, "roomsCount"),
           roomRowsCount,
-          hasMainMedia: hasHeroUpload || hasThumbnailUpload
+          ...(hasMainMediaUpload ? { hasMainMedia: true } : {})
         }
       });
 

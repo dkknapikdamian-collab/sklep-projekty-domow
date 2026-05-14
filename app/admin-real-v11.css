@@ -65,6 +65,33 @@
   margin-right: 8px;
 }
 
+.admin-file-upload-box {
+  overflow: hidden;
+}
+
+.admin-upload-preview-thumb {
+  width: 100%;
+  max-width: 126px;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+}
+
+.admin-upload-preview-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.admin-upload-preview-thumb svg {
+  color: var(--gold);
+}
+
 .media-upload-grid.private {
   grid-template-columns: repeat(3, 1fr);
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { UploadCloud } from "lucide-react";
 import { deleteProjectMediaItemBoundAction, deleteProjectPrivateFileItemBoundAction, setProjectMediaTypeBoundAction } from "@/app/admin/projekty/actions";
+import { AdminFileUploadBox } from "./AdminFileUploadBox";
 import type { AdminProjectFileItem, AdminProjectMediaItem } from "@/lib/admin/projects-admin";
 
 function isPreviewableImage(path: string, publicUrl: string) {
@@ -103,15 +103,15 @@ export function AdminProjectMediaManager({
       </div>
 
       <div className="media-upload-grid">
-        <label className="upload-box"><UploadCloud size={25} /><strong>Hero</strong><span>hero.jpg</span><input type="file" name="heroFile" accept="image/*" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Miniatura</strong><span>thumbnail.jpg</span><input type="file" name="thumbnailFile" accept="image/*" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Galeria</strong><span>gallery-01, gallery-02...</span><input type="file" name="galleryFiles" accept="image/*" multiple /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Rzut parteru</strong><span>floor-plan-ground.jpg</span><input type="file" name="floorPlanGroundFile" accept="image/*,.pdf" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Rzut dachu</strong><span>floor-plan-roof.jpg</span><input type="file" name="floorPlanRoofFile" accept="image/*,.pdf" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Przekroj A-A</strong><span>section-aa.jpg</span><input type="file" name="sectionAaFile" accept="image/*,.pdf" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Przekroj B-B</strong><span>section-bb.jpg</span><input type="file" name="sectionBbFile" accept="image/*,.pdf" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Elewacja frontowa</strong><span>elevation-front.jpg</span><input type="file" name="elevationFrontFile" accept="image/*,.pdf" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Elewacja ogrodowa</strong><span>elevation-garden.jpg</span><input type="file" name="elevationGardenFile" accept="image/*,.pdf" /></label>
+        <AdminFileUploadBox name="heroFile" title="Hero" hint="hero.jpg" accept="image/*" />
+        <AdminFileUploadBox name="thumbnailFile" title="Miniatura" hint="thumbnail.jpg" accept="image/*" />
+        <AdminFileUploadBox name="galleryFiles" title="Galeria" hint="gallery-01, gallery-02..." accept="image/*" multiple />
+        <AdminFileUploadBox name="floorPlanGroundFile" title="Rzut parteru" hint="floor-plan-ground.jpg" accept="image/*,.pdf" />
+        <AdminFileUploadBox name="floorPlanRoofFile" title="Rzut dachu" hint="floor-plan-roof.jpg" accept="image/*,.pdf" />
+        <AdminFileUploadBox name="sectionAaFile" title="Przekroj A-A" hint="section-aa.jpg" accept="image/*,.pdf" />
+        <AdminFileUploadBox name="sectionBbFile" title="Przekroj B-B" hint="section-bb.jpg" accept="image/*,.pdf" />
+        <AdminFileUploadBox name="elevationFrontFile" title="Elewacja frontowa" hint="elevation-front.jpg" accept="image/*,.pdf" />
+        <AdminFileUploadBox name="elevationGardenFile" title="Elewacja ogrodowa" hint="elevation-garden.jpg" accept="image/*,.pdf" />
       </div>
 
       <div className="admin-media-current-panel private" data-admin-project-current-private-files="true">
@@ -141,9 +141,9 @@ export function AdminProjectMediaManager({
       </div>
 
       <div className="media-upload-grid private">
-        <label className="upload-box"><UploadCloud size={25} /><strong>Dokumentacja PDF</strong><span>documentation-v1.pdf</span><input type="file" name="documentationFile" accept=".pdf" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>Pelna paczka ZIP</strong><span>full-package-v1.zip</span><input type="file" name="fullPackageFile" accept=".zip" /></label>
-        <label className="upload-box"><UploadCloud size={25} /><strong>PDF na e-mail</strong><span>pdf-email-package-v1.pdf</span><input type="file" name="pdfEmailPackageFile" accept=".pdf" /></label>
+        <AdminFileUploadBox name="documentationFile" title="Dokumentacja PDF" hint="documentation-v1.pdf" accept=".pdf" />
+        <AdminFileUploadBox name="fullPackageFile" title="Pelna paczka ZIP" hint="full-package-v1.zip" accept=".zip" />
+        <AdminFileUploadBox name="pdfEmailPackageFile" title="PDF na e-mail" hint="pdf-email-package-v1.pdf" accept=".pdf" />
       </div>
     </>
   );

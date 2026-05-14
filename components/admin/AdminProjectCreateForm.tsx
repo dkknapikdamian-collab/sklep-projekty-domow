@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { createProjectAction } from "@/app/admin/projekty/nowy/actions";
-import { CheckCircle2, FileText, ImagePlus, ListPlus, Save, UploadCloud, X } from "lucide-react";
+import { CheckCircle2, FileText, ImagePlus, ListPlus, Save, X } from "lucide-react";
 import { SelectWithCustom } from "./SelectWithCustom";
 import { FeaturePicker } from "./FeaturePicker";
+import { AdminFileUploadBox } from "./AdminFileUploadBox";
 import { badgeOptions, floorsCountOptions, garageOptions, projectTypeOptions, roofOptions, roomFloorOptions, styleOptions, technologyOptions } from "./admin-project-options";
 
 type CreateProjectState = {
@@ -37,6 +38,18 @@ function updateRow<T>(rows: T[], index: number, patch: Partial<T>) { return rows
 function makeSlug(value: string) { return value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
 function currentCodePreview() { return `DP-${new Date().getFullYear()}-0001`; }
 function normalizedRooms(rows: RoomRow[]) { return rows.map((room) => ({ ...room, floor: room.floor === CUSTOM_FLOOR ? room.customFloor || "" : room.floor })); }
+function collectDraftFields(form: HTMLFormElement) {
+  const fields: Record<string, string> = {};
+  const formData = new FormData(form);
+
+  for (const [key, value] of formData.entries()) {
+    if (value instanceof File) continue;
+    if (key.endsWith("Json")) continue;
+    if (!fields[key]) fields[key] = String(value || "");
+  }
+
+  return fields;
+}
 
 export function AdminProjectCreateForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -50,6 +63,27 @@ export function AdminProjectCreateForm() {
   const [addons, setAddons] = useState<AddonRow[]>(defaultAddons);
   const completion = useMemo(() => Math.round(([name, slug, status].filter(Boolean).length / 3) * 100), [name, slug, status]);
   function handleNameChange(value: string) { setName(value); if (!slugTouched) setSlug(makeSlug(value)); }
+  function saveDraft() {
+    const form = formRef.current;
+    if (!form) return;
+
+    const payload = {
+      name,
+      slug,
+      slugTouched,
+      status,
+      rooms,
+      variants,
+      addons,
+      fields: collectDraftFields(form)
+    };
+
+    try {
+      window.localStorage.setItem(CREATE_DRAFT_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore storage limits
+    }
+  }
 
   useEffect(() => {
     try {
@@ -96,34 +130,21 @@ export function AdminProjectCreateForm() {
   }, []);
 
   useEffect(() => {
+    saveDraft();
+  }, [name, slug, slugTouched, status, rooms, variants, addons]);
+
+  useEffect(() => {
     const form = formRef.current;
     if (!form) return;
 
-    const fields: Record<string, string> = {};
-    const formData = new FormData(form);
+    const handleChange = () => saveDraft();
+    form.addEventListener("input", handleChange);
+    form.addEventListener("change", handleChange);
 
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) continue;
-      if (key.endsWith("Json")) continue;
-      if (!fields[key]) fields[key] = String(value || "");
-    }
-
-    const payload = {
-      name,
-      slug,
-      slugTouched,
-      status,
-      rooms,
-      variants,
-      addons,
-      fields
+    return () => {
+      form.removeEventListener("input", handleChange);
+      form.removeEventListener("change", handleChange);
     };
-
-    try {
-      window.localStorage.setItem(CREATE_DRAFT_KEY, JSON.stringify(payload));
-    } catch {
-      // ignore storage limits
-    }
   }, [name, slug, slugTouched, status, rooms, variants, addons]);
 
   return (
@@ -205,10 +226,10 @@ export function AdminProjectCreateForm() {
         </section>
 
         <section className="admin-form-section"><div className="form-section-title"><ImagePlus size={22} /><div><h2>6. Media projektu</h2><p>Publiczne pliki trafią do Supabase Storage bucket `project-media`.</p></div></div><div className="media-upload-grid">
-          <label className="upload-box"><UploadCloud size={25} /><strong>Hero</strong><span>hero.jpg</span><input type="file" name="heroFile" accept="image/*" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Miniatura</strong><span>thumbnail.jpg</span><input type="file" name="thumbnailFile" accept="image/*" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Galeria</strong><span>gallery-01, gallery-02...</span><input type="file" name="galleryFiles" accept="image/*" multiple /></label><label className="upload-box"><UploadCloud size={25} /><strong>Rzut parteru</strong><span>floor-plan-ground.jpg</span><input type="file" name="floorPlanGroundFile" accept="image/*,.pdf" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Rzut dachu</strong><span>floor-plan-roof.jpg</span><input type="file" name="floorPlanRoofFile" accept="image/*,.pdf" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Przekrój A-A</strong><span>section-aa.jpg</span><input type="file" name="sectionAaFile" accept="image/*,.pdf" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Przekrój B-B</strong><span>section-bb.jpg</span><input type="file" name="sectionBbFile" accept="image/*,.pdf" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Elewacja frontowa</strong><span>elevation-front.jpg</span><input type="file" name="elevationFrontFile" accept="image/*,.pdf" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Elewacja ogrodowa</strong><span>elevation-garden.jpg</span><input type="file" name="elevationGardenFile" accept="image/*,.pdf" /></label>
+          <AdminFileUploadBox name="heroFile" title="Hero" hint="hero.jpg" accept="image/*" /><AdminFileUploadBox name="thumbnailFile" title="Miniatura" hint="thumbnail.jpg" accept="image/*" /><AdminFileUploadBox name="galleryFiles" title="Galeria" hint="gallery-01, gallery-02..." accept="image/*" multiple /><AdminFileUploadBox name="floorPlanGroundFile" title="Rzut parteru" hint="floor-plan-ground.jpg" accept="image/*,.pdf" /><AdminFileUploadBox name="floorPlanRoofFile" title="Rzut dachu" hint="floor-plan-roof.jpg" accept="image/*,.pdf" /><AdminFileUploadBox name="sectionAaFile" title="Przekrój A-A" hint="section-aa.jpg" accept="image/*,.pdf" /><AdminFileUploadBox name="sectionBbFile" title="Przekrój B-B" hint="section-bb.jpg" accept="image/*,.pdf" /><AdminFileUploadBox name="elevationFrontFile" title="Elewacja frontowa" hint="elevation-front.jpg" accept="image/*,.pdf" /><AdminFileUploadBox name="elevationGardenFile" title="Elewacja ogrodowa" hint="elevation-garden.jpg" accept="image/*,.pdf" />
         </div></section>
 
-        <section className="admin-form-section"><div className="form-section-title"><ImagePlus size={22} /><div><h2>7. Pliki prywatne po zakupie</h2><p>Prywatne pliki trafią do Supabase Storage bucket `project-private-files`.</p></div></div><div className="media-upload-grid private"><label className="upload-box"><UploadCloud size={25} /><strong>Dokumentacja PDF</strong><span>documentation-v1.pdf</span><input type="file" name="documentationFile" accept=".pdf" /></label><label className="upload-box"><UploadCloud size={25} /><strong>Pełna paczka ZIP</strong><span>full-package-v1.zip</span><input type="file" name="fullPackageFile" accept=".zip" /></label><label className="upload-box"><UploadCloud size={25} /><strong>PDF na e-mail</strong><span>pdf-email-package-v1.pdf</span><input type="file" name="pdfEmailPackageFile" accept=".pdf" /></label></div></section>
+        <section className="admin-form-section"><div className="form-section-title"><ImagePlus size={22} /><div><h2>7. Pliki prywatne po zakupie</h2><p>Prywatne pliki trafią do Supabase Storage bucket `project-private-files`.</p></div></div><div className="media-upload-grid private"><AdminFileUploadBox name="documentationFile" title="Dokumentacja PDF" hint="documentation-v1.pdf" accept=".pdf" /><AdminFileUploadBox name="fullPackageFile" title="Pełna paczka ZIP" hint="full-package-v1.zip" accept=".zip" /><AdminFileUploadBox name="pdfEmailPackageFile" title="PDF na e-mail" hint="pdf-email-package-v1.pdf" accept=".pdf" /></div></section>
 
         <section className="admin-form-section"><div className="form-section-title"><Save size={22} /><div><h2>8. Zapis</h2><p>Projekt zostanie zapisany w Supabase.</p></div></div>{state.message && <div className={state.ok ? "admin-form-success" : "admin-form-error"}>{state.message}{state.existingProjectHref && <p className="admin-error-link"><Link href={state.existingProjectHref}>{state.existingProjectLabel || "Zobacz istniejący projekt"}</Link></p>}</div>}<div className="admin-form-actions"><button type="submit" className="admin-primary-button" disabled={pending}>{pending ? "Zapisywanie..." : "Zapisz projekt"}</button></div></section>
       </div>
