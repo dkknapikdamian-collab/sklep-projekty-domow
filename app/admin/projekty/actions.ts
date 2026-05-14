@@ -566,9 +566,16 @@ export async function updateProjectAction(
     revalidatePath("/admin");
     revalidatePath("/admin/projekty");
     revalidatePath(`/admin/projekty/${projectId}/edytuj`);
-
-    return { ok: true, message: "Zapisano projekt i wszystkie powiazane dane." };
+    redirect(`/admin/projekty?updated=${encodeURIComponent(oldProject.code)}&saved=1`);
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "digest" in error &&
+      String((error as { digest?: unknown }).digest || "").startsWith("NEXT_REDIRECT")
+    ) {
+      throw error;
+    }
     return {
       ok: false,
       message: error instanceof Error ? error.message : "Nieznany blad zapisu projektu."
