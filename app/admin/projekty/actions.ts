@@ -443,6 +443,54 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
   redirect(`/admin/projekty/${projectId}/edytuj?saved=1&media_deleted=${encodeURIComponent(projectCode || "1")}`);
 }
 
+export async function setProjectMediaTypeAction(formData: FormData) {
+  const projectId = str(formData, "projectId");
+  const mediaId = str(formData, "mediaId");
+  const targetType = str(formData, "targetType");
+  const projectSlug = str(formData, "projectSlug");
+  const projectCode = str(formData, "projectCode");
+
+  if (!projectId || !mediaId) throw new Error("Brak danych media do aktualizacji typu.");
+  if (!["hero", "thumbnail"].includes(targetType)) throw new Error("Nieobslugiwany typ media.");
+
+  const { supabase } = await requireAdminAndClient();
+
+  const { data: selectedMedia, error: selectedMediaError } = await supabase
+    .from("project_media")
+    .select("id, project_id")
+    .eq("id", mediaId)
+    .eq("project_id", projectId)
+    .maybeSingle();
+
+  if (selectedMediaError) throw new Error(`Nie udalo sie pobrac media: ${selectedMediaError.message}`);
+  if (!selectedMedia) throw new Error("Nie znaleziono media do aktualizacji.");
+
+  const { error: demoteError } = await supabase
+    .from("project_media")
+    .update({ media_type: "gallery" })
+    .eq("project_id", projectId)
+    .eq("media_type", targetType)
+    .neq("id", mediaId);
+
+  if (demoteError) throw new Error(`Nie udalo sie zwolnic typu ${targetType}: ${demoteError.message}`);
+
+  const { error: updateError } = await supabase
+    .from("project_media")
+    .update({ media_type: targetType })
+    .eq("id", mediaId)
+    .eq("project_id", projectId);
+
+  if (updateError) throw new Error(`Nie udalo sie ustawic typu ${targetType}: ${updateError.message}`);
+
+  revalidatePath("/");
+  revalidatePath("/projekty");
+  if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
+  revalidatePath("/admin/projekty");
+  revalidatePath(`/admin/projekty/${projectId}/edytuj`);
+
+  redirect(`/admin/projekty/${projectId}/edytuj?saved=1&media_updated=${encodeURIComponent(projectCode || "1")}`);
+}
+
 export async function deleteProjectPrivateFileItemAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const fileId = str(formData, "fileId");

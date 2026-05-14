@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+﻿import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import type { Project } from "@/types/project";
 import { MediaSlot } from "@/components/MediaSlot";
 
@@ -33,10 +33,37 @@ function fileLabelFromUrl(url: string, fallback: string) {
 }
 
 function buildProjectGalleryImages(project: Project): GalleryImage[] {
-  const planImages = [...project.media.plans, ...project.media.elevations]
-    .map((item) => ({
+  const elevationImages = project.media.elevations.map((item, index) => ({
+    url: item.url || "",
+    label: item.fileName || item.title || `elevation-${index + 1}.jpg`
+  }));
+
+  const floorPlanImages = project.media.plans
+    .filter((item) => item.type === "floor_plan")
+    .map((item, index) => ({
       url: item.url || "",
-      label: item.fileName || item.title || "rysunek-projektu.jpg"
+      label: item.fileName || item.title || `floor-plan-${index + 1}.jpg`
+    }));
+
+  const roofPlanImages = project.media.plans
+    .filter((item) => item.type === "roof_plan")
+    .map((item, index) => ({
+      url: item.url || "",
+      label: item.fileName || item.title || `roof-plan-${index + 1}.jpg`
+    }));
+
+  const sectionImages = project.media.plans
+    .filter((item) => item.type === "section")
+    .map((item, index) => ({
+      url: item.url || "",
+      label: item.fileName || item.title || `section-${index + 1}.jpg`
+    }));
+
+  const otherImages = project.media.plans
+    .filter((item) => item.type === "other")
+    .map((item, index) => ({
+      url: item.url || "",
+      label: item.fileName || item.title || `other-${index + 1}.jpg`
     }));
 
   return uniqueImages([
@@ -46,7 +73,11 @@ function buildProjectGalleryImages(project: Project): GalleryImage[] {
       url,
       label: fileLabelFromUrl(url, `gallery-${String(index + 1).padStart(2, "0")}.jpg`)
     })),
-    ...planImages
+    ...elevationImages,
+    ...floorPlanImages,
+    ...roofPlanImages,
+    ...sectionImages,
+    ...otherImages
   ]);
 }
 
@@ -60,7 +91,7 @@ export function ProjectGallery({ project }: { project: Project }) {
     <div className="project-gallery" data-project-gallery-v30="true">
       <div className="main-photo">
         <button className="gallery-arrow left" type="button"><ChevronLeft size={24} /></button>
-        <MediaSlot src={mainImage?.url} alt={project.name} label="Dodaj zdjęcie główne projektu" />
+        <MediaSlot src={mainImage?.url} alt={project.name} label="Dodaj zdjecie glowne projektu" />
         <button className="gallery-arrow right" type="button"><ChevronRight size={24} /></button>
         <button className="heart-floating" type="button"><Heart size={35} /></button>
       </div>
@@ -80,7 +111,7 @@ export function ProjectGallery({ project }: { project: Project }) {
         })}
         <button className="more-photos" type="button">
           +{extraCount}
-          <span>więcej</span>
+          <span>wiecej</span>
         </button>
       </div>
     </div>

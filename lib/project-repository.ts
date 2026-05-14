@@ -91,6 +91,7 @@ function mediaUrl(media: DbMedia) {
 function mediaPlanType(row: DbMedia): ProjectPlan["type"] {
   if (row.media_type === "roof_plan") return "roof_plan";
   if (row.media_type === "section") return "section";
+  if (row.media_type === "other") return "other";
   return "floor_plan";
 }
 
@@ -104,7 +105,7 @@ function buildMedia(projectId: string, mediaRows: DbMedia[]): ProjectMedia {
   const gallery = rows.filter((row) => row.media_type === "gallery").map(mediaUrl).filter(Boolean);
 
   const plans: ProjectPlan[] = rows
-    .filter((row) => ["floor_plan", "roof_plan", "section"].includes(row.media_type))
+    .filter((row) => ["floor_plan", "roof_plan", "section", "other"].includes(row.media_type))
     .map((row) => ({
       title: row.title || row.alt || fileNameFromPath(row.path),
       type: mediaPlanType(row),

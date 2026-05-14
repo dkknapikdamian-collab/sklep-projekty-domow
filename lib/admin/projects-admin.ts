@@ -62,10 +62,12 @@ export type AdminProjectAddonItem = {
 
 export type AdminProjectMediaItem = {
   id: string;
+  bucket: string;
   mediaType: string;
   title: string;
   path: string;
   publicUrl: string;
+  sortOrder: number;
 };
 
 export type AdminProjectFileItem = {
@@ -159,7 +161,7 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     supabase.from("project_rooms").select("floor, number, name, area, dimensions, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_variants").select("name, price_gross, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_addons").select("code, name, description, price_gross, delivery_action, sort_order").eq("project_id", id).order("sort_order"),
-    supabase.from("project_media").select("id, media_type, title, path, public_url, sort_order").eq("project_id", id).order("sort_order"),
+    supabase.from("project_media").select("id, bucket, media_type, title, path, public_url, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_files").select("id, file_type, title, path, version, created_at").eq("project_id", id).order("created_at", { ascending: false })
   ]);
 
@@ -212,10 +214,12 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     })),
     media: (media || []).map((item) => ({
       id: String(item.id || ""),
+      bucket: String(item.bucket || "project-media"),
       mediaType: String(item.media_type || ""),
       title: String(item.title || ""),
       path: String(item.path || ""),
-      publicUrl: String(item.public_url || "")
+      publicUrl: String(item.public_url || ""),
+      sortOrder: toNumber(item.sort_order)
     })),
     privateFiles: (files || []).map((item) => ({
       id: String(item.id || ""),

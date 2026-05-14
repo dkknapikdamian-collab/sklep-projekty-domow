@@ -1,7 +1,7 @@
 "use client";
 
 import { UploadCloud } from "lucide-react";
-import { deleteProjectMediaItemAction, deleteProjectPrivateFileItemAction } from "@/app/admin/projekty/actions";
+import { deleteProjectMediaItemAction, deleteProjectPrivateFileItemAction, setProjectMediaTypeAction } from "@/app/admin/projekty/actions";
 import type { AdminProjectFileItem, AdminProjectMediaItem } from "@/lib/admin/projects-admin";
 
 function isPreviewableImage(path: string, publicUrl: string) {
@@ -11,6 +11,8 @@ function isPreviewableImage(path: string, publicUrl: string) {
 
 function MediaPreviewCard({ item, projectId, projectSlug, projectCode }: { item: AdminProjectMediaItem; projectId: string; projectSlug: string; projectCode: string }) {
   const canPreview = Boolean(item.publicUrl) && isPreviewableImage(item.path, item.publicUrl);
+  const isHero = item.mediaType === "hero";
+  const isThumbnail = item.mediaType === "thumbnail";
 
   return (
     <article className="admin-media-preview-card" data-admin-media-preview="true">
@@ -24,19 +26,40 @@ function MediaPreviewCard({ item, projectId, projectSlug, projectCode }: { item:
       <div className="admin-media-preview-body">
         <span>{item.mediaType || "media"}</span>
         <strong>{item.title || item.path}</strong>
+        <small data-admin-media-sort-order="true">Kolejnosc: {item.sortOrder}</small>
+        <small data-admin-media-is-hero="true">Hero: {isHero ? "tak" : "nie"}</small>
+        <small data-admin-media-is-thumbnail="true">Miniatura: {isThumbnail ? "tak" : "nie"}</small>
+        <small data-admin-media-bucket="true">Bucket: {item.bucket || "project-media"}</small>
         <code>{item.path}</code>
+        {item.publicUrl && <code data-admin-media-public-url="true">{item.publicUrl}</code>}
         {item.publicUrl ? (
           <a href={item.publicUrl} target="_blank" rel="noreferrer">Otworz plik</a>
         ) : (
           <p>Brak publicznego URL</p>
         )}
+        <form action={setProjectMediaTypeAction}>
+          <input type="hidden" name="projectId" value={projectId} />
+          <input type="hidden" name="projectSlug" value={projectSlug} />
+          <input type="hidden" name="projectCode" value={projectCode} />
+          <input type="hidden" name="mediaId" value={item.id} />
+          <input type="hidden" name="targetType" value="hero" />
+          <button type="submit" className="admin-secondary-button" data-admin-set-media-hero="true" disabled={isHero}>Ustaw jako hero</button>
+        </form>
+        <form action={setProjectMediaTypeAction}>
+          <input type="hidden" name="projectId" value={projectId} />
+          <input type="hidden" name="projectSlug" value={projectSlug} />
+          <input type="hidden" name="projectCode" value={projectCode} />
+          <input type="hidden" name="mediaId" value={item.id} />
+          <input type="hidden" name="targetType" value="thumbnail" />
+          <button type="submit" className="admin-secondary-button" data-admin-set-media-thumbnail="true" disabled={isThumbnail}>Ustaw jako miniature</button>
+        </form>
         <form action={deleteProjectMediaItemAction}>
           <input type="hidden" name="projectId" value={projectId} />
           <input type="hidden" name="projectSlug" value={projectSlug} />
           <input type="hidden" name="projectCode" value={projectCode} />
           <input type="hidden" name="mediaId" value={item.id} />
           <input type="hidden" name="path" value={item.path} />
-          <input type="hidden" name="bucket" value="project-media" />
+          <input type="hidden" name="bucket" value={item.bucket || "project-media"} />
           <button type="submit" className="admin-secondary-button" data-admin-delete-media-item="true">Usun media</button>
         </form>
       </div>

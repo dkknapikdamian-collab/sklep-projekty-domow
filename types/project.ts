@@ -1,6 +1,6 @@
 export type ProjectStatus = "draft" | "active" | "hidden" | "archived";
 
-export type ProjectPlanType = "floor_plan" | "roof_plan" | "section" | "elevation";
+export type ProjectPlanType = "floor_plan" | "roof_plan" | "section" | "elevation" | "other";
 
 export type ProjectPlan = {
   title: string;
