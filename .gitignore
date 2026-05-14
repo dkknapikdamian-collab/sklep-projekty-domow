@@ -12,3 +12,10 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 tsconfig.tsbuildinfo
+
+.vercel
+.env*.local
+
+.vercel
+.vercel
+.vercel
