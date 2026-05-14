@@ -1,4 +1,5 @@
-﻿@import "./admin-real-v20.css";
+@import "./public-catalog-filters-v22b.css";
+@import "./admin-real-v20.css";
 @import "./admin-real-v18.css";
 @import "./admin-real-v15.css";
 @import "./admin-real-v14.css";
@@ -293,7 +294,7 @@ button, input, select, textarea { font: inherit; }
 }
 
 .section-head h2::before {
-  content: "â€“";
+  content: "Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚ËĂ˘â€šÂ¬Äąâ€ş";
   color: var(--gold);
   margin-right: 12px;
 }
