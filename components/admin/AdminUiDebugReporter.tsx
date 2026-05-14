@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Bug, Download, MousePointer2, Trash2, X } from "lucide-react";
+import { Bug, Download, MousePointer2, X } from "lucide-react";
 
-const STORAGE_KEY = "sklep-projekty-domow:admin-ui-debug-reports:v28";
+const SESSION_STORAGE_KEY = "sklep-projekty-domow:admin-ui-debug-reports:v29g";
+const LEGACY_LOCAL_STORAGE_KEY = "sklep-projekty-domow:admin-ui-debug-reports:v28";
 const MAX_TEXT = 180;
 
 type ElementSnapshot = {
@@ -107,11 +108,9 @@ function snapshotRect(element: HTMLElement): RectSnapshot {
   };
 }
 
-function loadReports(): DebugReport[] {
-  if (typeof window === "undefined") return [];
+function parseReports(raw: string | null): DebugReport[] {
+  if (!raw) return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch {
@@ -119,9 +118,30 @@ function loadReports(): DebugReport[] {
   }
 }
 
+function loadReports(): DebugReport[] {
+  if (typeof window === "undefined") return [];
+
+  const sessionReports = parseReports(window.sessionStorage.getItem(SESSION_STORAGE_KEY));
+  if (sessionReports.length > 0) return sessionReports;
+
+  const legacyReports = parseReports(window.localStorage.getItem(LEGACY_LOCAL_STORAGE_KEY));
+  if (legacyReports.length > 0) {
+    window.sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(legacyReports, null, 2));
+    return legacyReports;
+  }
+
+  return [];
+}
+
 function saveReports(reports: DebugReport[]) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(reports, null, 2));
+  window.sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(reports, null, 2));
+}
+
+function clearReportsStorage() {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  window.localStorage.removeItem(LEGACY_LOCAL_STORAGE_KEY);
 }
 
 function toMarkdown(reports: DebugReport[]) {
@@ -130,6 +150,8 @@ function toMarkdown(reports: DebugReport[]) {
     "",
     `Wygenerowano: ${new Date().toISOString()}`,
     `Liczba zgłoszeń: ${reports.length}`,
+    "",
+    "Raport powstał z trybu Debug UI. Dane są zapisane w sessionStorage przeglądarki do czasu pobrania raportu albo zamknięcia sesji.",
     ""
   ];
 
@@ -169,17 +191,20 @@ function downloadText(filename: string, content: string, type: string) {
 
 export function AdminUiDebugReporter() {
   const [enabled, setEnabled] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const [reports, setReports] = useState<DebugReport[]>([]);
   const [pending, setPending] = useState<PendingReport | null>(null);
   const [note, setNote] = useState("");
 
   useEffect(() => {
     setReports(loadReports());
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     saveReports(reports);
-  }, [reports]);
+  }, [hydrated, reports]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -237,7 +262,7 @@ export function AdminUiDebugReporter() {
     const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
     downloadText(`admin-ui-debug-${stamp}.md`, toMarkdown(reports), "text/markdown;charset=utf-8");
     setReports([]);
-    saveReports([]);
+    clearReportsStorage();
   };
 
   return (
@@ -254,14 +279,14 @@ export function AdminUiDebugReporter() {
           {reports.length > 0 ? <strong>{reports.length}</strong> : null}
         </button>
 
-        {enabled ? (
-          <span className="admin-ui-debug-hint-v28"><MousePointer2 size={14} /> Kliknij element, opisz problem, Enter zapisuje.</span>
-        ) : null}
-
         {reports.length > 0 ? (
           <button type="button" className="admin-ui-debug-export-v28" onClick={exportAndClear}>
-            <Download size={15} /> Pobierz raport i wyczysc
+            <Download size={15} /> Pobierz raport ({reports.length}) i wyczyść
           </button>
+        ) : null}
+
+        {enabled ? (
+          <span className="admin-ui-debug-hint-v28"><MousePointer2 size={14} /> Kliknij element, opisz problem, Enter zapisuje.</span>
         ) : null}
       </div>
 
@@ -298,6 +323,11 @@ export function AdminUiDebugReporter() {
 
             <div className="admin-ui-debug-actions-v28">
               <button type="button" className="admin-ui-debug-save-v28" onClick={savePending}>Zapisz zgłoszenie</button>
+              {reports.length > 0 ? (
+                <button type="button" className="admin-ui-debug-export-v28" onClick={exportAndClear}>
+                  <Download size={15} /> Pobierz raport ({reports.length}) i wyczyść
+                </button>
+              ) : null}
               <button type="button" onClick={() => setPending(null)}>Anuluj</button>
             </div>
           </div>
