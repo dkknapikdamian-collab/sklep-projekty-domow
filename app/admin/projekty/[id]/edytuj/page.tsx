@@ -1,6 +1,6 @@
 ﻿import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Header } from "@/components/Header";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjectById } from "@/lib/admin/projects-admin";
 import { AdminProjectDeleteForm } from "@/components/admin/AdminProjectDeleteForm";
 import { AdminProjectEditForm } from "@/components/admin/AdminProjectEditForm";
@@ -30,7 +30,7 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <main className="admin-shell">
         <section className="admin-page-head">
           <div>

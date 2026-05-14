@@ -1,5 +1,5 @@
 ﻿import Link from "next/link";
-import { Header } from "@/components/Header";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjectMetrics } from "@/lib/admin/projects-admin";
 import { FolderPlus, Home, Images, ListChecks, LockKeyhole, PackageCheck, Settings, ShieldCheck } from "lucide-react";
 
@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <main className="admin-shell">
         <section className="admin-hero">
           <span>ADMIN PANEL / SUPABASE</span>

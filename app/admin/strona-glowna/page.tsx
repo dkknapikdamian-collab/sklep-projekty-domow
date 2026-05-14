@@ -1,5 +1,5 @@
 ﻿import Link from "next/link";
-import { Header } from "@/components/Header";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getHomepageHeroContent } from "@/lib/site-content";
 import { AdminHomepageContentForm } from "@/components/admin/AdminHomepageContentForm";
 
@@ -10,7 +10,7 @@ export default async function AdminHomepagePage() {
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <main className="admin-shell">
         <section className="admin-page-head">
           <div>

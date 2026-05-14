@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Header } from "@/components/Header";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminProjectCreateForm } from "@/components/admin/AdminProjectCreateForm";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default function NewAdminProjectPage() {
   return (
     <>
-      <Header />
+      <AdminHeader />
       <main className="admin-shell">
         <section className="admin-page-head">
           <div>

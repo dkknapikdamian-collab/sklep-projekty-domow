@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Header } from "@/components/Header";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjects } from "@/lib/admin/projects-admin";
 import { AdminProjectsListClient } from "@/components/admin/AdminProjectsListClient";
 import { FolderPlus } from "lucide-react";
@@ -81,7 +81,7 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <main className="admin-shell">
         <section className="admin-page-head">
           <div>
