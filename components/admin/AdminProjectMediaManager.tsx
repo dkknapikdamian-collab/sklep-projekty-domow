@@ -1,6 +1,7 @@
 "use client";
 
 import { UploadCloud } from "lucide-react";
+import { deleteProjectMediaItemAction, deleteProjectPrivateFileItemAction } from "@/app/admin/projekty/actions";
 import type { AdminProjectFileItem, AdminProjectMediaItem } from "@/lib/admin/projects-admin";
 
 function isPreviewableImage(path: string, publicUrl: string) {
@@ -8,7 +9,7 @@ function isPreviewableImage(path: string, publicUrl: string) {
   return /\.(png|jpe?g|webp|gif|avif)(\?|$|\s)/.test(value);
 }
 
-function MediaPreviewCard({ item }: { item: AdminProjectMediaItem }) {
+function MediaPreviewCard({ item, projectId, projectSlug, projectCode }: { item: AdminProjectMediaItem; projectId: string; projectSlug: string; projectCode: string }) {
   const canPreview = Boolean(item.publicUrl) && isPreviewableImage(item.path, item.publicUrl);
 
   return (
@@ -29,12 +30,33 @@ function MediaPreviewCard({ item }: { item: AdminProjectMediaItem }) {
         ) : (
           <p>Brak publicznego URL</p>
         )}
+        <form action={deleteProjectMediaItemAction}>
+          <input type="hidden" name="projectId" value={projectId} />
+          <input type="hidden" name="projectSlug" value={projectSlug} />
+          <input type="hidden" name="projectCode" value={projectCode} />
+          <input type="hidden" name="mediaId" value={item.id} />
+          <input type="hidden" name="path" value={item.path} />
+          <input type="hidden" name="bucket" value="project-media" />
+          <button type="submit" className="admin-secondary-button" data-admin-delete-media-item="true">Usun media</button>
+        </form>
       </div>
     </article>
   );
 }
 
-export function AdminProjectMediaManager({ media, privateFiles }: { media: AdminProjectMediaItem[]; privateFiles: AdminProjectFileItem[] }) {
+export function AdminProjectMediaManager({
+  projectId,
+  projectSlug,
+  projectCode,
+  media,
+  privateFiles
+}: {
+  projectId: string;
+  projectSlug: string;
+  projectCode: string;
+  media: AdminProjectMediaItem[];
+  privateFiles: AdminProjectFileItem[];
+}) {
   return (
     <>
       <div className="admin-media-current-panel" data-admin-project-current-media="true">
@@ -46,7 +68,7 @@ export function AdminProjectMediaManager({ media, privateFiles }: { media: Admin
 
         {media.length > 0 ? (
           <div className="admin-media-preview-grid">
-            {media.map((item) => <MediaPreviewCard key={item.id} item={item} />)}
+            {media.map((item) => <MediaPreviewCard key={item.id} item={item} projectId={projectId} projectSlug={projectSlug} projectCode={projectCode} />)}
           </div>
         ) : (
           <p className="admin-field-help">Ten projekt nie ma jeszcze rekordow w tabeli project_media.</p>
@@ -72,7 +94,19 @@ export function AdminProjectMediaManager({ media, privateFiles }: { media: Admin
         </div>
         {privateFiles.length > 0 && (
           <ul className="admin-private-file-list">
-            {privateFiles.map((item) => <li key={item.id}><strong>{item.title || item.fileType}</strong><code>{item.path}</code></li>)}
+            {privateFiles.map((item) => (
+              <li key={item.id}>
+                <strong>{item.title || item.fileType}</strong>
+                <code>{item.path}</code>
+                <form action={deleteProjectPrivateFileItemAction}>
+                  <input type="hidden" name="projectId" value={projectId} />
+                  <input type="hidden" name="fileId" value={item.id} />
+                  <input type="hidden" name="path" value={item.path} />
+                  <input type="hidden" name="bucket" value="project-private-files" />
+                  <button type="submit" className="admin-secondary-button" data-admin-delete-private-file-item="true">Usun plik prywatny</button>
+                </form>
+              </li>
+            ))}
           </ul>
         )}
       </div>

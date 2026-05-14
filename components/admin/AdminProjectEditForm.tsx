@@ -121,7 +121,13 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
 
         <section className="admin-form-section">
           <div className="form-section-title"><ImagePlus size={22} /><div><h2>6. Media publiczne</h2><p>Mozesz podmienic pliki i dograc nowe.</p></div></div>
-          <AdminProjectMediaManager media={project.media} privateFiles={project.privateFiles} />
+          <AdminProjectMediaManager
+            projectId={project.id}
+            projectSlug={project.slug}
+            projectCode={project.code}
+            media={project.media}
+            privateFiles={project.privateFiles}
+          />
         </section>
 
         <section className="admin-form-section"><div className="form-section-title"><Save size={22} /><div><h2>7. Zapis</h2></div></div>{state.message && <div className={state.ok ? "admin-form-success" : "admin-form-error"}>{state.message}</div>}<div className="admin-form-actions"><button type="submit" className="admin-primary-button" disabled={pending}>{pending ? "Zapisywanie..." : "Zapisz projekt"}</button><Link href="/admin/projekty?cancelled=1" className="admin-secondary-button">Anuluj</Link></div></section>

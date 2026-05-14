@@ -410,6 +410,66 @@ export async function deleteProjectAction(formData: FormData) {
   redirect("/admin/projekty?deleted=1");
 }
 
+export async function deleteProjectMediaItemAction(formData: FormData) {
+  const projectId = str(formData, "projectId");
+  const mediaId = str(formData, "mediaId");
+  const projectSlug = str(formData, "projectSlug");
+  const projectCode = str(formData, "projectCode");
+  const path = str(formData, "path");
+  const bucket = str(formData, "bucket") || "project-media";
+
+  if (!projectId || !mediaId) throw new Error("Brak danych media do usuniecia.");
+
+  const { supabase } = await requireAdminAndClient();
+
+  if (path) {
+    await supabase.storage.from(bucket).remove([path]);
+  }
+
+  const { error } = await supabase
+    .from("project_media")
+    .delete()
+    .eq("id", mediaId)
+    .eq("project_id", projectId);
+
+  if (error) throw new Error(`Nie udalo sie usunac media: ${error.message}`);
+
+  revalidatePath("/");
+  revalidatePath("/projekty");
+  if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
+  revalidatePath("/admin/projekty");
+  if (projectId) revalidatePath(`/admin/projekty/${projectId}/edytuj`);
+
+  redirect(`/admin/projekty/${projectId}/edytuj?saved=1&media_deleted=${encodeURIComponent(projectCode || "1")}`);
+}
+
+export async function deleteProjectPrivateFileItemAction(formData: FormData) {
+  const projectId = str(formData, "projectId");
+  const fileId = str(formData, "fileId");
+  const path = str(formData, "path");
+  const bucket = str(formData, "bucket") || "project-private-files";
+
+  if (!projectId || !fileId) throw new Error("Brak danych pliku prywatnego do usuniecia.");
+
+  const { supabase } = await requireAdminAndClient();
+
+  if (path) {
+    await supabase.storage.from(bucket).remove([path]);
+  }
+
+  const { error } = await supabase
+    .from("project_files")
+    .delete()
+    .eq("id", fileId)
+    .eq("project_id", projectId);
+
+  if (error) throw new Error(`Nie udalo sie usunac pliku prywatnego: ${error.message}`);
+
+  revalidatePath("/admin/projekty");
+  revalidatePath(`/admin/projekty/${projectId}/edytuj`);
+  redirect(`/admin/projekty/${projectId}/edytuj?saved=1&private_file_deleted=1`);
+}
+
 export async function updateProjectAction(
   _prevState: UpdateProjectState,
   formData: FormData
