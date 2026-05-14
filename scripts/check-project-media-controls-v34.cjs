@@ -26,8 +26,8 @@ for (const marker of [
 for (const marker of [
   "data-admin-delete-media-item=\"true\"",
   "data-admin-delete-private-file-item=\"true\"",
-  "deleteProjectMediaItemAction",
-  "deleteProjectPrivateFileItemAction"
+  "deleteProjectMediaItemBoundAction",
+  "deleteProjectPrivateFileItemBoundAction"
 ]) {
   if (!mediaManager.includes(marker)) fail(`Missing V34 media manager marker: ${marker}`);
 }

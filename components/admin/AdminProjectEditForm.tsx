@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, FileText, ImagePlus, ListPlus, Save } from "lucide-react";
 import { updateProjectAction, type UpdateProjectState } from "@/app/admin/projekty/actions";
 import { FeaturePicker } from "./FeaturePicker";
@@ -26,6 +26,8 @@ function makeSlug(value: string) {
 }
 
 export function AdminProjectEditForm({ project }: { project: AdminProjectEditItem }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const editDraftKey = `admin-project-edit-draft-v1:${project.id}`;
   const [state, formAction, pending] = useActionState(updateProjectAction, initialState);
   const [name, setName] = useState(project.name);
   const [slug, setSlug] = useState(project.slug);
@@ -58,8 +60,83 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
     if (!slugTouched) setSlug(makeSlug(value));
   }
 
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(editDraftKey);
+      if (!raw) return;
+      const draft = JSON.parse(raw) as {
+        name?: string;
+        slug?: string;
+        slugTouched?: boolean;
+        status?: string;
+        rooms?: RoomRow[];
+        variants?: VariantRow[];
+        addons?: AddonRow[];
+        fields?: Record<string, string>;
+      };
+
+      if (typeof draft.name === "string") setName(draft.name);
+      if (typeof draft.slug === "string") setSlug(draft.slug);
+      if (typeof draft.slugTouched === "boolean") setSlugTouched(draft.slugTouched);
+      if (typeof draft.status === "string") setStatus(draft.status);
+      if (Array.isArray(draft.rooms) && draft.rooms.length > 0) setRooms(draft.rooms);
+      if (Array.isArray(draft.variants) && draft.variants.length > 0) setVariants(draft.variants);
+      if (Array.isArray(draft.addons) && draft.addons.length > 0) setAddons(draft.addons);
+
+      if (draft.fields) {
+        requestAnimationFrame(() => {
+          const form = formRef.current;
+          if (!form) return;
+          const restoredFields = draft.fields || {};
+          for (const [fieldName, fieldValue] of Object.entries(restoredFields)) {
+            const element = form.elements.namedItem(fieldName);
+            if (!element) continue;
+            if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement || element instanceof HTMLSelectElement) {
+              element.value = fieldValue;
+              element.dispatchEvent(new Event("input", { bubbles: true }));
+              element.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          }
+        });
+      }
+    } catch {
+      // ignore corrupted local draft
+    }
+  }, [editDraftKey]);
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const fields: Record<string, string> = {};
+    const formData = new FormData(form);
+
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) continue;
+      if (key.endsWith("Json")) continue;
+      if (!fields[key]) fields[key] = String(value || "");
+    }
+
+    const payload = {
+      name,
+      slug,
+      slugTouched,
+      status,
+      rooms,
+      variants,
+      addons,
+      fields
+    };
+
+    try {
+      window.localStorage.setItem(editDraftKey, JSON.stringify(payload));
+    } catch {
+      // ignore storage limits
+    }
+  }, [editDraftKey, name, slug, slugTouched, status, rooms, variants, addons]);
+
   return (
-    <form className="admin-form-layout" action={formAction}>
+    <form ref={formRef} className="admin-form-layout" action={formAction}>
       <input type="hidden" name="projectId" value={project.id} />
       <input type="hidden" name="roomsJson" value={JSON.stringify(normalizeRooms(rooms))} />
       <input type="hidden" name="variantsJson" value={JSON.stringify(variants)} />

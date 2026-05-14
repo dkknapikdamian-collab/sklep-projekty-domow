@@ -22,8 +22,8 @@ for (const marker of [
   "data-admin-set-media-hero=\"true\"",
   "data-admin-set-media-thumbnail=\"true\"",
   "data-admin-delete-media-item=\"true\"",
-  "setProjectMediaTypeAction",
-  "deleteProjectMediaItemAction"
+  "setProjectMediaTypeBoundAction",
+  "deleteProjectMediaItemBoundAction"
 ]) {
   if (!manager.includes(marker)) fail(`Admin media manager missing marker: ${marker}`);
 }

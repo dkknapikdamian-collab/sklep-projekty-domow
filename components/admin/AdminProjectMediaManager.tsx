@@ -1,7 +1,7 @@
 "use client";
 
 import { UploadCloud } from "lucide-react";
-import { deleteProjectMediaItemAction, deleteProjectPrivateFileItemAction, setProjectMediaTypeAction } from "@/app/admin/projekty/actions";
+import { deleteProjectMediaItemBoundAction, deleteProjectPrivateFileItemBoundAction, setProjectMediaTypeBoundAction } from "@/app/admin/projekty/actions";
 import type { AdminProjectFileItem, AdminProjectMediaItem } from "@/lib/admin/projects-admin";
 
 function isPreviewableImage(path: string, publicUrl: string) {
@@ -37,31 +37,35 @@ function MediaPreviewCard({ item, projectId, projectSlug, projectCode }: { item:
         ) : (
           <p>Brak publicznego URL</p>
         )}
-        <form action={setProjectMediaTypeAction}>
-          <input type="hidden" name="projectId" value={projectId} />
-          <input type="hidden" name="projectSlug" value={projectSlug} />
-          <input type="hidden" name="projectCode" value={projectCode} />
-          <input type="hidden" name="mediaId" value={item.id} />
-          <input type="hidden" name="targetType" value="hero" />
-          <button type="submit" className="admin-secondary-button" data-admin-set-media-hero="true" disabled={isHero}>Ustaw jako hero</button>
-        </form>
-        <form action={setProjectMediaTypeAction}>
-          <input type="hidden" name="projectId" value={projectId} />
-          <input type="hidden" name="projectSlug" value={projectSlug} />
-          <input type="hidden" name="projectCode" value={projectCode} />
-          <input type="hidden" name="mediaId" value={item.id} />
-          <input type="hidden" name="targetType" value="thumbnail" />
-          <button type="submit" className="admin-secondary-button" data-admin-set-media-thumbnail="true" disabled={isThumbnail}>Ustaw jako miniature</button>
-        </form>
-        <form action={deleteProjectMediaItemAction}>
-          <input type="hidden" name="projectId" value={projectId} />
-          <input type="hidden" name="projectSlug" value={projectSlug} />
-          <input type="hidden" name="projectCode" value={projectCode} />
-          <input type="hidden" name="mediaId" value={item.id} />
-          <input type="hidden" name="path" value={item.path} />
-          <input type="hidden" name="bucket" value={item.bucket || "project-media"} />
-          <button type="submit" className="admin-secondary-button" data-admin-delete-media-item="true">Usun media</button>
-        </form>
+        <button
+          type="submit"
+          formAction={setProjectMediaTypeBoundAction.bind(null, projectId, projectSlug, projectCode, item.id, "hero")}
+          formNoValidate
+          className="admin-secondary-button"
+          data-admin-set-media-hero="true"
+          disabled={isHero}
+        >
+          Ustaw jako hero
+        </button>
+        <button
+          type="submit"
+          formAction={setProjectMediaTypeBoundAction.bind(null, projectId, projectSlug, projectCode, item.id, "thumbnail")}
+          formNoValidate
+          className="admin-secondary-button"
+          data-admin-set-media-thumbnail="true"
+          disabled={isThumbnail}
+        >
+          Ustaw jako miniature
+        </button>
+        <button
+          type="submit"
+          formAction={deleteProjectMediaItemBoundAction.bind(null, projectId, projectSlug, projectCode, item.id, item.path, item.bucket || "project-media")}
+          formNoValidate
+          className="admin-secondary-button"
+          data-admin-delete-media-item="true"
+        >
+          Usun media
+        </button>
       </div>
     </article>
   );
@@ -121,13 +125,15 @@ export function AdminProjectMediaManager({
               <li key={item.id}>
                 <strong>{item.title || item.fileType}</strong>
                 <code>{item.path}</code>
-                <form action={deleteProjectPrivateFileItemAction}>
-                  <input type="hidden" name="projectId" value={projectId} />
-                  <input type="hidden" name="fileId" value={item.id} />
-                  <input type="hidden" name="path" value={item.path} />
-                  <input type="hidden" name="bucket" value="project-private-files" />
-                  <button type="submit" className="admin-secondary-button" data-admin-delete-private-file-item="true">Usun plik prywatny</button>
-                </form>
+                <button
+                  type="submit"
+                  formAction={deleteProjectPrivateFileItemBoundAction.bind(null, projectId, item.id, item.path, "project-private-files")}
+                  formNoValidate
+                  className="admin-secondary-button"
+                  data-admin-delete-private-file-item="true"
+                >
+                  Usun plik prywatny
+                </button>
               </li>
             ))}
           </ul>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { createProjectAction } from "@/app/admin/projekty/nowy/actions";
 import { CheckCircle2, FileText, ImagePlus, ListPlus, Save, UploadCloud, X } from "lucide-react";
 import { SelectWithCustom } from "./SelectWithCustom";
@@ -20,6 +20,7 @@ type VariantRow = { name: string; priceGross: string; };
 type AddonRow = { code: string; name: string; priceGross: string; description: string; deliveryAction?: string; };
 
 const CUSTOM_FLOOR = "__custom__";
+const CREATE_DRAFT_KEY = "admin-project-create-draft-v1";
 
 const initialState: CreateProjectState = {
   ok: false,
@@ -38,6 +39,7 @@ function currentCodePreview() { return `DP-${new Date().getFullYear()}-0001`; }
 function normalizedRooms(rows: RoomRow[]) { return rows.map((room) => ({ ...room, floor: room.floor === CUSTOM_FLOOR ? room.customFloor || "" : room.floor })); }
 
 export function AdminProjectCreateForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, pending] = useActionState(createProjectAction, initialState);
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -49,8 +51,83 @@ export function AdminProjectCreateForm() {
   const completion = useMemo(() => Math.round(([name, slug, status].filter(Boolean).length / 3) * 100), [name, slug, status]);
   function handleNameChange(value: string) { setName(value); if (!slugTouched) setSlug(makeSlug(value)); }
 
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(CREATE_DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw) as {
+        name?: string;
+        slug?: string;
+        slugTouched?: boolean;
+        status?: string;
+        rooms?: RoomRow[];
+        variants?: VariantRow[];
+        addons?: AddonRow[];
+        fields?: Record<string, string>;
+      };
+
+      if (typeof draft.name === "string") setName(draft.name);
+      if (typeof draft.slug === "string") setSlug(draft.slug);
+      if (typeof draft.slugTouched === "boolean") setSlugTouched(draft.slugTouched);
+      if (typeof draft.status === "string") setStatus(draft.status);
+      if (Array.isArray(draft.rooms) && draft.rooms.length > 0) setRooms(draft.rooms);
+      if (Array.isArray(draft.variants) && draft.variants.length > 0) setVariants(draft.variants);
+      if (Array.isArray(draft.addons) && draft.addons.length > 0) setAddons(draft.addons);
+
+      if (draft.fields) {
+        requestAnimationFrame(() => {
+          const form = formRef.current;
+          if (!form) return;
+          const restoredFields = draft.fields || {};
+          for (const [fieldName, fieldValue] of Object.entries(restoredFields)) {
+            const element = form.elements.namedItem(fieldName);
+            if (!element) continue;
+            if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement || element instanceof HTMLSelectElement) {
+              element.value = fieldValue;
+              element.dispatchEvent(new Event("input", { bubbles: true }));
+              element.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          }
+        });
+      }
+    } catch {
+      // ignore corrupted local draft
+    }
+  }, []);
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const fields: Record<string, string> = {};
+    const formData = new FormData(form);
+
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) continue;
+      if (key.endsWith("Json")) continue;
+      if (!fields[key]) fields[key] = String(value || "");
+    }
+
+    const payload = {
+      name,
+      slug,
+      slugTouched,
+      status,
+      rooms,
+      variants,
+      addons,
+      fields
+    };
+
+    try {
+      window.localStorage.setItem(CREATE_DRAFT_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore storage limits
+    }
+  }, [name, slug, slugTouched, status, rooms, variants, addons]);
+
   return (
-    <form className="admin-form-layout" action={formAction}>
+    <form ref={formRef} className="admin-form-layout" action={formAction}>
       <input type="hidden" name="roomsJson" value={JSON.stringify(normalizedRooms(rooms))} />
       <input type="hidden" name="variantsJson" value={JSON.stringify(variants)} />
       <input type="hidden" name="addonsJson" value={JSON.stringify(addons)} />

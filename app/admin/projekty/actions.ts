@@ -491,6 +491,54 @@ export async function setProjectMediaTypeAction(formData: FormData) {
   redirect(`/admin/projekty/${projectId}/edytuj?saved=1&media_updated=${encodeURIComponent(projectCode || "1")}`);
 }
 
+export async function setProjectMediaTypeBoundAction(
+  projectId: string,
+  projectSlug: string,
+  projectCode: string,
+  mediaId: string,
+  targetType: string
+) {
+  const formData = new FormData();
+  formData.set("projectId", projectId);
+  formData.set("projectSlug", projectSlug);
+  formData.set("projectCode", projectCode);
+  formData.set("mediaId", mediaId);
+  formData.set("targetType", targetType);
+  return setProjectMediaTypeAction(formData);
+}
+
+export async function deleteProjectMediaItemBoundAction(
+  projectId: string,
+  projectSlug: string,
+  projectCode: string,
+  mediaId: string,
+  path: string,
+  bucket: string
+) {
+  const formData = new FormData();
+  formData.set("projectId", projectId);
+  formData.set("projectSlug", projectSlug);
+  formData.set("projectCode", projectCode);
+  formData.set("mediaId", mediaId);
+  formData.set("path", path);
+  formData.set("bucket", bucket);
+  return deleteProjectMediaItemAction(formData);
+}
+
+export async function deleteProjectPrivateFileItemBoundAction(
+  projectId: string,
+  fileId: string,
+  path: string,
+  bucket: string
+) {
+  const formData = new FormData();
+  formData.set("projectId", projectId);
+  formData.set("fileId", fileId);
+  formData.set("path", path);
+  formData.set("bucket", bucket);
+  return deleteProjectPrivateFileItemAction(formData);
+}
+
 export async function deleteProjectPrivateFileItemAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const fileId = str(formData, "fileId");
