@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 
 type MediaSlotProps = {
@@ -8,10 +7,26 @@ type MediaSlotProps = {
   sizes?: string;
 };
 
-export function MediaSlot({ src, alt, label, sizes = "100vw" }: MediaSlotProps) {
-  if (!src) {
+function normalizeSrc(src?: string) {
+  const value = String(src || "").trim();
+  return value || "";
+}
+
+export function MediaSlot({ src, alt, label }: MediaSlotProps) {
+  const normalizedSrc = normalizeSrc(src);
+
+  if (!normalizedSrc) {
     return <MediaPlaceholder label={label} />;
   }
 
-  return <Image src={src} alt={alt} fill sizes={sizes} />;
+  return (
+    <img
+      className="media-slot-image"
+      src={normalizedSrc}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      data-media-slot-image="true"
+    />
+  );
 }
