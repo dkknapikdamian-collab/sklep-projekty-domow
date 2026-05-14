@@ -158,7 +158,7 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
   }, [editDraftKey, name, slug, slugTouched, status, rooms, variants, addons]);
 
   return (
-    <form ref={formRef} className="admin-form-layout" action={formAction}>
+    <form ref={formRef} className="admin-form-layout" action={formAction} data-admin-action="project-edit-form">
       <input type="hidden" name="projectId" value={project.id} />
       <input type="hidden" name="roomsJson" value={JSON.stringify(normalizeRooms(rooms))} />
       <input type="hidden" name="variantsJson" value={JSON.stringify(variants)} />
@@ -181,7 +181,7 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
           <div className="form-section-title"><CheckCircle2 size={22} /><div><h2>2. Cena, status i publikacja</h2><p>Status active publikuje projekt, pozostale statusy ukrywaja go publicznie.</p></div></div>
           <div className="form-grid three">
             <label>Cena brutto<input name="priceGross" defaultValue={project.priceGross} inputMode="decimal" /></label>
-            <label>Status<select name="status" value={status} onChange={(event) => setStatus(event.target.value)}><option value="draft">draft</option><option value="active">active</option><option value="hidden">hidden</option><option value="archived">archived</option></select></label>
+            <label>Status<select name="status" value={status} onChange={(event) => setStatus(event.target.value)} data-admin-action="project-edit-status-select"><option value="draft">draft</option><option value="active">active</option><option value="hidden">hidden</option><option value="archived">archived</option></select></label>
             <SelectWithCustom name="badgePrimary" label="Badge glowny" options={badgeOptions} defaultValue={project.badgePrimary || ""} placeholder="Brak badge" />
             <SelectWithCustom name="badgeSecondary" label="Badge dodatkowy" options={badgeOptions} defaultValue={project.badgeSecondary || ""} placeholder="Brak badge" />
             <label>Podobne projekty<input name="relatedSlugs" defaultValue={project.relatedSlugs.join(", ")} placeholder="slug-1, slug-2" /></label>
@@ -229,7 +229,7 @@ export function AdminProjectEditForm({ project }: { project: AdminProjectEditIte
           />
         </section>
 
-        <section className="admin-form-section"><div className="form-section-title"><Save size={22} /><div><h2>7. Zapis</h2></div></div>{state.message && <div className={state.ok ? "admin-form-success" : "admin-form-error"}>{state.message}</div>}<div className="admin-form-actions"><button type="submit" className="admin-primary-button" disabled={pending}>{pending ? "Zapisywanie..." : "Zapisz projekt"}</button><Link href="/admin/projekty?cancelled=1" className="admin-secondary-button">Anuluj</Link></div></section>
+        <section className="admin-form-section"><div className="form-section-title"><Save size={22} /><div><h2>7. Zapis</h2></div></div>{state.message && <div className={state.ok ? "admin-form-success" : "admin-form-error"}>{state.message}</div>}<div className="admin-form-actions"><button type="submit" className="admin-primary-button" disabled={pending} data-admin-action="project-edit-save">{pending ? "Zapisywanie..." : "Zapisz projekt"}</button><Link href="/admin/projekty?cancelled=1" className="admin-secondary-button" data-admin-action="project-edit-cancel">Anuluj</Link></div></section>
       </div>
 
       <aside className="admin-form-sidebar"><div className="admin-side-card"><span>KOD PROJEKTU</span><strong>{project.code}</strong></div><div className="admin-side-card"><span>KOMPLETNOSC</span><strong>{completion}%</strong></div><div className="admin-side-card"><span>ZRODLO DANYCH</span><strong>Supabase</strong></div><div className="admin-side-card"><span>PUBLICZNOSC</span><strong>{status}</strong></div></aside>
