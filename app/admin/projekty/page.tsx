@@ -2,10 +2,14 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { getAdminProjects } from "@/lib/admin/projects-admin";
 import { AdminProjectsListClient } from "@/components/admin/AdminProjectsListClient";
-import { createSampleProjectAction } from "@/app/admin/projekty/actions";
 import { FolderPlus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+type AdminListMessage = {
+  tone: "success" | "neutral" | "error";
+  text: string;
+};
 
 type AdminProjectsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -15,48 +19,55 @@ function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
-function getAdminListMessage(searchParams: Record<string, string | string[] | undefined>) {
+function getAdminListMessage(searchParams: Record<string, string | string[] | undefined>): AdminListMessage | null {
   if (firstParam(searchParams.status) === "updated") {
     return {
-      tone: "success" as const,
+      tone: "success",
       text: "Status projektu został zapisany. Lista i publiczne strony zostały odświeżone."
+    };
+  }
+
+  if (firstParam(searchParams.status) === "error") {
+    const rawReason = firstParam(searchParams.reason) || "unknown";
+    let reason = rawReason;
+
+    try {
+      reason = decodeURIComponent(rawReason);
+    } catch {
+      reason = rawReason;
+    }
+
+    return {
+      tone: "error",
+      text: `Nie udało się zapisać zmiany projektu. Powód: ${reason}`
     };
   }
 
   if (firstParam(searchParams.deleted) === "1") {
     return {
-      tone: "success" as const,
+      tone: "success",
       text: "Projekt został usunięty z bazy. Jeżeli miał pliki w Storage, system spróbował je usunąć razem z rekordem."
     };
   }
 
   if (firstParam(searchParams.cancelled) === "1") {
     return {
-      tone: "neutral" as const,
+      tone: "neutral",
       text: "Edycja została anulowana. Formularz nie wysłał zmian do Supabase."
     };
   }
 
   if (firstParam(searchParams.sample) === "created") {
     return {
-      tone: "success" as const,
-      text: "Dodano przykladowy projekt V22 jako active. Mozesz od razu sprawdzic /projekty i /projekty/projekt-przykladowy-v22."
+      tone: "success",
+      text: "Projekt przykładowy został utworzony i opublikowany jako active."
     };
   }
 
   if (firstParam(searchParams.sample) === "exists") {
     return {
-      tone: "neutral" as const,
-      text: "Przykladowy projekt V22 juz istnieje. Uzyj go do testow publicznych stron."
-    };
-  }
-
-  if (firstParam(searchParams.status) === "error") {
-    const reason = firstParam(searchParams.reason);
-    const decodedReason = reason ? decodeURIComponent(reason) : "Nieznany blad";
-    return {
-      tone: "neutral" as const,
-      text: `Nie udalo sie zapisac statusu projektu: ${decodedReason}`
+      tone: "neutral",
+      text: "Projekt przykładowy już istnieje w bazie."
     };
   }
 
@@ -78,18 +89,13 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
             <h1>Projekty</h1>
             <p>Lista projektów zapisana w Supabase. Z tego poziomu możesz filtrować, zmienić status, wejść w edycję albo usunąć projekt.</p>
           </div>
-          <div className="admin-head-actions">
-            <form action={createSampleProjectAction}>
-              <button type="submit" className="admin-secondary-button">Dodaj przykladowy projekt</button>
-            </form>
-            <Link href="/admin/projekty/nowy" className="admin-primary-button">
-              <FolderPlus size={18} /> Dodaj projekt
-            </Link>
-          </div>
+          <Link href="/admin/projekty/nowy" className="admin-primary-button">
+            <FolderPlus size={18} /> Dodaj projekt
+          </Link>
         </section>
 
         {message && (
-          <section className={message.tone === "success" ? "admin-form-success" : "admin-inline-notice"} role="status">
+          <section className={message.tone === "success" ? "admin-form-success" : message.tone === "error" ? "admin-form-error" : "admin-inline-notice"} role="status">
             {message.text}
           </section>
         )}

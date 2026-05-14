@@ -11,7 +11,7 @@ export function HomeProjectSearch({ projects }: { projects: Project[] }) {
         Styl domu
         <select name="style" defaultValue="">
           <option value="">Wszystkie style</option>
-          {options.styles.map((style) => <option value={style} key={style}>{style}</option>)}
+          {options.styles.map((style: string) => <option value={style} key={style}>{style}</option>)}
         </select>
       </label>
 
@@ -27,7 +27,7 @@ export function HomeProjectSearch({ projects }: { projects: Project[] }) {
         Liczba pokoi
         <select name="rooms" defaultValue="">
           <option value="">Wszystkie</option>
-          {options.rooms.map((rooms) => <option value={rooms} key={rooms}>{rooms}</option>)}
+          {options.rooms.map((rooms: string) => <option value={rooms} key={rooms}>{rooms}</option>)}
         </select>
       </label>
 
@@ -35,7 +35,7 @@ export function HomeProjectSearch({ projects }: { projects: Project[] }) {
         Garaż
         <select name="garage" defaultValue="">
           <option value="">Dowolnie</option>
-          {options.garages.map((garage) => <option value={garage} key={garage}>{garage}</option>)}
+          {options.garages.map((garage: string) => <option value={garage} key={garage}>{garage}</option>)}
         </select>
       </label>
 
@@ -43,7 +43,7 @@ export function HomeProjectSearch({ projects }: { projects: Project[] }) {
         Kondygnacje
         <select name="floors" defaultValue="">
           <option value="">Dowolnie</option>
-          {options.floors.map((floors) => <option value={floors} key={floors}>{floors}</option>)}
+          {options.floors.map((floors: string) => <option value={floors} key={floors}>{floors}</option>)}
         </select>
       </label>
 

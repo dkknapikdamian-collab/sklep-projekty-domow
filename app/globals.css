@@ -294,7 +294,7 @@ button, input, select, textarea { font: inherit; }
 }
 
 .section-head h2::before {
-  content: "Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚ËĂ˘â€šÂ¬Äąâ€ş";
+  content: "\\2014";
   color: var(--gold);
   margin-right: 12px;
 }

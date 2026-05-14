@@ -59,7 +59,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   Styl domu
                   <select name="style" defaultValue={filters.style}>
                     <option value="">Wszystkie style</option>
-                    {options.styles.map((style) => <option value={style} key={style}>{style}</option>)}
+                    {options.styles.map((style: string) => <option value={style} key={style}>{style}</option>)}
                   </select>
                 </label>
 
@@ -75,7 +75,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   Garaż
                   <select name="garage" defaultValue={filters.garage}>
                     <option value="">Dowolnie</option>
-                    {options.garages.map((garage) => <option value={garage} key={garage}>{garage}</option>)}
+                    {options.garages.map((garage: string) => <option value={garage} key={garage}>{garage}</option>)}
                   </select>
                 </label>
 
@@ -83,7 +83,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   Typ domu
                   <select name="type" defaultValue={filters.type}>
                     <option value="">Dowolnie</option>
-                    {options.types.map((type) => <option value={type} key={type}>{type}</option>)}
+                    {options.types.map((type: string) => <option value={type} key={type}>{type}</option>)}
                   </select>
                 </label>
 
@@ -91,7 +91,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   Technologia
                   <select name="technology" defaultValue={filters.technology}>
                     <option value="">Dowolnie</option>
-                    {options.technologies.map((technology) => <option value={technology} key={technology}>{technology}</option>)}
+                    {options.technologies.map((technology: string) => <option value={technology} key={technology}>{technology}</option>)}
                   </select>
                 </label>
 
@@ -99,7 +99,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   Liczba pokoi
                   <select name="rooms" defaultValue={filters.rooms}>
                     <option value="">Wszystkie</option>
-                    {options.rooms.map((rooms) => <option value={rooms} key={rooms}>{rooms}</option>)}
+                    {options.rooms.map((rooms: string) => <option value={rooms} key={rooms}>{rooms}</option>)}
                   </select>
                 </label>
 
@@ -107,7 +107,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   Kondygnacje
                   <select name="floors" defaultValue={filters.floors}>
                     <option value="">Dowolnie</option>
-                    {options.floors.map((floors) => <option value={floors} key={floors}>{floors}</option>)}
+                    {options.floors.map((floors: string) => <option value={floors} key={floors}>{floors}</option>)}
                   </select>
                 </label>
 

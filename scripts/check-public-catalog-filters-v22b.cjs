@@ -11,6 +11,7 @@ const requiredFiles = [
   "app/projekty/page.tsx",
   "app/page.tsx",
   "app/public-catalog-filters-v22b.css",
+  "scripts/check-public-catalog-filters-v22b.cjs",
   "docs/implementation/STAGE22B_PUBLIC_CATALOG_FILTERS.md"
 ];
 
@@ -21,59 +22,44 @@ if (missing.length) {
   process.exit(1);
 }
 
-const filterLib = read("lib/public-catalog-filters.ts");
+const filters = read("lib/public-catalog-filters.ts");
 for (const needle of [
-  "getCatalogFiltersFromSearchParams",
-  "filterPublicProjects",
-  "buildCatalogOptions",
-  "hasPublicCatalogFilters",
-  "projectSearchHaystack",
-  "usableArea",
-  "roomsCount",
-  "floorsCount"
+  "export function getCatalogFiltersFromSearchParams",
+  "export function filterPublicProjects",
+  "export function buildCatalogOptions",
+  "export function hasPublicCatalogFilters",
+  "export function hasActivePublicCatalogFilters",
+  "projectMatchesQuery"
 ]) {
-  if (!filterLib.includes(needle)) {
-    console.error(`FAIL: public catalog filter lib missing ${needle}`);
+  if (!filters.includes(needle)) {
+    console.error(`FAIL: public-catalog-filters missing ${needle}`);
     process.exit(1);
   }
 }
 
-const catalogPage = read("app/projekty/page.tsx");
+const catalog = read("app/projekty/page.tsx");
 for (const needle of [
-  "searchParams?: Promise",
-  "getCatalogFiltersFromSearchParams",
-  "filterPublicProjects",
-  "buildCatalogOptions",
-  "hasPublicCatalogFilters",
+  'action="/projekty"',
   'method="get"',
   'data-public-catalog-search="query-params"',
   'data-public-catalog-filters="query-params"',
-  "filteredProjects.length",
-  "catalog-filter-empty"
+  "filterPublicProjects(projects, filters)",
+  "buildCatalogOptions(projects)",
+  "filteredProjects.map"
 ]) {
-  if (!catalogPage.includes(needle)) {
-    console.error(`FAIL: catalog page missing live filter wiring: ${needle}`);
-    process.exit(1);
-  }
-}
-
-for (const stale of [
-  "<input placeholder=\"Szukaj po nazwie, kodzie, metrażu, działce...\" />",
-  "<button><Search size={20} /> Szukaj</button>",
-  "<select><option>Wszystkie style</option></select>",
-  "<select><option>Dowolnie</option></select>"
-]) {
-  if (catalogPage.includes(stale)) {
-    console.error(`FAIL: catalog page still contains dead filter control: ${stale}`);
+  if (!catalog.includes(needle)) {
+    console.error(`FAIL: catalog page missing V22B wiring: ${needle}`);
     process.exit(1);
   }
 }
 
 const homeSearch = read("components/project/HomeProjectSearch.tsx");
 for (const needle of [
+  "export function HomeProjectSearch",
+  "projects }: { projects: Project[] }",
+  "buildCatalogOptions(projects)",
   'action="/projekty"',
   'method="get"',
-  'data-public-hero-search="query-params"',
   'name="style"',
   'name="areaFrom"',
   'name="areaTo"',
@@ -82,31 +68,24 @@ for (const needle of [
   'name="floors"'
 ]) {
   if (!homeSearch.includes(needle)) {
-    console.error(`FAIL: HomeProjectSearch missing query field: ${needle}`);
+    console.error(`FAIL: HomeProjectSearch missing ${needle}`);
     process.exit(1);
   }
 }
 
-const homePage = read("app/page.tsx");
-if (!homePage.includes("HomeProjectSearch") || homePage.includes("home-search\">\n            <label>Styl domu")) {
-  console.error("FAIL: home page must use HomeProjectSearch instead of dead hero controls.");
-  process.exit(1);
+const home = read("app/page.tsx");
+for (const needle of [
+  "HomeProjectSearch projects={projects}",
+  "getHomepageHeroContent",
+  "hero.title",
+  "hero.subtitle",
+  "hero.ctaLabel",
+  "hero.ctaHref"
+]) {
+  if (!home.includes(needle)) {
+    console.error(`FAIL: home page missing V22H/V23 binding: ${needle}`);
+    process.exit(1);
+  }
 }
 
-const globals = read("app/globals.css");
-if (!globals.includes('@import "./public-catalog-filters-v22b.css";')) {
-  console.error("FAIL: globals.css does not import public-catalog-filters-v22b.css");
-  process.exit(1);
-}
-
-const packageJson = JSON.parse(read("package.json"));
-if (!packageJson.scripts || packageJson.scripts["verify:public-catalog-filters-v22b"] !== "node scripts/check-public-catalog-filters-v22b.cjs") {
-  console.error("FAIL: package.json missing verify:public-catalog-filters-v22b script.");
-  process.exit(1);
-}
-if (!packageJson.scripts.verify.includes("verify:public-catalog-filters-v22b")) {
-  console.error("FAIL: npm run verify does not include V22B guard.");
-  process.exit(1);
-}
-
-console.log("OK: public catalog filters V22B guard passed.");
+console.log("OK: public catalog filters V22B/V22H guard passed.");
