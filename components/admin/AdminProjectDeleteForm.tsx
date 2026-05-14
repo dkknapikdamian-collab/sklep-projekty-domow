@@ -15,7 +15,7 @@ function DeleteProjectSubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button type="submit" className="admin-danger-button" disabled={pending} aria-busy={pending}>
+    <button type="submit" className="admin-danger-button" disabled={pending} aria-busy={pending} data-admin-action="project-delete-submit">
       <Trash2 size={15} /> {pending ? "Usuwanie..." : "Usuń"}
     </button>
   );
@@ -28,6 +28,7 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, cl
     <form
       action={deleteProjectAction}
       className={className}
+      data-admin-action="project-delete"
       onSubmit={(event) => {
         if (!window.confirm(`Usunąć projekt ${projectLabel}? Tej operacji nie cofniemy.`)) {
           event.preventDefault();
