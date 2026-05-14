@@ -38,7 +38,13 @@ function StatusActionForm({ project, targetStatus }: { project: AdminProjectList
   const disabledReason = disabled ? `Braki: ${missingList(project).join(", ")}` : "";
 
   return (
-    <form action={updateProjectStatusAction} className="admin-inline-form" title={disabledReason}>
+    <form
+      action={updateProjectStatusAction}
+      className="admin-inline-form"
+      title={disabledReason}
+      data-admin-action="project-status-change"
+      data-admin-target-status={targetStatus}
+    >
       <input type="hidden" name="projectId" value={project.id} />
       <input type="hidden" name="slug" value={project.slug} />
       <input type="hidden" name="status" value={targetStatus} />
@@ -110,9 +116,9 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                 </td>
                 <td>{formatDate(project.updatedAt)}</td>
                 <td>
-                  <div className="admin-row-actions">
-                    <Link href={`/admin/projekty/${project.id}/edytuj`}>Edytuj</Link>
-                    <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">Podglad publiczny</Link>
+                  <div className="admin-row-actions" data-admin-project-row-actions="true">
+                    <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
+                    <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
                     <StatusActionForm project={project} targetStatus="draft" />
                     <StatusActionForm project={project} targetStatus="active" />
                     <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
