@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useActionState } from "react";
 import type { HomepageHeroContent } from "@/lib/site-content";
@@ -12,6 +12,8 @@ const initialState: HomepageContentState = { ok: false, message: "" };
 
 export function AdminHomepageContentForm({ hero }: Props) {
   const [state, formAction, pending] = useActionState(updateHomepageHeroAction, initialState);
+  const displayImageUrl = state.imageUrl || hero.imageUrl || "";
+  const displayImagePath = state.imagePath || hero.imagePath || "";
 
   return (
     <form action={formAction} className="admin-form-layout">
@@ -52,6 +54,7 @@ export function AdminHomepageContentForm({ hero }: Props) {
             <label>
               Obraz hero / baner
               <input type="file" name="heroFile" accept="image/*" />
+              <span className="admin-field-help">Input pliku pokazuje tylko nowo wybrany plik. Aktualnie zapisany baner jest widoczny ponizej.</span>
             </label>
             <label>
               Alt obrazu
@@ -59,9 +62,23 @@ export function AdminHomepageContentForm({ hero }: Props) {
             </label>
           </div>
 
-          {hero.imageUrl && (
-            <p className="admin-field-help">Aktualny baner: {hero.imageUrl}</p>
-          )}
+          <div className="admin-current-banner-card" data-admin-current-banner="true">
+            <div className="admin-current-banner-meta">
+              <span>Aktualny baner</span>
+              <strong>{displayImageUrl ? "Podlaczony" : "Brak obrazu"}</strong>
+              {displayImagePath && <code>{displayImagePath}</code>}
+            </div>
+            {displayImageUrl ? (
+              <>
+                <img className="admin-current-banner-preview" src={displayImageUrl} alt={hero.imageAlt || "Baner strony glownej"} />
+                <a className="admin-current-media-link" href={displayImageUrl} target="_blank" rel="noreferrer">
+                  Otworz aktualny baner
+                </a>
+              </>
+            ) : (
+              <p className="admin-field-help">Nie ma jeszcze zapisanego obrazu banera w site_content.</p>
+            )}
+          </div>
         </section>
 
         <section className="admin-form-section">
@@ -77,9 +94,9 @@ export function AdminHomepageContentForm({ hero }: Props) {
 
       <aside className="admin-form-sidebar">
         <div className="admin-side-card">
-          <span>ZAKRES V23</span>
-          <strong>Hero + CTA</strong>
-          <p>W tym etapie edytujemy glowny baner i tresc hero z poziomu admina.</p>
+          <span>ZAKRES V25</span>
+          <strong>Hero + media</strong>
+          <p>Panel pokazuje aktualnie zapisany baner, sciezke Storage i link do pliku.</p>
         </div>
       </aside>
     </form>

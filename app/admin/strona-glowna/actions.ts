@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { getAdminSession } from "@/lib/auth/admin";
@@ -7,6 +7,9 @@ import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 export type HomepageContentState = {
   ok: boolean;
   message: string;
+  imageUrl?: string | null;
+  imagePath?: string | null;
+  uploadedImage?: boolean;
 };
 
 function str(formData: FormData, key: string) {
@@ -42,6 +45,12 @@ export async function updateHomepageHeroAction(
   if (!title || !subtitle || !ctaLabel) {
     return { ok: false, message: "Uzupelnij tytul, podtytul i tekst przycisku CTA." };
   }
+
+  const { data: existingHero } = await supabase
+    .from("site_content")
+    .select("image_public_url, image_path")
+    .eq("key", "homepage_hero")
+    .maybeSingle();
 
   let imagePath: string | null = null;
   let imagePublicUrl: string | null = null;
@@ -93,9 +102,20 @@ export async function updateHomepageHeroAction(
     return { ok: false, message: `Nie udalo sie zapisac tresci strony glownej: ${error.message}` };
   }
 
+  const resolvedImageUrl = imagePublicUrl || String(existingHero?.image_public_url || "") || null;
+  const resolvedImagePath = imagePath || String(existingHero?.image_path || "") || null;
+
   revalidatePath("/");
   revalidatePath("/admin");
   revalidatePath("/admin/strona-glowna");
 
-  return { ok: true, message: "Zapisano tresc strony glownej." };
+  return {
+    ok: true,
+    message: imagePath
+      ? "Zapisano tresc strony glownej i nowy baner."
+      : "Zapisano tresc strony glownej bez zmiany pliku banera.",
+    imageUrl: resolvedImageUrl,
+    imagePath: resolvedImagePath,
+    uploadedImage: Boolean(imagePath)
+  };
 }

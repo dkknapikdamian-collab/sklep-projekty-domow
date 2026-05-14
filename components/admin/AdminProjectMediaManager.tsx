@@ -1,18 +1,55 @@
-﻿"use client";
+"use client";
 
 import { UploadCloud } from "lucide-react";
 import type { AdminProjectFileItem, AdminProjectMediaItem } from "@/lib/admin/projects-admin";
 
+function isPreviewableImage(path: string, publicUrl: string) {
+  const value = `${path} ${publicUrl}`.toLowerCase();
+  return /\.(png|jpe?g|webp|gif|avif)(\?|$|\s)/.test(value);
+}
+
+function MediaPreviewCard({ item }: { item: AdminProjectMediaItem }) {
+  const canPreview = Boolean(item.publicUrl) && isPreviewableImage(item.path, item.publicUrl);
+
+  return (
+    <article className="admin-media-preview-card" data-admin-media-preview="true">
+      <div className="admin-media-preview-thumb">
+        {canPreview ? (
+          <img src={item.publicUrl} alt={item.title || item.mediaType || item.path} loading="lazy" />
+        ) : (
+          <span>plik</span>
+        )}
+      </div>
+      <div className="admin-media-preview-body">
+        <span>{item.mediaType || "media"}</span>
+        <strong>{item.title || item.path}</strong>
+        <code>{item.path}</code>
+        {item.publicUrl ? (
+          <a href={item.publicUrl} target="_blank" rel="noreferrer">Otworz plik</a>
+        ) : (
+          <p>Brak publicznego URL</p>
+        )}
+      </div>
+    </article>
+  );
+}
+
 export function AdminProjectMediaManager({ media, privateFiles }: { media: AdminProjectMediaItem[]; privateFiles: AdminProjectFileItem[] }) {
   return (
     <>
-      <div className="admin-side-card">
-        <span>Aktualne media</span>
-        <p>{media.length > 0 ? `${media.length} plikow publicznych podlaczonych` : "Brak publicznych mediow"}</p>
-        {media.length > 0 && (
-          <ul>
-            {media.map((item) => <li key={item.id}>{item.title || item.mediaType}: {item.path}</li>)}
-          </ul>
+      <div className="admin-media-current-panel" data-admin-project-current-media="true">
+        <div className="admin-media-current-head">
+          <span>Aktualne media publiczne</span>
+          <strong>{media.length > 0 ? `${media.length} plikow publicznych podlaczonych` : "Brak publicznych mediow"}</strong>
+          <p>Inputy ponizej sluza tylko do wyboru nowych plikow. Zapisane media sa widoczne w tej sekcji.</p>
+        </div>
+
+        {media.length > 0 ? (
+          <div className="admin-media-preview-grid">
+            {media.map((item) => <MediaPreviewCard key={item.id} item={item} />)}
+          </div>
+        ) : (
+          <p className="admin-field-help">Ten projekt nie ma jeszcze rekordow w tabeli project_media.</p>
         )}
       </div>
 
@@ -28,12 +65,14 @@ export function AdminProjectMediaManager({ media, privateFiles }: { media: Admin
         <label className="upload-box"><UploadCloud size={25} /><strong>Elewacja ogrodowa</strong><span>elevation-garden.jpg</span><input type="file" name="elevationGardenFile" accept="image/*,.pdf" /></label>
       </div>
 
-      <div className="admin-side-card">
-        <span>Aktualne pliki prywatne</span>
-        <p>{privateFiles.length > 0 ? `${privateFiles.length} plikow prywatnych podlaczonych` : "Brak plikow prywatnych"}</p>
+      <div className="admin-media-current-panel private" data-admin-project-current-private-files="true">
+        <div className="admin-media-current-head">
+          <span>Aktualne pliki prywatne</span>
+          <strong>{privateFiles.length > 0 ? `${privateFiles.length} plikow prywatnych podlaczonych` : "Brak plikow prywatnych"}</strong>
+        </div>
         {privateFiles.length > 0 && (
-          <ul>
-            {privateFiles.map((item) => <li key={item.id}>{item.title || item.fileType}: {item.path}</li>)}
+          <ul className="admin-private-file-list">
+            {privateFiles.map((item) => <li key={item.id}><strong>{item.title || item.fileType}</strong><code>{item.path}</code></li>)}
           </ul>
         )}
       </div>
@@ -46,4 +85,3 @@ export function AdminProjectMediaManager({ media, privateFiles }: { media: Admin
     </>
   );
 }
-

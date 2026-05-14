@@ -1,4 +1,4 @@
-﻿import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type HomepageHeroContent = {
   title: string;
@@ -6,8 +6,11 @@ export type HomepageHeroContent = {
   ctaLabel: string;
   ctaHref: string;
   imageUrl?: string;
+  imageBucket?: string;
+  imagePath?: string;
   imageAlt: string;
   isActive: boolean;
+  updatedAt?: string;
 };
 
 export const defaultHomepageHero: HomepageHeroContent = {
@@ -16,8 +19,11 @@ export const defaultHomepageHero: HomepageHeroContent = {
   ctaLabel: "Zobacz projekty",
   ctaHref: "/projekty",
   imageUrl: undefined,
+  imageBucket: undefined,
+  imagePath: undefined,
   imageAlt: "Baner strony glownej",
-  isActive: true
+  isActive: true,
+  updatedAt: undefined
 };
 
 type SiteContentRow = {
@@ -26,6 +32,8 @@ type SiteContentRow = {
   subtitle: string | null;
   cta_label: string | null;
   cta_href: string | null;
+  image_bucket: string | null;
+  image_path: string | null;
   image_public_url: string | null;
   alt: string | null;
   is_active: boolean | null;
@@ -41,8 +49,11 @@ function mapHero(row: SiteContentRow | null): HomepageHeroContent {
     ctaLabel: row.cta_label?.trim() || defaultHomepageHero.ctaLabel,
     ctaHref: row.cta_href?.trim() || defaultHomepageHero.ctaHref,
     imageUrl: row.image_public_url || undefined,
+    imageBucket: row.image_bucket || undefined,
+    imagePath: row.image_path || undefined,
     imageAlt: row.alt?.trim() || defaultHomepageHero.imageAlt,
-    isActive: row.is_active !== false
+    isActive: row.is_active !== false,
+    updatedAt: row.updated_at || undefined
   };
 }
 
@@ -52,7 +63,7 @@ export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
 
   const { data, error } = await supabase
     .from("site_content")
-    .select("key, title, subtitle, cta_label, cta_href, image_public_url, alt, is_active, updated_at")
+    .select("key, title, subtitle, cta_label, cta_href, image_bucket, image_path, image_public_url, alt, is_active, updated_at")
     .eq("key", "homepage_hero")
     .eq("is_active", true)
     .order("updated_at", { ascending: false })
