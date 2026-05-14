@@ -8,7 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "verify:content": "node scripts/check-content-source.cjs",
-    "verify": "npm run verify:admin-debug-v26 && npm run verify:admin-media-visibility-v25 && npm run verify:admin-header-v24 && npm run verify:ui-mojibake-status-v22d && npm run verify:admin-homepage-content-v23 && npm run verify:public-catalog-filters-v22b && npm run verify:public-project-data-v22 && npm run verify:admin-edit-parity-v21 && npm run verify:admin-css-imports-v20e && npm run verify:admin-list-search-filter-v20 && npm run verify:admin-buttons-v19 && npm run verify:admin-project-management-v18 && npm run verify:form-state-v17b && npm run verify:use-server-exports-v17 && npm run verify:server-action-400-v16 && npm run verify:featurepicker-v15b && npm run verify:admin-selects-features && npm run verify:admin-select-options && npm run verify:project-code-policy && npm run verify:no-static-supabase && npm run verify:real-admin-projects && npm run verify:supabase-foundation && npm run verify:legacy && npm run typecheck && npm run verify:content && npm run build",
+    "verify": "npm run verify:admin-ui-debug-v28 && npm run verify:public-service-role-read-v27 && npm run verify:admin-debug-v26 && npm run verify:admin-media-visibility-v25 && npm run verify:admin-header-v24 && npm run verify:ui-mojibake-status-v22d && npm run verify:admin-homepage-content-v23 && npm run verify:public-catalog-filters-v22b && npm run verify:public-project-data-v22 && npm run verify:admin-edit-parity-v21 && npm run verify:admin-css-imports-v20e && npm run verify:admin-list-search-filter-v20 && npm run verify:admin-buttons-v19 && npm run verify:admin-project-management-v18 && npm run verify:form-state-v17b && npm run verify:use-server-exports-v17 && npm run verify:server-action-400-v16 && npm run verify:featurepicker-v15b && npm run verify:admin-selects-features && npm run verify:admin-select-options && npm run verify:project-code-policy && npm run verify:no-static-supabase && npm run verify:real-admin-projects && npm run verify:supabase-foundation && npm run verify:legacy && npm run typecheck && npm run verify:content && npm run build",
     "verify:legacy": "node scripts/check-no-legacy-demo-components.cjs",
     "verify:supabase-foundation": "node scripts/check-supabase-foundation.cjs",
     "verify:real-admin-projects": "node scripts/check-real-admin-projects.cjs",
@@ -33,7 +33,9 @@
     "audit:admin-public-status-v22d": "node scripts/audit-admin-public-status-v22d.cjs",
     "verify:admin-header-v24": "node scripts/check-admin-header-v24.cjs",
     "verify:admin-media-visibility-v25": "node scripts/check-admin-media-visibility-v25.cjs",
-    "verify:admin-debug-v26": "node scripts/check-admin-debug-v26.cjs"
+    "verify:admin-debug-v26": "node scripts/check-admin-debug-v26.cjs",
+    "verify:public-service-role-read-v27": "node scripts/check-public-service-role-read-v27.cjs",
+    "verify:admin-ui-debug-v28": "node scripts/check-admin-ui-debug-v28.cjs"
   },
   "dependencies": {
     "next": "^15.0.0",

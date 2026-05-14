@@ -1,0 +1,169 @@
+.admin-ui-debug-panel-v28 {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  color: #f6efe2;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin-ui-debug-dock-v28 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 36px);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.admin-ui-debug-main-v28,
+.admin-ui-debug-export-v28 {
+  min-height: 42px;
+  border: 1px solid rgba(240, 223, 197, .34);
+  border-radius: 999px;
+  background: rgba(20, 24, 27, .94);
+  color: #f6efe2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .35);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.admin-ui-debug-main-v28.active {
+  background: linear-gradient(180deg, #d9b06c, #bd914b);
+  color: #1b1308;
+  border-color: rgba(255,255,255,.35);
+}
+
+.admin-ui-debug-main-v28 strong {
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.18);
+  font-size: 12px;
+}
+
+.admin-ui-debug-hint-v28 {
+  min-height: 36px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px;
+  background: rgba(15, 20, 23, .88);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  color: rgba(246,239,226,.86);
+  font-size: 12px;
+}
+
+.admin-ui-debug-active-v28 *:not([data-admin-ui-debug-panel='true']):hover {
+  outline: 2px solid rgba(217, 176, 108, .9) !important;
+  outline-offset: 3px !important;
+  cursor: crosshair !important;
+}
+
+.admin-ui-debug-modal-v28 {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 7, 9, .58);
+  backdrop-filter: blur(8px);
+}
+
+.admin-ui-debug-card-v28 {
+  width: min(720px, 100%);
+  border: 1px solid rgba(240, 223, 197, .28);
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(38, 45, 51, .98), rgba(18, 23, 27, .98));
+  box-shadow: 0 30px 90px rgba(0,0,0,.48);
+  padding: 20px;
+}
+
+.admin-ui-debug-card-head-v28 {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.admin-ui-debug-card-head-v28 span {
+  color: #d9b06c;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+
+.admin-ui-debug-card-head-v28 h2 {
+  margin: 6px 0 8px;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.admin-ui-debug-card-head-v28 code {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: rgba(246,239,226,.72);
+  font-size: 12px;
+}
+
+.admin-ui-debug-card-head-v28 button {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.05);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.admin-ui-debug-card-v28 textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  background: rgba(0,0,0,.22);
+  color: #fff;
+  padding: 14px;
+  outline: none;
+}
+
+.admin-ui-debug-card-v28 textarea:focus {
+  border-color: rgba(217,176,108,.75);
+  box-shadow: 0 0 0 3px rgba(217,176,108,.13);
+}
+
+.admin-ui-debug-actions-v28 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.admin-ui-debug-actions-v28 button {
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.05);
+  color: #fff;
+  padding: 0 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.admin-ui-debug-actions-v28 .admin-ui-debug-save-v28 {
+  border: 0;
+  background: linear-gradient(180deg, #d9b06c, #bd914b);
+  color: #1b1308;
+}
