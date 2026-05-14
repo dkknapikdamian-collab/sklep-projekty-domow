@@ -2,8 +2,7 @@
   position: fixed;
   right: 18px;
   bottom: 18px;
-  z-index: 9999;
-  color: #f6efe2;
+  z-index: 99999;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -11,7 +10,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  max-width: calc(100vw - 36px);
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -19,83 +17,83 @@
 .admin-ui-debug-main-v28,
 .admin-ui-debug-export-v28 {
   min-height: 42px;
-  border: 1px solid rgba(240, 223, 197, .34);
+  border: 1px solid rgba(240,223,197,.45);
   border-radius: 999px;
-  background: rgba(20, 24, 27, .94);
-  color: #f6efe2;
+  background: rgba(18,24,28,.95);
+  color: #f5ead8;
+  box-shadow: 0 18px 50px rgba(0,0,0,.36);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 0 14px;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, .35);
+  padding: 0 15px;
+  font-weight: 900;
   cursor: pointer;
-  font-weight: 800;
 }
 
 .admin-ui-debug-main-v28.active {
   background: linear-gradient(180deg, #d9b06c, #bd914b);
-  color: #1b1308;
-  border-color: rgba(255,255,255,.35);
+  color: #1d1408;
+  border-color: rgba(255,255,255,.25);
 }
 
 .admin-ui-debug-main-v28 strong {
-  min-width: 22px;
-  height: 22px;
-  border-radius: 999px;
+  min-width: 20px;
+  height: 20px;
   display: grid;
   place-items: center;
-  background: rgba(255,255,255,.18);
-  font-size: 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.22);
+  font-size: 11px;
 }
 
 .admin-ui-debug-hint-v28 {
   min-height: 36px;
-  border: 1px solid rgba(255,255,255,.16);
+  padding: 0 12px;
   border-radius: 999px;
-  background: rgba(15, 20, 23, .88);
+  background: rgba(15,20,23,.92);
+  border: 1px solid rgba(255,255,255,.13);
+  color: #d9dde0;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 0 12px;
-  color: rgba(246,239,226,.86);
   font-size: 12px;
 }
 
-.admin-ui-debug-active-v28 *:not([data-admin-ui-debug-panel='true']):hover {
-  outline: 2px solid rgba(217, 176, 108, .9) !important;
-  outline-offset: 3px !important;
+.admin-ui-debug-active-v28 * {
   cursor: crosshair !important;
 }
 
 .admin-ui-debug-modal-v28 {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  z-index: 100000;
   display: grid;
   place-items: center;
-  padding: 20px;
-  background: rgba(4, 7, 9, .58);
+  padding: 24px;
+  background: rgba(0,0,0,.48);
   backdrop-filter: blur(8px);
 }
 
 .admin-ui-debug-card-v28 {
-  width: min(720px, 100%);
-  border: 1px solid rgba(240, 223, 197, .28);
-  border-radius: 20px;
-  background: linear-gradient(160deg, rgba(38, 45, 51, .98), rgba(18, 23, 27, .98));
-  box-shadow: 0 30px 90px rgba(0,0,0,.48);
+  width: min(720px, calc(100vw - 36px));
+  border: 1px solid rgba(240,223,197,.24);
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.025)), #141b1f;
+  color: #f4f1ea;
+  box-shadow: 0 30px 90px rgba(0,0,0,.45);
   padding: 20px;
 }
 
 .admin-ui-debug-card-head-v28 {
   display: flex;
   justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 16px;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 14px;
 }
 
 .admin-ui-debug-card-head-v28 span {
-  color: #d9b06c;
+  color: #cda463;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: .16em;
@@ -104,44 +102,39 @@
 .admin-ui-debug-card-head-v28 h2 {
   margin: 6px 0 8px;
   font-size: 22px;
-  line-height: 1.15;
 }
 
 .admin-ui-debug-card-head-v28 code {
-  display: inline-block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  color: rgba(246,239,226,.72);
+  display: block;
+  max-width: 560px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #b8c0c5;
   font-size: 12px;
 }
 
-.admin-ui-debug-card-head-v28 button {
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.05);
-  color: #fff;
-  display: grid;
-  place-items: center;
+.admin-ui-debug-card-head-v28 button,
+.admin-ui-debug-actions-v28 button {
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.04);
+  color: #f4f1ea;
+  border-radius: 10px;
+  min-height: 38px;
+  padding: 0 12px;
   cursor: pointer;
 }
 
 .admin-ui-debug-card-v28 textarea {
   width: 100%;
-  min-height: 160px;
+  min-height: 145px;
   resize: vertical;
+  border-radius: 13px;
   border: 1px solid rgba(255,255,255,.18);
-  border-radius: 14px;
-  background: rgba(0,0,0,.22);
-  color: #fff;
+  background: rgba(0,0,0,.18);
+  color: #f4f1ea;
   padding: 14px;
   outline: none;
-}
-
-.admin-ui-debug-card-v28 textarea:focus {
-  border-color: rgba(217,176,108,.75);
-  box-shadow: 0 0 0 3px rgba(217,176,108,.13);
 }
 
 .admin-ui-debug-actions-v28 {
@@ -151,19 +144,123 @@
   margin-top: 14px;
 }
 
-.admin-ui-debug-actions-v28 button {
-  min-height: 40px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.05);
-  color: #fff;
-  padding: 0 14px;
-  cursor: pointer;
-  font-weight: 800;
+.admin-ui-debug-actions-v28 .admin-ui-debug-save-v28 {
+  background: linear-gradient(180deg, #f0dfc5, #dac09a);
+  color: #201810;
+  border-color: rgba(255,255,255,.22);
+  font-weight: 900;
 }
 
-.admin-ui-debug-actions-v28 .admin-ui-debug-save-v28 {
-  border: 0;
-  background: linear-gradient(180deg, #d9b06c, #bd914b);
-  color: #1b1308;
+.admin-ui-debug-route-v29 {
+  padding-bottom: 80px;
+}
+
+.admin-ui-debug-route-hero-v29,
+.admin-ui-debug-route-note-v29,
+.admin-ui-debug-route-card-v29 {
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(160deg, rgba(255,255,255,.055), rgba(255,255,255,.018)), #1b2227;
+  border-radius: 18px;
+  box-shadow: 0 22px 70px rgba(0,0,0,.20);
+}
+
+.admin-ui-debug-route-hero-v29 {
+  padding: 30px;
+  margin-bottom: 22px;
+}
+
+.admin-ui-debug-route-hero-v29 > span {
+  color: #cda463;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .18em;
+}
+
+.admin-ui-debug-route-hero-v29 h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(34px, 5vw, 58px);
+  letter-spacing: -.055em;
+  line-height: .95;
+}
+
+.admin-ui-debug-route-hero-v29 p,
+.admin-ui-debug-route-card-v29 p,
+.admin-ui-debug-route-note-v29 p {
+  color: #bfc6ca;
+  line-height: 1.65;
+}
+
+.admin-ui-debug-route-badges-v29 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.admin-ui-debug-route-badges-v29 strong {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: rgba(205,164,99,.12);
+  border: 1px solid rgba(205,164,99,.28);
+  color: #f0dfc5;
+}
+
+.admin-ui-debug-route-grid-v29 {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.admin-ui-debug-route-card-v29 {
+  padding: 20px;
+}
+
+.admin-ui-debug-route-card-v29 h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.admin-ui-debug-route-card-v29 p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.admin-ui-debug-route-note-v29 {
+  padding: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.admin-ui-debug-route-note-v29 span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #f0dfc5;
+  font-weight: 900;
+}
+
+.admin-ui-debug-route-note-v29 p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 980px) {
+  .admin-ui-debug-route-grid-v29,
+  .admin-ui-debug-route-note-v29 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-ui-debug-panel-v28 {
+    left: 12px;
+    right: 12px;
+  }
+
+  .admin-ui-debug-dock-v28 {
+    justify-content: flex-start;
+  }
 }

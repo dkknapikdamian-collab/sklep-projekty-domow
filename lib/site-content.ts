@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 export type HomepageHeroContent = {
   title: string;
@@ -58,7 +58,9 @@ function mapHero(row: SiteContentRow | null): HomepageHeroContent {
 }
 
 export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
-  const supabase = await createSupabaseServerClient();
+  // V27/V29: public SSR reads use service role on the server only.
+  // This avoids anon/RLS drift where admin writes succeed but public reads fall back to defaults.
+  const supabase = createSupabaseServiceRoleClient();
   if (!supabase) return defaultHomepageHero;
 
   const { data, error } = await supabase

@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -31,7 +31,6 @@ for (const needle of [
   "project_variants",
   "project_addons",
   "project_media",
-  "project_files",
   "relatedSlugs.length > 0",
   "candidate.type === project.type"
 ]) {
@@ -39,6 +38,16 @@ for (const needle of [
     console.error(`FAIL: project repository missing V22 rule: ${needle}`);
     process.exit(1);
   }
+}
+
+if (!repo.includes("createSupabaseServiceRoleClient")) {
+  console.error("FAIL: project repository missing V27/V29 server-only service role public read.");
+  process.exit(1);
+}
+
+if (/\.from\(\s*["']project_files["']\s*\)/.test(repo)) {
+  console.error("FAIL: project repository should not query private project files from public pages after V27/V29.");
+  process.exit(1);
 }
 
 for (const forbidden of [
@@ -74,4 +83,4 @@ for (const needle of ["project.variants", "project.addons", "Projekt podstawowy"
   }
 }
 
-console.log("OK: V22 public project data parity guard passed.");
+console.log("OK: V22 public project data parity guard passed with V27/V29 public-read compatibility.");

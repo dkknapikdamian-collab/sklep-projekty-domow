@@ -1,5 +1,5 @@
-﻿import type { Project, ProjectAddon, ProjectMedia, ProjectPlan, ProjectRoom, ProjectVariant } from "@/types/project";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { Project, ProjectAddon, ProjectMedia, ProjectPlan, ProjectRoom, ProjectVariant } from "@/types/project";
+import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 type DbProject = {
   id: string;
@@ -69,13 +69,6 @@ type DbMedia = {
   public_url: string | null;
 };
 
-type DbFile = {
-  project_id: string;
-  title: string | null;
-  file_type: string;
-  version: string | null;
-};
-
 function toNumber(value: number | string | null | undefined, fallback = 0) {
   if (value === null || value === undefined || value === "") return fallback;
   const numeric = Number(value);
@@ -143,8 +136,7 @@ function mapProject(
   rooms: DbRoom[],
   addons: DbAddon[],
   variants: DbVariant[],
-  media: DbMedia[],
-  files: DbFile[]
+  media: DbMedia[]
 ): Project {
   const projectRooms: ProjectRoom[] = rooms
     .filter((room) => room.project_id === row.id)
@@ -176,10 +168,6 @@ function mapProject(
       priceGross: toNumber(variant.price_gross)
     }));
 
-  const privateFilesInfo = files
-    .filter((file) => file.project_id === row.id)
-    .map((file) => `${file.title || file.file_type}${file.version ? ` (${file.version})` : ""}`);
-
   return {
     code: row.code,
     shortCode: row.short_code || row.code,
@@ -210,12 +198,14 @@ function mapProject(
     features: arrayFromUnknown(row.features),
     media: buildMedia(row.id, media),
     relatedSlugs: arrayFromUnknown(row.related_slugs).filter((slug) => slug !== row.slug),
-    privateFilesInfo
+    privateFilesInfo: []
   };
 }
 
 async function loadActiveFromSupabase() {
-  const supabase = await createSupabaseServerClient();
+  // V27/V29: public pages read through server-only service role and still filter status=active.
+  // This avoids anon/RLS drift while keeping drafts/hidden/archived out of public output.
+  const supabase = createSupabaseServiceRoleClient();
   if (!supabase) return [];
 
   const { data: projectRows, error: projectError } = await supabase
@@ -234,21 +224,19 @@ async function loadActiveFromSupabase() {
 
   const projectIds = projects.map((project) => project.id);
 
-  const [roomsResult, addonsResult, variantsResult, mediaResult, filesResult] = await Promise.all([
+  const [roomsResult, addonsResult, variantsResult, mediaResult] = await Promise.all([
     supabase.from("project_rooms").select("*").in("project_id", projectIds).order("sort_order"),
     supabase.from("project_addons").select("*").in("project_id", projectIds).order("sort_order"),
     supabase.from("project_variants").select("*").in("project_id", projectIds).order("sort_order"),
-    supabase.from("project_media").select("*").in("project_id", projectIds).order("sort_order"),
-    supabase.from("project_files").select("project_id, title, file_type, version").in("project_id", projectIds)
+    supabase.from("project_media").select("*").in("project_id", projectIds).order("sort_order")
   ]);
 
   const rooms = (roomsResult.data || []) as DbRoom[];
   const addons = (addonsResult.data || []) as DbAddon[];
   const variants = (variantsResult.data || []) as DbVariant[];
   const media = (mediaResult.data || []) as DbMedia[];
-  const files = (filesResult.data || []) as DbFile[];
 
-  return projects.map((project) => mapProject(project, rooms, addons, variants, media, files));
+  return projects.map((project) => mapProject(project, rooms, addons, variants, media));
 }
 
 export async function getPublicProjects(): Promise<Project[]> {

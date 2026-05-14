@@ -1,196 +1,84 @@
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { getAdminDebugDiagnostics, type AdminDebugCheck, type AdminDebugStatus } from "@/lib/admin/debug-diagnostics";
-import { AlertTriangle, CheckCircle2, Database, HardDrive, Image as ImageIcon, ListChecks, ShieldAlert, Wrench } from "lucide-react";
+import { Bug, Download, Keyboard, ListChecks, MousePointer2, ShieldCheck, Trash2 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-function statusLabel(status: AdminDebugStatus) {
-  if (status === "ok") return "OK";
-  if (status === "warning") return "UWAGA";
-  if (status === "error") return "BLAD";
-  return "INFO";
-}
+const steps = [
+  {
+    title: "1. Wlacz Debug",
+    text: "Kliknij plywajacy przycisk Debug w prawym dolnym rogu panelu admina. To uruchamia tryb wybierania elementow na ekranie."
+  },
+  {
+    title: "2. Kliknij problematyczny element",
+    text: "Kliknij przycisk, pole, kafelek, link albo fragment UI. Debug zatrzyma akcje klikniecia i zaznaczy wybrany element do opisania."
+  },
+  {
+    title: "3. Opisz problem",
+    text: "Wpisz krotka uwage, np. przycisk nie dziala, obraz znika po odswiezeniu, zly tekst, zla pozycja albo brak komunikatu."
+  },
+  {
+    title: "4. Enter zapisuje",
+    text: "Enter zapisuje zgloszenie. Shift+Enter dodaje nowa linie. Escape zamyka okno bez zapisu."
+  },
+  {
+    title: "5. Pobierz raport i wyczysc",
+    text: "Po zebraniu uwag kliknij Pobierz raport i wyczysc. System pobierze plik Markdown i skasuje lokalne zgloszenia."
+  }
+];
 
-function statusIcon(status: AdminDebugStatus) {
-  if (status === "ok") return <CheckCircle2 size={18} />;
-  if (status === "error") return <ShieldAlert size={18} />;
-  if (status === "warning") return <AlertTriangle size={18} />;
-  return <Wrench size={18} />;
-}
-
-function CheckRow({ check }: { check: AdminDebugCheck }) {
-  return (
-    <li className={`admin-debug-row admin-debug-${check.status}`}>
-      <span className="admin-debug-row-icon">{statusIcon(check.status)}</span>
-      <span className="admin-debug-row-main">
-        <strong>{check.label}</strong>
-        {check.detail ? <small>{check.detail}</small> : null}
-      </span>
-      <em>{check.value}</em>
-    </li>
-  );
-}
-
-function CheckSection({
-  title,
-  subtitle,
-  icon,
-  checks
-}: {
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  checks: AdminDebugCheck[];
-}) {
-  return (
-    <section className="admin-debug-card">
-      <div className="admin-debug-card-head">
-        <span className="admin-debug-card-icon">{icon}</span>
-        <div>
-          <h2>{title}</h2>
-          <p>{subtitle}</p>
-        </div>
-      </div>
-      <ul className="admin-debug-list">
-        {checks.map((check) => (
-          <CheckRow key={check.key} check={check} />
-        ))}
-      </ul>
-    </section>
-  );
-}
-
-export default async function AdminDebugPage() {
-  const diagnostics = await getAdminDebugDiagnostics();
-
+export default function AdminDebugPage() {
   return (
     <>
       <AdminHeader />
-      <main className="admin-shell admin-debug-v26" data-admin-debug-v26="true">
-        <section className={`admin-debug-hero admin-debug-${diagnostics.overallStatus}`}>
-          <span>ADMIN / DEBUG V26</span>
-          <h1>Panel diagnostyczny sklepu</h1>
+      <main className="admin-shell admin-ui-debug-route-v29" data-admin-debug-v29="true">
+        <section className="admin-ui-debug-route-hero-v29">
+          <span>ADMIN / DEBUG UI</span>
+          <h1>Tryb zglaszania bledow z ekranu</h1>
           <p>
-            Ten ekran pokazuje szybki stan konfiguracji, tabel, Storage, banera i publicznych projektow.
-            Nie pokazuje sekretow ani wartosci kluczy.
+            To nie jest juz stary panel diagnostyczny. Ten ekran opisuje aktualny tryb pracy:
+            wlaczasz Debug, klikasz obiekt na stronie, opisujesz problem, Enter zapisuje wpis,
+            a na koniec pobierasz zbiorczy raport.
           </p>
-          <div className="admin-debug-hero-status">
-            {statusIcon(diagnostics.overallStatus)}
-            <strong>{statusLabel(diagnostics.overallStatus)}</strong>
-            <small>Wygenerowano: {new Date(diagnostics.generatedAt).toLocaleString("pl-PL")}</small>
+          <div className="admin-ui-debug-route-badges-v29">
+            <strong><Bug size={17} /> Debug klikalny</strong>
+            <strong><MousePointer2 size={17} /> Wybieranie elementow</strong>
+            <strong><Keyboard size={17} /> Enter zapisuje</strong>
+            <strong><Download size={17} /> Raport Markdown</strong>
           </div>
         </section>
 
-        <section className="admin-debug-metrics">
-          <div>
-            <span>Projekty</span>
-            <strong>{diagnostics.counts.projects}</strong>
-          </div>
-          <div>
-            <span>Active</span>
-            <strong>{diagnostics.counts.activeProjects}</strong>
-          </div>
-          <div>
-            <span>Braki active</span>
-            <strong>{diagnostics.counts.activeIncompleteProjects}</strong>
-          </div>
-          <div>
-            <span>Media rows</span>
-            <strong>{diagnostics.counts.mediaRows}</strong>
-          </div>
-          <div>
-            <span>Room rows</span>
-            <strong>{diagnostics.counts.roomRows}</strong>
-          </div>
-          <div>
-            <span>Problemy</span>
-            <strong>{diagnostics.counts.issueCount}</strong>
-          </div>
+        <section className="admin-ui-debug-route-grid-v29">
+          {steps.map((step) => (
+            <article key={step.title} className="admin-ui-debug-route-card-v29">
+              <h2>{step.title}</h2>
+              <p>{step.text}</p>
+            </article>
+          ))}
         </section>
 
-        {diagnostics.issues.length > 0 ? (
-          <section className="admin-debug-card admin-debug-priority">
-            <div className="admin-debug-card-head">
-              <span className="admin-debug-card-icon"><AlertTriangle size={22} /></span>
-              <div>
-                <h2>Najpierw popraw</h2>
-                <p>Lista rzeczy, ktore najpewniej widac potem jako puste obrazki, zera albo brak publikacji.</p>
-              </div>
-            </div>
-            <ol className="admin-debug-issues">
-              {diagnostics.issues.map((issue) => (
-                <li key={issue}>{issue}</li>
-              ))}
-            </ol>
-          </section>
-        ) : (
-          <section className="admin-debug-card admin-debug-clean">
-            <div className="admin-debug-card-head">
-              <span className="admin-debug-card-icon"><CheckCircle2 size={22} /></span>
-              <div>
-                <h2>Brak wykrytych problemow</h2>
-                <p>Konfiguracja, baza, Storage i publiczne dane wygladaja poprawnie.</p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        <section className="admin-debug-grid">
-          <CheckSection
-            title="Env"
-            subtitle="Czy aplikacja widzi wymagane zmienne."
-            icon={<Wrench size={22} />}
-            checks={diagnostics.env}
-          />
-          <CheckSection
-            title="Storage"
-            subtitle="Czy istnieja buckety dla banera, mediow i plikow prywatnych."
-            icon={<HardDrive size={22} />}
-            checks={diagnostics.storage}
-          />
-          <CheckSection
-            title="Tabele"
-            subtitle="Czy podstawowe tabele odpowiadaja."
-            icon={<Database size={22} />}
-            checks={diagnostics.tables}
-          />
-          <CheckSection
-            title="Strona glowna"
-            subtitle="Czy hero i baner sa zapisane w site_content."
-            icon={<ImageIcon size={22} />}
-            checks={diagnostics.homepage}
-          />
-          <CheckSection
-            title="Katalog publiczny"
-            subtitle="Czy active projekty maja dane potrzebne do publikacji."
-            icon={<ListChecks size={22} />}
-            checks={diagnostics.publicProjects}
-          />
+        <section className="admin-ui-debug-route-note-v29">
+          <div>
+            <span><ShieldCheck size={22} /> Bezpieczne lokalne zbieranie uwag</span>
+            <p>
+              Zgloszenia sa zapisywane lokalnie w localStorage przegladarki pod kluczem debuggera UI.
+              Na tym etapie nie ida do Supabase, wiec mozna szybko zbierac uwagi bez dodawania kolejnej tabeli.
+            </p>
+          </div>
+          <div>
+            <span><ListChecks size={22} /> Co trafia do raportu</span>
+            <p>
+              Raport zawiera trase strony, viewport, selektor elementu, tekst elementu, klasy CSS,
+              pozycje na ekranie i Twoj opis problemu.
+            </p>
+          </div>
+          <div>
+            <span><Trash2 size={22} /> Czyszczenie po eksporcie</span>
+            <p>
+              Przycisk Pobierz raport i wyczysc pobiera plik Markdown oraz kasuje zebrane lokalnie wpisy,
+              zeby kolejne testy zaczynaly sie od czystej listy.
+            </p>
+          </div>
         </section>
-
-        {diagnostics.projectWarnings.length > 0 ? (
-          <section className="admin-debug-card">
-            <div className="admin-debug-card-head">
-              <span className="admin-debug-card-icon"><ListChecks size={22} /></span>
-              <div>
-                <h2>Aktywne projekty z brakami</h2>
-                <p>Te projekty sa publiczne, ale moga pokazywac placeholdery, zera albo niepelna karte.</p>
-              </div>
-            </div>
-            <div className="admin-debug-project-table">
-              {diagnostics.projectWarnings.map((project) => (
-                <article key={`${project.code}-${project.slug}`}>
-                  <div>
-                    <strong>{project.code}</strong>
-                    <span>{project.name}</span>
-                    <small>{project.slug || "brak slug"}</small>
-                  </div>
-                  <p>{project.warnings.join(", ")}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-        ) : null}
       </main>
     </>
   );
