@@ -4,8 +4,6 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjectById } from "@/lib/admin/projects-admin";
 import { AdminProjectDeleteForm } from "@/components/admin/AdminProjectDeleteForm";
 import { AdminProjectEditForm } from "@/components/admin/AdminProjectEditForm";
-import { updateProjectBasicsAction } from "@/app/admin/projekty/actions";
-import { AdminSubmitButton } from "@/components/admin/AdminSubmitButton";
 import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -63,7 +61,6 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
           <p>Usuniecie projektu usuwa rekord projektu i powiazane dane z bazy. System sprobuje tez usunac powiazane pliki ze Storage.</p>
           <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} className="admin-danger-zone-form" />
         </section>
-        {/* Legacy guard markers: updateProjectBasicsAction AdminSubmitButton Zapisz dane Zapisywanie danych... href="/admin/projekty?cancelled=1" */}
       </main>
     </>
   );
