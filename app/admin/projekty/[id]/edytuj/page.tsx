@@ -1,19 +1,33 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
-import { updateProjectBasicsAction, deleteProjectAction } from "@/app/admin/projekty/actions";
+import { updateProjectBasicsAction } from "@/app/admin/projekty/actions";
 import { getAdminProjectById } from "@/lib/admin/projects-admin";
-import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { AdminProjectDeleteForm } from "@/components/admin/AdminProjectDeleteForm";
+import { AdminSubmitButton } from "@/components/admin/AdminSubmitButton";
+import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 const STATUS_OPTIONS = ["draft", "active", "hidden", "archived"];
 
-export default async function EditAdminProjectPage({ params }: { params: Promise<{ id: string }> }) {
+type EditAdminProjectPageProps = {
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function EditAdminProjectPage({ params, searchParams }: EditAdminProjectPageProps) {
   const { id } = await params;
+  const query = searchParams ? await searchParams : {};
   const project = await getAdminProjectById(id);
 
   if (!project) notFound();
+
+  const saved = firstParam(query.saved) === "1";
 
   return (
     <>
@@ -36,6 +50,12 @@ export default async function EditAdminProjectPage({ params }: { params: Promise
             )}
           </div>
         </section>
+
+        {saved && (
+          <section className="admin-form-success" role="status">
+            Zapisano dane projektu. Zmiany są już w Supabase, a widoki admina i publiczne strony zostały odświeżone.
+          </section>
+        )}
 
         <form action={updateProjectBasicsAction} className="admin-edit-project-form">
           <input type="hidden" name="projectId" value={project.id} />
@@ -118,10 +138,8 @@ export default async function EditAdminProjectPage({ params }: { params: Promise
           </section>
 
           <section className="admin-form-section admin-edit-actions">
-            <button type="submit" className="admin-primary-button">
-              <Save size={17} /> Zapisz zmiany
-            </button>
-            <Link href="/admin/projekty" className="admin-secondary-button">
+            <AdminSubmitButton idleLabel="Zapisz dane" pendingLabel="Zapisywanie danych..." />
+            <Link href="/admin/projekty?cancelled=1" className="admin-secondary-button">
               Anuluj
             </Link>
           </section>
@@ -130,12 +148,7 @@ export default async function EditAdminProjectPage({ params }: { params: Promise
         <section className="admin-form-section admin-danger-zone">
           <h2>Strefa usuwania</h2>
           <p>Usunięcie projektu usuwa rekord projektu i powiązane dane z bazy. System spróbuje też usunąć powiązane pliki ze Storage.</p>
-          <form action={deleteProjectAction}>
-            <input type="hidden" name="projectId" value={project.id} />
-            <button type="submit" className="admin-danger-button">
-              <Trash2 size={16} /> Usuń projekt
-            </button>
-          </form>
+          <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} className="admin-danger-zone-form" />
         </section>
       </main>
     </>

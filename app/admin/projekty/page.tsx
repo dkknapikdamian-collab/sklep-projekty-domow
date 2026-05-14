@@ -1,13 +1,48 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { getAdminProjects } from "@/lib/admin/projects-admin";
-import { AdminProjectsTable } from "@/components/admin/AdminProjectsTable";
-import { FolderPlus, Search } from "lucide-react";
+import { AdminProjectsListClient } from "@/components/admin/AdminProjectsListClient";
+import { FolderPlus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminProjectsPage() {
+type AdminProjectsPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function getAdminListMessage(searchParams: Record<string, string | string[] | undefined>) {
+  if (firstParam(searchParams.status) === "updated") {
+    return {
+      tone: "success" as const,
+      text: "Status projektu został zapisany. Lista i publiczne strony zostały odświeżone."
+    };
+  }
+
+  if (firstParam(searchParams.deleted) === "1") {
+    return {
+      tone: "success" as const,
+      text: "Projekt został usunięty z bazy. Jeżeli miał pliki w Storage, system spróbował je usunąć razem z rekordem."
+    };
+  }
+
+  if (firstParam(searchParams.cancelled) === "1") {
+    return {
+      tone: "neutral" as const,
+      text: "Edycja została anulowana. Formularz nie wysłał zmian do Supabase."
+    };
+  }
+
+  return null;
+}
+
+export default async function AdminProjectsPage({ searchParams }: AdminProjectsPageProps) {
   const projects = await getAdminProjects();
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const message = getAdminListMessage(resolvedSearchParams);
 
   return (
     <>
@@ -17,39 +52,20 @@ export default async function AdminProjectsPage() {
           <div>
             <span>ADMIN / PROJEKTY</span>
             <h1>Projekty</h1>
-            <p>Lista projektów zapisana w Supabase. Z tego poziomu możesz zmienić status, wejść w edycję albo usunąć projekt.</p>
+            <p>Lista projektów zapisana w Supabase. Z tego poziomu możesz filtrować, zmienić status, wejść w edycję albo usunąć projekt.</p>
           </div>
           <Link href="/admin/projekty/nowy" className="admin-primary-button">
             <FolderPlus size={18} /> Dodaj projekt
           </Link>
         </section>
 
-        <section className="admin-toolbar">
-          <div className="admin-search">
-            <Search size={18} />
-            <input placeholder="Szukaj po nazwie, kodzie, statusie..." />
-          </div>
-          <select>
-            <option>Wszystkie statusy</option>
-            <option>Draft</option>
-            <option>Active</option>
-            <option>Hidden</option>
-            <option>Archived</option>
-          </select>
-        </section>
-
-        {projects.length > 0 ? (
-          <AdminProjectsTable projects={projects} />
-        ) : (
-          <section className="admin-empty">
-            <h2>Nie ma jeszcze żadnych projektów.</h2>
-            <p>Dodaj pierwszy projekt. Najbezpieczniej zacząć od statusu draft, sprawdzić dane i dopiero potem ustawić active.</p>
-            <div>
-              <Link href="/admin/projekty/nowy" className="admin-primary-button">Dodaj projekt</Link>
-              <Link href="/admin/projekty/podglad" className="admin-secondary-button">Zobacz podgląd karty</Link>
-            </div>
+        {message && (
+          <section className={message.tone === "success" ? "admin-form-success" : "admin-inline-notice"} role="status">
+            {message.text}
           </section>
         )}
+
+        <AdminProjectsListClient projects={projects} />
       </main>
     </>
   );

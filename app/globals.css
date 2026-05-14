@@ -1,4 +1,6 @@
-﻿@import "./admin-real-v18.css";
+﻿@import "./admin-real-v20.css";
+@import "./admin-real-v19.css";
+@import "./admin-real-v18.css";
 @import "./admin-real-v15.css";
 @import "./admin-real-v14.css";
 @import "./admin-real-v13.css";
@@ -1179,6 +1181,8 @@ button, input, select, textarea { font: inherit; }
   .more-photos { height: 83px; }
   .micro-trust { grid-template-columns: 1fr; }
 }
+
+
 
 
 

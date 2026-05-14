@@ -1,0 +1,91 @@
+/* ADMIN LIST SEARCH/FILTER V20 */
+
+.admin-toolbar-live {
+  grid-template-columns: minmax(260px, 1fr) minmax(180px, 240px) auto;
+  align-items: center;
+}
+
+.admin-toolbar-live .admin-search input {
+  width: 100%;
+}
+
+.admin-clear-filter-button {
+  min-height: 42px;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.admin-filter-summary {
+  min-height: 46px;
+  margin: -4px 0 14px;
+  padding: 12px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 7px;
+  background: rgba(255,255,255,.035);
+  color: var(--muted);
+}
+
+.admin-filter-summary strong {
+  color: var(--gold-2);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.admin-filter-summary em {
+  color: #d9d1c4;
+  font-style: normal;
+  font-size: 12px;
+}
+
+.admin-inline-notice {
+  padding: 14px 16px;
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.045);
+  color: #e8e3d8;
+  font-weight: 800;
+}
+
+.admin-filter-empty {
+  border-color: rgba(205,164,99,.20);
+}
+
+.admin-status-submit {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.045);
+  color: #f4f1ea;
+  padding: 0 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-status-submit:disabled,
+.admin-danger-button:disabled,
+.admin-primary-button:disabled {
+  cursor: progress;
+  opacity: .68;
+}
+
+.admin-danger-zone-form {
+  margin-top: 12px;
+}
+
+@media (max-width: 760px) {
+  .admin-toolbar-live {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-clear-filter-button {
+    width: 100%;
+  }
+}

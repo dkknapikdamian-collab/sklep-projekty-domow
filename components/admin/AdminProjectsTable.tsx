@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { deleteProjectAction, updateProjectStatusAction } from "@/app/admin/projekty/actions";
+import { updateProjectStatusAction } from "@/app/admin/projekty/actions";
 import type { AdminProjectListItem } from "@/lib/admin/projects-admin";
-import { Eye, ImageIcon, Pencil, Save, Trash2 } from "lucide-react";
+import { Eye, ImageIcon, Pencil } from "lucide-react";
+import { AdminProjectDeleteForm } from "./AdminProjectDeleteForm";
+import { AdminSubmitButton } from "./AdminSubmitButton";
 
 const STATUS_OPTIONS = ["draft", "active", "hidden", "archived"];
 
@@ -38,9 +40,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                       <option value={status} key={status}>{status}</option>
                     ))}
                   </select>
-                  <button type="submit" title="Zapisz status">
-                    <Save size={14} /> Zmień
-                  </button>
+                  <AdminSubmitButton idleLabel="Zmień" pendingLabel="Zapis..." className="admin-status-submit" iconSize={14} />
                 </form>
               </td>
               <td>{project.priceGross.toLocaleString("pl-PL")} zł</td>
@@ -55,20 +55,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                   <Link href={`/admin/projekty/${project.id}/edytuj`}>
                     <Pencil size={15} /> Edytuj
                   </Link>
-                  <form
-                    action={deleteProjectAction}
-                    onSubmit={(event) => {
-                      if (!window.confirm(`Usunąć projekt ${project.code} — ${project.name}? Tej operacji nie cofniemy.`)) {
-                        event.preventDefault();
-                      }
-                    }}
-                  >
-                    <input type="hidden" name="projectId" value={project.id} />
-                    <input type="hidden" name="projectCode" value={project.code} />
-                    <button type="submit" className="admin-danger-button">
-                      <Trash2 size={15} /> Usuń
-                    </button>
-                  </form>
+                  <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
                 </div>
               </td>
             </tr>
