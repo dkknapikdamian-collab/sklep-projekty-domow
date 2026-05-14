@@ -9,6 +9,7 @@ const requiredFiles = [
   "app/admin/projekty/page.tsx",
   "app/admin/projekty/actions.ts",
   "app/admin/projekty/[id]/edytuj/page.tsx",
+  "components/admin/AdminProjectEditForm.tsx",
   "components/admin/AdminProjectsTable.tsx",
   "components/admin/AdminProjectDeleteForm.tsx",
   "components/admin/AdminSubmitButton.tsx",
@@ -27,6 +28,7 @@ for (const needle of [
   '"use server"',
   "export async function updateProjectStatusAction",
   "export async function deleteProjectAction",
+  "export async function updateProjectAction",
   "export async function updateProjectBasicsAction",
   "redirect(\"/admin/projekty?status=updated\")",
   "redirect(\"/admin/projekty?deleted=1\")"
@@ -54,9 +56,15 @@ for (const needle of [
   "updateProjectStatusAction",
   "AdminSubmitButton",
   "AdminProjectDeleteForm",
+  "data-admin-project-row-actions=\"true\"",
+  "data-admin-action=\"project-edit\"",
+  "data-admin-action=\"project-public-preview\"",
+  "data-admin-action=\"project-status-change\"",
+  "data-admin-target-status={targetStatus}",
   "`/admin/projekty/${project.id}/edytuj`",
   "`/projekty/${project.slug}`",
-  "Ustaw active"
+  "Ustaw active",
+  "Ustaw draft"
 ]) {
   if (!table.includes(needle)) {
     console.error(`FAIL: AdminProjectsTable missing working control: ${needle}`);
@@ -64,10 +72,17 @@ for (const needle of [
   }
 }
 
+if (table.includes("href=\"#\"") || table.includes("onClick={() => {}}")) {
+  console.error("FAIL: AdminProjectsTable contains dead action placeholder.");
+  process.exit(1);
+}
+
 const deleteForm = read("components/admin/AdminProjectDeleteForm.tsx");
 for (const needle of [
   '"use client"',
   "deleteProjectAction",
+  "data-admin-action=\"project-delete\"",
+  "data-admin-action=\"project-delete-submit\"",
   "window.confirm",
   "type=\"submit\"",
   "disabled={pending}",
@@ -95,17 +110,41 @@ for (const needle of [
 
 const editPage = read("app/admin/projekty/[id]/edytuj/page.tsx");
 for (const needle of [
-  "updateProjectBasicsAction",
-  "AdminSubmitButton",
+  "AdminProjectEditForm",
   "AdminProjectDeleteForm",
-  "Zapisz dane",
-  "Zapisywanie danych...",
-  "href=\"/admin/projekty?cancelled=1\"",
   "saved",
   "admin-form-success"
 ]) {
   if (!editPage.includes(needle)) {
-    console.error(`FAIL: edit project page missing button/feedback wiring: ${needle}`);
+    console.error(`FAIL: edit project page missing wrapper wiring: ${needle}`);
+    process.exit(1);
+  }
+}
+
+for (const fakeMarker of [
+  "Legacy guard markers",
+  "updateProjectBasicsAction AdminSubmitButton Zapisz dane Zapisywanie danych..."
+]) {
+  if (editPage.includes(fakeMarker)) {
+    console.error(`FAIL: edit page still contains fake legacy guard marker: ${fakeMarker}`);
+    process.exit(1);
+  }
+}
+
+const editForm = read("components/admin/AdminProjectEditForm.tsx");
+for (const needle of [
+  "useActionState(updateProjectAction",
+  "data-admin-action=\"project-edit-form\"",
+  "data-admin-action=\"project-edit-status-select\"",
+  "data-admin-action=\"project-edit-save\"",
+  "data-admin-action=\"project-edit-cancel\"",
+  "type=\"submit\"",
+  "Zapisz projekt",
+  "Zapisywanie...",
+  "href=\"/admin/projekty?cancelled=1\""
+]) {
+  if (!editForm.includes(needle)) {
+    console.error(`FAIL: AdminProjectEditForm missing real edit/save/cancel wiring: ${needle}`);
     process.exit(1);
   }
 }
@@ -131,7 +170,9 @@ const scannedFiles = [
   "components/admin/AdminProjectsTable.tsx",
   "components/admin/AdminProjectDeleteForm.tsx",
   "components/admin/AdminSubmitButton.tsx",
-  "components/admin/AdminProjectCreateForm.tsx"
+  "components/admin/AdminProjectCreateForm.tsx",
+  "components/admin/AdminProjectEditForm.tsx",
+  "components/admin/AdminProjectMediaManager.tsx"
 ].filter(exists);
 
 for (const file of scannedFiles) {
