@@ -18,8 +18,8 @@ function uniqueValues(values: string[]) {
     });
 }
 
-export function FeaturePicker({ name = "features" }: { name?: string }) {
-  const [selected, setSelected] = useState<string[]>([]);
+export function FeaturePicker({ name = "features", initialSelected = [] }: { name?: string; initialSelected?: string[] }) {
+  const [selected, setSelected] = useState<string[]>(() => uniqueValues(initialSelected));
   const [customFeatures, setCustomFeatures] = useState<string[]>([]);
   const [manualFeature, setManualFeature] = useState("");
   const [groupSelections, setGroupSelections] = useState<Record<string, string>>({});

@@ -1,4 +1,4 @@
-import { Car, ChevronDown, Construction, Grid3X3, House, Layers, Sun, ZoomIn } from "lucide-react";
+﻿import { Car, ChevronDown, Construction, Grid3X3, House, Layers, Sun, ZoomIn } from "lucide-react";
 import type { Project } from "@/types/project";
 import { MediaSlot } from "@/components/MediaSlot";
 
@@ -8,7 +8,7 @@ export function ProjectTabs({ project }: { project: Project }) {
   return (
     <div className="tabs-card">
       <div className="tabs">
-        {["OPIS PROJEKTU", "RZUTY I PRZEKROJE", "ELEWACJE", "DANE TECHNICZNE", "CO ZAWIERA PROJEKT", "DODATKI", "PODOBNE PROJEKTY"].map((tab, index) => (
+        {["OPIS PROJEKTU", "RZUTY I PRZEKROJE", "ELEWACJE", "POMIESZCZENIA", "DANE TECHNICZNE", "CO ZAWIERA PROJEKT", "DODATKI", "PODOBNE PROJEKTY"].map((tab, index) => (
           <a className={index === 0 ? "active" : ""} key={tab}>{tab}</a>
         ))}
       </div>
@@ -17,7 +17,7 @@ export function ProjectTabs({ project }: { project: Project }) {
         <div className="desc-copy">
           <h3>Opis projektu</h3>
           <p>{project.description}</p>
-          <button className="read-more">CZYTAJ WIĘCEJ <ChevronDown size={14} /></button>
+          <button className="read-more">CZYTAJ WIECEJ <ChevronDown size={14} /></button>
         </div>
 
         <div className="feature-grid">
@@ -43,15 +43,55 @@ export function ProjectTabs({ project }: { project: Project }) {
             return (
               <article className="plan-card" key={index}>
                 <div>
-                  <MediaSlot src={plan?.url} alt={plan?.title || `Rzut ${index + 1}`} label={plan?.fileName || "Dodaj rzut/przekrój"} sizes="260px" />
+                  <MediaSlot src={plan?.url} alt={plan?.title || `Rzut ${index + 1}`} label={plan?.fileName || "Dodaj rzut/przekroj"} sizes="260px" />
                   <button><ZoomIn size={16} /></button>
                 </div>
-                <strong>{plan?.title || "Rzut / przekrój"}</strong>
+                <strong>{plan?.title || "Rzut / przekroj"}</strong>
               </article>
             );
           })}
         </div>
       </div>
+
+      <div className="plans-block">
+        <h3>Pomieszczenia</h3>
+        {project.rooms.length > 0 ? (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Kondygnacja</th>
+                <th>Nr</th>
+                <th>Nazwa</th>
+                <th>Powierzchnia</th>
+                <th>Wymiary</th>
+              </tr>
+            </thead>
+            <tbody>
+              {project.rooms.map((room, index) => (
+                <tr key={`${room.floor}-${room.number}-${index}`}>
+                  <td>{room.floor}</td>
+                  <td>{room.number || "-"}</td>
+                  <td>{room.name}</td>
+                  <td>{room.area} m2</td>
+                  <td>{room.dimensions || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="muted-note">Tabela pomieszczen zostanie uzupelniona przez administratora.</p>
+        )}
+      </div>
+
+      {project.privateFilesInfo && project.privateFilesInfo.length > 0 && (
+        <div className="plans-block">
+          <h3>Pliki po zakupie</h3>
+          <p className="muted-note">Ponizsze pliki sa dostepne po zakupie. Linki nie sa publiczne.</p>
+          <ul>
+            {project.privateFilesInfo.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

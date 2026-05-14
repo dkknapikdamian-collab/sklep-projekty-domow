@@ -1,8 +1,4 @@
-import type { Project, ProjectAddon, ProjectMedia, ProjectPlan, ProjectRoom, ProjectVariant } from "@/types/project";
-import {
-  getProjectBySlug as getLocalProjectBySlug,
-  getPublishedProjects as getLocalPublishedProjects
-} from "@/lib/projects";
+﻿import type { Project, ProjectAddon, ProjectMedia, ProjectPlan, ProjectRoom, ProjectVariant } from "@/types/project";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type DbProject = {
@@ -73,6 +69,13 @@ type DbMedia = {
   public_url: string | null;
 };
 
+type DbFile = {
+  project_id: string;
+  title: string | null;
+  file_type: string;
+  version: string | null;
+};
+
 function toNumber(value: number | string | null | undefined, fallback = 0) {
   if (value === null || value === undefined || value === "") return fallback;
   const numeric = Number(value);
@@ -80,10 +83,8 @@ function toNumber(value: number | string | null | undefined, fallback = 0) {
 }
 
 function arrayFromUnknown(value: unknown): string[] {
-  if (Array.isArray(value)) {
-    return value.filter((item): item is string => typeof item === "string");
-  }
-  return [];
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean);
 }
 
 function fileNameFromPath(path: string) {
@@ -92,6 +93,12 @@ function fileNameFromPath(path: string) {
 
 function mediaUrl(media: DbMedia) {
   return media.public_url || "";
+}
+
+function mediaPlanType(row: DbMedia): ProjectPlan["type"] {
+  if (row.media_type === "roof_plan") return "roof_plan";
+  if (row.media_type === "section") return "section";
+  return "floor_plan";
 }
 
 function buildMedia(projectId: string, mediaRows: DbMedia[]): ProjectMedia {
@@ -103,25 +110,23 @@ function buildMedia(projectId: string, mediaRows: DbMedia[]): ProjectMedia {
   const thumbnail = rows.find((row) => row.media_type === "thumbnail");
   const gallery = rows.filter((row) => row.media_type === "gallery").map(mediaUrl).filter(Boolean);
 
-  const planRows = rows.filter((row) =>
-    ["floor_plan", "roof_plan", "section"].includes(row.media_type)
-  );
+  const plans: ProjectPlan[] = rows
+    .filter((row) => ["floor_plan", "roof_plan", "section"].includes(row.media_type))
+    .map((row) => ({
+      title: row.title || row.alt || fileNameFromPath(row.path),
+      type: mediaPlanType(row),
+      fileName: fileNameFromPath(row.path),
+      url: mediaUrl(row)
+    }));
 
-  const elevationRows = rows.filter((row) => row.media_type === "elevation");
-
-  const plans: ProjectPlan[] = planRows.map((row) => ({
-    title: row.title || row.alt || fileNameFromPath(row.path),
-    type: row.media_type as ProjectPlan["type"],
-    fileName: fileNameFromPath(row.path),
-    url: mediaUrl(row)
-  }));
-
-  const elevations: ProjectPlan[] = elevationRows.map((row) => ({
-    title: row.title || row.alt || fileNameFromPath(row.path),
-    type: "elevation",
-    fileName: fileNameFromPath(row.path),
-    url: mediaUrl(row)
-  }));
+  const elevations: ProjectPlan[] = rows
+    .filter((row) => row.media_type === "elevation")
+    .map((row) => ({
+      title: row.title || row.alt || fileNameFromPath(row.path),
+      type: "elevation",
+      fileName: fileNameFromPath(row.path),
+      url: mediaUrl(row)
+    }));
 
   return {
     basePath: "",
@@ -138,7 +143,8 @@ function mapProject(
   rooms: DbRoom[],
   addons: DbAddon[],
   variants: DbVariant[],
-  media: DbMedia[]
+  media: DbMedia[],
+  files: DbFile[]
 ): Project {
   const projectRooms: ProjectRoom[] = rooms
     .filter((room) => room.project_id === row.id)
@@ -170,6 +176,10 @@ function mapProject(
       priceGross: toNumber(variant.price_gross)
     }));
 
+  const privateFilesInfo = files
+    .filter((file) => file.project_id === row.id)
+    .map((file) => `${file.title || file.file_type}${file.version ? ` (${file.version})` : ""}`);
+
   return {
     code: row.code,
     shortCode: row.short_code || row.code,
@@ -199,16 +209,14 @@ function mapProject(
     rooms: projectRooms,
     features: arrayFromUnknown(row.features),
     media: buildMedia(row.id, media),
-    relatedSlugs: arrayFromUnknown(row.related_slugs)
+    relatedSlugs: arrayFromUnknown(row.related_slugs).filter((slug) => slug !== row.slug),
+    privateFilesInfo
   };
 }
 
-async function loadPublishedFromSupabase() {
+async function loadActiveFromSupabase() {
   const supabase = await createSupabaseServerClient();
-
-  if (!supabase) {
-    return null;
-  }
+  if (!supabase) return [];
 
   const { data: projectRows, error: projectError } = await supabase
     .from("projects")
@@ -217,58 +225,71 @@ async function loadPublishedFromSupabase() {
     .order("name", { ascending: true });
 
   if (projectError) {
-    console.error("Failed to load Supabase projects", projectError);
-    return null;
-  }
-
-  const projects = (projectRows || []) as DbProject[];
-
-  if (!projects.length) {
+    console.error("Failed to load active projects from Supabase", projectError);
     return [];
   }
 
+  const projects = (projectRows || []) as DbProject[];
+  if (!projects.length) return [];
+
   const projectIds = projects.map((project) => project.id);
 
-  const [roomsResult, addonsResult, variantsResult, mediaResult] = await Promise.all([
+  const [roomsResult, addonsResult, variantsResult, mediaResult, filesResult] = await Promise.all([
     supabase.from("project_rooms").select("*").in("project_id", projectIds).order("sort_order"),
     supabase.from("project_addons").select("*").in("project_id", projectIds).order("sort_order"),
     supabase.from("project_variants").select("*").in("project_id", projectIds).order("sort_order"),
-    supabase.from("project_media").select("*").in("project_id", projectIds).order("sort_order")
+    supabase.from("project_media").select("*").in("project_id", projectIds).order("sort_order"),
+    supabase.from("project_files").select("project_id, title, file_type, version").in("project_id", projectIds)
   ]);
 
   const rooms = (roomsResult.data || []) as DbRoom[];
   const addons = (addonsResult.data || []) as DbAddon[];
   const variants = (variantsResult.data || []) as DbVariant[];
   const media = (mediaResult.data || []) as DbMedia[];
+  const files = (filesResult.data || []) as DbFile[];
 
-  return projects.map((project) => mapProject(project, rooms, addons, variants, media));
+  return projects.map((project) => mapProject(project, rooms, addons, variants, media, files));
 }
 
 export async function getPublicProjects(): Promise<Project[]> {
-  const supabaseProjects = await loadPublishedFromSupabase();
-
-  if (supabaseProjects !== null) {
-    return supabaseProjects;
-  }
-
-  return getLocalPublishedProjects();
+  return loadActiveFromSupabase();
 }
 
 export async function getPublicProjectBySlug(slug: string): Promise<Project | undefined> {
   const projects = await getPublicProjects();
-  const project = projects.find((item) => item.slug === slug);
-
-  if (project) {
-    return project;
-  }
-
-  return getLocalProjectBySlug(slug);
+  return projects.find((item) => item.slug === slug);
 }
 
 export async function getRelatedPublicProjects(project: Project): Promise<Project[]> {
   const projects = await getPublicProjects();
+  const pool = projects.filter((item) => item.slug !== project.slug);
 
-  return project.relatedSlugs
-    .map((slug) => projects.find((item) => item.slug === slug))
-    .filter((item): item is Project => Boolean(item));
+  if (project.relatedSlugs.length > 0) {
+    return project.relatedSlugs
+      .map((slug) => pool.find((item) => item.slug === slug))
+      .filter((item): item is Project => Boolean(item))
+      .slice(0, 4);
+  }
+
+  const scored = pool
+    .map((candidate) => {
+      let score = 0;
+      if (candidate.type && project.type && candidate.type === project.type) score += 3;
+      if (candidate.style && project.style && candidate.style === project.style) score += 2;
+      if (candidate.garage && project.garage && candidate.garage === project.garage) score += 2;
+      if (candidate.technology && project.technology && candidate.technology === project.technology) score += 2;
+
+      const areaDiff = Math.abs(candidate.usableArea - project.usableArea);
+      if (areaDiff <= 10) score += 3;
+      else if (areaDiff <= 20) score += 2;
+      else if (areaDiff <= 35) score += 1;
+
+      return { candidate, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.candidate.name.localeCompare(b.candidate.name, "pl"))
+    .slice(0, 4)
+    .map((item) => item.candidate);
+
+  return scored;
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { getAdminProjects } from "@/lib/admin/projects-admin";
 import { AdminProjectsListClient } from "@/components/admin/AdminProjectsListClient";
+import { createSampleProjectAction } from "@/app/admin/projekty/actions";
 import { FolderPlus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -36,6 +37,20 @@ function getAdminListMessage(searchParams: Record<string, string | string[] | un
     };
   }
 
+  if (firstParam(searchParams.sample) === "created") {
+    return {
+      tone: "success" as const,
+      text: "Dodano przykladowy projekt V22 jako active. Mozesz od razu sprawdzic /projekty i /projekty/projekt-przykladowy-v22."
+    };
+  }
+
+  if (firstParam(searchParams.sample) === "exists") {
+    return {
+      tone: "neutral" as const,
+      text: "Przykladowy projekt V22 juz istnieje. Uzyj go do testow publicznych stron."
+    };
+  }
+
   return null;
 }
 
@@ -54,9 +69,14 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
             <h1>Projekty</h1>
             <p>Lista projektów zapisana w Supabase. Z tego poziomu możesz filtrować, zmienić status, wejść w edycję albo usunąć projekt.</p>
           </div>
-          <Link href="/admin/projekty/nowy" className="admin-primary-button">
-            <FolderPlus size={18} /> Dodaj projekt
-          </Link>
+          <div className="admin-head-actions">
+            <form action={createSampleProjectAction}>
+              <button type="submit" className="admin-secondary-button">Dodaj przykladowy projekt</button>
+            </form>
+            <Link href="/admin/projekty/nowy" className="admin-primary-button">
+              <FolderPlus size={18} /> Dodaj projekt
+            </Link>
+          </div>
         </section>
 
         {message && (

@@ -69,4 +69,5 @@ export type Project = {
   features: string[];
   media: ProjectMedia;
   relatedSlugs: string[];
+  privateFilesInfo?: string[];
 };

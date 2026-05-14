@@ -40,12 +40,18 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
         </div>
 
         {project.variants.length > 0 ? (
-          project.variants.map((variant) => (
-            <button className="variant-row" key={variant.name}>
-              <span>{variant.name}</span>
-              <strong>+{money(variant.priceGross)}</strong>
+          <>
+            <button className="variant-row" key="base-variant">
+              <span>Projekt podstawowy</span>
+              <strong>+{money(0)}</strong>
             </button>
-          ))
+            {project.variants.map((variant) => (
+              <button className="variant-row" key={variant.name}>
+                <span>{variant.name}</span>
+                <strong>+{money(variant.priceGross)}</strong>
+              </button>
+            ))}
+          </>
         ) : (
           <p className="muted-note">Warianty dodasz w danych projektu.</p>
         )}

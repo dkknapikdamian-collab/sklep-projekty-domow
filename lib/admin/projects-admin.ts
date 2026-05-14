@@ -32,6 +32,48 @@ export type AdminProjectEditItem = AdminProjectListItem & {
   minPlotLength: number;
   features: string[];
   relatedSlugs: string[];
+  rooms: AdminProjectRoomItem[];
+  variants: AdminProjectVariantItem[];
+  addons: AdminProjectAddonItem[];
+  media: AdminProjectMediaItem[];
+  privateFiles: AdminProjectFileItem[];
+};
+
+export type AdminProjectRoomItem = {
+  floor: string;
+  number: string;
+  name: string;
+  area: number;
+  dimensions: string;
+};
+
+export type AdminProjectVariantItem = {
+  name: string;
+  priceGross: number;
+};
+
+export type AdminProjectAddonItem = {
+  code: string;
+  name: string;
+  priceGross: number;
+  description: string;
+  deliveryAction: string;
+};
+
+export type AdminProjectMediaItem = {
+  id: string;
+  mediaType: string;
+  title: string;
+  path: string;
+  publicUrl: string;
+};
+
+export type AdminProjectFileItem = {
+  id: string;
+  fileType: string;
+  title: string;
+  path: string;
+  version: string;
 };
 
 export type AdminProjectMetrics = {
@@ -113,10 +155,13 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     return null;
   }
 
-  const { count } = await supabase
-    .from("project_media")
-    .select("id", { count: "exact", head: true })
-    .eq("project_id", id);
+  const [{ data: rooms }, { data: variants }, { data: addons }, { data: media }, { data: files }] = await Promise.all([
+    supabase.from("project_rooms").select("floor, number, name, area, dimensions, sort_order").eq("project_id", id).order("sort_order"),
+    supabase.from("project_variants").select("name, price_gross, sort_order").eq("project_id", id).order("sort_order"),
+    supabase.from("project_addons").select("code, name, description, price_gross, delivery_action, sort_order").eq("project_id", id).order("sort_order"),
+    supabase.from("project_media").select("id, media_type, title, path, public_url, sort_order").eq("project_id", id).order("sort_order"),
+    supabase.from("project_files").select("id, file_type, title, path, version, created_at").eq("project_id", id).order("created_at", { ascending: false })
+  ]);
 
   return {
     id: project.id as string,
@@ -126,7 +171,7 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     name: project.name as string,
     status: project.status as string,
     priceGross: toNumber(project.price_gross),
-    mediaCount: count || 0,
+    mediaCount: (media || []).length,
     updatedAt: String(project.updated_at || ""),
     subtitle: String(project.subtitle || ""),
     description: String(project.description || ""),
@@ -146,7 +191,39 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     minPlotWidth: toNumber(project.min_plot_width),
     minPlotLength: toNumber(project.min_plot_length),
     features: toStringArray(project.features),
-    relatedSlugs: toStringArray(project.related_slugs)
+    relatedSlugs: toStringArray(project.related_slugs),
+    rooms: (rooms || []).map((room) => ({
+      floor: String(room.floor || ""),
+      number: String(room.number || ""),
+      name: String(room.name || ""),
+      area: toNumber(room.area),
+      dimensions: String(room.dimensions || "")
+    })),
+    variants: (variants || []).map((variant) => ({
+      name: String(variant.name || ""),
+      priceGross: toNumber(variant.price_gross)
+    })),
+    addons: (addons || []).map((addon) => ({
+      code: String(addon.code || ""),
+      name: String(addon.name || ""),
+      priceGross: toNumber(addon.price_gross),
+      description: String(addon.description || ""),
+      deliveryAction: String(addon.delivery_action || "")
+    })),
+    media: (media || []).map((item) => ({
+      id: String(item.id || ""),
+      mediaType: String(item.media_type || ""),
+      title: String(item.title || ""),
+      path: String(item.path || ""),
+      publicUrl: String(item.public_url || "")
+    })),
+    privateFiles: (files || []).map((item) => ({
+      id: String(item.id || ""),
+      fileType: String(item.file_type || ""),
+      title: String(item.title || ""),
+      path: String(item.path || ""),
+      version: String(item.version || "")
+    }))
   };
 }
 
