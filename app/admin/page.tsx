@@ -1,7 +1,7 @@
 ﻿import Link from "next/link";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjectMetrics } from "@/lib/admin/projects-admin";
-import { FolderPlus, Home, Images, ListChecks, LockKeyhole, PackageCheck, Settings, ShieldCheck } from "lucide-react";
+import { Bug, FolderPlus, Home, Images, ListChecks, LockKeyhole, PackageCheck, Settings, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +48,12 @@ export default async function AdminDashboardPage() {
             <Home size={34} />
             <h2>Strona glowna</h2>
             <p>Hero, baner i CTA na stronie glownej sterowane z admina.</p>
+          </Link>
+
+          <Link href="/admin/debug" className="admin-action-card">
+            <Bug size={34} />
+            <h2>Debug admina</h2>
+            <p>Szybka diagnostyka env, Storage, tabel, banera i publicznych projektow.</p>
           </Link>
 
           <div className="admin-action-card muted">

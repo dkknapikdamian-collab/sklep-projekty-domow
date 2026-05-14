@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Home, LayoutDashboard, ListChecks, MonitorCog, PlusCircle, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Bug, Home, LayoutDashboard, ListChecks, MonitorCog, PlusCircle, ShieldCheck } from "lucide-react";
 
 export function AdminHeader() {
   return (
@@ -28,6 +28,7 @@ export function AdminHeader() {
         <Link href="/admin/projekty"><ListChecks size={17} /> Projekty</Link>
         <Link href="/admin/projekty/nowy"><PlusCircle size={17} /> Dodaj projekt</Link>
         <Link href="/admin/strona-glowna"><MonitorCog size={17} /> Strona główna</Link>
+        <Link href="/admin/debug"><Bug size={17} /> Debug</Link>
         <Link href="/projekty" className="admin-header-v24-public-preview"><Home size={17} /> Publiczny katalog</Link>
       </nav>
     </header>
