@@ -46,6 +46,11 @@ function intNum(formData: FormData, key: string) {
   return Math.round(num(formData, key));
 }
 
+function toNumber(value: unknown) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : 0;
+}
+
 function slugify(input: string) {
   return input
     .toLowerCase()
@@ -99,6 +104,99 @@ function assertStatus(status: string) {
   if (!["draft", "active", "hidden", "archived"].includes(status)) {
     throw new Error("Niepoprawny status projektu.");
   }
+}
+
+const PUBLICATION_MISSING_LABELS: Record<string, string> = {
+  name: "nazwy projektu",
+  slug: "slug",
+  price: "ceny > 0",
+  usable_area: "powierzchni uzytkowej > 0",
+  rooms_count: "liczby pokoi > 0",
+  media_main: "zdjecia glownego (hero albo thumbnail)",
+  rooms_table: "tabeli pomieszczen"
+};
+
+type PublicationValidationPayload = {
+  name?: string;
+  slug?: string;
+  priceGross?: number;
+  usableArea?: number;
+  roomsCount?: number;
+  roomRowsCount?: number;
+  hasMainMedia?: boolean;
+};
+
+function buildPublicationErrorMessage(missing: string[]) {
+  const lines = missing.map((key) => `- ${PUBLICATION_MISSING_LABELS[key] || key}`);
+  return `Nie mozna opublikowac projektu. Brakuje:\n${lines.join("\n")}`;
+}
+
+async function validateProjectPublication(params: {
+  supabase: NonNullable<ReturnType<typeof createSupabaseServiceRoleClient>>;
+  projectId: string;
+  payload?: PublicationValidationPayload;
+}) {
+  const { supabase, projectId, payload } = params;
+
+  const { data: project, error: projectError } = await supabase
+    .from("projects")
+    .select("name, slug, price_gross, usable_area, rooms_count")
+    .eq("id", projectId)
+    .maybeSingle();
+
+  if (projectError) {
+    throw new Error(`Nie udalo sie sprawdzic danych publikacji: ${projectError.message}`);
+  }
+
+  if (!project) {
+    throw new Error("Nie znaleziono projektu do publikacji.");
+  }
+
+  const { count: roomsCountDb, error: roomsCountError } = await supabase
+    .from("project_rooms")
+    .select("id", { count: "exact", head: true })
+    .eq("project_id", projectId);
+
+  if (roomsCountError) {
+    throw new Error(`Nie udalo sie sprawdzic tabeli pomieszczen: ${roomsCountError.message}`);
+  }
+
+  const { data: mediaRows, error: mediaError } = await supabase
+    .from("project_media")
+    .select("media_type")
+    .eq("project_id", projectId);
+
+  if (mediaError) {
+    throw new Error(`Nie udalo sie sprawdzic mediow projektu: ${mediaError.message}`);
+  }
+
+  const hasMainMediaInDb = (mediaRows || []).some((item) => {
+    const type = String(item.media_type || "");
+    return type === "hero" || type === "thumbnail";
+  });
+
+  const finalName = (payload?.name ?? String(project.name || "")).trim();
+  const finalSlug = (payload?.slug ?? String(project.slug || "")).trim();
+  const finalPrice = payload?.priceGross ?? toNumber(project.price_gross);
+  const finalUsableArea = payload?.usableArea ?? toNumber(project.usable_area);
+  const finalRoomsCount = payload?.roomsCount ?? toNumber(project.rooms_count);
+  const finalRoomRowsCount = payload?.roomRowsCount ?? toNumber(roomsCountDb);
+  const finalHasMainMedia = payload?.hasMainMedia ?? hasMainMediaInDb;
+
+  const missing: string[] = [];
+  if (!finalName) missing.push("name");
+  if (!finalSlug) missing.push("slug");
+  if (finalPrice <= 0) missing.push("price");
+  if (finalUsableArea <= 0) missing.push("usable_area");
+  if (finalRoomsCount <= 0) missing.push("rooms_count");
+  if (!finalHasMainMedia) missing.push("media_main");
+  if (finalRoomRowsCount <= 0) missing.push("rooms_table");
+
+  return {
+    ok: missing.length === 0,
+    missing,
+    message: missing.length ? buildPublicationErrorMessage(missing) : ""
+  };
 }
 
 async function uploadPublicMedia(params: {
@@ -244,6 +342,21 @@ export async function updateProjectStatusAction(formData: FormData) {
     redirect(`/admin/projekty?status=error&reason=${reason}`);
   }
 
+  if (status === "active") {
+    const publication = await validateProjectPublication({
+      supabase,
+      projectId
+    });
+
+    if (!publication.ok) {
+      const reason = encodeURIComponent(publication.message);
+      const missing = encodeURIComponent(
+        publication.missing.map((item) => PUBLICATION_MISSING_LABELS[item] || item).join(",")
+      );
+      redirect(`/admin/projekty?status=error&reason=${reason}&missing=${missing}`);
+    }
+  }
+
   const { error } = await supabase
     .from("projects")
     .update({ status, updated_at: new Date().toISOString() })
@@ -336,6 +449,30 @@ export async function updateProjectAction(
       .split("\n")
       .map((item) => item.trim())
       .filter(Boolean);
+
+    if (status === "active") {
+      const roomRowsCount = rooms.filter((room) => room.name && String(room.name).trim()).length;
+      const hasHeroUpload = isRealFile(formData.get("heroFile"));
+      const hasThumbnailUpload = isRealFile(formData.get("thumbnailFile"));
+
+      const publication = await validateProjectPublication({
+        supabase,
+        projectId,
+        payload: {
+          name,
+          slug,
+          priceGross: num(formData, "priceGross"),
+          usableArea: num(formData, "usableArea"),
+          roomsCount: intNum(formData, "roomsCount"),
+          roomRowsCount,
+          hasMainMedia: hasHeroUpload || hasThumbnailUpload
+        }
+      });
+
+      if (!publication.ok) {
+        return { ok: false, message: publication.message };
+      }
+    }
 
     const { error } = await supabase
       .from("projects")

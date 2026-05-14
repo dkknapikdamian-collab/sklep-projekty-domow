@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjects } from "@/lib/admin/projects-admin";
 import { AdminProjectsListClient } from "@/components/admin/AdminProjectsListClient";
@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic";
 type AdminListMessage = {
   tone: "success" | "neutral" | "error";
   text: string;
+  checklist?: string[];
 };
 
 type AdminProjectsPageProps = {
@@ -23,7 +24,7 @@ function getAdminListMessage(searchParams: Record<string, string | string[] | un
   if (firstParam(searchParams.status) === "updated") {
     return {
       tone: "success",
-      text: "Status projektu został zapisany. Lista i publiczne strony zostały odświeżone."
+      text: "Status projektu zostal zapisany. Lista i publiczne strony zostaly odswiezone."
     };
   }
 
@@ -37,37 +38,44 @@ function getAdminListMessage(searchParams: Record<string, string | string[] | un
       reason = rawReason;
     }
 
+    const missingParam = firstParam(searchParams.missing) || "";
+    const checklist = missingParam
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
     return {
       tone: "error",
-      text: `Nie udało się zapisać zmiany projektu. Powód: ${reason}`
+      text: `Nie udalo sie zapisac zmiany projektu. Powod: ${reason}`,
+      checklist: checklist.length ? checklist : undefined
     };
   }
 
   if (firstParam(searchParams.deleted) === "1") {
     return {
       tone: "success",
-      text: "Projekt został usunięty z bazy. Jeżeli miał pliki w Storage, system spróbował je usunąć razem z rekordem."
+      text: "Projekt zostal usuniety z bazy. Jezeli mial pliki w Storage, system sprobowal je usunac razem z rekordem."
     };
   }
 
   if (firstParam(searchParams.cancelled) === "1") {
     return {
       tone: "neutral",
-      text: "Edycja została anulowana. Formularz nie wysłał zmian do Supabase."
+      text: "Edycja zostala anulowana. Formularz nie wyslal zmian do Supabase."
     };
   }
 
   if (firstParam(searchParams.sample) === "created") {
     return {
       tone: "success",
-      text: "Projekt przykładowy został utworzony i opublikowany jako active."
+      text: "Projekt przykladowy zostal utworzony i opublikowany jako active."
     };
   }
 
   if (firstParam(searchParams.sample) === "exists") {
     return {
       tone: "neutral",
-      text: "Projekt przykładowy już istnieje w bazie."
+      text: "Projekt przykladowy juz istnieje w bazie."
     };
   }
 
@@ -87,7 +95,7 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
           <div>
             <span>ADMIN / PROJEKTY</span>
             <h1>Projekty</h1>
-            <p>Lista projektów zapisana w Supabase. Z tego poziomu możesz filtrować, zmienić status, wejść w edycję albo usunąć projekt.</p>
+            <p>Lista projektow zapisana w Supabase. Z tego poziomu mozesz filtrowac, zmienic status, wejsc w edycje albo usunac projekt.</p>
           </div>
           <Link href="/admin/projekty/nowy" className="admin-primary-button">
             <FolderPlus size={18} /> Dodaj projekt
@@ -96,7 +104,14 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
 
         {message && (
           <section className={message.tone === "success" ? "admin-form-success" : message.tone === "error" ? "admin-form-error" : "admin-inline-notice"} role="status">
-            {message.text}
+            <p>{message.text}</p>
+            {message.checklist && message.checklist.length > 0 && (
+              <ul>
+                {message.checklist.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
           </section>
         )}
 
