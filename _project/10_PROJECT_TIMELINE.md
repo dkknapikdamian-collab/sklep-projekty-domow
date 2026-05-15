@@ -37,3 +37,5 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 | 2026-05-15 | Etap 14: strona szczegółów zamówienia | Rozdzielono listę zamówień od obsługi konkretnego zamówienia na `/admin/zamowienia/[id]`. | `app/admin/zamowienia/page.tsx`, `app/admin/zamowienia/[id]/page.tsx`, `lib/admin/orders-admin.ts`, `scripts/check-admin-orders-v42.cjs` |
 
 | 2026-05-15 | Etap 15: panel awaryjnego delete w tabeli projektów | Zmieniono `Awaryjne` na `Awaryjne usunięcie`, skrócono teksty i dopasowano CSS, żeby panel nie ucinał treści w tabeli. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin-v8.css`, `scripts/check-admin-buttons-v19.cjs` |
+
+| 2026-05-15 | Etap 15B: utrwalona checklista realizacji | Dodano tabelę `order_fulfillment_checklist`, zapis checkboxów realizacji i notatkę admina na `/admin/zamowienia/[id]`. | `app/admin/zamowienia/[id]/page.tsx`, `app/admin/zamowienia/actions.ts`, `lib/admin/orders-admin.ts`, `supabase/migrations/0017_order_fulfillment_checklist.sql` |

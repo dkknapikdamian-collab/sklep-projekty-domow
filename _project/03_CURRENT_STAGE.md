@@ -1,47 +1,66 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 19:35 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 20:10 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 15: Dopasowanie panelu awaryjnego usunięcia w tabeli projektów
+Etap 15B: Utrwalona checklista realizacji zamówienia
 
 ## Status etapu
 
-Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guardy, typecheck, build i test ręczny.
+Przygotowany w paczce wdrożeniowej. To jest logiczna kontynuacja Etapu 14. Nazwa 15B wynika z tego, że numer 15 był już użyty na panel awaryjnego usunięcia w tabeli projektów.
 
 ## Cel etapu
 
-Otwarty panel awaryjnego usunięcia w `/admin/projekty` nie może rozpychać ani ucinać tabeli. Ma być mniejszy, czytelny i mieścić tekst w ekranie.
+Checklistę realizacji trzeba zapisywać jako dane, nie tylko pokazywać jako UI. Admin ma móc odhaczyć realizację i po odświeżeniu widzieć ten sam stan.
 
 ## Co zostało zrobione
 
-- Zmieniono etykietę z `Awaryjne` na `Awaryjne usunięcie`.
-- Skrócono treści w czerwonym panelu.
-- Zmieniono tytuł panelu z `Ostatni guzik pod szkłem` na prostsze `Trwałe usunięcie`.
-- Dodano override CSS `STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT`.
-- Panel w tabeli ma mniejszą szerokość, padding, font i input.
-- W panelu wymuszono `white-space: normal` i `overflow-wrap: anywhere`, żeby teksty nie były ucinane przez jednowierszowe reguły tabeli.
-- Zaktualizowano guard `verify:admin-buttons-v19`, żeby pilnował krótszej kopii i CSS panelu.
+- Dodano migrację `0017_order_fulfillment_checklist.sql`.
+- Dodano tabelę `order_fulfillment_checklist`:
+  - `order_id`,
+  - `payment_confirmed`,
+  - `pdf_sent`,
+  - `zip_sent`,
+  - `order_closed`,
+  - `internal_note`,
+  - `updated_at`.
+- Rozszerzono `lib/admin/orders-admin.ts` o:
+  - `AdminOrderFulfillmentChecklist`,
+  - pobieranie checklisty dla zamówień,
+  - domyślną pustą checklistę,
+  - `updateAdminOrderFulfillmentChecklist`.
+- Dodano server action `updateOrderFulfillmentChecklistAction`.
+- Strona `/admin/zamowienia/[id]` pokazuje checkboksy i notatkę admina jako formularz zapisu.
+- Po zapisie strona wraca na szczegół zamówienia z komunikatem sukcesu.
+- Dodano audit log `order_fulfillment_checklist_update`.
+- Zaktualizowano guard `verify:admin-orders-v42`.
 
 ## Czego nie zmieniano
 
-- Nie zmieniano logiki archiwizacji.
-- Nie zmieniano fizycznego delete po stronie server action.
-- Nie zmieniano publicznego sklepu.
-- Nie zmieniano Supabase schema.
-- Nie zmieniano układu całej tabeli poza panelem awaryjnego delete.
+- Nie dodawano automatycznej wysyłki.
+- Nie zmieniano płatności.
+- Nie dodawano signed URL.
+- Nie zmieniano storage linków.
+- Nie zmieniano checkoutu klienta.
 
 ## Checki wymagane
 
 ```powershell
-npm run verify:admin-buttons-v19
-npm run verify:admin-project-list-compact-v41
+npm run verify:admin-orders-v42
 npm run typecheck
 npm run build
 npm run check:project-memory
 ```
 
+## Ważne przed testem runtime
+
+Trzeba zastosować migrację w Supabase:
+
+```text
+supabase/migrations/0017_order_fulfillment_checklist.sql
+```
+
 ## Kryterium zakończenia
 
-Po rozwinięciu `Awaryjne usunięcie` teksty mieszczą się w panelu, panel jest mniejszy i nie ucina treści po prawej stronie.
+Admin może odhaczyć realizację i stan zostaje po odświeżeniu strony.

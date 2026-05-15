@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ClipboardList } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
+import { updateOrderFulfillmentChecklistAction, updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
 import {
   ADMIN_ORDER_STATUS_LABELS,
   ADMIN_ORDER_STATUSES,
@@ -34,6 +34,7 @@ function OrderStatusForm({ order }: { order: AdminOrderListItem }) {
   return (
     <form action={updateOrderStatusAction} className="admin-order-status-form" data-admin-order-status-form="true">
       <input type="hidden" name="orderId" value={order.id} />
+      <input type="hidden" name="returnTo" value={`/admin/zamowienia/${order.id}`} />
       <select name="status" defaultValue={order.status} aria-label={`Status zamówienia ${order.shortId}`}>
         {ADMIN_ORDER_STATUSES.map((status) => (
           <option value={status} key={status}>{ADMIN_ORDER_STATUS_LABELS[status]}</option>
@@ -74,14 +75,16 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
   const hasPdfEmailFile = privateFiles.some((file) => file.fileType === "pdf_email_package");
   const hasZipFile = privateFiles.some((file) => file.fileType === "full_package" || file.path.toLowerCase().endsWith(".zip"));
   const hasDocumentationFile = privateFiles.some((file) => file.fileType === "documentation");
+  const checklist = order.fulfillmentChecklist;
 
   return (
-    <section className="admin-order-fulfillment" data-admin-order-fulfillment-v43="true">
+    <section className="admin-order-fulfillment" data-admin-order-fulfillment-v43="true" data-admin-order-fulfillment-persistent-v45="true">
       <div>
         <h2>Realizacja ręczna</h2>
         <p>
-          Ta strona nie generuje linków czasowych i nie wysyła maili automatycznie. Ma pokazać operatorowi, co trzeba wysłać klientowi po potwierdzeniu płatności.
+          Ta strona nie generuje linków czasowych i nie wysyła maili automatycznie. Zapisuje tylko stan ręcznej realizacji zamówienia.
         </p>
+        {checklist.updatedAt && <small>Ostatnia aktualizacja checklisty: {formatDate(checklist.updatedAt)}</small>}
       </div>
 
       <div className="admin-order-fulfillment-grid">
@@ -107,12 +110,51 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
         </article>
       </div>
 
-      <ul className="admin-order-fulfillment-checklist" data-admin-order-fulfillment-checklist="true">
-        <li data-admin-fulfillment-payment-confirmed="true"><span aria-hidden="true">☐</span> Płatność potwierdzona</li>
-        <li data-admin-fulfillment-pdf-sent="true"><span aria-hidden="true">☐</span> PDF wysłany, jeśli dotyczy</li>
-        <li data-admin-fulfillment-zip-sent="true"><span aria-hidden="true">☐</span> ZIP wysłany, jeśli dotyczy</li>
-        <li data-admin-fulfillment-order-closed="true"><span aria-hidden="true">☐</span> Zamówienie zamknięte statusem `Wysłane` albo `Anulowane`</li>
-      </ul>
+      <form action={updateOrderFulfillmentChecklistAction} className="admin-order-fulfillment-form" data-admin-order-fulfillment-form="true">
+        <input type="hidden" name="orderId" value={order.id} />
+        <input type="hidden" name="returnTo" value={`/admin/zamowienia/${order.id}`} />
+
+        <ul className="admin-order-fulfillment-checklist" data-admin-order-fulfillment-checklist="true">
+          <li data-admin-fulfillment-payment-confirmed="true">
+            <label>
+              <input type="checkbox" name="paymentConfirmed" defaultChecked={checklist.paymentConfirmed} />
+              <span>Płatność potwierdzona</span>
+            </label>
+          </li>
+          <li data-admin-fulfillment-pdf-sent="true">
+            <label>
+              <input type="checkbox" name="pdfSent" defaultChecked={checklist.pdfSent} />
+              <span>PDF wysłany, jeśli dotyczy</span>
+            </label>
+          </li>
+          <li data-admin-fulfillment-zip-sent="true">
+            <label>
+              <input type="checkbox" name="zipSent" defaultChecked={checklist.zipSent} />
+              <span>ZIP wysłany, jeśli dotyczy</span>
+            </label>
+          </li>
+          <li data-admin-fulfillment-order-closed="true">
+            <label>
+              <input type="checkbox" name="orderClosed" defaultChecked={checklist.orderClosed} />
+              <span>Zamówienie zamknięte statusem `Wysłane` albo `Anulowane`</span>
+            </label>
+          </li>
+        </ul>
+
+        <label className="admin-order-internal-note" data-admin-order-internal-note="true">
+          Notatka admina
+          <textarea
+            name="internalNote"
+            rows={4}
+            defaultValue={checklist.internalNote}
+            placeholder="Np. klient prosi o telefon przed wysyłką, płatność potwierdzona ręcznie, wysłano paczkę ZIP..."
+          />
+        </label>
+
+        <button type="submit" className="admin-primary-button" data-admin-order-fulfillment-save="true">
+          Zapisz realizację
+        </button>
+      </form>
     </section>
   );
 }
@@ -173,9 +215,9 @@ function OrderCustomerPanel({ order }: { order: AdminOrderListItem }) {
           <h3>Dane do faktury</h3>
           <p>{order.invoiceData || "Brak danych do faktury."}</p>
         </article>
-        <article data-admin-order-admin-note-placeholder="true">
+        <article data-admin-order-admin-note-persistent="true">
           <h3>Notatka admina</h3>
-          <p>Brak osobnego pola w schemacie V1. Nie dopisujemy go tutaj bez migracji i decyzji produktowej.</p>
+          <p>{order.fulfillmentChecklist.internalNote || "Brak notatki admina."}</p>
         </article>
       </div>
     </section>
@@ -188,6 +230,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
   const order = await getAdminOrderById(resolvedParams.id);
   const updatedId = firstParam(resolvedSearchParams.updated);
   const status = firstParam(resolvedSearchParams.status);
+  const fulfillment = firstParam(resolvedSearchParams.fulfillment);
 
   if (!order) notFound();
 
@@ -209,6 +252,12 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
         {updatedId && (
           <section className="admin-form-success" role="status">
             Status zamówienia {updatedId.slice(0, 8)} został zapisany.
+          </section>
+        )}
+
+        {fulfillment === "updated" && (
+          <section className="admin-form-success" role="status" data-admin-order-fulfillment-saved="true">
+            Realizacja zamówienia została zapisana.
           </section>
         )}
 

@@ -22,7 +22,8 @@ for (const file of [
   "app/admin/zamowienia/actions.ts",
   "lib/admin/orders-admin.ts",
   "lib/admin/order-files.ts",
-  "supabase/migrations/0015_orders_v42_statuses.sql"
+  "supabase/migrations/0015_orders_v42_statuses.sql",
+  "supabase/migrations/0017_order_fulfillment_checklist.sql"
 ]) {
   if (!exists(file)) fail(`missing admin orders file: ${file}`);
 }
@@ -40,12 +41,38 @@ for (const marker of [
   "order_item_addons",
   "updateAdminOrderStatus",
   "getAdminOrderById",
+  "AdminOrderFulfillmentChecklist",
+  "fulfillmentChecklist",
+  "emptyAdminOrderFulfillmentChecklist",
+  "getAdminOrderFulfillmentChecklistByOrderId",
+  "updateAdminOrderFulfillmentChecklist",
+  "order_fulfillment_checklist",
+  "payment_confirmed",
+  "pdf_sent",
+  "zip_sent",
+  "order_closed",
+  "internal_note",
   "privateFiles",
   "hasPdfEmailAddon",
   "getAdminOrderPrivateFilesByProjectKey",
   "adminOrderProjectFileLookupKey"
 ]) {
   if (!repo.includes(marker)) fail(`orders admin repository missing marker: ${marker}`);
+}
+
+const fulfillmentMigration = read("supabase/migrations/0017_order_fulfillment_checklist.sql");
+for (const marker of [
+  "create table if not exists public.order_fulfillment_checklist",
+  "order_id uuid primary key references public.orders(id) on delete cascade",
+  "payment_confirmed boolean not null default false",
+  "pdf_sent boolean not null default false",
+  "zip_sent boolean not null default false",
+  "order_closed boolean not null default false",
+  "internal_note text",
+  "updated_at timestamptz not null",
+  "order_fulfillment_checklist_updated_at_idx"
+]) {
+  if (!fulfillmentMigration.includes(marker)) fail(`fulfillment migration missing marker: ${marker}`);
 }
 
 const orderFiles = read("lib/admin/order-files.ts");
@@ -94,6 +121,7 @@ for (const marker of [
   "getAdminOrderById",
   "OrderStatusForm",
   "updateOrderStatusAction",
+  "updateOrderFulfillmentChecklistAction",
   "ADMIN_ORDER_STATUS_LABELS",
   "data-admin-order-customer-panel",
   "data-admin-order-items",
@@ -101,19 +129,48 @@ for (const marker of [
   "data-admin-order-pdf-email-addon",
   "data-admin-order-send-instructions",
   "data-admin-order-fulfillment-v43",
+  "data-admin-order-fulfillment-persistent-v45",
+  "data-admin-order-fulfillment-form",
+  "data-admin-order-fulfillment-save",
   "data-admin-order-fulfillment-checklist",
   "data-admin-fulfillment-payment-confirmed",
+  "name=\"paymentConfirmed\"",
   "data-admin-fulfillment-pdf-sent",
+  "name=\"pdfSent\"",
   "data-admin-fulfillment-zip-sent",
+  "name=\"zipSent\"",
   "data-admin-fulfillment-order-closed",
-  "data-admin-order-admin-note-placeholder",
+  "name=\"orderClosed\"",
+  "data-admin-order-internal-note",
+  "name=\"internalNote\"",
+  "data-admin-order-admin-note-persistent",
+  "data-admin-order-fulfillment-saved",
   "notFound"
 ]) {
   if (!detailPage.includes(marker)) fail(`admin order detail page missing marker: ${marker}`);
 }
 
+if (detailPage.includes("data-admin-order-admin-note-placeholder")) {
+  fail("admin order detail page still contains placeholder-only admin note marker.");
+}
+
 const actions = read("app/admin/zamowienia/actions.ts");
-for (const marker of ["getAdminSession", "updateOrderStatusAction", "updateAdminOrderStatus", "revalidatePath", "redirect"]) {
+for (const marker of [
+  "getAdminSession",
+  "updateOrderStatusAction",
+  "updateAdminOrderStatus",
+  "updateOrderFulfillmentChecklistAction",
+  "updateAdminOrderFulfillmentChecklist",
+  "order_fulfillment_checklist_update",
+  "paymentConfirmed",
+  "pdfSent",
+  "zipSent",
+  "orderClosed",
+  "internalNote",
+  "returnTo",
+  "revalidatePath",
+  "redirect"
+]) {
   if (!actions.includes(marker)) fail(`admin order action missing marker: ${marker}`);
 }
 
@@ -140,7 +197,10 @@ for (const marker of [
   ".admin-order-detail-layout",
   ".admin-order-detail-panel",
   ".admin-order-list-actions",
-  "data-admin-order-detail-v44"
+  "STAGE46 ADMIN ORDER FULFILLMENT CHECKLIST PERSISTENCE START",
+  ".admin-order-fulfillment-form",
+  ".admin-order-internal-note",
+  "accent-color"
 ]) {
   if (!css.includes(marker) && !detailPage.includes(marker) && !listPage.includes(marker)) {
     fail(`admin order detail style/source marker missing: ${marker}`);
@@ -155,7 +215,7 @@ for (const marker of ["drop constraint if exists orders_status_check", "'contact
 const forbiddenAutoDeliverySources = [repo, orderFiles, listPage, detailPage].join("\n");
 for (const forbidden of ["createSignedUrl", "createSignedUrls", "sendEmail(", "send_email", "stripe", "payu", "PayU"]) {
   if (forbiddenAutoDeliverySources.includes(forbidden)) {
-    fail(`Etap 14 must not add automatic delivery/payment marker: ${forbidden}`);
+    fail(`Etap 15B must not add automatic delivery/payment marker: ${forbidden}`);
   }
 }
 
@@ -168,4 +228,4 @@ if (!String(pkg.scripts?.verify || "").includes("verify:admin-orders-v42")) {
   fail("main verify script missing verify:admin-orders-v42.");
 }
 
-console.log("OK: admin orders V42/V44 detail page guard passed.");
+console.log("OK: admin orders V42/V45 persistent fulfillment checklist guard passed.");

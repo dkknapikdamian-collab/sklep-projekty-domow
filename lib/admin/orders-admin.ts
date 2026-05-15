@@ -26,6 +26,15 @@ export type AdminOrderAddon = {
   deliveryAction: string;
 };
 
+export type AdminOrderFulfillmentChecklist = {
+  paymentConfirmed: boolean;
+  pdfSent: boolean;
+  zipSent: boolean;
+  orderClosed: boolean;
+  internalNote: string;
+  updatedAt: string;
+};
+
 export type AdminOrderItem = {
   id: string;
   projectCode: string;
@@ -52,7 +61,27 @@ export type AdminOrderListItem = {
   updatedAt: string;
   invoiceData: string;
   notes: string;
+  fulfillmentChecklist: AdminOrderFulfillmentChecklist;
   items: AdminOrderItem[];
+};
+
+export type UpdateAdminOrderFulfillmentChecklistInput = {
+  orderId: string;
+  paymentConfirmed: boolean;
+  pdfSent: boolean;
+  zipSent: boolean;
+  orderClosed: boolean;
+  internalNote: string;
+};
+
+type FulfillmentRow = {
+  order_id: string;
+  payment_confirmed: boolean | null;
+  pdf_sent: boolean | null;
+  zip_sent: boolean | null;
+  order_closed: boolean | null;
+  internal_note: string | null;
+  updated_at: string | null;
 };
 
 function toNumber(value: unknown) {
@@ -70,6 +99,53 @@ function invoiceDataToText(value: unknown) {
   if (typeof value === "string") return value;
   if (typeof value === "object" && "raw" in value) return String((value as { raw?: unknown }).raw || "");
   return JSON.stringify(value);
+}
+
+export function emptyAdminOrderFulfillmentChecklist(): AdminOrderFulfillmentChecklist {
+  return {
+    paymentConfirmed: false,
+    pdfSent: false,
+    zipSent: false,
+    orderClosed: false,
+    internalNote: "",
+    updatedAt: ""
+  };
+}
+
+function mapFulfillmentRow(row: FulfillmentRow | undefined): AdminOrderFulfillmentChecklist {
+  if (!row) return emptyAdminOrderFulfillmentChecklist();
+
+  return {
+    paymentConfirmed: Boolean(row.payment_confirmed),
+    pdfSent: Boolean(row.pdf_sent),
+    zipSent: Boolean(row.zip_sent),
+    orderClosed: Boolean(row.order_closed),
+    internalNote: String(row.internal_note || ""),
+    updatedAt: String(row.updated_at || "")
+  };
+}
+
+async function getAdminOrderFulfillmentChecklistByOrderId(orderIds: string[]) {
+  const supabase = createSupabaseServiceRoleClient();
+  const lookup = new Map<string, AdminOrderFulfillmentChecklist>();
+
+  if (!supabase || orderIds.length === 0) return lookup;
+
+  const { data, error } = await supabase
+    .from("order_fulfillment_checklist")
+    .select("order_id, payment_confirmed, pdf_sent, zip_sent, order_closed, internal_note, updated_at")
+    .in("order_id", orderIds);
+
+  if (error) {
+    console.error("Failed to load order fulfillment checklist", error);
+    return lookup;
+  }
+
+  for (const row of (data || []) as FulfillmentRow[]) {
+    lookup.set(String(row.order_id || ""), mapFulfillmentRow(row));
+  }
+
+  return lookup;
 }
 
 export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
@@ -117,6 +193,10 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
     return [];
   }
 
+  const fulfillmentByOrderId = await getAdminOrderFulfillmentChecklistByOrderId(
+    (orders || []).map((order) => String(order.id || "")).filter(Boolean)
+  );
+
   const mappedOrders = orders.map((order) => {
     const id = String(order.id || "");
     const items = Array.isArray(order.order_items) ? order.order_items : [];
@@ -133,6 +213,7 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
       updatedAt: String(order.updated_at || ""),
       invoiceData: invoiceDataToText(order.invoice_data),
       notes: String(order.notes || ""),
+      fulfillmentChecklist: fulfillmentByOrderId.get(id) || emptyAdminOrderFulfillmentChecklist(),
       items: items.map((item) => {
         const addons = Array.isArray(item.order_item_addons) ? item.order_item_addons : [];
         const mappedAddons = addons.map((addon) => ({
@@ -182,7 +263,6 @@ export async function getAdminOrderById(id: string): Promise<AdminOrderListItem 
   return orders.find((order) => order.id === normalizedId || order.shortId === normalizedId) || null;
 }
 
-
 export async function updateAdminOrderStatus(orderId: string, status: AdminOrderStatus) {
   const supabase = createSupabaseServiceRoleClient();
 
@@ -197,5 +277,32 @@ export async function updateAdminOrderStatus(orderId: string, status: AdminOrder
 
   if (error) {
     throw new Error(`Nie udało się zapisać statusu zamówienia: ${error.message}`);
+  }
+}
+
+export async function updateAdminOrderFulfillmentChecklist(input: UpdateAdminOrderFulfillmentChecklistInput) {
+  const supabase = createSupabaseServiceRoleClient();
+
+  if (!supabase) {
+    throw new Error("Brak SUPABASE_SERVICE_ROLE_KEY albo env Supabase.");
+  }
+
+  const orderId = String(input.orderId || "").trim();
+  if (!orderId) throw new Error("Brak ID zamówienia.");
+
+  const { error } = await supabase
+    .from("order_fulfillment_checklist")
+    .upsert({
+      order_id: orderId,
+      payment_confirmed: input.paymentConfirmed,
+      pdf_sent: input.pdfSent,
+      zip_sent: input.zipSent,
+      order_closed: input.orderClosed,
+      internal_note: input.internalNote || null,
+      updated_at: new Date().toISOString()
+    }, { onConflict: "order_id" });
+
+  if (error) {
+    throw new Error(`Nie udało się zapisać checklisty realizacji: ${error.message}`);
   }
 }

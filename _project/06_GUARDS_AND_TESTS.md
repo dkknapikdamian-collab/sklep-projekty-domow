@@ -1,6 +1,36 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Checki wymagane dla Etapu 15B
+
+```powershell
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda zamówień
+
+Zaostrzono:
+
+```powershell
+npm run verify:admin-orders-v42
+```
+
+Guard pilnuje teraz:
+
+- migracji `0017_order_fulfillment_checklist.sql`,
+- tabeli `order_fulfillment_checklist`,
+- pól `payment_confirmed`, `pdf_sent`, `zip_sent`, `order_closed`, `internal_note`, `updated_at`,
+- typu `AdminOrderFulfillmentChecklist`,
+- pobierania checklisty w `getAdminOrders`,
+- akcji `updateOrderFulfillmentChecklistAction`,
+- formularza checklisty na `/admin/zamowienia/[id]`,
+- trwałej notatki admina,
+- braku signed URL, maili automatycznych i płatności.
+
+
 ## Checki wymagane dla Etapu 15
 
 ```powershell

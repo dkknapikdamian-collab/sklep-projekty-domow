@@ -1,6 +1,51 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 20:10 - Etap 15B: Utrwalona checklista realizacji zamówienia
+
+- Dodano migrację `supabase/migrations/0017_order_fulfillment_checklist.sql`.
+- Dodano tabelę `order_fulfillment_checklist`.
+- Dodano pola realizacji:
+  - `payment_confirmed`,
+  - `pdf_sent`,
+  - `zip_sent`,
+  - `order_closed`,
+  - `internal_note`,
+  - `updated_at`.
+- Rozszerzono `lib/admin/orders-admin.ts` o pobieranie i zapis checklisty.
+- Dodano server action `updateOrderFulfillmentChecklistAction`.
+- Strona `/admin/zamowienia/[id]` zapisuje checkboxy realizacji i notatkę admina.
+- Dodano audit log `order_fulfillment_checklist_update`.
+- Zaktualizowano guard `verify:admin-orders-v42`.
+- Nie zmieniano automatycznej wysyłki, płatności ani signed URL.
+
+### Pliki zmienione
+
+- `app/admin/zamowienia/[id]/page.tsx`
+- `app/admin/zamowienia/actions.ts`
+- `lib/admin/orders-admin.ts`
+- `supabase/migrations/0017_order_fulfillment_checklist.sql`
+- `app/admin-v8.css`
+- `scripts/check-admin-orders-v42.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_2010_order-fulfillment-checklist-persistent.md`
+
+### Testy / guardy
+
+```powershell
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+
 ## 2026-05-15 19:35 - Etap 15: Dopasowanie panelu awaryjnego usunięcia
 
 - Zmieniono etykietę `Awaryjne` na `Awaryjne usunięcie`.

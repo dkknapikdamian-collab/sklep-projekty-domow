@@ -1,19 +1,19 @@
 ﻿# 07_NEXT_STEPS - nastepne kroki
 
-## Najblizszy rekomendowany krok po Etapie 15
+## Najblizszy rekomendowany krok po Etapie 15B
 
-Wykonać ręczny test `/admin/projekty`: rozwinąć `Awaryjne usunięcie` przy projekcie archived i active, sprawdzić czy panel mieści się w tabeli i czy teksty nie są ucięte.
+Zastosować migrację `0017_order_fulfillment_checklist.sql` w Supabase i wykonać runtime test na jednym zamówieniu: zaznaczyć checklistę, dodać notatkę, zapisać i odświeżyć stronę.
 
 ## Zasady dalszej pracy
 
-- Nie rozbudowywać destrukcyjnego panelu w tabeli o długie teksty.
-- Długie ostrzeżenia przenosić na osobną stronę albo skracać.
-- W tabeli projektów nadal obowiązuje jednowierszowy layout, wyjątkiem jest tylko rozwinięty panel awaryjnego delete.
-- Fizyczne delete zostaje operacją awaryjną, nie codzienną.
+- Checklisty realizacji są teraz danymi, nie tylko UI.
+- Nie dodawać automatycznej wysyłki, signed URL ani płatności bez osobnego etapu.
+- Każda zmiana procesu realizacji powinna przejść przez stronę `/admin/zamowienia/[id]`.
+- Notatka admina jest częścią tabeli `order_fulfillment_checklist`.
 
 ## Kolejne możliwe etapy
 
-1. Runtime test Etapu 15.
-2. Dodać filtr `Zarchiwizowane` w liście projektów.
-3. Runtime test pełnej ścieżki zamówienia V1.
-4. Widok audit logu `/admin/audit`.
+1. Runtime test Etapu 15B.
+2. Widok audit logu `/admin/audit`.
+3. Filtry zamówień po statusie i etapie realizacji.
+4. Rozsądne oznaczenie zamówień częściowo/pełnie zrealizowanych na liście.

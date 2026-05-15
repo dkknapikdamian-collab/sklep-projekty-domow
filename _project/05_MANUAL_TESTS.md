@@ -1,6 +1,47 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 15B
+
+Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0017_order_fulfillment_checklist.sql`.
+
+### Co sprawdzić
+
+1. Wejdź do:
+
+```text
+/admin/zamowienia
+```
+
+2. Kliknij `Obsłuż zamówienie`.
+
+3. Na `/admin/zamowienia/[id]` zaznacz:
+   - `Płatność potwierdzona`,
+   - `PDF wysłany, jeśli dotyczy`,
+   - `ZIP wysłany, jeśli dotyczy`,
+   - `Zamówienie zamknięte`.
+
+4. Wpisz notatkę admina.
+
+5. Kliknij `Zapisz realizację`.
+
+6. Oczekiwany wynik:
+   - pojawia się komunikat `Realizacja zamówienia została zapisana`,
+   - checkboxy zostają zaznaczone po odświeżeniu,
+   - notatka admina zostaje po odświeżeniu,
+   - w Supabase pojawia się/aktualizuje rekord w `order_fulfillment_checklist`.
+
+7. Sprawdź SQL:
+
+```sql
+select *
+from order_fulfillment_checklist
+order by updated_at desc;
+```
+
+8. Nie sprawdzamy automatycznej wysyłki, płatności ani signed URL, bo są poza zakresem.
+
+
 ## Test reczny po Etapie 15
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.
