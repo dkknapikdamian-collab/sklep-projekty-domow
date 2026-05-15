@@ -122,7 +122,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                       <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
                       <StatusActionForm project={project} targetStatus="draft" />
                       <StatusActionForm project={project} targetStatus="active" />
-                      <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
+                      <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} />
                     </div>
                   </td>
                 </tr>
@@ -175,7 +175,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                 <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
                 <StatusActionForm project={project} targetStatus="draft" />
                 <StatusActionForm project={project} targetStatus="active" />
-                <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} />
+                <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} />
               </div>
             </article>
           );

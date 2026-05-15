@@ -59,7 +59,7 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
         <section className="admin-form-section admin-danger-zone">
           <h2>Strefa usuwania</h2>
           <p>Usuniecie projektu usuwa rekord projektu i powiazane dane z bazy. System sprobuje tez usunac powiazane pliki ze Storage.</p>
-          <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} className="admin-danger-zone-form" />
+          <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} className="admin-danger-zone-form" />
         </section>
       </main>
     </>
