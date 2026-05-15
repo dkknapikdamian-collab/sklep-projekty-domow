@@ -1,43 +1,55 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 21:15 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 21:45 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 17: Płatność manualna / instrukcja przelewu
+Etap 19: Filtry i priorytetyzacja zamówień w adminie
 
 ## Status etapu
 
-Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guardy, typecheck, build i test ręczny.
+Wdrożone bez zmiany modelu płatności, bez automatycznej wysyłki i bez rozbudowy panelu zamówień do ciężkiego CRM.
 
 ## Cel etapu
 
-Dodać profesjonalną, ale prostą obsługę płatności manualnej bez Stripe/PayU. Klient wie, że płatność następuje po kontakcie, a admin może przygotować instrukcję przelewu i wkleić ją do roboczego e-maila.
+Panel `/admin/zamowienia` ma przestać być tylko listą. Admin ma od razu widzieć, czym zająć się najpierw: kontakt z klientem, płatność manualna albo wysyłka plików.
 
 ## Co zostało zrobione
 
-- Checkout jasno komunikuje: płatność po kontakcie, brak automatycznej płatności online.
-- Dodano migrację `0018_order_manual_payment_instruction.sql`.
-- Do `order_fulfillment_checklist` dodano kolumnę `payment_instruction`.
-- Na `/admin/zamowienia/[id]` admin może wpisać/zapisać instrukcję przelewu.
-- Instrukcja przelewu jest wykorzystywana w roboczym e-mailu `E-mail: potwierdzenie zamówienia`.
-- Status `paid_manual` pozostaje operacyjnym statusem ręcznie potwierdzonej płatności.
-- Dodano guard `verify:manual-payment-v48`.
+- Dodano panel szybkich liczników na `/admin/zamowienia`:
+  - `Wymaga kontaktu`,
+  - `Czeka na płatność`,
+  - `Do wysyłki`.
+- Dodano filtrowanie listy zamówień po:
+  - statusie zamówienia: `new`, `contacted`, `paid_manual`, `sent`, `cancelled`,
+  - płatności: instrukcja ustawiona / brak instrukcji,
+  - realizacji: PDF wysłany / ZIP wysłany / zamknięte,
+  - szybkim oznaczeniu: wymaga kontaktu / czeka na płatność / do wysyłki.
+- Dodano widoczne oznaczenia na kartach zamówień:
+  - priorytet operacyjny,
+  - stan instrukcji płatności,
+  - stan PDF,
+  - stan ZIP,
+  - stan zamknięcia zamówienia.
+- Dodano helpery priorytetu w `lib/admin/orders-admin.ts`:
+  - `getAdminOrderPriorityFlags`,
+  - `getAdminOrderPriorityRank`,
+  - listy i etykiety filtrów.
+- Rozszerzono guard `scripts/check-admin-orders-v42.cjs`, żeby pilnował nowych filtrów i priorytetów.
+- Dodano style `STAGE49 ADMIN ORDER FILTERS AND PRIORITY` w `app/admin-v8.css`.
 
 ## Czego nie zmieniano
 
 - Nie dodano Stripe.
 - Nie dodano PayU.
+- Nie dodano automatycznej wysyłki PDF/ZIP.
 - Nie dodano automatycznego księgowania.
-- Nie dodano SMTP/Resend/Mailgun.
-- Nie zmieniano automatycznej wysyłki plików.
-- Nie zmieniano storage linków.
+- Nie przebudowano szczegółu zamówienia w CRM.
+- Nie zmieniano routingu zamówień.
 
 ## Checki wymagane
 
 ```powershell
-npm run verify:manual-payment-v48
-npm run verify:cart-order-v38
 npm run verify:admin-orders-v42
 npm run typecheck
 npm run build
@@ -46,12 +58,8 @@ npm run check:project-memory
 
 ## Ważne przed testem runtime
 
-Trzeba zastosować migrację w Supabase:
-
-```text
-supabase/migrations/0018_order_manual_payment_instruction.sql
-```
+Ten etap nie wymaga nowej migracji. Korzysta z danych już istniejących w zamówieniu i `order_fulfillment_checklist`, w tym `payment_instruction`, `pdf_sent`, `zip_sent`, `order_closed` oraz statusu zamówienia.
 
 ## Kryterium zakończenia
 
-Możesz przyjąć zamówienie i poprowadzić klienta do płatności ręcznie, bez chaosu.
+Po wejściu w `/admin/zamowienia` admin widzi, czym zająć się najpierw, i może zawęzić listę zamówień bez przechodzenia po kolei przez każdy szczegół.
