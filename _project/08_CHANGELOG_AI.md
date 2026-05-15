@@ -1,4 +1,42 @@
-﻿## 2026-05-15 21:55 - Hotfix: marker `Fakt` i zasada ZIP/jedno polecenie
+## 2026-05-15 22:20 - Etap 20: Widok audit logu `/admin/audit`
+
+- Dodano stronę `/admin/audit`.
+- Dodano odczyt wpisów z tabeli `admin_audit_log`.
+- Dodano filtrowanie audit logu po typie akcji.
+- Dodano tabelę: data, admin, akcja, typ encji, ID encji, skrót metadata.
+- Dodano link `Audit` w `AdminHeader`.
+- Dodano kafel `Audit` na dashboardzie admina.
+- Rozszerzono guard `verify:admin-audit-log-v44`, żeby pilnował widoku audit logu.
+- Nie zmieniono mechanizmu auth, logiki operacji admina ani publicznych stron.
+
+### Pliki zmienione
+
+- `lib/admin/audit-log.ts`
+- `app/admin/audit/page.tsx`
+- `components/admin/AdminHeader.tsx`
+- `app/admin/page.tsx`
+- `app/admin-v8.css`
+- `scripts/check-admin-audit-log-v44.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_2220_admin-audit-view.md`
+
+### Testy wymagane
+
+```powershell
+npm run verify:admin-audit-log-v44
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+
+## 2026-05-15 21:55 - Hotfix: marker `Fakt` i zasada ZIP/jedno polecenie
 
 - Naprawiono niespĂłjnoĹ›Ä‡ guardu pamiÄ™ci projektu: `scripts/check-project-memory.cjs` wymaga markera `Fakt`, a `AGENTS.md` miaĹ‚ tylko wersjÄ™ `FAKT`.
 - Dodano jawny marker zgodnoĹ›ci guardu: `Fakt / Decyzja / Hipoteza / Do potwierdzenia`.

@@ -12,6 +12,10 @@ function fail(message) {
 
 const requiredFiles = [
   "lib/admin/audit-log.ts",
+  "app/admin/audit/page.tsx",
+  "components/admin/AdminHeader.tsx",
+  "app/admin/page.tsx",
+  "app/admin-v8.css",
   "supabase/migrations/0016_admin_audit_log.sql",
   "app/admin/projekty/actions.ts",
   "app/admin/zamowienia/actions.ts",
@@ -43,6 +47,13 @@ for (const needle of [
 const helper = read("lib/admin/audit-log.ts");
 for (const needle of [
   "export async function writeAdminAuditLog",
+  "export async function getAdminAuditLogEntries",
+  "ADMIN_AUDIT_ACTION_FILTERS",
+  "ADMIN_AUDIT_ACTION_FILTER_LABELS",
+  "toAdminAuditActionFilter",
+  "adminAuditMetadataSummary",
+  "adminAuditMetadataJson",
+  "actionLabel",
   "admin_audit_log",
   "actor_user_id",
   "actor_email",
@@ -51,9 +62,85 @@ for (const needle of [
   "action",
   "metadata",
   "created_at",
+  ".order(\"created_at\", { ascending: false })",
+  ".limit(limit)",
+  ".eq(\"action\", action)",
   "throw new Error"
 ]) {
   if (!helper.includes(needle)) fail(`audit helper missing marker: ${needle}`);
+}
+
+const auditPage = read("app/admin/audit/page.tsx");
+for (const needle of [
+  'data-admin-audit-v50="true"',
+  'data-admin-audit-filter-bar="true"',
+  'data-admin-audit-action-filter="true"',
+  'data-admin-audit-filter-submit="true"',
+  'data-admin-audit-filter-reset="true"',
+  'data-admin-audit-empty="true"',
+  'data-admin-audit-table="true"',
+  'data-admin-audit-entry="true"',
+  "data-admin-audit-action-value",
+  'data-admin-audit-created-at="true"',
+  'data-admin-audit-actor="true"',
+  'data-admin-audit-action="true"',
+  'data-admin-audit-entity-type="true"',
+  'data-admin-audit-entity-id="true"',
+  'data-admin-audit-metadata-summary="true"',
+  "getAdminAuditLogEntries",
+  "toAdminAuditActionFilter",
+  "ADMIN_AUDIT_ACTION_FILTERS",
+  "ADMIN_AUDIT_ACTION_FILTER_LABELS",
+  "adminAuditMetadataSummary",
+  "adminAuditMetadataJson",
+  "actionLabel"
+]) {
+  if (!auditPage.includes(needle)) fail(`admin audit page missing marker: ${needle}`);
+}
+
+for (const forbidden of [
+  "writeAdminAuditLog(",
+  "updateAdminOrderStatus(",
+  "updateAdminOrderFulfillmentChecklist(",
+  "updateAdminProject",
+  "deleteAdminProject",
+  "archiveAdminProject"
+]) {
+  if (auditPage.includes(forbidden)) {
+    fail(`admin audit page must be read-only and not call mutation marker: ${forbidden}`);
+  }
+}
+
+const header = read("components/admin/AdminHeader.tsx");
+for (const needle of [
+  'href="/admin/audit"',
+  "History",
+  "Audit"
+]) {
+  if (!header.includes(needle)) fail(`AdminHeader missing audit nav marker: ${needle}`);
+}
+
+const dashboard = read("app/admin/page.tsx");
+for (const needle of [
+  'href="/admin/audit"',
+  'data-admin-audit-dashboard-link="true"',
+  "Audit",
+  "ślad operacji"
+]) {
+  if (!dashboard.includes(needle)) fail(`admin dashboard missing audit card marker: ${needle}`);
+}
+
+const css = read("app/admin-v8.css");
+for (const needle of [
+  "STAGE50 ADMIN AUDIT VIEW START",
+  ".admin-audit-shell",
+  ".admin-audit-filter-bar",
+  ".admin-audit-table-card",
+  ".admin-audit-table-wrap",
+  ".admin-audit-table",
+  "STAGE50 ADMIN AUDIT VIEW END"
+]) {
+  if (!css.includes(needle)) fail(`admin audit CSS missing marker: ${needle}`);
 }
 
 const projectActions = read("app/admin/projekty/actions.ts");
@@ -82,6 +169,7 @@ for (const needle of [
   "writeAdminAuditLog",
   'entityType: "order"',
   'action: "order_status_update"',
+  'action: "order_fulfillment_checklist_update"',
   "toStatus: status"
 ]) {
   if (!orderActions.includes(needle)) fail(`order actions missing audit marker: ${needle}`);
@@ -96,4 +184,4 @@ if (!String(pkg.scripts.verify || "").includes("verify:admin-audit-log-v44")) {
   fail("main verify script does not include verify:admin-audit-log-v44.");
 }
 
-console.log("OK: admin audit log V44 guard passed.");
+console.log("OK: admin audit log V44/V50 visible audit page guard passed.");

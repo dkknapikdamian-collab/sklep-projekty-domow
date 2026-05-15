@@ -1,3 +1,27 @@
+## Checki wymagane dla Etapu 20
+
+```powershell
+npm run verify:admin-audit-log-v44
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Rozszerzony guard audit logu
+
+`verify:admin-audit-log-v44` pilnuje teraz także widoku `/admin/audit`:
+
+- istnienia strony `app/admin/audit/page.tsx`,
+- helpera `getAdminAuditLogEntries`,
+- filtrowania po typie akcji,
+- skrótu metadata,
+- markerów UI tabeli audit logu,
+- linku `Audit` w `AdminHeader`,
+- kafla `Audit` na dashboardzie admina,
+- stylów `STAGE50 ADMIN AUDIT VIEW`,
+- braku mutacji na stronie audit.
+
+
 # 06_GUARDS_AND_TESTS - Guardy i testy automatyczne
 
 

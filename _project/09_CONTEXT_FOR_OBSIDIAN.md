@@ -6,32 +6,33 @@
 
 ## Aktualny etap
 
-Etap 19: Filtry i priorytetyzacja zamówień w adminie.
+Etap 20: Widok audit logu `/admin/audit`.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 21:45 Europe/Warsaw: `/admin/zamowienia` dostało panel szybkich liczników, filtry i priorytety operacyjne. Admin ma szybciej zobaczyć, które zamówienia wymagają kontaktu, czekają na płatność albo są do wysyłki.
+2026-05-15 22:20 Europe/Warsaw: przygotowano widok audit logu `/admin/audit`, który pokazuje wpisy z `admin_audit_log`, pozwala filtrować po typie akcji i daje adminowi podgląd śladu operacji.
 
 ## Najważniejsze ustalenia
 
 - V1 działa na płatności manualnej,
 - nie ma Stripe/PayU,
-- status `paid_manual` oznacza ręcznie potwierdzoną płatność,
-- dane do płatności są częścią roboczego e-maila,
 - system nadal niczego sam nie wysyła,
-- lista zamówień ma priorytetyzować pracę admina, ale nie ma być ciężkim CRM.
+- lista zamówień priorytetyzuje pracę admina,
+- audit log jest widokiem tylko do odczytu,
+- mechanizm auth i logika operacji admina nie są zmieniane w Etapie 20.
 
-## Pliki techniczne ważne dla Etapu 19
+## Pliki techniczne ważne dla Etapu 20
 
-- `../app/admin/zamowienia/page.tsx`
-- `../lib/admin/orders-admin.ts`
-- `../app/admin-v8.css`
-- `../scripts/check-admin-orders-v42.cjs`
+- `../lib/admin/audit-log.ts`
+- `../app/admin/audit/page.tsx`
+- `../components/admin/AdminHeader.tsx`
+- `../app/admin/page.tsx`
+- `../scripts/check-admin-audit-log-v44.cjs`
 
-## Checki wymagane po Etapie 19
+## Checki wymagane po Etapie 20
 
 ```powershell
-npm run verify:admin-orders-v42
+npm run verify:admin-audit-log-v44
 npm run typecheck
 npm run build
 npm run check:project-memory

@@ -87,3 +87,6 @@ Uzupełnienie repo i Obsidiana o pełny mózg projektu:
 |---|---|---|---|
 | 2026-05-15 | Etap 17: płatność manualna / instrukcja przelewu | Checkout komunikuje płatność po kontakcie, admin zapisuje instrukcję przelewu, a roboczy e-mail zawiera dane do płatności. | `components/order/CheckoutForm.tsx`, `app/admin/zamowienia/[id]/page.tsx`, `lib/admin/order-email-drafts.ts`, `supabase/migrations/0018_order_manual_payment_instruction.sql` |
 | 2026-05-15 | Etap 19: filtry i priorytetyzacja zamówień | Lista `/admin/zamowienia` dostała liczniki, filtry i oznaczenia priorytetów: kontakt, płatność, wysyłka. | `app/admin/zamowienia/page.tsx`, `lib/admin/orders-admin.ts`, `app/admin-v8.css`, `scripts/check-admin-orders-v42.cjs` |
+
+| 2026-05-15 | Etap 20: widok audit logu | Dodano `/admin/audit`, filtr po typie akcji i tabelę śladu operacji admina. | `lib/admin/audit-log.ts`, `app/admin/audit/page.tsx`, `components/admin/AdminHeader.tsx`, `scripts/check-admin-audit-log-v44.cjs` |
+

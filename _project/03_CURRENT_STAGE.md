@@ -1,65 +1,53 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 21:45 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 22:20 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 19: Filtry i priorytetyzacja zamówień w adminie
+Etap 20: Widok audit logu `/admin/audit`
 
 ## Status etapu
 
-Wdrożone bez zmiany modelu płatności, bez automatycznej wysyłki i bez rozbudowy panelu zamówień do ciężkiego CRM.
+Przygotowany w paczce ZIP do wdrożenia lokalnego. ChatGPT/operator paczek nie pushuje sam. Jedno polecenie PowerShell ma wykonać wdrożenie, checki, commit i push z lokalnego repo.
 
 ## Cel etapu
 
-Panel `/admin/zamowienia` ma przestać być tylko listą. Admin ma od razu widzieć, czym zająć się najpierw: kontakt z klientem, płatność manualna albo wysyłka plików.
+Audit log ma być widoczny z panelu admina. Po operacji admina można wejść w `/admin/audit` i zobaczyć ślad: data, admin, akcja, typ encji, ID encji i skrót metadata.
 
-## Co zostało zrobione
+## Co zostanie zrobione
 
-- Dodano panel szybkich liczników na `/admin/zamowienia`:
-  - `Wymaga kontaktu`,
-  - `Czeka na płatność`,
-  - `Do wysyłki`.
-- Dodano filtrowanie listy zamówień po:
-  - statusie zamówienia: `new`, `contacted`, `paid_manual`, `sent`, `cancelled`,
-  - płatności: instrukcja ustawiona / brak instrukcji,
-  - realizacji: PDF wysłany / ZIP wysłany / zamknięte,
-  - szybkim oznaczeniu: wymaga kontaktu / czeka na płatność / do wysyłki.
-- Dodano widoczne oznaczenia na kartach zamówień:
-  - priorytet operacyjny,
-  - stan instrukcji płatności,
-  - stan PDF,
-  - stan ZIP,
-  - stan zamknięcia zamówienia.
-- Dodano helpery priorytetu w `lib/admin/orders-admin.ts`:
-  - `getAdminOrderPriorityFlags`,
-  - `getAdminOrderPriorityRank`,
-  - listy i etykiety filtrów.
-- Rozszerzono guard `scripts/check-admin-orders-v42.cjs`, żeby pilnował nowych filtrów i priorytetów.
-- Dodano style `STAGE49 ADMIN ORDER FILTERS AND PRIORITY` w `app/admin-v8.css`.
+- Dodanie strony `/admin/audit`.
+- Dodanie czytania wpisów z tabeli `admin_audit_log`.
+- Dodanie filtrowania po typie akcji.
+- Dodanie widoku tabeli audit logu:
+  - data,
+  - admin,
+  - akcja,
+  - typ encji,
+  - ID encji,
+  - skrót metadata.
+- Dodanie linku `Audit` w `AdminHeader`.
+- Dodanie kafla `Audit` na dashboardzie admina.
+- Rozszerzenie guardu `verify:admin-audit-log-v44`.
+- Aktualizacja pamięci projektu i raportu run.
 
-## Czego nie zmieniano
+## Czego nie zmieniać
 
-- Nie dodano Stripe.
-- Nie dodano PayU.
-- Nie dodano automatycznej wysyłki PDF/ZIP.
-- Nie dodano automatycznego księgowania.
-- Nie przebudowano szczegółu zamówienia w CRM.
-- Nie zmieniano routingu zamówień.
+- Nie zmieniać mechanizmu auth.
+- Nie zmieniać logiki operacji admina.
+- Nie zmieniać publicznych stron.
+- Nie dodawać nowych mutacji na stronie audit.
+- Nie zmieniać sposobu zapisu audit logu poza dodaniem odczytu.
 
 ## Checki wymagane
 
 ```powershell
-npm run verify:admin-orders-v42
+npm run verify:admin-audit-log-v44
 npm run typecheck
 npm run build
 npm run check:project-memory
 ```
 
-## Ważne przed testem runtime
-
-Ten etap nie wymaga nowej migracji. Korzysta z danych już istniejących w zamówieniu i `order_fulfillment_checklist`, w tym `payment_instruction`, `pdf_sent`, `zip_sent`, `order_closed` oraz statusu zamówienia.
-
 ## Kryterium zakończenia
 
-Po wejściu w `/admin/zamowienia` admin widzi, czym zająć się najpierw, i może zawęzić listę zamówień bez przechodzenia po kolei przez każdy szczegół.
+Po operacji admina można wejść w `/admin/audit` i zobaczyć ślad operacji.

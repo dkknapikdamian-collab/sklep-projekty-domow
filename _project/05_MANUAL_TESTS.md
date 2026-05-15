@@ -1,3 +1,28 @@
+## Test ręczny po Etapie 20
+
+Status: do wykonania po wdrożeniu paczki, przejściu guardów, typecheck i build.
+
+### Co sprawdzić
+
+1. Wejdź do `/admin`.
+2. Sprawdź, czy na dashboardzie jest kafel `Audit`.
+3. Sprawdź, czy w górnej nawigacji admina jest link `Audit`.
+4. Wejdź do `/admin/audit`.
+5. Oczekiwany wynik:
+   - strona się ładuje,
+   - widać filtr `Typ akcji`,
+   - widać kolumny: data, admin, akcja, typ encji, ID encji, metadata.
+6. Wykonaj operację admina, np. zmianę statusu zamówienia albo projektu.
+7. Wróć do `/admin/audit`.
+8. Oczekiwany wynik:
+   - pojawia się ślad operacji,
+   - metadata jest widoczna jako skrót,
+   - filtr po typie akcji zawęża wyniki.
+9. Sprawdź reset filtra.
+
+Guard: `npm run verify:admin-audit-log-v44`.
+
+
 # 05_MANUAL_TESTS - Testy ręczne Damiana
 
 

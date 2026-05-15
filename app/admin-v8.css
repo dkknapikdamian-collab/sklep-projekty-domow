@@ -1617,3 +1617,148 @@
   }
 }
 /* STAGE49 ADMIN ORDER FILTERS AND PRIORITY END */
+
+/* STAGE50 ADMIN AUDIT VIEW START */
+.admin-audit-shell .admin-page-head p {
+  max-width: 900px;
+}
+
+.admin-audit-filter-bar {
+  display: grid;
+  grid-template-columns: minmax(180px, .7fr) minmax(220px, 1fr) auto auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 7px;
+  background: rgba(255,255,255,.025);
+}
+
+.admin-audit-filter-bar > div,
+.admin-audit-filter-bar label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.admin-audit-filter-bar > div {
+  min-height: 44px;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 5px;
+  background: rgba(0,0,0,.12);
+}
+
+.admin-audit-filter-bar > div svg {
+  color: #f0dfc5;
+}
+
+.admin-audit-filter-bar > div strong {
+  color: #f0dfc5;
+  font-size: 20px;
+}
+
+.admin-audit-filter-bar > div span,
+.admin-audit-filter-bar label span {
+  color: rgba(244,241,234,.68);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.admin-audit-filter-bar select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 5px;
+  background: rgba(0,0,0,.18);
+  color: #f4f1ea;
+  padding: 0 10px;
+}
+
+.admin-audit-filter-bar button,
+.admin-audit-filter-bar a {
+  min-height: 44px;
+}
+
+.admin-audit-table-card {
+  overflow: hidden;
+}
+
+.admin-audit-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-audit-table {
+  min-width: 1080px;
+  table-layout: fixed;
+}
+
+.admin-audit-table th:nth-child(1),
+.admin-audit-table td:nth-child(1) {
+  width: 170px;
+}
+
+.admin-audit-table th:nth-child(2),
+.admin-audit-table td:nth-child(2) {
+  width: 210px;
+}
+
+.admin-audit-table th:nth-child(3),
+.admin-audit-table td:nth-child(3) {
+  width: 210px;
+}
+
+.admin-audit-table th:nth-child(4),
+.admin-audit-table td:nth-child(4) {
+  width: 110px;
+}
+
+.admin-audit-table th:nth-child(5),
+.admin-audit-table td:nth-child(5) {
+  width: 150px;
+}
+
+.admin-audit-table th:nth-child(6),
+.admin-audit-table td:nth-child(6) {
+  width: 430px;
+}
+
+.admin-audit-table td {
+  vertical-align: top;
+}
+
+.admin-audit-table td strong,
+.admin-audit-table td small,
+.admin-audit-table td code {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.admin-audit-table td small {
+  margin-top: 4px;
+  color: rgba(244,241,234,.58);
+  font-size: 11px;
+}
+
+.admin-audit-table td code {
+  color: rgba(244,241,234,.78);
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: normal;
+}
+
+@media (max-width: 900px) {
+  .admin-audit-filter-bar {
+    grid-template-columns: 1fr;
+  }
+}
+/* STAGE50 ADMIN AUDIT VIEW END */
+
