@@ -1,5 +1,60 @@
 # 05_MANUAL_TESTS - testy reczne
 
+## Test reczny po Etapie 7
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Uruchom lokalnie:
+
+```powershell
+START_LOCAL.bat
+```
+
+albo:
+
+```powershell
+npm run dev
+```
+
+2. Dodaj aktywny projekt do koszyka i przejdź do:
+
+```text
+/zamowienie
+```
+
+3. Sprawdź nagłówek checkoutu.
+
+Oczekiwany wynik:
+
+- widzisz `Zamówienie projektu`,
+- widzisz komunikat `Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji`,
+- nie ma komunikatu `zamówienie testowe` ani tekstu o technicznym rekordzie w Supabase.
+
+4. Sprawdź opis przy formularzu.
+
+Oczekiwany wynik:
+
+- klient rozumie, że kupuje wybrane projekty, warianty i dodatki z koszyka,
+- klient rozumie, że kontakt nastąpi po złożeniu zamówienia,
+- checkout nie obiecuje automatycznej płatności online.
+
+5. Jeśli w koszyku jest dodatek `PDF na e-mail`, sprawdź podsumowanie.
+
+Oczekiwany wynik:
+
+- PDF na e-mail jest opisany jako dodatkowy pakiet PDF wysyłany na podany adres po potwierdzeniu realizacji,
+- tekst nie sugeruje natychmiastowej automatycznej wysyłki plików.
+
+6. Wyślij formularz.
+
+Oczekiwany wynik:
+
+- komunikat sukcesu potwierdza przyjęcie zamówienia projektu,
+- jest numer zamówienia,
+- tekst informuje o ręcznym potwierdzeniu dostępności, płatności i realizacji.
+
 ## Test reczny po Etapie 6
 
 Status: do wykonania w runtime z dzialajacym Supabase Auth i zastosowana migracja `0015_orders_v42_statuses.sql`.

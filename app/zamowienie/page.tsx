@@ -6,10 +6,13 @@ export default function CheckoutPage() {
     <>
       <Header />
       <main className="page-shell">
-        <section className="catalog-header">
-          <span>ZAMOWIENIE</span>
-          <h1>Zamowienie testowe</h1>
-          <p>W V1 nie uruchamiamy automatycznej platnosci. Po wyslaniu formularza rekord trafi do Supabase.</p>
+        <section className="catalog-header" data-checkout-v43-page-copy="true">
+          <span>ZAMÓWIENIE</span>
+          <h1>Zamówienie projektu</h1>
+          <p>
+            Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji.
+            Zamówienie jest przyjmowane ręcznie, bez automatycznej płatności online.
+          </p>
         </section>
         <CheckoutForm />
       </main>

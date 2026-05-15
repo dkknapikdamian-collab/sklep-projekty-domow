@@ -120,10 +120,42 @@ for (const needle of purchasePdfGuardMarkers) {
   }
 }
 
+const checkoutPage = read("app/zamowienie/page.tsx");
 const checkout = read("components/order/CheckoutForm.tsx");
+const checkoutAction = read("app/zamowienie/actions.ts");
+
 for (const needle of ["data-checkout-form-v38", "customerName", "customerEmail", "customerPhone", "invoiceData", "termsConsent", "contactConsent", "cartJson"]) {
   if (!checkout.includes(needle)) {
     console.error(`FAIL: checkout form missing marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const checkoutCopySources = [checkoutPage, checkout, checkoutAction].join("\n");
+for (const needle of [
+  "Zamówienie projektu",
+  "Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji",
+  "Kupujesz wybrane projekty, warianty i dodatki z koszyka",
+  "Pliki projektu przekażemy po ręcznym potwierdzeniu dostępności, płatności",
+  "PDF na e-mail oznacza dodatkowy pakiet PDF",
+  "Skontaktujemy się z Tobą"
+]) {
+  if (!checkoutCopySources.includes(needle)) {
+    console.error(`FAIL: checkout V43 copy missing required text: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const checkoutCopyLower = checkoutCopySources.toLocaleLowerCase("pl-PL");
+for (const forbidden of [
+  "zamowienie testowe",
+  "zamówienie testowe",
+  "zamowienia testowego",
+  "zamówienia testowego",
+  "rekord trafi do supabase"
+]) {
+  if (checkoutCopyLower.includes(forbidden)) {
+    console.error(`FAIL: checkout must not look like a demo/test flow: ${forbidden}`);
     process.exit(1);
   }
 }

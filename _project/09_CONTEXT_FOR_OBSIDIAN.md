@@ -14,16 +14,18 @@ Repo dla sklepu z projektami domow. Publiczna czesc obejmuje strone glowna, kata
 
 ## Aktualny etap
 
-Etap 6: Zamowienie V1 - realny zapis i podstawowy panel zamowien w adminie.
+Etap 7: Checkout - komunikacja półprodukcyjna V1.
 
 ## Ostatnia wazna zmiana
 
-2026-05-15 09:28 Europe/Warsaw: zaktualizowano `AGENTS.md` do globalnego workflow Damiana, dodano timeline projektu i folder historii.
+2026-05-15 09:42 Europe/Warsaw: checkout dostał komunikację półprodukcyjną V1. Publiczny formularz nie mówi już o zamówieniu testowym, tylko o `Zamówieniu projektu`, ręcznym potwierdzeniu dostępności, płatności i sposobu realizacji oraz o tym, że PDF na e-mail jest dodatkowym pakietem PDF realizowanym po potwierdzeniu.
 
 Najwazniejsze ustalenia:
 
+- checkout V1 przyjmuje zamowienia recznie i uczciwie komunikuje brak automatycznej platnosci,
 - zamowienia V1 sa obslugiwane recznie statusami `new`, `contacted`, `paid_manual`, `sent`, `cancelled`,
 - nie ma jeszcze platnosci online, maili, faktur ani automatycznej wysylki plikow,
+- `PDF na e-mail` nie jest natychmiastowa dostawa automatyczna; to dodatek realizowany po potwierdzeniu,
 - czat nie jest zrodlem prawdy; zrodlem prawdy pozostaja pliki projektu,
 - przy zmianie kierunku projektu trzeba aktualizowac decyzje, timeline i `_project/history/`.
 
@@ -43,6 +45,13 @@ Najwazniejsze ustalenia:
 - `10_PROJECT_TIMELINE.md`
 - `runs/`
 - `history/`
+
+## Pliki techniczne wazne dla Etapu 7
+
+- `../app/zamowienie/page.tsx`
+- `../components/order/CheckoutForm.tsx`
+- `../app/zamowienie/actions.ts`
+- `../scripts/check-cart-order-v38.cjs`
 
 ## Pliki techniczne wazne dla Etapu 6
 
@@ -67,7 +76,7 @@ Od 2026-05-15 repo uzywa globalnego workflow Damiana:
 
 ## Nastepny praktyczny krok
 
-Zastosowac migracje `0015_orders_v42_statuses.sql`, wyslac testowe zamowienie i potwierdzic w `/admin/zamowienia`, ze widac rekord, pozycje oraz zapis zmiany statusu.
+Uruchomic checki Etapu 7, potem manualnie przejsc `/koszyk` -> `/zamowienie` -> sukces zamowienia i potwierdzic, ze komunikacja checkoutu jest sprzedażowa, uczciwa i nie obiecuje automatyzacji.
 
 ## Uwaga
 

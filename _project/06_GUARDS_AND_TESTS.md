@@ -1,5 +1,36 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
+## Checki wymagane dla Etapu 7
+
+Do uruchomienia po wdrożeniu:
+
+```powershell
+npm run verify:content
+npm run verify:cart-order-v38
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda checkoutu w Etapie 7
+
+Zaostrzono istniejący guard:
+
+```powershell
+npm run verify:cart-order-v38
+```
+
+Guard sprawdza teraz dodatkowo komunikację checkoutu:
+
+- obecność `Zamówienie projektu`,
+- obecność `Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji`,
+- opis tego, że klient kupuje wybrane projekty, warianty i dodatki z koszyka,
+- opis ręcznego przekazania plików po potwierdzeniu dostępności, płatności i realizacji,
+- opis `PDF na e-mail` jako dodatkowego pakietu PDF,
+- obecność informacji, że po zamówieniu nastąpi kontakt,
+- brak tekstów typu `zamówienie testowe`, `zamowienie testowe`, `zamówienia testowego`,
+- brak technicznego komunikatu `rekord trafi do Supabase` w publicznym checkoutcie.
+
 ## Aktualizacja guarda pamieci projektu 2026-05-15
 
 `npm run check:project-memory` sprawdza teraz rowniez:

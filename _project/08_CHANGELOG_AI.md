@@ -1,5 +1,51 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
+## 2026-05-15 09:42 - Etap 7: Checkout - komunikacja półprodukcyjna V1
+
+- Zmieniono publiczny nagłówek checkoutu z komunikacji testowej na `Zamówienie projektu`.
+- Dodano jasny komunikat: `Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji`.
+- Dodano opis, że klient kupuje wybrane projekty, warianty i dodatki z koszyka.
+- Dodano opis, kiedy klient dostanie pliki: po ręcznym potwierdzeniu dostępności, płatności i realizacji.
+- Doprecyzowano `PDF na e-mail` jako dodatkowy pakiet PDF wysyłany na podany adres po potwierdzeniu realizacji.
+- Zmieniono treść zgody z `zamówienia testowego` na kontakt w sprawie `zamówienia projektu`.
+- Zmieniono komunikat sukcesu, aby mówił o przyjęciu zamówienia projektu i ręcznym potwierdzeniu dalszej realizacji.
+- Zaostrzono `scripts/check-cart-order-v38.cjs`, żeby blokował powrót tekstów testowych w checkoutcie.
+- Nie dodawano płatności online, maili, faktur, automatycznej wysyłki plików ani zmian w tabelach Supabase.
+
+### Pliki zmienione
+
+- `app/zamowienie/page.tsx`
+- `components/order/CheckoutForm.tsx`
+- `app/zamowienie/actions.ts`
+- `scripts/check-cart-order-v38.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/04_DECISIONS.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_0942_checkout-v1-copy.md`
+
+### Testy / guardy
+
+Do uruchomienia lokalnie po wdrożeniu:
+
+```powershell
+npm run verify:content
+npm run verify:cart-order-v38
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ryzyka
+
+- Pełny runtime wymaga projektu w koszyku i działającego lokalnego środowiska.
+- Checkout nadal jest ręcznym procesem V1; płatności, maile i automatyczna wysyłka plików pozostają poza zakresem.
+- Guard jest statyczny i pilnuje treści, ale nie zastępuje ręcznego sprawdzenia czytelności UI.
+
 ## 2026-05-15 09:19 - Etap 6: Zamowienie V1 - panel zamowien admina
 
 - Dodano podstawowy panel `/admin/zamowienia` dla realnych zamowien zapisanych w Supabase.

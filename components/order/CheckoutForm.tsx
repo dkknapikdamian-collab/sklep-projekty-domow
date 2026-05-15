@@ -17,6 +17,10 @@ export function CheckoutForm() {
   const [state, formAction, pending] = useActionState(submitOrderAction, initialState);
   const [cart, setCart] = useState<CartPayload>({ items: [] });
   const cartJson = useMemo(() => JSON.stringify(cart), [cart]);
+  const hasPdfEmailAddon = useMemo(
+    () => cart.items.some((item) => item.selectedAddons.some((addon) => addon.code === "send_pdf_email")),
+    [cart]
+  );
 
   useEffect(() => {
     setCart(readCart());
@@ -32,8 +36,12 @@ export function CheckoutForm() {
     return (
       <section className="checkout-success" data-order-success-v38="true">
         <h2>{state.message}</h2>
-        <p>Numer techniczny zamowienia: {state.orderId}</p>
-        <Link className="empty-link" href="/projekty">Wroc do projektow</Link>
+        <p>Numer zamówienia: {state.orderId}</p>
+        <p>
+          Skontaktujemy się z Tobą, żeby potwierdzić dostępność projektu, płatność
+          i sposób realizacji. Pliki przekażemy po ręcznym potwierdzeniu realizacji.
+        </p>
+        <Link className="empty-link" href="/projekty">Wróć do projektów</Link>
       </section>
     );
   }
@@ -41,10 +49,10 @@ export function CheckoutForm() {
   if (cart.items.length === 0) {
     return (
       <section className="empty-state">
-        <span>ZAMOWIENIE</span>
+        <span>ZAMÓWIENIE</span>
         <h1>Nie masz pozycji w koszyku.</h1>
         <p>Najpierw wybierz projekt, wariant i dodatki na karcie projektu.</p>
-        <Link className="empty-link" href="/projekty">Przejdz do projektow</Link>
+        <Link className="empty-link" href="/projekty">Przejdź do projektów</Link>
       </section>
     );
   }
@@ -54,8 +62,17 @@ export function CheckoutForm() {
       <form action={formAction} className="checkout-form">
         <input type="hidden" name="cartJson" value={cartJson} />
 
+        <div className="checkout-form-intro" data-checkout-v43-copy="true">
+          <h2>Dane do zamówienia</h2>
+          <p>
+            Kupujesz wybrane projekty, warianty i dodatki z koszyka. Po wysłaniu
+            formularza skontaktujemy się z Tobą, aby potwierdzić dostępność,
+            płatność i sposób realizacji.
+          </p>
+        </div>
+
         <label>
-          Imie i nazwisko *
+          Imię i nazwisko *
           <input name="customerName" required />
         </label>
 
@@ -81,23 +98,27 @@ export function CheckoutForm() {
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="termsConsent" required />
-          <span>Akceptuje kontakt w sprawie zamowienia testowego.</span>
+          <span>Akceptuję kontakt w sprawie zamówienia projektu.</span>
         </label>
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="contactConsent" required />
-          <span>Potwierdzam poprawnosc danych i wybranych pozycji koszyka.</span>
+          <span>Potwierdzam poprawność danych i wybranych pozycji koszyka.</span>
         </label>
 
         {state.message && <p className="admin-form-error">{state.message}</p>}
 
         <button className="buy-button" type="submit" disabled={pending}>
-          <Send size={17} /> {pending ? "Wysylanie..." : "Wyslij zamowienie"}
+          <Send size={17} /> {pending ? "Wysyłanie..." : "Wyślij zamówienie"}
         </button>
       </form>
 
       <aside className="checkout-summary">
-        <h2>Podsumowanie</h2>
+        <h2>Co zamawiasz?</h2>
+        <p>
+          Podsumowanie obejmuje wybrany projekt, wariant oraz dodatki. Zamówienie
+          nie uruchamia jeszcze automatycznej płatności ani automatycznej wysyłki plików.
+        </p>
         {cart.items.map((item) => (
           <div className="checkout-summary-item" key={item.id}>
             <strong>{item.projectName}</strong>
@@ -108,6 +129,19 @@ export function CheckoutForm() {
           </div>
         ))}
         <strong className="checkout-total">{money(cartTotal(cart))}</strong>
+        <div className="checkout-summary-note" data-checkout-v43-delivery-note="true">
+          <p>
+            Pliki projektu przekażemy po ręcznym potwierdzeniu dostępności, płatności
+            i realizacji.
+          </p>
+          {hasPdfEmailAddon && (
+            <p>
+              PDF na e-mail oznacza dodatkowy pakiet PDF wysłany na podany adres
+              po potwierdzeniu realizacji. Nie zastępuje on ręcznego potwierdzenia
+              zamówienia.
+            </p>
+          )}
+        </div>
       </aside>
     </section>
   );

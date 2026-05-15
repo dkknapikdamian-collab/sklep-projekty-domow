@@ -35,7 +35,7 @@ export async function submitOrderAction(_prevState: CheckoutState, formData: For
     const contactConsent = bool(formData, "contactConsent");
     const cart = parseCart(str(formData, "cartJson"));
 
-    if (!customerName) throw new Error("Podaj imie i nazwisko.");
+    if (!customerName) throw new Error("Podaj imię i nazwisko.");
     if (!customerEmail || !customerEmail.includes("@")) throw new Error("Podaj poprawny e-mail.");
     if (!customerPhone) throw new Error("Podaj telefon.");
     if (!termsConsent || !contactConsent) throw new Error("Zaznacz wymagane zgody.");
@@ -54,13 +54,13 @@ export async function submitOrderAction(_prevState: CheckoutState, formData: For
 
     return {
       ok: true,
-      message: "Zamowienie zostalo przyjete. Skontaktujemy sie w sprawie platnosci i realizacji.",
+      message: "Zamówienie projektu zostało przyjęte. Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji.",
       orderId: order.orderId
     };
   } catch (error) {
     return {
       ok: false,
-      message: error instanceof Error ? error.message : "Nie udalo sie zapisac zamowienia."
+      message: error instanceof Error ? error.message : "Nie udało się zapisać zamówienia."
     };
   }
 }
