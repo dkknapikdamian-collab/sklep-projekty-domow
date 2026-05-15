@@ -327,11 +327,26 @@ export async function updateProjectStatusAction(formData: FormData) {
 
 export async function deleteProjectAction(formData: FormData) {
   const projectId = str(formData, "projectId");
+  const confirmationCode = str(formData, "deleteConfirmCode").toUpperCase();
+
   if (!projectId) throw new Error("Brak ID projektu.");
 
   const { supabase } = await requireAdminAndClient();
 
-  const { data: project } = await supabase.from("projects").select("slug, code").eq("id", projectId).maybeSingle();
+  const { data: project, error: projectError } = await supabase
+    .from("projects")
+    .select("id, slug, code, name, status")
+    .eq("id", projectId)
+    .maybeSingle();
+
+  if (projectError) throw new Error("Nie udalo sie pobrac projektu przed usunieciem: " + projectError.message);
+  if (!project?.id) throw new Error("Nie znaleziono projektu do usuniecia.");
+
+  const expectedCode = String(project.code || "").trim().toUpperCase();
+  if (!expectedCode || confirmationCode !== expectedCode) {
+    throw new Error("Wpisany kod projektu nie potwierdza usuniecia.");
+  }
+
   const { data: mediaRows } = await supabase.from("project_media").select("bucket, path").eq("project_id", projectId);
   const { data: privateRows } = await supabase.from("project_files").select("bucket, path").eq("project_id", projectId);
 
@@ -349,16 +364,17 @@ export async function deleteProjectAction(formData: FormData) {
   }
 
   const { error } = await supabase.from("projects").delete().eq("id", projectId);
-  if (error) throw new Error(`Nie udalo sie usunac projektu: ${error.message}`);
+  if (error) throw new Error("Nie udalo sie usunac projektu: " + error.message);
 
   revalidatePath("/");
   revalidatePath("/projekty");
-  if (project?.slug) revalidatePath(`/projekty/${project.slug}`);
+  if (project.slug) revalidatePath(`/projekty/${project.slug}`);
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
 
   redirect("/admin/projekty?deleted=1");
 }
+
 
 export async function deleteProjectMediaItemAction(formData: FormData) {
   const projectId = str(formData, "projectId");

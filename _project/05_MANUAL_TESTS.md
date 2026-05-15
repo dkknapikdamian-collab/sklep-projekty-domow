@@ -268,3 +268,18 @@ npm run check:project-memory
 ```text
 OK: project memory structure is complete.
 ```
+
+
+## Test reczny po Etapie 9
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do `/admin/projekty`.
+2. Przy dowolnym projekcie rozwiń `Usuń projekt`.
+3. Bez wpisania kodu projektu sprawdź, że przycisk `Usuń trwale` jest zablokowany.
+4. Wpisz błędny kod i spróbuj wysłać formularz.
+5. Oczekiwany wynik: UI blokuje akcję albo pokazuje alert, a server action nie akceptuje błędnego kodu.
+6. Przy projekcie `active` sprawdź, że widoczny jest osobny komunikat ostrzegający o projekcie publicznym.
+7. Nie testuj realnego usuwania na produkcyjnym projekcie. Użyj tylko projektu testowego.

@@ -272,3 +272,27 @@ Sprawdza:
 - Gdy zmienia sie lista obowiazkowych plikow pamieci projektu.
 - Gdy funkcja produktu zostaje usunieta albo zastapiona i stary guard pilnuje juz nieaktualnego zachowania.
 - Gdy runtime test wykaze blad w przeplywie admina albo publicznej sprzedazy, ktory mozna zabezpieczyc automatycznie.
+
+
+## Checki wymagane dla Etapu 9
+
+```powershell
+npm run verify:admin-project-media-v34
+npm run verify:project-media-controls-v34
+npm run verify:admin-buttons-v19
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda admin delete safety
+
+`npm run verify:admin-buttons-v19` pilnuje teraz dodatkowo:
+
+- `AdminProjectDeleteForm` nie jest zwykłym linkiem,
+- delete używa `deleteProjectAction`,
+- formularz wymaga `deleteConfirmCode`,
+- UI ma `expectedProjectCode` i `isCodeConfirmed`,
+- przycisk jest zablokowany bez poprawnego kodu,
+- zachowane jest `window.confirm`,
+- active project ma marker `data-admin-delete-active-warning`.

@@ -24,3 +24,4 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 | 2026-05-15 | Etap 7: checkout polprodukcyjny V1 | Checkout przestal brzmiec testowo i jasno komunikuje reczne potwierdzenie dostepnosci, platnosci i realizacji. | `app/zamowienie/page.tsx`, `components/order/CheckoutForm.tsx`, `scripts/check-cart-order-v38.cjs` |
 
 | 2026-05-15 | Etap 8: pliki prywatne i dostawa ręczna | Panel zamówień pokazuje prywatne pliki projektu, PDF na e-mail, instrukcję wysyłki i checklistę ręcznej realizacji. | `app/admin/zamowienia/page.tsx`, `lib/admin/order-files.ts`, `scripts/check-admin-orders-v42.cjs` |
+| 2026-05-15 | Etap 9: delete safety admina | Usuwanie projektu wymaga wpisania kodu i walidacji server-side. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |

@@ -306,3 +306,31 @@ Każdy większy etap ma dopisać nowy wpis z:
   - `npm run typecheck` - OK
   - `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
 - Znane ryzyko: ulubione nie maja osobnej strony/listy; na razie jest lokalny zapis, aktywne serduszko i licznik.
+
+
+## 2026-05-15 10:35 - Etap 9: Minimum bezpieczeństwa admina i operacji destrukcyjnych
+
+- Zmieniono formularz usuwania projektu tak, aby wymagał wpisania kodu projektu.
+- Przycisk `Usuń trwale` jest zablokowany bez poprawnego kodu.
+- `deleteProjectAction` pobiera projekt po stronie serwera i waliduje kod przed usunięciem.
+- Projekt `active` pokazuje dodatkowe ostrzeżenie w strefie usuwania.
+- Zaostrzono `verify:admin-buttons-v19`, żeby pilnował kodu potwierdzającego i confirmu.
+- Naprawiono zaległe błędy typecheck po Etapie 8: `AdminProjectFileItem.bucket` oraz nullable `supabase` w `lib/admin/order-files.ts`.
+- Nie zmieniano routingu, całego auth, publicznych stron ani modelu płatności/dostawy.
+
+### Testy / guardy
+
+Do uruchomienia lokalnie przez paczkę:
+
+```powershell
+npm run verify:admin-project-media-v34
+npm run verify:project-media-controls-v34
+npm run verify:admin-buttons-v19
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ryzyka
+
+- Fizyczne delete nadal istnieje. Dla większego bezpieczeństwa kolejnym etapem powinien być archived-first.

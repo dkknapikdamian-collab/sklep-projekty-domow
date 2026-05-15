@@ -108,6 +108,7 @@ function toPrivateFile(row: PrivateFileRow, project: ProjectRow): AdminOrderPriv
 export async function getAdminOrderPrivateFilesByProjectKey(items: AdminOrderProjectFileRef[]): Promise<AdminOrderPrivateFileLookup> {
   const supabase = createSupabaseServiceRoleClient();
   if (!supabase || items.length === 0) return {};
+  const supabaseClient = supabase;
 
   const codes = unique(items.map((item) => item.projectCode));
   const slugs = unique(items.map((item) => item.projectSlug));
@@ -119,7 +120,7 @@ export async function getAdminOrderPrivateFilesByProjectKey(items: AdminOrderPro
   async function collectProjectsBy(field: "code" | "slug", values: string[]) {
     if (values.length === 0) return;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("projects")
       .select("id, code, slug, name")
       .in(field, values);
@@ -144,7 +145,7 @@ export async function getAdminOrderPrivateFilesByProjectKey(items: AdminOrderPro
   const projectIds = Array.from(projectsById.keys());
   if (projectIds.length === 0) return {};
 
-  const { data: fileRows, error: filesError } = await supabase
+  const { data: fileRows, error: filesError } = await supabaseClient
     .from("project_files")
     .select("id, project_id, bucket, file_type, title, path, version, created_at")
     .in("project_id", projectIds)

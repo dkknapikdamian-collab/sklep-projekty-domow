@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -94,6 +94,24 @@ for (const needle of [
   }
 }
 
+
+if (!/disabled=\{[^}]*pending[^}]*\}/.test(deleteForm) && !deleteForm.includes("deleteDisabled") && !deleteForm.includes("canDelete")) {
+  console.error("FAIL: AdminProjectDeleteForm delete submit must be disabled while pending and before confirmation code matches.");
+  process.exit(1);
+}
+
+for (const needle of [
+  "confirmationCode",
+  "expectedProjectCode",
+  "Wpisz kod projektu",
+  "Projekt jest ACTIVE",
+  "window.confirm"
+]) {
+  if (!deleteForm.includes(needle)) {
+    console.error(`FAIL: AdminProjectDeleteForm missing delete safety marker: ${needle}`);
+    process.exit(1);
+  }
+}
 const submitButton = read("components/admin/AdminSubmitButton.tsx");
 for (const needle of [
   '"use client"',
@@ -188,3 +206,4 @@ for (const file of scannedFiles) {
 }
 
 console.log("OK: admin buttons V19 guard passed.");
+

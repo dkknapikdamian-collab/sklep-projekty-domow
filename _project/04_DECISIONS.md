@@ -10,3 +10,4 @@
 | 2026-05-15 | Checkout V1 ma brzmiec polprodukcyjnie, nie testowo. | Sklep nie moze wygladac jak zabawka, ale nie wolno udawac automatycznych platnosci ani automatycznej dostawy plikow. | Komunikacja checkoutu mowi o zamowieniu projektu, recznym potwierdzeniu dostepnosci, platnosci i realizacji oraz jasno opisuje PDF na e-mail. | Aktywna |
 
 | 2026-05-15 | Pliki prywatne w Etapie 8 są tylko instrukcją do ręcznej realizacji. | Sklep ma obsłużyć sprzedaż V1 bez udawania automatycznych linków, maili i płatności. | Panel zamówień pokazuje przypięte pliki prywatne, PDF na e-mail i checklistę realizacji, ale nie wysyła nic automatycznie. | Aktywna |
+| 2026-05-15 | Operacje destrukcyjne admina muszą mieć twarde potwierdzenie kodem projektu. | Delete usuwa rekord i próbuje usuwać pliki ze Storage, więc sam confirm jest za słaby. | Formularz usuwania wymaga kodu projektu i walidacji po stronie server action. | Aktywna |
