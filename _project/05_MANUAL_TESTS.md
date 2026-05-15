@@ -1,5 +1,25 @@
 # 05_MANUAL_TESTS - testy reczne
 
+## Test reczny po Etapie 8
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Upewnij się, że testowy projekt ma w panelu edycji przypięte prywatne pliki:
+
+- `Dokumentacja PDF`,
+- `Pełna paczka ZIP`,
+- `PDF na e-mail`.
+
+2. Dodaj projekt do koszyka z dodatkiem `PDF na e-mail` i złóż zamówienie przez `/zamowienie`.
+3. Wejdź do `/admin/zamowienia` i rozwiń `Pozycje, pliki prywatne i dane obsługi`.
+4. Oczekiwany wynik: przy pozycji widzisz prywatne pliki przypięte do projektu, ich typ, bucket, wersję i ścieżkę.
+5. Oczekiwany wynik: panel pokazuje, że PDF na e-mail jest zamówiony.
+6. Oczekiwany wynik: panel pokazuje instrukcję, co admin ma wysłać klientowi po potwierdzeniu płatności.
+7. Oczekiwany wynik: widoczna jest checklista: płatność potwierdzona, PDF wysłany, ZIP wysłany, zamówienie zamknięte.
+8. Oczekiwany wynik negatywny: panel nie generuje signed URL, nie wysyła e-maila i nie uruchamia płatności online.
+
 ## Test reczny po Etapie 7
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.

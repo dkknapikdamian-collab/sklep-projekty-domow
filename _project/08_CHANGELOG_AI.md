@@ -1,5 +1,55 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
+## 2026-05-15 10:05 - Etap 8: Pliki prywatne i dostawa ręczna
+
+- Dodano `lib/admin/order-files.ts` do pobierania prywatnych plików projektów dla pozycji zamówienia.
+- Panel `/admin/zamowienia` pokazuje teraz prywatne pliki przypięte do projektu: dokumentację PDF, pełną paczkę ZIP i PDF na e-mail.
+- Panel pokazuje, czy zamówienie zawiera dodatek PDF na e-mail.
+- Dodano instrukcję, co admin ma wysłać klientowi po potwierdzeniu płatności.
+- Dodano checklistę realizacji: płatność potwierdzona, PDF wysłany, ZIP wysłany, zamówienie zamknięte.
+- Panel mediów projektu dostał opis, że pliki prywatne są źródłem ręcznej realizacji zamówień.
+- Zaktualizowano guard `verify:admin-orders-v42` i `verify:admin-project-media-v34`.
+- Nie dodawano linków czasowych, automatycznego mailingu, Stripe ani PayU.
+
+### Pliki zmienione
+
+- `app/admin/zamowienia/page.tsx`
+- `lib/admin/orders-admin.ts`
+- `lib/admin/order-files.ts`
+- `lib/admin/projects-admin.ts`
+- `components/admin/AdminProjectMediaManager.tsx`
+- `scripts/check-admin-orders-v42.cjs`
+- `scripts/check-admin-project-media-v34.cjs`
+- `app/admin-v8.css`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/04_DECISIONS.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_1005_private-files-manual-fulfillment.md`
+
+### Testy / guardy
+
+Skrypt wdrożeniowy uruchamia lokalnie:
+
+```powershell
+npm run verify:admin-project-media-v34
+npm run verify:project-media-controls-v34
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ryzyka
+
+- Checklisty nie zapisują stanu w bazie; są instrukcją operacyjną V1.
+- Panel nie generuje linków ani nie wysyła maili. Admin nadal musi ręcznie obsłużyć wysyłkę.
+- Jeżeli projekt nie ma przypiętych prywatnych plików, panel pokaże brak i trzeba uzupełnić projekt w edycji.
+
 ## 2026-05-15 09:42 - Etap 7: Checkout - komunikacja półprodukcyjna V1
 
 - Zmieniono publiczny nagłówek checkoutu z komunikacji testowej na `Zamówienie projektu`.

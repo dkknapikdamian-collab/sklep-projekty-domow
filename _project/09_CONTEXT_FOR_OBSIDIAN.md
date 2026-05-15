@@ -6,30 +6,30 @@
 
 ## Typ
 
-Aplikacja webowa / sklep-katalog projektow domow.
+Aplikacja webowa / sklep-katalog projektów domów.
 
-## Krotki opis
+## Krótki opis
 
-Repo dla sklepu z projektami domow. Publiczna czesc obejmuje strone glowna, katalog, karte projektu, koszyk i checkout. Dane projektow maja pochodzic z realnego zrodla danych oraz panelu admina, bez aktywnych fikcyjnych ofert.
+Repo dla sklepu z projektami domów. Publiczna część obejmuje stronę główną, katalog, kartę projektu, koszyk i checkout. Dane projektów mają pochodzić z realnego źródła danych oraz panelu admina, bez aktywnych fikcyjnych ofert.
 
 ## Aktualny etap
 
-Etap 7: Checkout - komunikacja półprodukcyjna V1.
+Etap 8: Pliki prywatne i dostawa ręczna.
 
-## Ostatnia wazna zmiana
+## Ostatnia ważna zmiana
 
-2026-05-15 09:42 Europe/Warsaw: checkout dostał komunikację półprodukcyjną V1. Publiczny formularz nie mówi już o zamówieniu testowym, tylko o `Zamówieniu projektu`, ręcznym potwierdzeniu dostępności, płatności i sposobu realizacji oraz o tym, że PDF na e-mail jest dodatkowym pakietem PDF realizowanym po potwierdzeniu.
+2026-05-15 10:05 Europe/Warsaw: panel zamówień dostał operacyjną warstwę ręcznej realizacji. Admin widzi prywatne pliki przypięte do projektów w zamówieniu, informację czy klient zamówił PDF na e-mail, instrukcję co wysłać oraz checklistę realizacji.
 
-Najwazniejsze ustalenia:
+Najważniejsze ustalenia:
 
-- checkout V1 przyjmuje zamowienia recznie i uczciwie komunikuje brak automatycznej platnosci,
-- zamowienia V1 sa obslugiwane recznie statusami `new`, `contacted`, `paid_manual`, `sent`, `cancelled`,
-- nie ma jeszcze platnosci online, maili, faktur ani automatycznej wysylki plikow,
-- `PDF na e-mail` nie jest natychmiastowa dostawa automatyczna; to dodatek realizowany po potwierdzeniu,
-- czat nie jest zrodlem prawdy; zrodlem prawdy pozostaja pliki projektu,
-- przy zmianie kierunku projektu trzeba aktualizowac decyzje, timeline i `_project/history/`.
+- pliki prywatne są źródłem ręcznej realizacji, nie publicznym linkiem dla klienta,
+- panel nie generuje signed URL i nie wysyła maili,
+- PDF na e-mail jest dodatkiem realizowanym po potwierdzeniu płatności i realizacji,
+- zamówienia V1 są obsługiwane ręcznie statusami `new`, `contacted`, `paid_manual`, `sent`, `cancelled`,
+- nie ma jeszcze Stripe/PayU, automatycznych maili, faktur ani automatycznej wysyłki plików,
+- czat nie jest źródłem prawdy; źródłem prawdy pozostają pliki projektu.
 
-## Najwazniejsze pliki
+## Najważniejsze pliki
 
 - `../AGENTS.md`
 - `00_PROJECT_STATUS.md`
@@ -46,38 +46,30 @@ Najwazniejsze ustalenia:
 - `runs/`
 - `history/`
 
-## Pliki techniczne wazne dla Etapu 7
-
-- `../app/zamowienie/page.tsx`
-- `../components/order/CheckoutForm.tsx`
-- `../app/zamowienie/actions.ts`
-- `../scripts/check-cart-order-v38.cjs`
-
-## Pliki techniczne wazne dla Etapu 6
+## Pliki techniczne ważne dla Etapu 8
 
 - `../app/admin/zamowienia/page.tsx`
-- `../app/admin/zamowienia/actions.ts`
 - `../lib/admin/orders-admin.ts`
-- `../lib/order/create-order.ts`
-- `../supabase/migrations/0014_orders_v1.sql`
-- `../supabase/migrations/0015_orders_v42_statuses.sql`
+- `../lib/admin/order-files.ts`
+- `../lib/admin/projects-admin.ts`
+- `../components/admin/AdminProjectMediaManager.tsx`
 - `../scripts/check-admin-orders-v42.cjs`
-- `../scripts/check-order-schema-v38.cjs`
+- `../scripts/check-admin-project-media-v34.cjs`
 
-## Standard pracy agentow
+## Standard pracy agentów
 
-Od 2026-05-15 repo uzywa globalnego workflow Damiana:
+Od 2026-05-15 repo używa globalnego workflow Damiana:
 
-- kazdy sensowny etap aktualizuje changelog, run report i kontekst dla Obsidiana,
+- każdy sensowny etap aktualizuje changelog, run report i kontekst dla Obsidiana,
 - zmiana etapu aktualizuje `03_CURRENT_STAGE` i `07_NEXT_STEPS`,
-- zmiana testow albo guardow aktualizuje `05_MANUAL_TESTS` i `06_GUARDS_AND_TESTS`,
+- zmiana testów albo guardów aktualizuje `05_MANUAL_TESTS` i `06_GUARDS_AND_TESTS`,
 - zmiana kierunku projektu wymaga decyzji, timeline i notatki w `_project/history/`,
-- `npm run check:project-memory` pilnuje obecnosci timeline i historii.
+- `npm run check:project-memory` pilnuje obecności timeline i historii.
 
-## Nastepny praktyczny krok
+## Następny praktyczny krok
 
-Uruchomic checki Etapu 7, potem manualnie przejsc `/koszyk` -> `/zamowienie` -> sukces zamowienia i potwierdzic, ze komunikacja checkoutu jest sprzedażowa, uczciwa i nie obiecuje automatyzacji.
+Uruchomić runtime test: zamówienie z dodatkiem PDF na e-mail i projektem z prywatnymi plikami -> `/admin/zamowienia` -> sprawdzenie prywatnych plików, instrukcji wysyłki i checklisty.
 
 ## Uwaga
 
-Obsidian jest tylko indeksem/dashboardem. Zrodlem prawdy pozostaje repo.
+Obsidian jest tylko indeksem/dashboardem. Źródłem prawdy pozostaje repo.

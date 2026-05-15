@@ -1,24 +1,24 @@
-﻿# 07_NEXT_STEPS - nastepne kroki
+# 07_NEXT_STEPS - nastepne kroki
 
-## Najblizszy rekomendowany krok po Etapie 7
+## Najbliższy rekomendowany krok po Etapie 8
 
-Po zmianie komunikacji checkoutu trzeba wykonać krótki test runtime: dodać projekt do koszyka, wejść w `/zamowienie`, sprawdzić teksty i wysłać zamówienie. Cel: potwierdzić, że checkout wygląda jak realne zamówienie V1, ale nie obiecuje automatycznych płatności ani natychmiastowej wysyłki plików.
+Wykonać runtime test pełnej ręcznej realizacji: projekt z prywatnymi plikami -> koszyk z dodatkiem PDF na e-mail -> zamówienie -> panel `/admin/zamowienia` -> sprawdzenie listy plików prywatnych, instrukcji wysyłki i checklisty.
 
 ## Zasady dalszej pracy
 
-- Publiczne dane projektow powinny dalej isc tylko przez `lib/project-repository.ts`.
-- Nie dodawac bezposrednich publicznych query do `projects` poza repozytorium.
-- Utrzymac guard `verify:public-project-detail-sales-v37` przy kazdej zmianie karty produktu.
-- Utrzymac guard `verify:cart-order-v38` przy kazdej zmianie koszyka, wariantow, dodatkow, checkoutu albo headerowych licznikow.
-- Nie mieszac opcjonalnego PDF na e-mail z podstawowa dostawa projektu.
-- PDF na e-mail ma pozostac dodatkiem realizowanym po potwierdzeniu płatności i realizacji, nie obietnicą natychmiastowej automatycznej wysyłki.
-- Jesli testujemy runtime admina, naprawic albo ominac niestabilny lokalny anon key przez stabilne srodowisko testowe.
-- Zamowienia obslugiwac recznie statusami `new`, `contacted`, `paid_manual`, `sent`, `cancelled`, dopoki nie ma osobnej decyzji o platnosciach, mailach i automatycznej wysylce.
+- Publiczne dane projektów powinny dalej iść tylko przez `lib/project-repository.ts`.
+- Nie dodawać bezpośrednich publicznych query do `projects` poza repozytorium.
+- Utrzymać guard `verify:public-project-detail-sales-v37` przy każdej zmianie karty produktu.
+- Utrzymać guard `verify:cart-order-v38` przy każdej zmianie koszyka, wariantów, dodatków, checkoutu albo headerowych liczników.
+- Utrzymać guard `verify:admin-orders-v42` przy każdej zmianie panelu zamówień, statusów, plików zamówienia albo realizacji ręcznej.
+- Nie mieszać opcjonalnego PDF na e-mail z podstawową dostawą projektu.
+- PDF na e-mail ma pozostać dodatkiem realizowanym po potwierdzeniu płatności i realizacji, nie obietnicą natychmiastowej automatycznej wysyłki.
+- Pliki prywatne są widoczne dla admina jako operacyjna instrukcja realizacji, nie jako publiczne linki dla klienta.
+- Zamówienia obsługiwać ręcznie statusami `new`, `contacted`, `paid_manual`, `sent`, `cancelled`, dopóki nie ma osobnej decyzji o płatnościach, mailach i automatycznej wysyłce.
 
-## Kolejne mozliwe etapy
+## Kolejne możliwe etapy
 
-1. Manualny runtime test `/koszyk` -> `/zamowienie` -> sukces zamówienia -> `/admin/zamowienia`.
-2. Zastosowac migracje `0015_orders_v42_statuses.sql` w Supabase, jezeli nie zostala jeszcze zastosowana.
-3. Stabilny runtime test admina na srodowisku z dzialajacym Supabase Auth.
-4. Strona/lista ulubionych albo decyzja, ze lokalny licznik + serduszka wystarczaja na teraz.
-5. Platnosci, maile i automatyzacja dostawy plikow dopiero jako osobny etap.
+1. Runtime test `/koszyk` -> `/zamowienie` -> `/admin/zamowienia` z realnymi prywatnymi plikami.
+2. Zapis checklisty realizacji w bazie dopiero jako osobny etap, jeśli ręczna checklista statyczna okaże się za słaba.
+3. Szablony maili ręcznych dla admina: co wkleić klientowi przy płatności, PDF i ZIP.
+4. Linki czasowe, automatyczny mailing i płatności dopiero po osobnej decyzji.

@@ -197,7 +197,7 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     supabase.from("project_variants").select("name, price_gross, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_addons").select("code, name, description, price_gross, delivery_action, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_media").select("id, bucket, media_type, title, path, public_url, sort_order").eq("project_id", id).order("sort_order"),
-    supabase.from("project_files").select("id, file_type, title, path, version, created_at").eq("project_id", id).order("created_at", { ascending: false })
+    supabase.from("project_files").select("id, bucket, file_type, title, path, version, created_at").eq("project_id", id).order("created_at", { ascending: false })
   ]);
 
   return {

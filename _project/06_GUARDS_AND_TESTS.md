@@ -1,5 +1,27 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
+## Checki wymagane dla Etapu 8
+
+Skrypt wdrożeniowy uruchamia:
+
+```powershell
+npm run verify:admin-project-media-v34
+npm run verify:project-media-controls-v34
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guardów w Etapie 8
+
+Zaostrzono:
+
+- `npm run verify:admin-orders-v42`, żeby pilnował panelu ręcznej realizacji zamówienia, prywatnych plików, dodatku PDF na e-mail i checklisty,
+- `npm run verify:admin-project-media-v34`, żeby pilnował, że prywatne pliki w edycji projektu są oznaczone jako źródło ręcznej realizacji.
+
+Guard `verify:admin-orders-v42` dodatkowo blokuje w tym zakresie markery automatyzacji, których nie wolno jeszcze dodawać: signed URL, automatyczny mailing, Stripe i PayU.
+
 ## Checki wymagane dla Etapu 7
 
 Do uruchomienia po wdrożeniu:

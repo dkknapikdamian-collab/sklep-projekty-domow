@@ -1,3 +1,9 @@
+import {
+  adminOrderProjectFileLookupKey,
+  getAdminOrderPrivateFilesByProjectKey,
+  isPdfEmailAddon,
+  type AdminOrderPrivateFile
+} from "@/lib/admin/order-files";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 export const ADMIN_ORDER_STATUSES = ["new", "contacted", "paid_manual", "sent", "cancelled"] as const;
@@ -6,9 +12,9 @@ export type AdminOrderStatus = (typeof ADMIN_ORDER_STATUSES)[number];
 
 export const ADMIN_ORDER_STATUS_LABELS: Record<AdminOrderStatus, string> = {
   new: "Nowe",
-  contacted: "Kontakt byl",
-  paid_manual: "Oplacone recznie",
-  sent: "Wyslane",
+  contacted: "Kontakt był",
+  paid_manual: "Opłacone ręcznie",
+  sent: "Wysłane",
   cancelled: "Anulowane"
 };
 
@@ -29,6 +35,8 @@ export type AdminOrderItem = {
   basePriceGross: number;
   variantPriceGross: number;
   itemTotalGross: number;
+  hasPdfEmailAddon: boolean;
+  privateFiles: AdminOrderPrivateFile[];
   addons: AdminOrderAddon[];
 };
 
@@ -109,7 +117,7 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
     return [];
   }
 
-  return orders.map((order) => {
+  const mappedOrders = orders.map((order) => {
     const id = String(order.id || "");
     const items = Array.isArray(order.order_items) ? order.order_items : [];
 
@@ -127,6 +135,13 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
       notes: String(order.notes || ""),
       items: items.map((item) => {
         const addons = Array.isArray(item.order_item_addons) ? item.order_item_addons : [];
+        const mappedAddons = addons.map((addon) => ({
+          id: String(addon.id || ""),
+          code: String(addon.addon_code || ""),
+          name: String(addon.addon_name || ""),
+          priceGross: toNumber(addon.price_gross),
+          deliveryAction: String(addon.delivery_action || "")
+        }));
 
         return {
           id: String(item.id || ""),
@@ -137,17 +152,25 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
           basePriceGross: toNumber(item.base_price_gross),
           variantPriceGross: toNumber(item.variant_price_gross),
           itemTotalGross: toNumber(item.item_total_gross),
-          addons: addons.map((addon) => ({
-            id: String(addon.id || ""),
-            code: String(addon.addon_code || ""),
-            name: String(addon.addon_name || ""),
-            priceGross: toNumber(addon.price_gross),
-            deliveryAction: String(addon.delivery_action || "")
-          }))
+          hasPdfEmailAddon: mappedAddons.some(isPdfEmailAddon),
+          privateFiles: [],
+          addons: mappedAddons
         };
       })
     };
   });
+
+  const privateFilesByProjectKey = await getAdminOrderPrivateFilesByProjectKey(
+    mappedOrders.flatMap((order) => order.items)
+  );
+
+  return mappedOrders.map((order) => ({
+    ...order,
+    items: order.items.map((item) => ({
+      ...item,
+      privateFiles: privateFilesByProjectKey[adminOrderProjectFileLookupKey(item.projectCode, item.projectSlug)] || []
+    }))
+  }));
 }
 
 export async function updateAdminOrderStatus(orderId: string, status: AdminOrderStatus) {
@@ -163,6 +186,6 @@ export async function updateAdminOrderStatus(orderId: string, status: AdminOrder
     .eq("id", orderId);
 
   if (error) {
-    throw new Error(`Nie udalo sie zapisac statusu zamowienia: ${error.message}`);
+    throw new Error(`Nie udało się zapisać statusu zamówienia: ${error.message}`);
   }
 }

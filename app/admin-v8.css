@@ -803,3 +803,86 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* STAGE43 ADMIN ORDER MANUAL FULFILLMENT START */
+.admin-order-fulfillment {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(205,164,99,.28);
+  border-radius: 7px;
+  background: rgba(205,164,99,.055);
+}
+
+.admin-order-fulfillment h3,
+.admin-order-item h4 {
+  margin: 0 0 8px;
+}
+
+.admin-order-fulfillment p,
+.admin-order-fulfillment small,
+.admin-order-private-files-empty,
+.admin-order-private-files li span,
+.admin-order-private-files li small {
+  color: rgba(244,241,234,.72);
+}
+
+.admin-order-fulfillment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-order-fulfillment-grid article {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 6px;
+  background: rgba(0,0,0,.12);
+}
+
+.admin-order-fulfillment-grid article span {
+  color: var(--gold-2);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.admin-order-fulfillment-checklist,
+.admin-order-private-files {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.admin-order-fulfillment-checklist li,
+.admin-order-private-files li {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 6px;
+  background: rgba(0,0,0,.10);
+}
+
+.admin-order-fulfillment-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-order-private-files code {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .admin-order-fulfillment-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* STAGE43 ADMIN ORDER MANUAL FULFILLMENT END */
