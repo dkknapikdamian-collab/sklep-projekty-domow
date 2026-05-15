@@ -52,10 +52,23 @@ for (const marker of [
   "zip_sent",
   "order_closed",
   "internal_note",
+  "payment_instruction",
   "privateFiles",
   "hasPdfEmailAddon",
   "getAdminOrderPrivateFilesByProjectKey",
-  "adminOrderProjectFileLookupKey"
+  "adminOrderProjectFileLookupKey",
+  "ADMIN_ORDER_PAYMENT_INSTRUCTION_FILTERS",
+  "ADMIN_ORDER_PAYMENT_INSTRUCTION_FILTER_LABELS",
+  "ADMIN_ORDER_FULFILLMENT_FILTERS",
+  "ADMIN_ORDER_FULFILLMENT_FILTER_LABELS",
+  "ADMIN_ORDER_PRIORITY_FILTERS",
+  "ADMIN_ORDER_PRIORITY_FILTER_LABELS",
+  "getAdminOrderPriorityFlags",
+  "getAdminOrderPriorityRank",
+  "requiresContact",
+  "waitingPayment",
+  "readyToSend",
+  "hasPaymentInstruction"
 ]) {
   if (!repo.includes(marker)) fail(`orders admin repository missing marker: ${marker}`);
 }
@@ -97,10 +110,36 @@ for (const marker of [
   'data-admin-orders-list="true"',
   'data-admin-order-card="true"',
   'data-admin-order-detail-link="true"',
+  'data-admin-orders-priority-filters-v49="true"',
+  'data-admin-order-priority-panel="true"',
+  'data-admin-order-filter-bar="true"',
+  'data-admin-order-status-filter="true"',
+  'data-admin-order-payment-filter="true"',
+  'data-admin-order-fulfillment-filter="true"',
+  'data-admin-order-priority-filter="true"',
+  'data-admin-order-filter-submit="true"',
+  'data-admin-order-filter-reset="true"',
+  'data-admin-order-priority-row="true"',
+  'data-admin-order-priority-badge="true"',
+  'data-admin-order-priority-quick-filter="requires_contact"',
+  'data-admin-order-priority-quick-filter="waiting_payment"',
+  'data-admin-order-priority-quick-filter="ready_to_send"',
+  "normalizeOrderStatusFilter",
+  "normalizePaymentFilter",
+  "normalizeFulfillmentFilter",
+  "normalizePriorityFilter",
+  "filteredOrders",
+  "priorityCounts",
+  "priorityLabel",
+  "getAdminOrderPriorityFlags",
+  "getAdminOrderPriorityRank",
   "customerEmail",
   "customerPhone",
   "totalGross",
   "ADMIN_ORDER_STATUS_LABELS",
+  "ADMIN_ORDER_PAYMENT_INSTRUCTION_FILTER_LABELS",
+  "ADMIN_ORDER_FULFILLMENT_FILTER_LABELS",
+  "ADMIN_ORDER_PRIORITY_FILTER_LABELS",
   "`/admin/zamowienia/${order.id}`"
 ]) {
   if (!listPage.includes(marker)) fail(`admin orders list page missing marker: ${marker}`);
@@ -200,7 +239,12 @@ for (const marker of [
   "STAGE46 ADMIN ORDER FULFILLMENT CHECKLIST PERSISTENCE START",
   ".admin-order-fulfillment-form",
   ".admin-order-internal-note",
-  "accent-color"
+  "accent-color",
+  "STAGE49 ADMIN ORDER FILTERS AND PRIORITY START",
+  ".admin-orders-priority-shell",
+  ".admin-order-priority-panel",
+  ".admin-order-filter-bar",
+  ".admin-order-priority-row"
 ]) {
   if (!css.includes(marker) && !detailPage.includes(marker) && !listPage.includes(marker)) {
     fail(`admin order detail style/source marker missing: ${marker}`);
@@ -228,7 +272,7 @@ for (const forbidden of [
   "autoPayment"
 ]) {
   if (forbiddenAutoDeliverySources.includes(forbidden)) {
-    fail(`Etap 15B must not add automatic delivery/payment marker: ${forbidden}`);
+    fail(`Etap 19 must not add automatic delivery/payment marker: ${forbidden}`);
   }
 }
 
@@ -241,4 +285,4 @@ if (!String(pkg.scripts?.verify || "").includes("verify:admin-orders-v42")) {
   fail("main verify script missing verify:admin-orders-v42.");
 }
 
-console.log("OK: admin orders V42/V45 persistent fulfillment checklist guard passed.");
+console.log("OK: admin orders V42/V49 filters and priority guard passed.");
