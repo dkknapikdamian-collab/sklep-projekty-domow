@@ -219,5 +219,11 @@ npm run build
 
 `_project/runs/2026-05-15_1900_sklep-pelny-mozg-projektu.md`
 
+## 2026-05-15 20:49 - Aktualizacja globalnych zasad AGENTS.md
+
+- Podmieniono plik `AGENTS.md` na nowy blok globalnych zasad dla Codexa/Damiana.
+- Zakres zmiany: wyłącznie dokumentacja zasad pracy i pamięci projektu.
+- Nie zmieniono kodu aplikacji, guardów ani logiki biznesowej.
+
 
 
