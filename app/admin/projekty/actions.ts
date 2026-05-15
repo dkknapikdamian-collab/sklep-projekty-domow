@@ -325,6 +325,61 @@ export async function updateProjectStatusAction(formData: FormData) {
   redirect("/admin/projekty?status=updated");
 }
 
+export async function archiveProjectAction(formData: FormData) {
+  const projectId = str(formData, "projectId");
+  const slug = str(formData, "slug");
+
+  if (!projectId) {
+    redirect("/admin/projekty?status=error&reason=missing_project_id");
+  }
+
+  let supabase: ReturnType<typeof createSupabaseServiceRoleClient> | null = null;
+
+  try {
+    const resolved = await requireAdminAndClient();
+    supabase = resolved.supabase;
+  } catch (error) {
+    const reason = error instanceof Error ? encodeURIComponent(error.message) : "auth_or_env_error";
+    redirect(`/admin/projekty?status=error&reason=${reason}`);
+  }
+
+  const { data: project, error: projectError } = await supabase
+    .from("projects")
+    .select("id, slug, status")
+    .eq("id", projectId)
+    .maybeSingle();
+
+  if (projectError) {
+    redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(projectError.message)}`);
+  }
+
+  if (!project?.id) {
+    redirect("/admin/projekty?status=error&reason=Nie%20znaleziono%20projektu%20do%20archiwizacji");
+  }
+
+  if (project.status !== "archived") {
+    const { error } = await supabase
+      .from("projects")
+      .update({ status: "archived", updated_at: new Date().toISOString() })
+      .eq("id", projectId);
+
+    if (error) {
+      redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(error.message)}`);
+    }
+  }
+
+  const projectSlug = String(project.slug || slug || "");
+
+  revalidatePath("/");
+  revalidatePath("/projekty");
+  if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
+  revalidatePath("/admin");
+  revalidatePath("/admin/projekty");
+
+  redirect("/admin/projekty?archived=1");
+}
+
+
 export async function deleteProjectAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const confirmationCode = str(formData, "deleteConfirmCode").toUpperCase();
@@ -341,6 +396,11 @@ export async function deleteProjectAction(formData: FormData) {
 
   if (projectError) throw new Error("Nie udalo sie pobrac projektu przed usunieciem: " + projectError.message);
   if (!project?.id) throw new Error("Nie znaleziono projektu do usuniecia.");
+
+  const projectStatusBeforeDelete = String(project.status || "");
+  if (!["archived", "draft"].includes(projectStatusBeforeDelete)) {
+    redirect("/admin/projekty?status=error&reason=Najpierw%20zarchiwizuj%20projekt%20albo%20ustaw%20draft%20przed%20trwalym%20usunieciem");
+  }
 
   const expectedCode = String(project.code || "").trim().toUpperCase();
   if (!expectedCode || confirmationCode !== expectedCode) {

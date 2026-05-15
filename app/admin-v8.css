@@ -481,6 +481,7 @@
 /* STAGE41 ADMIN PROJECT LIST COMPACT START */
 /* ETAP10 ADMIN PROJECTS FULL WIDTH LAYOUT: data-dense admin page uses the viewport, table owns horizontal overflow. */
 /* ETAP10B ADMIN PROJECTS ACTION COLUMN FIT LOCK: keep every desktop action visible in one line. */
+/* ETAP11 ARCHIVED FIRST ACTION FIT: archive is the default safe action, hard delete stays emergency-only. */
 .admin-shell.admin-projects-shell {
   width: min(100%, calc(100vw - 40px));
   max-width: none;
@@ -547,7 +548,7 @@
 
 .admin-projects-table {
   width: 100%;
-  min-width: 1640px;
+  min-width: 1770px;
   table-layout: fixed;
   font-size: 12px;
 }
@@ -583,12 +584,12 @@
 
 .admin-projects-table th:nth-child(2),
 .admin-projects-table td:nth-child(2) {
-  width: 180px;
+  width: 170px;
 }
 
 .admin-projects-table th:nth-child(3),
 .admin-projects-table td:nth-child(3) {
-  width: 106px;
+  width: 104px;
 }
 
 .admin-projects-table th:nth-child(4),
@@ -618,22 +619,22 @@
 
 .admin-projects-table th:nth-child(9),
 .admin-projects-table td:nth-child(9) {
-  width: 162px;
+  width: 150px;
 }
 
 .admin-projects-table th:nth-child(10),
 .admin-projects-table td:nth-child(10) {
-  width: 156px;
+  width: 150px;
 }
 
 .admin-projects-table th:nth-child(11),
 .admin-projects-table td:nth-child(11) {
-  width: 118px;
+  width: 108px;
 }
 
 .admin-projects-table th:nth-child(12),
 .admin-projects-table td:nth-child(12) {
-  width: 450px;
+  width: 620px;
 }
 
 .admin-projects-table td > strong {
@@ -756,6 +757,7 @@
   min-height: 26px;
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   padding: 0 6px;
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 4px;
@@ -767,7 +769,7 @@
 }
 
 .admin-projects-table .admin-delete-safety[open] {
-  min-width: 280px;
+  min-width: 320px;
 }
 
 .admin-project-mobile-list {

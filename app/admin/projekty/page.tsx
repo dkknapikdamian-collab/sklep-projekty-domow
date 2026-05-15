@@ -51,10 +51,18 @@ function getAdminListMessage(searchParams: Record<string, string | string[] | un
     };
   }
 
+  if (firstParam(searchParams.archived) === "1") {
+    return {
+      tone: "success",
+      text: "Projekt zostal zarchiwizowany. Nie jest juz codzienna pozycja robocza i nie powinien byc widoczny publicznie."
+    };
+  }
+
+
   if (firstParam(searchParams.deleted) === "1") {
     return {
       tone: "success",
-      text: "Projekt zostal usuniety z bazy. Jezeli mial pliki w Storage, system sprobowal je usunac razem z rekordem."
+      text: "Projekt zostal trwale usuniety awaryjnie. Jezeli mial pliki w Storage, system sprobowal je usunac razem z rekordem."
     };
   }
 

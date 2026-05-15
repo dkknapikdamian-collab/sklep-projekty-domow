@@ -6,24 +6,27 @@
 
 ## Aktualny etap
 
-Etap 10B: Blokada idealnego układu listy projektów i dopasowanie kolumny akcji.
+Etap 11: Archived-first zamiast fizycznego delete jako domyślna ścieżka.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 16:45 Europe/Warsaw: zaakceptowany layout `/admin/projekty` został zachowany i zabezpieczony guardem. Poprawiono ostatni problem: `Ustaw active` nie powinno być ucinane po prawej stronie tabeli.
+2026-05-15 17:15 Europe/Warsaw: panel admina dostał bezpieczną ścieżkę `Archiwizuj`. Fizyczne `Usuń trwale` zostało przeniesione do strefy awaryjnej i jest blokowane dla projektów innych niż `archived` albo `draft`.
 
 ## Najważniejsze ustalenia
 
-- obecny układ tabeli projektów jest docelowym układem desktopowym,
-- kolumna `Akcje` musi mieścić pełny zestaw akcji w jednej linii,
-- guard blokuje powrót do za wąskiej kolumny akcji,
-- nie ruszać tego layoutu przy kolejnych etapach bez osobnej decyzji,
-- mobile nadal używa kart.
+- codzienna praca admina nie wymaga fizycznego delete,
+- standardowa ścieżka to `Archiwizuj`,
+- projekt `active` trzeba najpierw zarchiwizować albo ustawić draft,
+- `Usuń trwale` wymaga statusu `archived` albo `draft`, kodu projektu i confirmu,
+- publiczny katalog pozostaje oparty wyłącznie o status `active`.
 
-## Pliki techniczne ważne dla Etapu 10B
+## Pliki techniczne ważne dla Etapu 11
 
-- `../app/admin-v8.css`
-- `../scripts/check-admin-project-list-compact-v41.cjs`
+- `../components/admin/AdminProjectDeleteForm.tsx`
+- `../components/admin/AdminProjectsTable.tsx`
+- `../app/admin/projekty/actions.ts`
+- `../app/admin/projekty/page.tsx`
+- `../scripts/check-admin-buttons-v19.cjs`
 
 ## Uwaga
 

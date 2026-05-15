@@ -1,6 +1,56 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 17:15 - Etap 11: Archived-first zamiast fizycznego delete
+
+- Dodano `archiveProjectAction` jako bezpieczną server action do ustawiania statusu `archived`.
+- Dodano widoczną akcję `Archiwizuj` w tabeli projektów admina.
+- Przeniesiono fizyczne usuwanie do strefy awaryjnej `Awaryjne`.
+- `Usuń trwale` wymaga nadal kodu projektu, ale dodatkowo jest zablokowane, jeśli projekt nie jest `archived` albo `draft`.
+- `deleteProjectAction` sprawdza status po stronie serwera i blokuje delete dla `active` oraz innych statusów niż `archived`/`draft`.
+- Dla projektu `active` UI pokazuje jasne ostrzeżenie, że najpierw trzeba archiwizować albo ustawić draft.
+- Lista admina pokazuje komunikat po archiwizacji `archived=1`.
+- Zaktualizowano guard `verify:admin-buttons-v19`.
+- Zaktualizowano layout tabeli po dodaniu akcji `Archiwizuj`, żeby akcje dalej były w jednym wierszu.
+- Publiczny katalog nie został zmieniony i nadal powinien pokazywać tylko `active`.
+
+### Pliki zmienione
+
+- `components/admin/AdminProjectDeleteForm.tsx`
+- `components/admin/AdminProjectsTable.tsx`
+- `app/admin/projekty/actions.ts`
+- `app/admin/projekty/page.tsx`
+- `app/admin-v8.css`
+- `scripts/check-admin-buttons-v19.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/04_DECISIONS.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_1715_archived-first-delete.md`
+
+### Testy / guardy
+
+Do uruchomienia lokalnie przez paczkę:
+
+```powershell
+npm run verify:admin-buttons-v19
+npm run verify:admin-project-list-compact-v41
+npm run verify:public-project-data-v22
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ryzyka
+
+- Fizyczne delete nadal istnieje, ale nie jest domyślną ścieżką.
+- Runtime test wymaga działającego logowania admina i bezpiecznego projektu testowego.
+
+
 ## 2026-05-15 16:45 - Etap 10B: Guard idealnego układu i dopasowanie akcji
 
 - Zachowano zaakceptowany pełnoszeroki układ `/admin/projekty`.

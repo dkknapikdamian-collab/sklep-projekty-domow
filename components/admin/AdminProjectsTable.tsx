@@ -4,7 +4,7 @@ import Link from "next/link";
 import { updateProjectStatusAction } from "@/app/admin/projekty/actions";
 import type { AdminProjectListItem } from "@/lib/admin/projects-admin";
 import { PROJECT_PUBLICATION_MISSING_LABELS } from "@/lib/admin/project-publication-readiness";
-import { AdminProjectDeleteForm } from "./AdminProjectDeleteForm";
+import { AdminProjectArchiveForm, AdminProjectDeleteForm } from "./AdminProjectDeleteForm";
 import { AdminSubmitButton } from "./AdminSubmitButton";
 
 function formatPrice(value: number) {
@@ -26,6 +26,8 @@ function statusBadges(project: AdminProjectListItem) {
   const badges: string[] = [];
   if (project.status === "draft") badges.push("Draft");
   if (project.status === "active") badges.push("Publiczny");
+  if (project.status === "hidden") badges.push("Ukryty");
+  if (project.status === "archived") badges.push("Archived");
   if (project.canPublish) badges.push("Gotowy");
   if (!project.canPublish) badges.push("Niekompletny");
   if (project.mediaCount <= 0) badges.push("Brak zdjec");
@@ -125,6 +127,13 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                     <div className="admin-row-actions" data-admin-project-row-actions="true">
                       <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
                       <Link href={publicHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                      <AdminProjectArchiveForm
+                        projectId={project.id}
+                        projectCode={project.code}
+                        projectName={project.name}
+                        projectSlug={project.slug}
+                        projectStatus={project.status}
+                      />
                       <StatusActionForm project={project} targetStatus="draft" />
                       <StatusActionForm project={project} targetStatus="active" />
                       <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} />
@@ -180,6 +189,13 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
               <div className="admin-row-actions" data-admin-project-row-actions="true">
                 <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
                 <Link href={publicHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                <AdminProjectArchiveForm
+                  projectId={project.id}
+                  projectCode={project.code}
+                  projectName={project.name}
+                  projectSlug={project.slug}
+                  projectStatus={project.status}
+                />
                 <StatusActionForm project={project} targetStatus="draft" />
                 <StatusActionForm project={project} targetStatus="active" />
                 <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} />

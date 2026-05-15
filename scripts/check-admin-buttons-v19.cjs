@@ -1,4 +1,4 @@
-﻿const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = process.cwd();
@@ -27,11 +27,16 @@ const actions = read("app/admin/projekty/actions.ts");
 for (const needle of [
   '"use server"',
   "export async function updateProjectStatusAction",
+  "export async function archiveProjectAction",
   "export async function deleteProjectAction",
   "export async function updateProjectAction",
   "export async function updateProjectBasicsAction",
   "redirect(\"/admin/projekty?status=updated\")",
-  "redirect(\"/admin/projekty?deleted=1\")"
+  "redirect(\"/admin/projekty?archived=1\")",
+  "redirect(\"/admin/projekty?deleted=1\")",
+  'status: "archived"',
+  "projectStatusBeforeDelete",
+  '![\"archived\", \"draft\"].includes(projectStatusBeforeDelete)'
 ]) {
   if (!actions.includes(needle)) {
     console.error(`FAIL: admin project actions missing ${needle}`);
@@ -55,6 +60,7 @@ const table = read("components/admin/AdminProjectsTable.tsx");
 for (const needle of [
   "updateProjectStatusAction",
   "AdminSubmitButton",
+  "AdminProjectArchiveForm",
   "AdminProjectDeleteForm",
   "data-admin-project-row-actions=\"true\"",
   "data-admin-action=\"project-edit\"",
@@ -64,7 +70,9 @@ for (const needle of [
   "`/admin/projekty/${project.id}/edytuj`",
   "`/projekty/${project.slug}`",
   "Ustaw active",
-  "Ustaw draft"
+  "Ustaw draft",
+  "projectStatus={project.status}",
+  "projectSlug={project.slug}"
 ]) {
   if (!table.includes(needle)) {
     console.error(`FAIL: AdminProjectsTable missing working control: ${needle}`);
@@ -80,9 +88,18 @@ if (table.includes("href=\"#\"") || table.includes("onClick={() => {}}")) {
 const deleteForm = read("components/admin/AdminProjectDeleteForm.tsx");
 for (const needle of [
   '"use client"',
+  "archiveProjectAction",
   "deleteProjectAction",
-  "data-admin-action=\"project-delete\"",
+  "data-admin-action=\"project-archive\"",
+  "data-admin-action=\"project-archive-submit\"",
+  "data-admin-action=\"project-hard-delete\"",
   "data-admin-action=\"project-delete-submit\"",
+  "data-admin-emergency-delete-panel",
+  "canAttemptPhysicalDelete",
+  "projectStatus === \"archived\" || projectStatus === \"draft\"",
+  "Ostatni guzik pod szkłem",
+  "Najpierw zarchiwizuj projekt albo ustaw draft",
+  "Awaryjne",
   "window.confirm",
   "type=\"submit\"",
   "Usuwanie..."
@@ -93,9 +110,8 @@ for (const needle of [
   }
 }
 
-
 if (!/disabled=\{[^}]*pending[^}]*\}/.test(deleteForm) && !deleteForm.includes("deleteDisabled") && !deleteForm.includes("canDelete")) {
-  console.error("FAIL: AdminProjectDeleteForm delete submit must be disabled while pending and before confirmation code matches.");
+  console.error("FAIL: AdminProjectDeleteForm delete submit must be disabled while pending and before confirmation code/status are valid.");
   process.exit(1);
 }
 
@@ -111,6 +127,7 @@ for (const needle of [
     process.exit(1);
   }
 }
+
 const submitButton = read("components/admin/AdminSubmitButton.tsx");
 for (const needle of [
   '"use client"',
@@ -158,10 +175,11 @@ for (const needle of [
   "type=\"submit\"",
   "Zapisz projekt",
   "Zapisywanie...",
-  "href=\"/admin/projekty?cancelled=1\""
+  "href=\"/admin/projekty?cancelled=1\"",
+  "<option value=\"archived\">archived</option>"
 ]) {
   if (!editForm.includes(needle)) {
-    console.error(`FAIL: AdminProjectEditForm missing real edit/save/cancel wiring: ${needle}`);
+    console.error(`FAIL: AdminProjectEditForm missing real edit/save/cancel/status wiring: ${needle}`);
     process.exit(1);
   }
 }
@@ -169,6 +187,7 @@ for (const needle of [
 const listPage = read("app/admin/projekty/page.tsx");
 for (const needle of [
   "status) === \"updated\"",
+  "archived) === \"1\"",
   "deleted) === \"1\"",
   "cancelled) === \"1\"",
   "role=\"status\"",
@@ -205,6 +224,3 @@ for (const file of scannedFiles) {
 }
 
 console.log("OK: admin buttons V19 guard passed.");
-
-
-

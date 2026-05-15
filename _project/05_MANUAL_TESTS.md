@@ -1,6 +1,38 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 11
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do:
+
+```text
+/admin/projekty
+```
+
+2. Przy projekcie testowym kliknij `Archiwizuj`.
+3. Oczekiwany wynik:
+   - pojawia się confirm,
+   - po potwierdzeniu projekt dostaje status `archived`,
+   - projekt nie powinien być widoczny w publicznym katalogu, bo publiczny katalog bierze tylko `active`.
+
+4. Przy projekcie `active` rozwiń `Awaryjne`.
+5. Oczekiwany wynik:
+   - widzisz ostrzeżenie, że najpierw trzeba zarchiwizować projekt albo ustawić draft,
+   - `Usuń trwale` jest zablokowane nawet po wpisaniu kodu.
+
+6. Przy projekcie `archived` albo `draft` rozwiń `Awaryjne`.
+7. Oczekiwany wynik:
+   - fizyczne usunięcie wymaga wpisania kodu projektu,
+   - bez kodu przycisk jest zablokowany,
+   - po wpisaniu kodu pojawia się confirm.
+
+8. Nie testuj fizycznego usuwania na realnym projekcie produkcyjnym.
+
+
 ## Test reczny po Etapie 10B
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.

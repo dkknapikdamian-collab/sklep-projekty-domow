@@ -1,6 +1,41 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Checki wymagane dla Etapu 11
+
+```powershell
+npm run verify:admin-buttons-v19
+npm run verify:admin-project-list-compact-v41
+npm run verify:public-project-data-v22
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda archived-first
+
+Zaostrzono:
+
+```powershell
+npm run verify:admin-buttons-v19
+```
+
+Guard pilnuje teraz:
+
+- `archiveProjectAction` istnieje w server actions,
+- tabela projektów ma normalną akcję `AdminProjectArchiveForm`,
+- UI ma marker `data-admin-action="project-archive"`,
+- fizyczne usuwanie jest pod markerem `data-admin-action="project-hard-delete"`,
+- strefa awaryjna ma marker `data-admin-emergency-delete-panel`,
+- delete wymaga `canAttemptPhysicalDelete`,
+- delete jest dozwolone tylko dla `archived` albo `draft`,
+- projekt `active` ma ostrzeżenie przed awaryjnym delete,
+- edycja projektu nadal pozwala ustawić status `archived`,
+- lista admina obsługuje komunikat `archived=1`.
+
+Dodatkowo `verify:admin-project-list-compact-v41` pilnuje, że nowa akcja `Archiwizuj` nie rozjeżdża tabeli.
+
+
 ## Aktualizacja guarda po Etapie 10B
 
 `npm run verify:admin-project-list-compact-v41` pilnuje teraz także zaakceptowanego układu wizualnego:

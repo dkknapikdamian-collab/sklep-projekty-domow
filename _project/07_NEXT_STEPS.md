@@ -1,20 +1,20 @@
 ﻿# 07_NEXT_STEPS - nastepne kroki
 
-## Najblizszy rekomendowany krok po Etapie 10B
+## Najblizszy rekomendowany krok po Etapie 11
 
-Wykonać ręczny test `/admin/projekty` na desktopie. Jeśli układ wygląda jak na zaakceptowanym zrzucie i `Ustaw active` nie jest ucięte, zamykamy temat layoutu listy projektów.
+Wykonać ręczny test archived-first w `/admin/projekty` na projekcie testowym: `Archiwizuj` ma być standardową ścieżką, a `Usuń trwale` ma być dostępne tylko w strefie awaryjnej i tylko dla `archived` albo `draft`.
 
 ## Zasady dalszej pracy
 
-- Tego układu tabeli nie ruszać przy kolejnych etapach, chyba że Damian jawnie poprosi.
-- Dla listy projektów admina obowiązuje wzorzec: pełna szerokość strony, jednowierszowe komórki, ellipsis dla długich wartości, akcje w jednej linii.
-- Nie dodawać nowych przycisków do kolumny `Akcje` bez ponownego sprawdzenia szerokości i guarda.
-- Długie treści w tabeli skracać przez ellipsis i `title`, nie przez łamanie wierszy.
-- Widok mobilny zostawić jako karty.
+- Nie używać fizycznego delete jako codziennej operacji admina.
+- Przy pracy operacyjnej projekty mają być archiwizowane.
+- Fizyczne delete traktować jako awaryjne sprzątanie danych testowych albo błędnych rekordów.
+- Nie usuwać realnych projektów produkcyjnych w testach.
+- Nie dodawać nowych akcji destrukcyjnych bez server-side guardów.
 
 ## Kolejne możliwe etapy
 
-1. Runtime test Etapu 10B w panelu admina.
-2. Archived-first zamiast bezpośredniego fizycznego delete.
-3. Osobny audit log operacji admina.
-4. Stabilny runtime test pełnej ścieżki `/koszyk` -> `/zamowienie` -> `/admin/zamowienia`.
+1. Runtime test Etapu 11 w panelu admina.
+2. Osobny audit log operacji admina.
+3. Stabilny runtime test pełnej ścieżki `/koszyk` -> `/zamowienie` -> `/admin/zamowienia`.
+4. Uporządkowanie filtrów admina, żeby łatwo pokazywać/ukrywać archived.

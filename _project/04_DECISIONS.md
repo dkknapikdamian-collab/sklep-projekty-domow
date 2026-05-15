@@ -11,3 +11,5 @@
 
 | 2026-05-15 | Pliki prywatne w Etapie 8 są tylko instrukcją do ręcznej realizacji. | Sklep ma obsłużyć sprzedaż V1 bez udawania automatycznych linków, maili i płatności. | Panel zamówień pokazuje przypięte pliki prywatne, PDF na e-mail i checklistę realizacji, ale nie wysyła nic automatycznie. | Aktywna |
 | 2026-05-15 | Operacje destrukcyjne admina muszą mieć twarde potwierdzenie kodem projektu. | Delete usuwa rekord i próbuje usuwać pliki ze Storage, więc sam confirm jest za słaby. | Formularz usuwania wymaga kodu projektu i walidacji po stronie server action. | Aktywna |
+
+| 2026-05-15 | Domyślna ścieżka usuwania projektów to archived-first. | Fizyczne delete jest zbyt ryzykowne jako codzienna akcja admina. | Panel ma używać `Archiwizuj`, a `Usuń trwale` zostaje tylko jako awaryjna operacja po statusie `archived` albo `draft` i po wpisaniu kodu projektu. | Aktywna |
