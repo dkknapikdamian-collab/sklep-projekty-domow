@@ -1,6 +1,50 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 19:05 - Etap 14: Strona szczegółów zamówienia
+
+- Dodano dedykowaną stronę `/admin/zamowienia/[id]`.
+- Uproszczono `/admin/zamowienia` do listy zamówień z linkiem `Obsłuż zamówienie`.
+- Przeniesiono operacyjną obsługę zamówienia na stronę szczegółu:
+  - dane klienta,
+  - pozycje,
+  - warianty,
+  - dodatki,
+  - pliki prywatne,
+  - PDF na e-mail,
+  - checklistę realizacji,
+  - zmianę statusu.
+- Dodano `getAdminOrderById` w `lib/admin/orders-admin.ts`.
+- Dodano style `STAGE44 ADMIN ORDER DETAIL`.
+- Zaktualizowano guard `verify:admin-orders-v42`.
+- Nie dodano automatycznych maili, płatności, signed URL ani automatycznej wysyłki.
+
+### Pliki zmienione
+
+- `app/admin/zamowienia/page.tsx`
+- `app/admin/zamowienia/[id]/page.tsx`
+- `lib/admin/orders-admin.ts`
+- `app/admin-v8.css`
+- `scripts/check-admin-orders-v42.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_1905_admin-order-detail-page.md`
+
+### Testy / guardy
+
+```powershell
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+
 ## 2026-05-15 18:20 - Etap 12B: hotfix patchera audit logu
 
 - Poprawiono błąd poprzedniej paczki: patcher nie znalazł markera w `updateProjectStatusAction`.

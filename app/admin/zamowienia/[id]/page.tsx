@@ -1,0 +1,246 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowLeft, ClipboardList } from "lucide-react";
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
+import {
+  ADMIN_ORDER_STATUS_LABELS,
+  ADMIN_ORDER_STATUSES,
+  getAdminOrderById,
+  type AdminOrderItem,
+  type AdminOrderListItem
+} from "@/lib/admin/orders-admin";
+import { money } from "@/lib/format";
+
+export const dynamic = "force-dynamic";
+
+type AdminOrderDetailPageProps = {
+  params?: Promise<{ id: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function formatDate(value: string) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+  return date.toLocaleString("pl-PL");
+}
+
+function OrderStatusForm({ order }: { order: AdminOrderListItem }) {
+  return (
+    <form action={updateOrderStatusAction} className="admin-order-status-form" data-admin-order-status-form="true">
+      <input type="hidden" name="orderId" value={order.id} />
+      <select name="status" defaultValue={order.status} aria-label={`Status zamówienia ${order.shortId}`}>
+        {ADMIN_ORDER_STATUSES.map((status) => (
+          <option value={status} key={status}>{ADMIN_ORDER_STATUS_LABELS[status]}</option>
+        ))}
+      </select>
+      <button type="submit" className="admin-secondary-button">Zapisz status</button>
+    </form>
+  );
+}
+
+function PrivateFilesList({ item }: { item: AdminOrderItem }) {
+  if (item.privateFiles.length === 0) {
+    return (
+      <p className="admin-order-private-files-empty" data-admin-order-private-files-empty="true">
+        Brak plików prywatnych przypiętych do tego projektu. Przed realizacją sprawdź media prywatne w edycji projektu.
+      </p>
+    );
+  }
+
+  return (
+    <ul className="admin-order-private-files" data-admin-order-private-files="true">
+      {item.privateFiles.map((file) => (
+        <li key={file.id} data-admin-order-private-file-type={file.fileType}>
+          <strong>{file.fileLabel}</strong>
+          <span>{file.title || file.fileType}</span>
+          <small>Bucket: {file.bucket}</small>
+          {file.version && <small>Wersja: {file.version}</small>}
+          <code>{file.path}</code>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
+  const privateFiles = order.items.flatMap((item) => item.privateFiles);
+  const hasPdfEmailAddon = order.items.some((item) => item.hasPdfEmailAddon);
+  const hasPdfEmailFile = privateFiles.some((file) => file.fileType === "pdf_email_package");
+  const hasZipFile = privateFiles.some((file) => file.fileType === "full_package" || file.path.toLowerCase().endsWith(".zip"));
+  const hasDocumentationFile = privateFiles.some((file) => file.fileType === "documentation");
+
+  return (
+    <section className="admin-order-fulfillment" data-admin-order-fulfillment-v43="true">
+      <div>
+        <h2>Realizacja ręczna</h2>
+        <p>
+          Ta strona nie generuje linków czasowych i nie wysyła maili automatycznie. Ma pokazać operatorowi, co trzeba wysłać klientowi po potwierdzeniu płatności.
+        </p>
+      </div>
+
+      <div className="admin-order-fulfillment-grid">
+        <article data-admin-order-pdf-email-addon={hasPdfEmailAddon ? "true" : "false"}>
+          <span>Dodatek PDF na e-mail</span>
+          <strong>{hasPdfEmailAddon ? "Tak, zamówiony" : "Nie dotyczy"}</strong>
+          <p>
+            {hasPdfEmailAddon
+              ? hasPdfEmailFile
+                ? "Wyślij klientowi prywatny plik typu PDF na e-mail."
+                : "Dodatek jest w zamówieniu, ale nie znaleziono przypiętego pliku pdf_email_package przy projekcie."
+              : "Nie wysyłaj dodatkowego PDF-a na e-mail, jeśli nie ustalisz tego ręcznie z klientem."}
+          </p>
+        </article>
+
+        <article data-admin-order-send-instructions="true">
+          <span>Co wysłać klientowi</span>
+          <strong>{privateFiles.length > 0 ? `${privateFiles.length} plików prywatnych do sprawdzenia` : "Brak plików prywatnych"}</strong>
+          <p>
+            Najpierw potwierdź płatność. Następnie wyślij prywatne pliki przypięte do projektów w zamówieniu: dokumentację PDF, paczkę ZIP oraz PDF na e-mail, jeśli dodatek został zamówiony.
+          </p>
+          <small>PDF: {hasDocumentationFile ? "jest" : "brak"} / ZIP: {hasZipFile ? "jest" : "brak"}</small>
+        </article>
+      </div>
+
+      <ul className="admin-order-fulfillment-checklist" data-admin-order-fulfillment-checklist="true">
+        <li data-admin-fulfillment-payment-confirmed="true"><span aria-hidden="true">☐</span> Płatność potwierdzona</li>
+        <li data-admin-fulfillment-pdf-sent="true"><span aria-hidden="true">☐</span> PDF wysłany, jeśli dotyczy</li>
+        <li data-admin-fulfillment-zip-sent="true"><span aria-hidden="true">☐</span> ZIP wysłany, jeśli dotyczy</li>
+        <li data-admin-fulfillment-order-closed="true"><span aria-hidden="true">☐</span> Zamówienie zamknięte statusem `Wysłane` albo `Anulowane`</li>
+      </ul>
+    </section>
+  );
+}
+
+function OrderItemsPanel({ order }: { order: AdminOrderListItem }) {
+  return (
+    <section className="admin-order-detail-panel" data-admin-order-items="true">
+      <h2>Pozycje zamówienia</h2>
+      <div className="admin-order-items">
+        {order.items.map((item) => (
+          <article key={item.id} className="admin-order-item">
+            <strong>{item.projectCode} / {item.projectName}</strong>
+            <span>Slug: {item.projectSlug}</span>
+            <span>Wariant: {item.variantName}</span>
+            <span>Baza: {money(item.basePriceGross)} | Wariant: {money(item.variantPriceGross)} | Razem: {money(item.itemTotalGross)}</span>
+            <p data-admin-order-item-pdf-email-addon={item.hasPdfEmailAddon ? "true" : "false"}>
+              PDF na e-mail: {item.hasPdfEmailAddon ? "zamówiony" : "niezamówiony"}
+            </p>
+            {item.addons.length > 0 ? (
+              <ul>
+                {item.addons.map((addon) => (
+                  <li key={addon.id}>
+                    {addon.name} ({addon.code}) +{money(addon.priceGross)}
+                    {addon.deliveryAction ? ` / ${addon.deliveryAction}` : ""}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Brak dodatków w tej pozycji.</p>
+            )}
+            <h3>Pliki prywatne przypięte do projektu</h3>
+            <PrivateFilesList item={item} />
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function OrderCustomerPanel({ order }: { order: AdminOrderListItem }) {
+  return (
+    <section className="admin-order-detail-panel" data-admin-order-customer-panel="true">
+      <h2>Dane klienta</h2>
+      <dl className="admin-order-meta">
+        <div><dt>Klient</dt><dd>{order.customerName}</dd></div>
+        <div><dt>E-mail</dt><dd><a href={`mailto:${order.customerEmail}`}>{order.customerEmail}</a></dd></div>
+        <div><dt>Telefon</dt><dd><a href={`tel:${order.customerPhone}`}>{order.customerPhone}</a></dd></div>
+        <div><dt>Status</dt><dd>{ADMIN_ORDER_STATUS_LABELS[order.status]}</dd></div>
+        <div><dt>Utworzone</dt><dd>{formatDate(order.createdAt)}</dd></div>
+        <div><dt>Aktualizacja</dt><dd>{formatDate(order.updatedAt)}</dd></div>
+      </dl>
+      <div className="admin-order-note-grid">
+        <article>
+          <h3>Uwagi klienta</h3>
+          <p>{order.notes || "Brak uwag."}</p>
+        </article>
+        <article>
+          <h3>Dane do faktury</h3>
+          <p>{order.invoiceData || "Brak danych do faktury."}</p>
+        </article>
+        <article data-admin-order-admin-note-placeholder="true">
+          <h3>Notatka admina</h3>
+          <p>Brak osobnego pola w schemacie V1. Nie dopisujemy go tutaj bez migracji i decyzji produktowej.</p>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+export default async function AdminOrderDetailPage({ params, searchParams }: AdminOrderDetailPageProps) {
+  const resolvedParams = params ? await params : { id: "" };
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const order = await getAdminOrderById(resolvedParams.id);
+  const updatedId = firstParam(resolvedSearchParams.updated);
+  const status = firstParam(resolvedSearchParams.status);
+
+  if (!order) notFound();
+
+  return (
+    <>
+      <AdminHeader />
+      <main className="admin-shell" data-admin-order-detail-v44="true">
+        <section className="admin-page-head">
+          <div>
+            <span>ADMIN / ZAMÓWIENIA / SZCZEGÓŁY</span>
+            <h1>Zamówienie #{order.shortId}</h1>
+            <p>Dedykowana strona operacyjna do ręcznej obsługi zamówienia: klient, pozycje, pliki prywatne, PDF na e-mail, checklisty i status.</p>
+          </div>
+          <Link href="/admin/zamowienia" className="admin-secondary-button">
+            <ArrowLeft size={18} /> Lista zamówień
+          </Link>
+        </section>
+
+        {updatedId && (
+          <section className="admin-form-success" role="status">
+            Status zamówienia {updatedId.slice(0, 8)} został zapisany.
+          </section>
+        )}
+
+        {status === "error" && (
+          <section className="admin-form-error" role="status">
+            Nie udało się zapisać statusu zamówienia. Sprawdź identyfikator i status.
+          </section>
+        )}
+
+        <section className="admin-order-detail-hero">
+          <div>
+            <span>Zamówienie</span>
+            <strong>#{order.shortId}</strong>
+            <small>{order.id}</small>
+          </div>
+          <strong className="admin-order-total">{money(order.totalGross)}</strong>
+          <OrderStatusForm order={order} />
+          <Link href="/admin/zamowienia" className="admin-secondary-button">
+            <ClipboardList size={16} /> Wróć do listy
+          </Link>
+        </section>
+
+        <div className="admin-order-detail-layout">
+          <div className="admin-order-detail-main">
+            <OrderCustomerPanel order={order} />
+            <OrderItemsPanel order={order} />
+          </div>
+          <aside className="admin-order-detail-side">
+            <OrderFulfillmentPanel order={order} />
+          </aside>
+        </div>
+      </main>
+    </>
+  );
+}

@@ -173,6 +173,16 @@ export async function getAdminOrders(): Promise<AdminOrderListItem[]> {
   }));
 }
 
+export async function getAdminOrderById(id: string): Promise<AdminOrderListItem | null> {
+  const normalizedId = String(id || "").trim();
+  if (!normalizedId) return null;
+
+  const orders = await getAdminOrders();
+
+  return orders.find((order) => order.id === normalizedId || order.shortId === normalizedId) || null;
+}
+
+
 export async function updateAdminOrderStatus(orderId: string, status: AdminOrderStatus) {
   const supabase = createSupabaseServiceRoleClient();
 

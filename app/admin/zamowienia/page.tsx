@@ -1,13 +1,9 @@
 import Link from "next/link";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, ExternalLink } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
 import {
   ADMIN_ORDER_STATUS_LABELS,
-  ADMIN_ORDER_STATUSES,
-  getAdminOrders,
-  type AdminOrderItem,
-  type AdminOrderListItem
+  getAdminOrders
 } from "@/lib/admin/orders-admin";
 import { money } from "@/lib/format";
 
@@ -28,138 +24,6 @@ function formatDate(value: string) {
   return date.toLocaleString("pl-PL");
 }
 
-function OrderStatusForm({ order }: { order: AdminOrderListItem }) {
-  return (
-    <form action={updateOrderStatusAction} className="admin-order-status-form" data-admin-order-status-form="true">
-      <input type="hidden" name="orderId" value={order.id} />
-      <select name="status" defaultValue={order.status} aria-label={`Status zamówienia ${order.shortId}`}>
-        {ADMIN_ORDER_STATUSES.map((status) => (
-          <option value={status} key={status}>{ADMIN_ORDER_STATUS_LABELS[status]}</option>
-        ))}
-      </select>
-      <button type="submit" className="admin-secondary-button">Zapisz</button>
-    </form>
-  );
-}
-
-function PrivateFilesList({ item }: { item: AdminOrderItem }) {
-  if (item.privateFiles.length === 0) {
-    return (
-      <p className="admin-order-private-files-empty" data-admin-order-private-files-empty="true">
-        Brak plików prywatnych przypiętych do tego projektu. Przed realizacją sprawdź media prywatne w edycji projektu.
-      </p>
-    );
-  }
-
-  return (
-    <ul className="admin-order-private-files" data-admin-order-private-files="true">
-      {item.privateFiles.map((file) => (
-        <li key={file.id} data-admin-order-private-file-type={file.fileType}>
-          <strong>{file.fileLabel}</strong>
-          <span>{file.title || file.fileType}</span>
-          <small>Bucket: {file.bucket}</small>
-          {file.version && <small>Wersja: {file.version}</small>}
-          <code>{file.path}</code>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
-  const privateFiles = order.items.flatMap((item) => item.privateFiles);
-  const hasPdfEmailAddon = order.items.some((item) => item.hasPdfEmailAddon);
-  const hasPdfEmailFile = privateFiles.some((file) => file.fileType === "pdf_email_package");
-  const hasZipFile = privateFiles.some((file) => file.fileType === "full_package" || file.path.toLowerCase().endsWith(".zip"));
-  const hasDocumentationFile = privateFiles.some((file) => file.fileType === "documentation");
-
-  return (
-    <section className="admin-order-fulfillment" data-admin-order-fulfillment-v43="true">
-      <div>
-        <h3>Realizacja ręczna</h3>
-        <p>
-          Ten panel nie generuje linków czasowych i nie wysyła maili automatycznie. Ma pokazać operatorowi, co trzeba wysłać klientowi po potwierdzeniu płatności.
-        </p>
-      </div>
-
-      <div className="admin-order-fulfillment-grid">
-        <article data-admin-order-pdf-email-addon={hasPdfEmailAddon ? "true" : "false"}>
-          <span>Dodatek PDF na e-mail</span>
-          <strong>{hasPdfEmailAddon ? "Tak, zamówiony" : "Nie dotyczy"}</strong>
-          <p>
-            {hasPdfEmailAddon
-              ? hasPdfEmailFile
-                ? "Wyślij klientowi prywatny plik typu PDF na e-mail."
-                : "Dodatek jest w zamówieniu, ale nie znaleziono przypiętego pliku pdf_email_package przy projekcie."
-              : "Nie wysyłaj dodatkowego PDF-a na e-mail, jeśli nie ustalisz tego ręcznie z klientem."}
-          </p>
-        </article>
-
-        <article data-admin-order-send-instructions="true">
-          <span>Co wysłać klientowi</span>
-          <strong>{privateFiles.length > 0 ? `${privateFiles.length} plików prywatnych do sprawdzenia` : "Brak plików prywatnych"}</strong>
-          <p>
-            Najpierw potwierdź płatność. Następnie wyślij prywatne pliki przypięte do projektów w zamówieniu: dokumentację PDF, paczkę ZIP oraz PDF na e-mail, jeśli dodatek został zamówiony.
-          </p>
-          <small>PDF: {hasDocumentationFile ? "jest" : "brak"} / ZIP: {hasZipFile ? "jest" : "brak"}</small>
-        </article>
-      </div>
-
-      <ul className="admin-order-fulfillment-checklist" data-admin-order-fulfillment-checklist="true">
-        <li data-admin-fulfillment-payment-confirmed="true"><span aria-hidden="true">☐</span> Płatność potwierdzona</li>
-        <li data-admin-fulfillment-pdf-sent="true"><span aria-hidden="true">☐</span> PDF wysłany, jeśli dotyczy</li>
-        <li data-admin-fulfillment-zip-sent="true"><span aria-hidden="true">☐</span> ZIP wysłany, jeśli dotyczy</li>
-        <li data-admin-fulfillment-order-closed="true"><span aria-hidden="true">☐</span> Zamówienie zamknięte statusem `Wysłane` albo `Anulowane`</li>
-      </ul>
-    </section>
-  );
-}
-
-function OrderDetails({ order }: { order: AdminOrderListItem }) {
-  return (
-    <details className="admin-order-details" data-admin-order-details="true">
-      <summary>Pozycje, pliki prywatne i dane obsługi</summary>
-      <div className="admin-order-details-grid">
-        <section>
-          <h3>Pozycje zamówienia</h3>
-          <div className="admin-order-items" data-admin-order-items="true">
-            {order.items.map((item) => (
-              <article key={item.id} className="admin-order-item">
-                <strong>{item.projectCode} / {item.projectName}</strong>
-                <span>Slug: {item.projectSlug}</span>
-                <span>Wariant: {item.variantName}</span>
-                <span>Baza: {money(item.basePriceGross)} | Wariant: {money(item.variantPriceGross)} | Razem: {money(item.itemTotalGross)}</span>
-                <p data-admin-order-item-pdf-email-addon={item.hasPdfEmailAddon ? "true" : "false"}>
-                  PDF na e-mail: {item.hasPdfEmailAddon ? "zamówiony" : "niezamówiony"}
-                </p>
-                {item.addons.length > 0 && (
-                  <ul>
-                    {item.addons.map((addon) => (
-                      <li key={addon.id}>
-                        {addon.name} ({addon.code}) +{money(addon.priceGross)}
-                        {addon.deliveryAction ? ` / ${addon.deliveryAction}` : ""}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <h4>Pliki prywatne przypięte do projektu</h4>
-                <PrivateFilesList item={item} />
-              </article>
-            ))}
-          </div>
-        </section>
-        <section>
-          <h3>Uwagi klienta</h3>
-          <p>{order.notes || "Brak uwag."}</p>
-          <h3>Dane do faktury</h3>
-          <p>{order.invoiceData || "Brak danych do faktury."}</p>
-        </section>
-      </div>
-      <OrderFulfillmentPanel order={order} />
-    </details>
-  );
-}
-
 export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageProps) {
   const orders = await getAdminOrders();
   const resolvedSearchParams = searchParams ? await searchParams : {};
@@ -169,12 +33,12 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
   return (
     <>
       <AdminHeader />
-      <main className="admin-shell" data-admin-orders-v42="true">
+      <main className="admin-shell" data-admin-orders-v42="true" data-admin-orders-list-only-v44="true">
         <section className="admin-page-head">
           <div>
             <span>ADMIN / ZAMÓWIENIA</span>
             <h1>Zamówienia</h1>
-            <p>Lista realnych zamówień zapisanych w Supabase. Ten panel służy do ręcznego kontaktu, potwierdzenia płatności i przygotowania plików do wysyłki.</p>
+            <p>Lista realnych zamówień zapisanych w Supabase. Szczegółowa obsługa zamówienia jest na osobnej stronie operacyjnej.</p>
           </div>
           <Link href="/admin" className="admin-secondary-button">
             <ClipboardList size={18} /> Dashboard
@@ -202,7 +66,7 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
           <section className="admin-table-card" data-admin-orders-list="true">
             <div className="admin-order-list">
               {orders.map((order) => (
-                <article className="admin-order-card" data-admin-order-card="true" key={order.id}>
+                <article className="admin-order-card admin-order-card-compact" data-admin-order-card="true" key={order.id}>
                   <header>
                     <div>
                       <span>Zamówienie</span>
@@ -221,8 +85,15 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
                     <div><dt>Pozycje</dt><dd>{order.items.length}</dd></div>
                   </dl>
 
-                  <OrderStatusForm order={order} />
-                  <OrderDetails order={order} />
+                  <div className="admin-order-list-actions">
+                    <Link
+                      href={`/admin/zamowienia/${order.id}`}
+                      className="admin-primary-button"
+                      data-admin-order-detail-link="true"
+                    >
+                      <ExternalLink size={16} /> Obsłuż zamówienie
+                    </Link>
+                  </div>
                 </article>
               ))}
             </div>

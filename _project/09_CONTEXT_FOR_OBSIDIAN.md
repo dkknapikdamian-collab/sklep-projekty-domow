@@ -6,26 +6,26 @@
 
 ## Aktualny etap
 
-Etap 12B: Hotfix patchera audit logu.
+Etap 14: Osobna strona szczegółów zamówienia `/admin/zamowienia/[id]`.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 18:20 Europe/Warsaw: poprawiono paczkę Etapu 12 po błędzie markera w `updateProjectStatusAction`. Nowy patcher wymienia całe funkcje server actions, zamiast polegać na kruchym fragmencie tekstu.
+2026-05-15 19:05 Europe/Warsaw: lista zamówień została rozdzielona od obsługi zamówienia. `/admin/zamowienia` jest listą, a operacyjna obsługa konkretnego zamówienia jest na `/admin/zamowienia/[id]`.
 
 ## Najważniejsze ustalenia
 
-- cel Etapu 12 pozostaje bez zmian: ryzykowne operacje admina mają zostawiać audit log,
-- runtime wymaga migracji `0016_admin_audit_log.sql`,
-- publiczny sklep, płatności i checkout klienta nie są ruszane,
-- patcher ma przerywać pracę po błędach checków.
+- lista zamówień nie powinna rosnąć w nieskończoność,
+- status, pliki, PDF na e-mail i checklisty są na stronie szczegółu,
+- brak trwałej notatki admina bez migracji,
+- nie dodano automatycznych maili, płatności, signed URL ani automatycznej wysyłki.
 
-## Pliki techniczne ważne
+## Pliki techniczne ważne dla Etapu 14
 
-- `../lib/admin/audit-log.ts`
-- `../supabase/migrations/0016_admin_audit_log.sql`
-- `../app/admin/projekty/actions.ts`
-- `../app/admin/zamowienia/actions.ts`
-- `../scripts/check-admin-audit-log-v44.cjs`
+- `../app/admin/zamowienia/page.tsx`
+- `../app/admin/zamowienia/[id]/page.tsx`
+- `../lib/admin/orders-admin.ts`
+- `../scripts/check-admin-orders-v42.cjs`
+- `../app/admin-v8.css`
 
 ## Uwaga
 

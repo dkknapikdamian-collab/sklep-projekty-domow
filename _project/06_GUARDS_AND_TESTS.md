@@ -1,6 +1,41 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Checki wymagane dla Etapu 14
+
+```powershell
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda zamówień
+
+Zaostrzono:
+
+```powershell
+npm run verify:admin-orders-v42
+```
+
+Guard pilnuje teraz:
+
+- istnienia `/admin/zamowienia/[id]/page.tsx`,
+- istnienia `getAdminOrderById`,
+- lista `/admin/zamowienia` ma marker `data-admin-orders-list-only-v44`,
+- lista ma link do szczegółu `data-admin-order-detail-link`,
+- lista nie zawiera już ciężkiego panelu szczegółów i checklisty,
+- strona szczegółu zawiera:
+  - dane klienta,
+  - status,
+  - pozycje,
+  - pliki prywatne,
+  - PDF na e-mail,
+  - checklistę ręcznej realizacji,
+  - placeholder notatki admina,
+- etap nie dodaje signed URL, maili automatycznych ani płatności.
+
+
 ## Hotfix guarda/pacthera po Etapie 12B
 
 Poprzedni patcher Etapu 12 był zbyt kruchy i zatrzymał się na markerze w `updateProjectStatusAction`.

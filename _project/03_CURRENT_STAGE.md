@@ -1,48 +1,50 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 18:20 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 19:05 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 12B: Hotfix patchera audit logu
+Etap 14: Osobna strona szczegółów zamówienia `/admin/zamowienia/[id]`
 
 ## Status etapu
 
-Przygotowany po błędzie `function updateProjectStatusAction missing replacement marker`. Nowa paczka nie opiera się na kruchym markerze tekstowym, tylko wymienia całe małe funkcje server actions.
+Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guard, typecheck, build i test ręczny.
 
 ## Cel etapu
 
-Wdrożyć audit log z Etapu 12 bez wrażliwości na drobne różnice formatowania w `actions.ts`.
+Lista zamówień ma pozostać listą, a obsługa konkretnego zamówienia ma odbywać się na dedykowanej stronie operacyjnej.
 
 ## Co zostało zrobione
 
-- Patcher wymienia całe funkcje:
-  - `updateProjectStatusAction`,
-  - `archiveProjectAction`,
-  - `deleteProjectAction`.
-- `app/admin/zamowienia/actions.ts` jest nadpisywany bezpieczną wersją z audit logiem.
-- Dodano/utrzymano:
-  - `lib/admin/audit-log.ts`,
-  - `supabase/migrations/0016_admin_audit_log.sql`,
-  - `scripts/check-admin-audit-log-v44.cjs`,
-  - `verify:admin-audit-log-v44`.
-- Zachowano hotfix dla guarda layoutu Etapu 11.
-- Skrypt nadal przerywa pracę po błędzie i nie commituję nieprzechodzących checków.
+- Dodano stronę `/admin/zamowienia/[id]`.
+- Lista `/admin/zamowienia` została uproszczona do szybkiego przeglądu i linku `Obsłuż zamówienie`.
+- Szczegóły zamówienia przeniesiono na dedykowaną stronę:
+  - dane klienta,
+  - status i zmiana statusu,
+  - pozycje,
+  - warianty,
+  - dodatki,
+  - pliki prywatne przypięte do projektów,
+  - PDF na e-mail,
+  - checklistę realizacji,
+  - dane do faktury,
+  - uwagi klienta.
+- Dodano placeholder notatki admina bez zapisu, ponieważ osobna notatka admina wymaga nowego pola/migracji.
+- Dodano `getAdminOrderById` w `lib/admin/orders-admin.ts`.
+- Zaktualizowano guard `verify:admin-orders-v42`, żeby pilnował podziału lista/szczegół.
 
 ## Czego nie zmieniano
 
-- Nie zmieniano publicznego wyglądu sklepu.
+- Nie zmieniano automatycznych maili.
 - Nie zmieniano płatności.
+- Nie dodawano signed URL.
+- Nie dodawano automatycznej wysyłki plików.
 - Nie zmieniano checkoutu klienta.
-- Nie zmieniano auth.
 
 ## Checki wymagane
 
 ```powershell
-npm run verify:admin-audit-log-v44
-npm run verify:admin-buttons-v19
-npm run verify:admin-project-list-compact-v41
-npm run verify:public-project-data-v22
+npm run verify:admin-orders-v42
 npm run typecheck
 npm run build
 npm run check:project-memory
@@ -50,4 +52,4 @@ npm run check:project-memory
 
 ## Kryterium zakończenia
 
-Każda ryzykowna operacja admina zostawia ślad w `admin_audit_log`.
+Lista zamówień jest listą, a obsługa konkretnego zamówienia dzieje się na dedykowanej stronie.

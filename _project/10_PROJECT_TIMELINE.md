@@ -33,3 +33,5 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 | 2026-05-15 | Etap 11: archived-first delete safety | Standardową ścieżką dla projektu jest archiwizacja, a fizyczne delete zostało awaryjne i blokowane dla statusów innych niż `archived`/`draft`. | `components/admin/AdminProjectDeleteForm.tsx`, `components/admin/AdminProjectsTable.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |
 
 | 2026-05-15 | Etap 12: admin audit log | Dodano minimalny audit log dla ryzykownych operacji admina: update projektu, status projektu, archiwizacja, hard delete i status zamówienia. | `lib/admin/audit-log.ts`, `supabase/migrations/0016_admin_audit_log.sql`, `scripts/check-admin-audit-log-v44.cjs` |
+
+| 2026-05-15 | Etap 14: strona szczegółów zamówienia | Rozdzielono listę zamówień od obsługi konkretnego zamówienia na `/admin/zamowienia/[id]`. | `app/admin/zamowienia/page.tsx`, `app/admin/zamowienia/[id]/page.tsx`, `lib/admin/orders-admin.ts`, `scripts/check-admin-orders-v42.cjs` |

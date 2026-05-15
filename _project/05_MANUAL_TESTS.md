@@ -1,6 +1,44 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 14
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do:
+
+```text
+/admin/zamowienia
+```
+
+2. Oczekiwany wynik:
+   - lista pokazuje skrócone karty zamówień,
+   - nie ma rozwijanych szczegółów i checklisty w każdej karcie,
+   - przy każdym zamówieniu jest link `Obsłuż zamówienie`.
+
+3. Kliknij `Obsłuż zamówienie`.
+
+4. Oczekiwany wynik na `/admin/zamowienia/[id]`:
+   - widać dane klienta,
+   - widać status i formularz zmiany statusu,
+   - widać pozycje zamówienia,
+   - widać warianty,
+   - widać dodatki,
+   - widać PDF na e-mail,
+   - widać pliki prywatne przypięte do projektu,
+   - widać dane do faktury i uwagi klienta,
+   - widać checklistę ręcznej realizacji,
+   - jest informacja, że osobna notatka admina wymaga osobnego pola/migracji.
+
+5. Zmień status zamówienia na stronie szczegółu.
+6. Oczekiwany wynik:
+   - status zapisuje się,
+   - po odświeżeniu zostaje,
+   - wracając do listy widać nowy status.
+
+
 ## Test reczny po Etapie 12B
 
 Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0016_admin_audit_log.sql`.

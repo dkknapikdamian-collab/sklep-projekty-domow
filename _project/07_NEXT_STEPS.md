@@ -1,20 +1,19 @@
 ﻿# 07_NEXT_STEPS - nastepne kroki
 
-## Najblizszy rekomendowany krok po Etapie 11
+## Najblizszy rekomendowany krok po Etapie 14
 
-Wykonać ręczny test archived-first w `/admin/projekty` na projekcie testowym: `Archiwizuj` ma być standardową ścieżką, a `Usuń trwale` ma być dostępne tylko w strefie awaryjnej i tylko dla `archived` albo `draft`.
+Wykonać runtime test jednego zamówienia na `/admin/zamowienia/[id]`: wejść z listy, sprawdzić dane, zmienić status i potwierdzić, że obsługa ręczna jest możliwa bez zaglądania do Supabase.
 
 ## Zasady dalszej pracy
 
-- Nie używać fizycznego delete jako codziennej operacji admina.
-- Przy pracy operacyjnej projekty mają być archiwizowane.
-- Fizyczne delete traktować jako awaryjne sprzątanie danych testowych albo błędnych rekordów.
-- Nie usuwać realnych projektów produkcyjnych w testach.
-- Nie dodawać nowych akcji destrukcyjnych bez server-side guardów.
+- Lista zamówień ma pozostać szybkim przeglądem.
+- Szczegóły i obsługa konkretnego zamówienia mają być na `/admin/zamowienia/[id]`.
+- Nie dokładać automatycznej wysyłki, signed URL ani płatności bez osobnego etapu.
+- Notatka admina wymaga osobnej decyzji i migracji, jeśli ma być zapisywana trwale.
 
 ## Kolejne możliwe etapy
 
-1. Runtime test Etapu 11 w panelu admina.
-2. Osobny audit log operacji admina.
-3. Stabilny runtime test pełnej ścieżki `/koszyk` -> `/zamowienie` -> `/admin/zamowienia`.
-4. Uporządkowanie filtrów admina, żeby łatwo pokazywać/ukrywać archived.
+1. Runtime test Etapu 14.
+2. Trwała notatka admina dla zamówienia z migracją.
+3. Widok audit logu `/admin/audit`.
+4. Uporządkowanie filtrów zamówień i wyszukiwarka po kliencie/statusie.
