@@ -1,4 +1,4 @@
-# 04_DECISIONS - Aktywne decyzje projektu
+﻿# 04_DECISIONS - Aktywne decyzje projektu
 
 ## Jak czytać ten plik
 
@@ -104,3 +104,21 @@ Nie wdrażać bez decyzji Damiana.
 - Czysty HTML jako produkcyjny sklep: porzucone.
 - Fikcyjne projekty jako realne oferty: zakazane.
 - Panel klienta jako konieczny element V1: odłożone do V2/później.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## Product and operational decisions confirmed in memory - 2026-05-15 22:12:34
+
+- Production store, not static HTML.
+- Browsing without login.
+- Guest checkout allowed.
+- Admin login is primary login use case.
+- Private order/download link can replace customer account.
+- Stable project code required.
+- Production catalog only real active/published projects.
+- Fictional data only dev/seed/demo, never real offer.
+- Add-on Projekt w formacie PDF na e-mail costs +250 zl and is an extra email PDF package/copy.
+- Repo is the source of truth for code/project memory; Obsidian is dashboard/index.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
+

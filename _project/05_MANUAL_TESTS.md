@@ -1,4 +1,4 @@
-## Test ręczny po Etapie 20
+﻿## Test ręczny po Etapie 20
 
 Status: do wykonania po wdrożeniu paczki, przejściu guardów, typecheck i build.
 
@@ -174,3 +174,17 @@ Test ręczny jest ważny tylko wtedy, gdy zapisujemy:
 | Oczekiwany wynik | Guard potwierdza komplet plików `_project/` i Obsidiana. |
 | Status | Dodany w tym etapie. |
 | Guard | Tak. |
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## Manual tests after this package - 2026-05-15 22:12:34
+
+| Area | Status | What Damian should verify |
+|---|---|---|
+| App repo memory | TEST RECZNY DO WYKONANIA | Check _project/ files and run report after script completes. |
+| Obsidian dashboard | TEST RECZNY DO WYKONANIA | Open 10_PROJEKTY/Sklep_projekty_domow/00_START - Sklep projekty domow.md. |
+| Generic Obsidian names | TEST RECZNY DO WYKONANIA | Confirm no active root INDEX.md, STATUS.md, LEDGER.md, NOTES.md, TESTS.md, TODO.md, NEXT.md. |
+| Store UI | BRAK POTWIERDZONEGO TESTU | This package does not modify UI. |
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
+

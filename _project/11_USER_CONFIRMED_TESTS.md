@@ -1,4 +1,4 @@
-# 11_USER_CONFIRMED_TESTS - Potwierdzenia Damiana
+﻿# 11_USER_CONFIRMED_TESTS - Potwierdzenia Damiana
 
 ## Zasada
 
@@ -40,3 +40,12 @@ Nie ma jeszcze w tym pliku pełnego potwierdzenia Damiana dla:
 - produkcyjnych płatności,
 - prywatnych linków do pobrania,
 - pełnej automatycznej dostawy dokumentacji.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## 2026-05-15 22:12:34
+
+No manual UI test confirmed in this run. Status remains: BRAK POTWIERDZONEGO TESTU for app UI.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
+

@@ -1,4 +1,4 @@
-# 03_CURRENT_STAGE - aktualny etap
+﻿# 03_CURRENT_STAGE - aktualny etap
 
 Ostatnia aktualizacja: 2026-05-15 22:20 Europe/Warsaw
 
@@ -51,3 +51,14 @@ npm run check:project-memory
 ## Kryterium zakończenia
 
 Po operacji admina można wejść w `/admin/audit` i zobaczyć ślad operacji.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## Update 2026-05-15 22:12:34
+
+Current stage: full project memory + Obsidian dashboard + implementation/test history + naming audit.
+
+This stage does not change storefront logic, admin UI, checkout or routing.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
+

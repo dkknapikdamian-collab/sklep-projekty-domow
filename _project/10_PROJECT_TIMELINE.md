@@ -1,4 +1,4 @@
-# 10_PROJECT_TIMELINE - Oś czasu projektu
+﻿# 10_PROJECT_TIMELINE - Oś czasu projektu
 
 ## Przed aplikacją
 
@@ -89,4 +89,12 @@ Uzupełnienie repo i Obsidiana o pełny mózg projektu:
 | 2026-05-15 | Etap 19: filtry i priorytetyzacja zamówień | Lista `/admin/zamowienia` dostała liczniki, filtry i oznaczenia priorytetów: kontakt, płatność, wysyłka. | `app/admin/zamowienia/page.tsx`, `lib/admin/orders-admin.ts`, `app/admin-v8.css`, `scripts/check-admin-orders-v42.cjs` |
 
 | 2026-05-15 | Etap 20: widok audit logu | Dodano `/admin/audit`, filtr po typie akcji i tabelę śladu operacji admina. | `lib/admin/audit-log.ts`, `app/admin/audit/page.tsx`, `components/admin/AdminHeader.tsx`, `scripts/check-admin-audit-log-v44.cjs` |
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## 2026-05-15 22:12:34 - V6 memory/Obsidian repair
+
+After V3/V4/V5 package failures, V6 rewrites the executor with named parameters, empty-path guards and a simpler commit model.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 

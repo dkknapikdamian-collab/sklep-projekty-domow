@@ -1,4 +1,4 @@
-## Checki wymagane dla Etapu 20
+﻿## Checki wymagane dla Etapu 20
 
 ```powershell
 npm run verify:admin-audit-log-v44
@@ -96,3 +96,17 @@ Te guardy są ważne, ale ich istnienie trzeba potwierdzić w aktualnym repo:
 ## Zasada dla kolejnych AI developerów
 
 Jeśli dotykasz funkcji, dodaj albo zaktualizuj guard. Jeśli guard jest nierealny, wpisz w raporcie: `brak guardu - tylko test ręczny` i podaj dokładny test ręczny.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## Guards added/checked - 2026-05-15 22:12:34
+
+- TEST AUTOMATYCZNY / GUARD: 
+ode scripts/check-sklep-full-memory-v6.cjs <AppRepo> <ObsidianVault>.
+- Existing 
+pm run check:project-memory is executed when present.
+- Existing 
+pm run build is attempted as optional validation when present.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
+

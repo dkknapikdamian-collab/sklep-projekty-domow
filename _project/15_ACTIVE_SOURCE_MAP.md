@@ -1,52 +1,14 @@
-﻿# 09_CONTEXT_FOR_OBSIDIAN - indeks projektu
+﻿# 15_ACTIVE_SOURCE_MAP - Sklep projekty domow
 
-## Projekt
+## Mapa zrodel
 
-`sklep-projekty-domow`
-
-## Aktualny etap
-
-Etap 20: Widok audit logu `/admin/audit`.
-
-## Ostatnia ważna zmiana
-
-2026-05-15 22:20 Europe/Warsaw: przygotowano widok audit logu `/admin/audit`, który pokazuje wpisy z `admin_audit_log`, pozwala filtrować po typie akcji i daje adminowi podgląd śladu operacji.
-
-## Najważniejsze ustalenia
-
-- V1 działa na płatności manualnej,
-- nie ma Stripe/PayU,
-- system nadal niczego sam nie wysyła,
-- lista zamówień priorytetyzuje pracę admina,
-- audit log jest widokiem tylko do odczytu,
-- mechanizm auth i logika operacji admina nie są zmieniane w Etapie 20.
-
-## Pliki techniczne ważne dla Etapu 20
-
-- `../lib/admin/audit-log.ts`
-- `../app/admin/audit/page.tsx`
-- `../components/admin/AdminHeader.tsx`
-- `../app/admin/page.tsx`
-- `../scripts/check-admin-audit-log-v44.cjs`
-
-## Checki wymagane po Etapie 20
-
-```powershell
-npm run verify:admin-audit-log-v44
-npm run typecheck
-npm run build
-npm run check:project-memory
-```
-
-## Uwaga
-
-Obsidian jest tylko indeksem/dashboardem. Źródłem prawdy pozostaje repo.
+Fakty: kod, repo, testy, guardy, _project i aktualne pliki Obsidiana.
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
 
-## Update 2026-05-15 22:12:34 - full memory, Obsidian and naming audit
+## Source map update - 2026-05-15 22:12:34
 
-### FAKTY ZE SCAN-FIRST
+### App repo facts
 
 - FAKT: local repo scan path: C:\Users\malim\Desktop\biznesy_ai\strony\strona z projektami.
 - FAKT: package.json name: sklep-projekty-domow.
@@ -68,20 +30,12 @@ Obsidian jest tylko indeksem/dashboardem. Źródłem prawdy pozostaje repo.
 - FAKT: detected route/app files: app\layout.tsx; app\page.tsx; app\admin\page.tsx; app\admin\audit\page.tsx; app\admin\debug\page.tsx; app\admin\login\page.tsx; app\admin\logout\route.ts; app\admin\projekty\page.tsx; app\admin\projekty\nowy\page.tsx; app\admin\projekty\podglad\page.tsx; app\admin\projekty\[id]\edytuj\page.tsx; app\admin\setup\page.tsx; app\admin\strona-glowna\page.tsx; app\admin\zamowienia\page.tsx; app\admin\zamowienia\[id]\page.tsx; app\koszyk\page.tsx; app\projekty\page.tsx; app\projekty\[slug]\page.tsx; app\zamowienie\page.tsx.
 - FAKT: detected guard/test files: scripts\check-admin-audit-log-v44.cjs; scripts\check-admin-buttons-v19.cjs; scripts\check-admin-css-imports-v20e.cjs; scripts\check-admin-debug-v26.cjs; scripts\check-admin-edit-parity-v21.cjs; scripts\check-admin-header-v24.cjs; scripts\check-admin-homepage-content-v23.cjs; scripts\check-admin-list-search-filter-v20.cjs; scripts\check-admin-media-visibility-v25.cjs; scripts\check-admin-orders-v42.cjs; scripts\check-admin-project-list-compact-v41.cjs; scripts\check-admin-project-management-v18.cjs; scripts\check-admin-project-media-v34.cjs; scripts\check-admin-projects-control-center-v36.cjs; scripts\check-admin-save-redirect-v31.cjs; scripts\check-admin-select-options.cjs; scripts\check-admin-selects-features.cjs; scripts\check-admin-ui-debug-v28.cjs; scripts\check-cart-order-v38.cjs; scripts\check-content-source.cjs; scripts\check-featurepicker-v15b.cjs; scripts\check-form-state-v17b.cjs; scripts\check-homepage-hero-full-bleed-v32.cjs; scripts\check-homepage-hero-full-bleed-v33.cjs; scripts\check-homepage-hero-polish-v33.cjs; scripts\check-manual-email-drafts-v47.cjs; scripts\check-manual-payment-v48.cjs; scripts\check-no-demo-content.cjs; scripts\check-no-legacy-demo-components.cjs; scripts\check-no-supabase-static-params.cjs; scripts\check-order-schema-v38.cjs; scripts\check-project-code-policy.cjs; scripts\check-project-media-controls-v34.cjs; scripts\check-project-media-rendering-v30.cjs; scripts\check-project-memory.cjs; scripts\check-project-publication-readiness-v35.cjs; scripts\check-public-catalog-filters-v22b.cjs; scripts\check-public-project-data-v22.cjs; scripts\check-public-project-detail-sales-v37.cjs; scripts\check-public-project-media-v34.cjs; scripts\check-public-service-role-read-v27.cjs; scripts\check-real-admin-projects.cjs; scripts\check-server-action-400-v16.cjs; scripts\check-supabase-foundation.cjs; scripts\check-ui-mojibake-status-v22d.cjs; scripts\check-use-server-action-exports-v17.cjs.
 
-### DECYZJE
+### Source priority
 
-- DECYZJA: project is a store application for selling house projects.
-- DECYZJA: app repo is source of truth for code, tests, guards, _project/ and technical run reports.
-- DECYZJA: Obsidian is a dashboard for status, decisions, manual tests, confirmations, risks and next steps.
-- DECYZJA: active Obsidian files must use descriptive project-context names.
-
-### HIPOTEZY / PROPOZYCJE
-
-- HIPOTEZA: next implementation stage should be chosen from real _project/07_NEXT_STEPS.md and current code state.
-
-### DO POTWIERDZENIA
-
-- DO POTWIERDZENIA: manual UI state must be confirmed by Damian, because this package does not change app logic.
+1. Code and tests in repo.
+2. AGENTS.md and _project/.
+3. Obsidian dashboard for operational status.
+4. Chat only as temporary input until written to repo/vault.
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 

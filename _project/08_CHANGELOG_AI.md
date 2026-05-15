@@ -225,5 +225,15 @@ npm run build
 - Zakres zmiany: wyłącznie dokumentacja zasad pracy i pamięci projektu.
 - Nie zmieniono kodu aplikacji, guardów ani logiki biznesowej.
 
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
 
+## 2026-05-15 22:12:34 - full memory + Obsidian + naming audit V6
+
+- Appended project rules to AGENTS.md without replacing existing content.
+- Updated _project/ memory files.
+- Added implementation ledger and test history entries.
+- Added memory guard scripts/check-sklep-full-memory-v6.cjs.
+- Updated Obsidian dashboard and naming audit.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 

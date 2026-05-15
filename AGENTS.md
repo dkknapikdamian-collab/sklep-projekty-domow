@@ -1,4 +1,4 @@
-<!-- Project marker required by guard: Sklep z projektami domów -->
+﻿<!-- Project marker required by guard: Sklep z projektami domów -->
 
 
 Marker zgodnoĹ›ci guardu projektu: Sklep z projektami domĂłw.
@@ -483,3 +483,43 @@ Następny krok:
 - ...
 
 Nie kończ pracy bez informacji, co stało się z pamięcią projektu, testami i Obsidianem.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+
+## Sklep projekty domow - full project memory and Obsidian rules
+
+Scope: project Sklep / strona z projektami domow.
+
+### Work mode
+
+- Always work scan-first.
+- Read AGENTS.md, README.md if present, package.json, whole _project/, scripts/, 	ests/ and relevant app files before implementation.
+- Split every finding into: FAKT, DECYZJA, HIPOTEZA / PROPOZYCJA, DO POTWIERDZENIA.
+- Never write hypotheses as facts.
+- Do not replace existing AGENTS.md rules. Append only.
+- After every meaningful stage update _project/, run report, changelog, implementation ledger and test history.
+- Push changes to GitHub when the task uses push mode.
+
+### Required memory files
+
+Required root memory: AGENTS.md and _project/ with status, goal, work rules, current stage, decisions, manual tests, guards/tests, next steps, changelog, Obsidian context, timeline, user-confirmed tests, implementation ledger, campaign/project ledger, test history, active source map and Obsidian naming rules.
+
+### Product decisions
+
+- Production direction: store application, not static HTML.
+- Browsing projects without login.
+- Guest purchase is allowed.
+- Login is mainly for admin.
+- Client may get a private order/download link instead of an account.
+- Every project must have stable project code.
+- Project data must be managed by admin/database, not hardcoded as production offers.
+- Production catalog shows only real projects added by admin and active/published.
+- Fictional projects can exist only as seed/dev/demo and must be clearly marked.
+- Add-on Projekt w formacie PDF na e-mail costs +250 zl and means an extra PDF package/copy sent by email.
+
+### Obsidian naming
+
+Active Obsidian section must not use generic root files like INDEX.md, STATUS.md, ledger.md, NOTES.md, TESTS.md, TODO.md, NEXT.md without project context.
+
+<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
+
