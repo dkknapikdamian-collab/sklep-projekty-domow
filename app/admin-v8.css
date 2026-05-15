@@ -1464,3 +1464,156 @@
   color: rgba(244,241,234,.72);
 }
 /* STAGE48 MANUAL PAYMENT INSTRUCTIONS END */
+
+
+/* STAGE49 ADMIN ORDER FILTERS AND PRIORITY START */
+.admin-orders-priority-shell .admin-page-head p {
+  max-width: 920px;
+}
+
+.admin-order-priority-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.admin-order-priority-panel article {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(205,164,99,.24);
+  border-radius: 7px;
+  background: rgba(205,164,99,.055);
+}
+
+.admin-order-priority-panel span {
+  color: rgba(244,241,234,.70);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.admin-order-priority-panel strong {
+  color: #f0dfc5;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.admin-order-priority-panel a {
+  width: fit-content;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 4px;
+  color: #f4f1ea;
+  background: rgba(255,255,255,.035);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.admin-order-filter-bar {
+  display: grid;
+  grid-template-columns: minmax(170px, .9fr) repeat(4, minmax(160px, 1fr)) auto auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 7px;
+  background: rgba(255,255,255,.025);
+}
+
+.admin-order-filter-bar > div,
+.admin-order-filter-bar label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.admin-order-filter-bar > div {
+  min-height: 44px;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 5px;
+  background: rgba(0,0,0,.12);
+}
+
+.admin-order-filter-bar > div svg {
+  color: #f0dfc5;
+}
+
+.admin-order-filter-bar > div strong {
+  color: #f0dfc5;
+  font-size: 20px;
+}
+
+.admin-order-filter-bar > div span,
+.admin-order-filter-bar label span {
+  color: rgba(244,241,234,.68);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.admin-order-filter-bar select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 5px;
+  background: rgba(0,0,0,.18);
+  color: #f4f1ea;
+  padding: 0 10px;
+}
+
+.admin-order-filter-bar button,
+.admin-order-filter-bar a {
+  min-height: 44px;
+}
+
+.admin-order-priority-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.admin-order-priority-row span,
+.admin-order-priority-row small {
+  min-height: 25px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  padding: 0 10px;
+  background: rgba(255,255,255,.035);
+  color: rgba(244,241,234,.74);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.admin-order-priority-row span {
+  border-color: rgba(205,164,99,.42);
+  background: rgba(205,164,99,.12);
+  color: #f0dfc5;
+}
+
+@media (max-width: 1180px) {
+  .admin-order-filter-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-order-priority-panel,
+  .admin-order-filter-bar {
+    grid-template-columns: 1fr;
+  }
+}
+/* STAGE49 ADMIN ORDER FILTERS AND PRIORITY END */
