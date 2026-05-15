@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { Heart, ShoppingCart, Search, User, ChevronDown, House, Mail, Phone, HelpCircle, RotateCcw, Truck } from "lucide-react";
+import { Search, User, House, Mail, Phone, HelpCircle, RotateCcw, Truck } from "lucide-react";
+import { HeaderCartLink } from "@/components/HeaderCartLink";
+import { HeaderFavoritesLink } from "@/components/HeaderFavoritesLink";
 
 export function Header() {
   return (
@@ -42,8 +44,8 @@ export function Header() {
         </div>
 
         <div className="nav-icons">
-          <a><Heart size={21} /><span>Ulubione</span><em>0</em></a>
-          <Link href="/koszyk"><ShoppingCart size={21} /><span>Koszyk</span><em>0</em></Link>
+          <HeaderFavoritesLink />
+          <HeaderCartLink />
         </div>
       </div>
     </header>

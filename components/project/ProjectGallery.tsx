@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Project } from "@/types/project";
 import { MediaSlot } from "@/components/MediaSlot";
+import { FavoriteButton } from "@/components/project/FavoriteButton";
 
 type GalleryImage = {
   url: string;
@@ -117,7 +118,13 @@ export function ProjectGallery({ project }: { project: Project }) {
             <ChevronRight size={24} />
           </button>
         )}
-        <button className="heart-floating" type="button" aria-label="Dodaj do ulubionych"><Heart size={35} /></button>
+        <FavoriteButton
+          className="heart-floating"
+          iconSize={35}
+          projectCode={project.code}
+          projectSlug={project.slug}
+          projectName={project.name}
+        />
       </div>
 
       {thumbs.length > 1 && (

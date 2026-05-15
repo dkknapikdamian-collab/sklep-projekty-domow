@@ -1,7 +1,8 @@
-﻿import Link from "next/link";
-import { Heart, FileText } from "lucide-react";
+import Link from "next/link";
+import { FileText } from "lucide-react";
 import type { Project } from "@/types/project";
 import { MediaSlot } from "@/components/MediaSlot";
+import { FavoriteButton } from "@/components/project/FavoriteButton";
 import { area, money } from "@/lib/format";
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -18,7 +19,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <Link href={`/projekty/${project.slug}`} className="project-image">
         {project.badgePrimary && <span className="card-badge">{project.badgePrimary}</span>}
         <MediaSlot src={cardImageSrc} alt={project.name} label="Dodaj miniature projektu" sizes="360px" />
-        <button type="button" aria-label="Dodaj do ulubionych"><Heart size={20} /></button>
+        <FavoriteButton projectCode={project.code} projectSlug={project.slug} projectName={project.name} />
       </Link>
 
       <div className="project-body">

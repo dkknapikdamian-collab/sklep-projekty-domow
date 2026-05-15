@@ -15,7 +15,9 @@ const requiredFiles = [
   '_project/07_NEXT_STEPS.md',
   '_project/08_CHANGELOG_AI.md',
   '_project/09_CONTEXT_FOR_OBSIDIAN.md',
+  '_project/10_PROJECT_TIMELINE.md',
   '_project/runs/.gitkeep',
+  '_project/history',
 ];
 
 const requiredAgentMentions = [
@@ -28,14 +30,25 @@ const requiredAgentMentions = [
   '_project/06_GUARDS_AND_TESTS.md',
   '_project/07_NEXT_STEPS.md',
   '_project/08_CHANGELOG_AI.md',
+  '_project/09_CONTEXT_FOR_OBSIDIAN.md',
+  '_project/10_PROJECT_TIMELINE.md',
   '_project/runs/',
+  '_project/history/',
 ];
 
 function exists(relativePath) {
   return fs.existsSync(path.join(root, relativePath));
 }
 
+function isDirectory(relativePath) {
+  const absolutePath = path.join(root, relativePath);
+  return fs.existsSync(absolutePath) && fs.statSync(absolutePath).isDirectory();
+}
+
 const missingFiles = requiredFiles.filter((file) => !exists(file));
+if (!isDirectory('_project/history')) {
+  missingFiles.push('_project/history/');
+}
 
 let missingMentions = [];
 if (exists('AGENTS.md')) {

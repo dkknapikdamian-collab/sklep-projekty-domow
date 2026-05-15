@@ -1,78 +1,70 @@
-﻿# 03_CURRENT_STAGE - aktualny etap
+# 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 08:35 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 09:19 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 4: Karta projektu jako glowna strona sprzedazowa
+Etap 6: Zamowienie V1 - realny zapis i podstawowy panel zamowien w adminie
 
 ## Status etapu
 
-Zakonczony.
+Zakonczony kodowo i guardowo lokalnie.
 
-Karta projektu ma dopiety sprzedazowy flow: galeria, cena, warianty, dodatki, CTA do koszyka, dane techniczne, rzuty, pomieszczenia, co zawiera projekt i podobne projekty.
+Checkout nadal zapisuje zamowienia do Supabase przez `createOrder`, bez platnosci online, faktur, maili i automatycznej wysylki plikow. Admin ma teraz podstawowy panel `/admin/zamowienia` do recznej obslugi zamowien.
 
 ## Cel etapu
 
-Dopiac karte projektu tak, zeby nie tylko wyswietlala dane, ale prowadzila uzytkownika do wyboru wariantu, dodatkow i koszyka.
+Po wyslaniu zamowienia Damian ma widziec rekord w panelu admina, wraz z klientem, kontaktem, suma, statusem, data oraz pozycjami zamowienia, i moze recznie zmienic status obslugi.
 
 ## Zakres
 
-- `components/project/ProjectDetailPage.tsx`
-- `components/project/ProjectGallery.tsx`
-- `components/project/ProjectMediaGallery.tsx`
-- `components/project/ProjectPurchaseBox.tsx`
-- `components/project/ProjectTabs.tsx`
-- `components/project/RelatedProjects.tsx`
-- `components/project/ProjectCard.tsx`
-- `lib/project-repository.ts`
-- `types/project.ts`
-- `scripts/check-public-project-detail-sales-v37.cjs`
-- `START_LOCAL.bat`
+- `app/admin/zamowienia/page.tsx`
+- `app/admin/zamowienia/actions.ts`
+- `lib/admin/orders-admin.ts`
+- `components/admin/AdminHeader.tsx`
+- `app/admin/page.tsx`
+- `app/admin-v8.css`
+- `supabase/migrations/0014_orders_v1.sql`
+- `supabase/migrations/0015_orders_v42_statuses.sql`
+- `scripts/check-order-schema-v38.cjs`
+- `scripts/check-admin-orders-v42.cjs`
+- `package.json`
 
 ## Co zostalo zrobione
 
-- Doprecyzowano publiczny wybor dodatku PDF na e-mail.
-- Dodatek `send_pdf_email` jest oznaczany jako opcjonalny pakiet PDF na e-mail.
-- Dodano tekst, ze PDF na e-mail nie zastepuje podstawowej dostawy projektu.
-- CTA `DODAJ DO KOSZYKA` ma stabilny marker `data-project-cart-cta="true"` i opis `aria-label` z aktualna kwota.
-- Mikrokomunikat dostawy nie miesza juz podstawowej dostawy z dodatkiem PDF.
-- Dodano anchor/marker sekcji podobnych projektow.
-- Dodano `ProjectMediaGallery.tsx` jako bezpieczny alias do istniejacego `ProjectGallery`.
-- Zaostrzono `scripts/check-public-project-detail-sales-v37.cjs`.
-- Dodano `START_LOCAL.bat` do prostego uruchamiania lokalnego.
-- Sprawdzono przeplyw w przegladarce: wariant + PDF na e-mail +250 zl -> CTA -> `/koszyk`.
+- Dodano panel `/admin/zamowienia` zabezpieczony istniejacym middleware admina.
+- Panel pobiera zamowienia z `orders`, `order_items` i `order_item_addons` przez server-side service role.
+- Lista pokazuje numer/id, klienta, e-mail, telefon, sume, status, date i liczbe pozycji.
+- Dodano rozwijany szczegol zamowienia z pozycjami, wariantami, dodatkami, uwagami i danymi do faktury.
+- Dodano reczna zmiane statusu zamowienia przez server action.
+- Docelowe statusy V1 to: `new`, `contacted`, `paid_manual`, `sent`, `cancelled`.
+- Dodano migracje `0015_orders_v42_statuses.sql`, ktora mapuje stare statusy `pending_contact`, `paid`, `completed` na nowe.
+- Dodano link do zamowien w headerze admina i kafelek na dashboardzie admina.
+- Dodano guard `npm run verify:admin-orders-v42`.
 
 ## Czego nie zmieniano
 
-- Nie dodawano fikcyjnych danych projektow.
-- Nie zmieniano routingu.
-- Nie zmieniano admina poza sprawdzeniem opcji i domyslnego dodatku PDF w guardzie.
-- Nie zmieniano checkoutu.
+- Nie dodawano platnosci online.
+- Nie dodawano automatycznej wysylki plikow.
+- Nie dodawano faktur.
+- Nie dodawano maili.
+- Nie zmieniano publicznego checkoutu poza tym, ze nadal tworzy zamowienie ze statusem `new`.
+- Nie dodawano fikcyjnych zamowien ani danych produkcyjnych.
 
 ## Wyniki checkow
 
-- `npm run verify:public-project-detail-sales-v37` - OK
+- `npm run verify:order-schema-v38` - OK
 - `npm run verify:cart-order-v38` - OK
+- `npm run verify:admin-orders-v42` - OK
 - `npm run typecheck` - OK
 - `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
-- `npm run check:project-memory` - OK
-
-## Wynik testu przegladarkowego
-
-Na publicznej karcie aktywnego projektu:
-
-- wybrano wariant `Odbicie lustrzane + zmiany`,
-- zaznaczono `Pakiet PDF na e-mail` z cena `+250 zl`,
-- kliknieto `DODAJ DO KOSZYKA`,
-- strona przeszla do `/koszyk`,
-- koszyk zawieral wybrany wariant i zaznaczony dodatek PDF.
 
 ## Znane problemy / ryzyka
 
-- Lokalny admin runtime z Etapu 2 nadal moze byc blokowany przez niestabilny anon key.
-- Header koszyka w testowanym runtime pokazywal `Koszyk 0`, mimo ze strona koszyka zawierala dodana pozycje. Nie ruszano tego w Etapie 4, bo kryterium dotyczylo przejscia z karty do koszyka i wyboru wariantu/dodatkow.
+- Runtime test w przegladarce admina nadal zalezy od dzialajacego lokalnego Supabase Auth / anon key, ktory byl ryzykiem w poprzednich etapach.
+- Migracja `0015_orders_v42_statuses.sql` musi zostac zastosowana w bazie, jezeli `0014_orders_v1.sql` bylo juz wdrozone ze starym check constraintem.
+- Panel pozwala na reczna obsluge i statusy, ale nie wysyla maili, faktur ani plikow automatycznie.
 
 ## Nastepny krok
 
-Jesli kolejnym etapem bedzie koszyk/header, warto dopiac licznik koszyka w headerze jako osobny, maly etap. Karta projektu jako strona sprzedazowa ma teraz guard i przeszla flow wyboru do koszyka.
+Przeprowadzic manualny runtime test: wyslac zamowienie z `/zamowienie`, wejsc w `/admin/zamowienia`, rozwinac szczegoly i zmienic status np. z `new` na `contacted`.

@@ -21,7 +21,11 @@ export function CartClient() {
   useEffect(() => {
     refreshCart();
     window.addEventListener("project-cart-updated", refreshCart);
-    return () => window.removeEventListener("project-cart-updated", refreshCart);
+    window.addEventListener("storage", refreshCart);
+    return () => {
+      window.removeEventListener("project-cart-updated", refreshCart);
+      window.removeEventListener("storage", refreshCart);
+    };
   }, []);
 
   function handleRemove(itemId: string) {
@@ -56,7 +60,14 @@ export function CartClient() {
     <section className="cart-layout" data-cart-v38="true">
       <div className="cart-items">
         {cart.items.map((item) => (
-          <article className="cart-item" key={item.id}>
+          <article
+            className="cart-item"
+            key={item.id}
+            data-cart-item-code={item.projectCode}
+            data-cart-item-slug={item.projectSlug}
+            data-cart-item-variant={item.variantName}
+            data-cart-item-total={cartItemTotal(item)}
+          >
             <div>
               <span>{item.projectCode}</span>
               <h2>{item.projectName}</h2>

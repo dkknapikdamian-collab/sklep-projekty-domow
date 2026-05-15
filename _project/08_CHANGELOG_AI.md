@@ -1,5 +1,71 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
+## 2026-05-15 09:19 - Etap 6: Zamowienie V1 - panel zamowien admina
+
+- Dodano podstawowy panel `/admin/zamowienia` dla realnych zamowien zapisanych w Supabase.
+- Dodano `lib/admin/orders-admin.ts` do odczytu `orders`, `order_items` i `order_item_addons` przez service role.
+- Lista zamowien pokazuje id/numer, klienta, e-mail, telefon, sume, status, date i liczbe pozycji.
+- Dodano rozwijany szczegol zamowienia z pozycjami, wariantami, dodatkami, uwagami i danymi do faktury.
+- Dodano server action do recznej zmiany statusu zamowienia.
+- Statusy V1 to `new`, `contacted`, `paid_manual`, `sent`, `cancelled`.
+- Dodano migracje `0015_orders_v42_statuses.sql`, ktora mapuje stare statusy na nowe i aktualizuje check constraint.
+- Dodano link do zamowien w headerze admina i kafelek na dashboardzie.
+- Dodano guard `scripts/check-admin-orders-v42.cjs` i wpis `verify:admin-orders-v42` w `package.json`.
+- Zaktualizowano guard schematu zamowien V38 pod nowe statusy.
+- Nie dodawano platnosci online, maili, faktur ani automatycznej wysylki plikow.
+
+### Pliki zmienione
+
+- `app/admin/zamowienia/page.tsx`
+- `app/admin/zamowienia/actions.ts`
+- `lib/admin/orders-admin.ts`
+- `components/admin/AdminHeader.tsx`
+- `app/admin/page.tsx`
+- `app/admin-v8.css`
+- `supabase/migrations/0014_orders_v1.sql`
+- `supabase/migrations/0015_orders_v42_statuses.sql`
+- `scripts/check-order-schema-v38.cjs`
+- `scripts/check-admin-orders-v42.cjs`
+- `package.json`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/runs/2026-05-15_0919_admin-orders-v1.md`
+
+### Testy / guardy
+
+- `npm run verify:order-schema-v38` - OK
+- `npm run verify:cart-order-v38` - OK
+- `npm run verify:admin-orders-v42` - OK
+- `npm run typecheck` - OK
+- `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
+
+### Ryzyka
+
+- Pelny runtime test wymaga dzialajacego logowania admina i poprawnego anon key.
+- Jezeli baza ma juz zastosowana migracje `0014_orders_v1.sql`, trzeba zastosowac `0015_orders_v42_statuses.sql`, zeby nowe statusy przechodzily constraint.
+- Panel jest manualny; platnosci, maile, faktury i automatyczna wysylka plikow pozostaja poza zakresem.
+
+## 2026-05-15 09:28 - Aktualizacja globalnego workflow pamieci projektu
+
+- Zaktualizowano `AGENTS.md` do globalnego standardu Damiana.
+- Dodano `_project/10_PROJECT_TIMELINE.md`.
+- Dodano `_project/history/` oraz notatke historyczna o zmianie standardu pamieci.
+- Zaktualizowano `scripts/check-project-memory.cjs`, zeby pilnowal timeline i historii.
+- Zaktualizowano `_project/02_WORK_RULES.md`, `_project/04_DECISIONS.md`, `_project/06_GUARDS_AND_TESTS.md` i `_project/09_CONTEXT_FOR_OBSIDIAN.md`.
+- Nie zmieniano logiki sklepu, UI sklepu, checkoutu, panelu zamowien ani danych produkcyjnych.
+
+### Testy / guardy
+
+- `npm run check:project-memory` - OK
+
+### Ryzyka
+
+- Nowy standard wymaga konsekwentnego uzupelniania timeline i historii przy przyszlych zmianach kierunku projektu.
+
 ## 2026-05-14 22:35 - Etap 1: Audyt i stabilizacja akcji panelu admina
 
 - Przeczytano `AGENTS.md` oraz pliki `_project/` jako źródło prawdy.
@@ -127,3 +193,20 @@ Każdy większy etap ma dopisać nowy wpis z:
   - `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
   - `npm run check:project-memory` - OK
 - Znane ryzyko: header koszyka pokazal `Koszyk 0`, mimo ze koszyk zawieral dodana pozycje. To nie blokuje Etapu 4, ale warto naprawic jako osobny etap.
+
+## 2026-05-15 09:03 - Etap 5: Koszyk - walidacja ceny, wariantow i dodatkow
+
+- Dodano walidacje localStorage koszyka w `lib/cart/storage.ts`.
+- Koszyk wymaga kodu projektu, sluga, nazwy, ceny bazowej, wariantu, ceny wariantu, dodatkow i daty dodania.
+- Wybrane dodatki sa filtrowane do dodatkow dostepnych dla danej pozycji.
+- Dodano klientowy licznik koszyka w headerze, oparty o `readCart()` i `project-cart-updated`.
+- Dodano lokalne ulubione: `lib/favorites/storage.ts`, `FavoriteButton`, licznik `HeaderFavoritesLink`.
+- Serduszka w karcie projektu i kafelkach katalogu zapisują stan ulubionych bez zmiany layoutu.
+- Zaostrzono `scripts/check-cart-order-v38.cjs`, zeby pilnowal walidacji koszyka, markerow pozycji, PDF/email i licznikow headera.
+- Test runtime: dodanie projektu z PDF -> `/koszyk`, licznik `1`, zmiana dodatku przelicza sume, usuniecie pokazuje pusty koszyk i licznik `0`.
+- Test runtime ulubionych: serduszko zapisuje stan, licznik finalnie pokazuje `1`, brak bledow konsoli.
+- Uruchomione testy:
+  - `npm run verify:cart-order-v38` - OK
+  - `npm run typecheck` - OK
+  - `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
+- Znane ryzyko: ulubione nie maja osobnej strony/listy; na razie jest lokalny zapis, aktywne serduszko i licznik.

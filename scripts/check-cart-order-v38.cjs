@@ -10,10 +10,15 @@ const requiredFiles = [
   "app/zamowienie/page.tsx",
   "app/zamowienie/actions.ts",
   "components/cart/CartClient.tsx",
+  "components/Header.tsx",
+  "components/HeaderCartLink.tsx",
+  "components/HeaderFavoritesLink.tsx",
   "components/order/CheckoutForm.tsx",
+  "components/project/FavoriteButton.tsx",
   "components/project/ProjectPurchaseBox.tsx",
   "lib/cart/types.ts",
   "lib/cart/storage.ts",
+  "lib/favorites/storage.ts",
   "lib/order/create-order.ts",
   "docs/implementation/STAGE38_CART_ORDER_V1.md"
 ];
@@ -26,7 +31,17 @@ if (missing.length) {
 }
 
 const cart = read("components/cart/CartClient.tsx");
-for (const needle of ["data-cart-v38", "removeCartItem", "updateCartItemAddons", "cartTotal", "Przejdz do zamowienia"]) {
+for (const needle of [
+  "data-cart-v38",
+  "data-cart-item-code",
+  "data-cart-item-slug",
+  "data-cart-item-variant",
+  "data-cart-item-total",
+  "removeCartItem",
+  "updateCartItemAddons",
+  "cartTotal",
+  "Przejdz do zamowienia"
+]) {
   if (!cart.includes(needle)) {
     console.error(`FAIL: cart UI missing marker: ${needle}`);
     process.exit(1);
@@ -42,9 +57,65 @@ for (const needle of ["addCartItem", "selectedVariantPrice", "selectedAddons", "
 }
 
 const storage = read("lib/cart/storage.ts");
-for (const needle of ["localStorage", "project-cart-v38", "cartItemTotal", "variantPriceGross", "selectedAddons"]) {
+for (const needle of [
+  "localStorage",
+  "project-cart-v38",
+  "safeCartPayload",
+  "normalizeCartItem",
+  "Number.isFinite",
+  "projectCode",
+  "projectSlug",
+  "projectName",
+  "basePriceGross",
+  "variantName",
+  "variantPriceGross",
+  "selectedAddons",
+  "availableAddons",
+  "deliveryAction",
+  "cartItemTotal"
+]) {
   if (!storage.includes(needle)) {
     console.error(`FAIL: cart storage missing marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const header = read("components/Header.tsx");
+for (const needle of ["HeaderCartLink", "HeaderFavoritesLink"]) {
+  if (!header.includes(needle)) {
+    console.error(`FAIL: header missing live cart/favorites marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const headerCart = read("components/HeaderCartLink.tsx");
+for (const needle of ["readCart", "project-cart-updated", "storage", "Koszyk"]) {
+  if (!headerCart.includes(needle)) {
+    console.error(`FAIL: header cart counter missing marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const favoritesStorage = read("lib/favorites/storage.ts");
+for (const needle of ["project-favorites-v1", "project-favorites-updated", "projectCode", "projectSlug", "projectName"]) {
+  if (!favoritesStorage.includes(needle)) {
+    console.error(`FAIL: favorites storage missing marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const favoriteButton = read("components/project/FavoriteButton.tsx");
+for (const needle of ["toggleFavorite", "aria-pressed", "data-favorite-project-button", "data-favorite-active"]) {
+  if (!favoriteButton.includes(needle)) {
+    console.error(`FAIL: favorite button missing marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const purchasePdfGuardMarkers = ["send_pdf_email", "data-project-pdf-email-addon"];
+for (const needle of purchasePdfGuardMarkers) {
+  if (!purchase.includes(needle) && !storage.includes(needle)) {
+    console.error(`FAIL: PDF email addon guard missing marker: ${needle}`);
     process.exit(1);
   }
 }

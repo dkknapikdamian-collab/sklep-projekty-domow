@@ -13,7 +13,7 @@ create table if not exists public.orders (
   total_gross numeric not null default 0,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint orders_status_check check (status in ('new', 'pending_contact', 'paid', 'cancelled', 'completed'))
+  constraint orders_status_check check (status in ('new', 'contacted', 'paid_manual', 'sent', 'cancelled'))
 );
 
 create table if not exists public.order_items (

@@ -1,7 +1,7 @@
 ﻿import Link from "next/link";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjectMetrics } from "@/lib/admin/projects-admin";
-import { Bug, FolderPlus, Home, Images, ListChecks, LockKeyhole, PackageCheck, Settings, ShieldCheck } from "lucide-react";
+import { Bug, ClipboardList, FolderPlus, Home, Images, ListChecks, LockKeyhole, PackageCheck, Settings, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +42,12 @@ export default async function AdminDashboardPage() {
             <Images size={34} />
             <h2>Podglad karty</h2>
             <p>Zobacz karte projektu jako draft bez publikowania oferty.</p>
+          </Link>
+
+          <Link href="/admin/zamowienia" className="admin-action-card">
+            <ClipboardList size={34} />
+            <h2>Zamowienia</h2>
+            <p>Realne zamowienia z checkoutu, pozycje koszyka i reczna obsluga statusow.</p>
           </Link>
 
           <Link href="/admin/strona-glowna" className="admin-action-card">

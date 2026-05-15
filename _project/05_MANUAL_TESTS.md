@@ -1,5 +1,87 @@
-﻿# 05_MANUAL_TESTS - testy reczne
+# 05_MANUAL_TESTS - testy reczne
 
+## Test reczny po Etapie 6
+
+Status: do wykonania w runtime z dzialajacym Supabase Auth i zastosowana migracja `0015_orders_v42_statuses.sql`.
+
+### Co sprawdzic
+
+1. Uruchom lokalnie:
+
+```powershell
+START_LOCAL.bat
+```
+
+albo:
+
+```powershell
+npm run dev
+```
+
+2. Dodaj aktywny projekt do koszyka i przejdz do `/zamowienie`.
+3. Wypelnij formularz zamowienia i wyslij go.
+4. Oczekiwany wynik: checkout pokazuje sukces i techniczny numer zamowienia.
+5. Zaloguj sie do panelu admina.
+6. Wejdz na:
+
+```text
+/admin/zamowienia
+```
+
+7. Oczekiwany wynik: widac nowe zamowienie z numerem/id, klientem, e-mailem, telefonem, suma, statusem `Nowe`, data i liczba pozycji.
+8. Rozwin `Pozycje i dane obslugi`.
+9. Oczekiwany wynik: widac pozycje zamowienia, projekt, slug, wariant, dodatki, uwagi i dane do faktury.
+10. Zmien status na `Kontakt byl`, zapisz i sprawdz, czy po powrocie status jest zachowany.
+
+## Wynik proby 2026-05-15 09:19
+
+- Runtime przegladarkowy nie byl wykonywany w tym etapie.
+- Kodowo i buildowo potwierdzono trase `/admin/zamowienia`.
+- Pelny test admina nadal zalezy od dzialajacego lokalnego Supabase Auth / anon key oraz zastosowania migracji statusow.
+
+## Test reczny po Etapie 5
+
+Status: przeprowadzony lokalnie na publicznej karcie aktywnego projektu i koszyku.
+
+### Co sprawdzic
+
+1. Uruchom lokalnie:
+
+```powershell
+START_LOCAL.bat
+```
+
+albo:
+
+```powershell
+npm run dev
+```
+
+2. Wejdz na aktywny projekt, np.:
+
+```text
+/projekty/[slug-active]
+```
+
+3. Kliknij serduszko na glownej galerii albo kafelku projektu.
+4. Oczekiwany wynik: licznik `Ulubione` w headerze zmienia stan i serduszko ma stan aktywny.
+5. Zaznacz dodatek `Pakiet PDF na e-mail`, jesli projekt go ma.
+6. Kliknij `DODAJ DO KOSZYKA`.
+7. Oczekiwany wynik: przejscie do `/koszyk`, 1 pozycja w koszyku i licznik `Koszyk` w headerze rowny `1`.
+8. Odznacz/zaznacz dodatek w koszyku.
+9. Oczekiwany wynik: suma pozycji i podsumowanie zmieniaja sie zgodnie z cena dodatku.
+10. Kliknij `Usun pozycje`.
+11. Oczekiwany wynik: koszyk jest pusty, a licznik `Koszyk` w headerze wraca do `0`.
+
+## Wynik proby 2026-05-15 09:03
+
+- Runtime: `http://localhost:3100`.
+- Testowany projekt: `/projekty/31231312312`.
+- Ulubione: serduszko zapisalo stan, licznik finalnie pokazal `1`, brak bledow konsoli.
+- Koszyk: po `DODAJ DO KOSZYKA` strona przeszla do `/koszyk`, licznik pokazal `1`.
+- Pozycja koszyka miala kod `DP-2026-0001`, slug `31231312312`, wariant `Projekt podstawowy` i sume `12584` z PDF.
+- Odznaczenie dodatku zmienilo sume pozycji z `12584` na `12334`.
+- `Usun pozycje` pokazalo pusty koszyk i licznik `0`.
 ## Test reczny po Etapie 4
 
 Status: przeprowadzony na publicznej karcie aktywnego projektu.

@@ -676,3 +676,130 @@
   }
 }
 /* STAGE41 ADMIN PROJECT LIST COMPACT END */
+
+/* STAGE42 ADMIN ORDERS START */
+.admin-order-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-order-card {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 7px;
+  background: rgba(255,255,255,.025);
+}
+
+.admin-order-card header,
+.admin-order-status-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.admin-order-card header div {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-order-card header span,
+.admin-order-card header small,
+.admin-order-meta dt,
+.admin-order-item span,
+.admin-order-details p,
+.admin-order-details li {
+  color: rgba(244,241,234,.72);
+}
+
+.admin-order-card header strong {
+  font-size: 22px;
+}
+
+.admin-order-total {
+  color: #f0dfc5;
+  white-space: nowrap;
+}
+
+.admin-order-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.admin-order-meta div,
+.admin-order-item {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.admin-order-meta dd,
+.admin-order-meta dt {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-order-status-form {
+  justify-content: flex-start;
+}
+
+.admin-order-status-form select {
+  min-height: 38px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 5px;
+  background: rgba(0,0,0,.18);
+  color: #f4f1ea;
+  padding: 0 12px;
+}
+
+.admin-order-details {
+  border-top: 1px solid rgba(255,255,255,.09);
+  padding-top: 12px;
+}
+
+.admin-order-details summary {
+  cursor: pointer;
+  color: #f0dfc5;
+  font-weight: 800;
+}
+
+.admin-order-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, .9fr);
+  gap: 18px;
+  padding-top: 14px;
+}
+
+.admin-order-items {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-order-item {
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 6px;
+  background: rgba(0,0,0,.12);
+}
+
+.admin-order-item ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+@media (max-width: 760px) {
+  .admin-order-card header,
+  .admin-order-status-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-order-meta,
+  .admin-order-details-grid {
+    grid-template-columns: 1fr;
+  }
+}

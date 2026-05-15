@@ -1,5 +1,90 @@
-﻿# 06_GUARDS_AND_TESTS - guardy i testy
+# 06_GUARDS_AND_TESTS - guardy i testy
 
+## Aktualizacja guarda pamieci projektu 2026-05-15
+
+`npm run check:project-memory` sprawdza teraz rowniez:
+
+- `_project/10_PROJECT_TIMELINE.md`,
+- `_project/history/`,
+- odniesienia do `_project/09_CONTEXT_FOR_OBSIDIAN.md`,
+- odniesienia do `_project/10_PROJECT_TIMELINE.md`,
+- odniesienia do `_project/history/` w `AGENTS.md`.
+
+## Checki wymagane dla Etapu 6
+
+Uruchomione 2026-05-15:
+
+```powershell
+npm run verify:order-schema-v38
+npm run verify:cart-order-v38
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+```
+
+Wynik:
+
+- `verify:order-schema-v38` - OK
+- `verify:cart-order-v38` - OK
+- `verify:admin-orders-v42` - OK
+- `typecheck` - OK
+- `build` - OK, ze starymi ostrzezeniami autoprefixera
+
+## Guard panelu zamowien admina
+
+Dodany w Etapie 6:
+
+```powershell
+npm run verify:admin-orders-v42
+```
+
+Guard sprawdza:
+
+- istnienie `/admin/zamowienia`,
+- server action do zmiany statusu zamowienia,
+- repozytorium `lib/admin/orders-admin.ts`,
+- odczyt `orders`, `order_items` i `order_item_addons`,
+- statusy `new`, `contacted`, `paid_manual`, `sent`, `cancelled`,
+- markery listy, karty, szczegolow i pozycji zamowienia,
+- link do panelu zamowien w `AdminHeader`,
+- kafelek zamowien na dashboardzie admina,
+- migracje statusow V42,
+- wpis `verify:admin-orders-v42` w `package.json` i glownym `npm run verify`.
+
+## Checki wymagane dla Etapu 5
+
+Uruchomione 2026-05-15:
+
+```powershell
+npm run verify:cart-order-v38
+npm run typecheck
+npm run build
+```
+
+Wynik:
+
+- `verify:cart-order-v38` - OK
+- `typecheck` - OK
+- `build` - OK, ze starymi ostrzezeniami autoprefixera
+
+## Guard koszyka i lokalnych licznikow
+
+Zaostrzony w Etapie 5:
+
+```powershell
+npm run verify:cart-order-v38
+```
+
+Guard sprawdza teraz dodatkowo:
+
+- walidacje localStorage przez `safeCartPayload` i `normalizeCartItem`,
+- wymagane pola pozycji koszyka: kod projektu, slug, nazwa, cena bazowa, wariant, cena wariantu, dostepne i wybrane dodatki,
+- markery pozycji w koszyku: `data-cart-item-code`, `data-cart-item-slug`, `data-cart-item-variant`, `data-cart-item-total`,
+- filtrowanie wybranych dodatkow do dodatkow dostepnych,
+- obsluge dodatku PDF/email przez `send_pdf_email` i `data-project-pdf-email-addon`,
+- klientowy licznik koszyka w headerze oparty o `readCart()` i `project-cart-updated`,
+- lokalne ulubione oparte o `project-favorites-v1` i `project-favorites-updated`,
+- aktywny przycisk ulubionych z `aria-pressed` i markerami `data-favorite-*`.
 ## Checki wymagane dla Etapu 4
 
 Uruchomione 2026-05-15:

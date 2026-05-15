@@ -16,10 +16,10 @@ for (const needle of [
   "create table if not exists public.order_items",
   "create table if not exists public.order_item_addons",
   "status text not null default 'new'",
-  "'pending_contact'",
-  "'paid'",
+  "'contacted'",
+  "'paid_manual'",
   "'cancelled'",
-  "'completed'",
+  "'sent'",
   "total_gross",
   "variant_price_gross",
   "delivery_action"
