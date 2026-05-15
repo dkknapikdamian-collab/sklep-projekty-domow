@@ -1,5 +1,28 @@
 # 05_MANUAL_TESTS - Testy ręczne Damiana
 
+
+## Test reczny po Etapie 17
+
+Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0018_order_manual_payment_instruction.sql`.
+
+### Co sprawdzić
+
+1. Wejdź do `/zamowienie`.
+2. Sprawdź, czy checkout jasno komunikuje:
+   - płatność po kontakcie,
+   - brak automatycznej płatności online,
+   - dane do przelewu zostaną wysłane po weryfikacji.
+
+3. Wejdź do `/admin/zamowienia/[id]`.
+4. W sekcji realizacji wpisz instrukcję przelewu.
+5. Kliknij `Zapisz realizację`.
+6. Odśwież stronę.
+7. Oczekiwany wynik:
+   - instrukcja przelewu zostaje po odświeżeniu,
+   - roboczy e-mail `E-mail: potwierdzenie zamówienia` zawiera dane do płatności,
+   - status `Opłacone ręcznie` nadal jest dostępny.
+8. Nie testujemy Stripe, PayU ani automatycznego księgowania.
+
 ## Zasada
 
 Test ręczny jest ważny tylko wtedy, gdy zapisujemy:

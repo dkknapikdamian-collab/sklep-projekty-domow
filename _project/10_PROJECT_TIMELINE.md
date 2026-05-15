@@ -82,3 +82,5 @@ Uzupełnienie repo i Obsidiana o pełny mózg projektu:
 - Nie refaktorować szeroko przy małych etapach.
 - Nie dopisywać propozycji AI jako decyzji.
 - Nie ruszać routingu, jeśli zadanie dotyczy tylko dokumentacji/pamięci.
+
+| 2026-05-15 | Etap 17: płatność manualna / instrukcja przelewu | Checkout komunikuje płatność po kontakcie, admin zapisuje instrukcję przelewu, a roboczy e-mail zawiera dane do płatności. | `components/order/CheckoutForm.tsx`, `app/admin/zamowienia/[id]/page.tsx`, `lib/admin/order-email-drafts.ts`, `supabase/migrations/0018_order_manual_payment_instruction.sql` |

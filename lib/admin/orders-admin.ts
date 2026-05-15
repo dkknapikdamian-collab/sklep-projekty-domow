@@ -32,6 +32,7 @@ export type AdminOrderFulfillmentChecklist = {
   zipSent: boolean;
   orderClosed: boolean;
   internalNote: string;
+  paymentInstruction: string;
   updatedAt: string;
 };
 
@@ -72,6 +73,7 @@ export type UpdateAdminOrderFulfillmentChecklistInput = {
   zipSent: boolean;
   orderClosed: boolean;
   internalNote: string;
+  paymentInstruction: string;
 };
 
 type FulfillmentRow = {
@@ -81,6 +83,7 @@ type FulfillmentRow = {
   zip_sent: boolean | null;
   order_closed: boolean | null;
   internal_note: string | null;
+  payment_instruction: string | null;
   updated_at: string | null;
 };
 
@@ -108,6 +111,7 @@ export function emptyAdminOrderFulfillmentChecklist(): AdminOrderFulfillmentChec
     zipSent: false,
     orderClosed: false,
     internalNote: "",
+    paymentInstruction: "",
     updatedAt: ""
   };
 }
@@ -121,6 +125,7 @@ function mapFulfillmentRow(row: FulfillmentRow | undefined): AdminOrderFulfillme
     zipSent: Boolean(row.zip_sent),
     orderClosed: Boolean(row.order_closed),
     internalNote: String(row.internal_note || ""),
+    paymentInstruction: String(row.payment_instruction || ""),
     updatedAt: String(row.updated_at || "")
   };
 }
@@ -133,7 +138,7 @@ async function getAdminOrderFulfillmentChecklistByOrderId(orderIds: string[]) {
 
   const { data, error } = await supabase
     .from("order_fulfillment_checklist")
-    .select("order_id, payment_confirmed, pdf_sent, zip_sent, order_closed, internal_note, updated_at")
+    .select("order_id, payment_confirmed, pdf_sent, zip_sent, order_closed, internal_note, payment_instruction, updated_at")
     .in("order_id", orderIds);
 
   if (error) {
@@ -299,6 +304,7 @@ export async function updateAdminOrderFulfillmentChecklist(input: UpdateAdminOrd
       zip_sent: input.zipSent,
       order_closed: input.orderClosed,
       internal_note: input.internalNote || null,
+      payment_instruction: input.paymentInstruction || null,
       updated_at: new Date().toISOString()
     }, { onConflict: "order_id" });
 

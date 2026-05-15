@@ -57,6 +57,21 @@ function privateFilesSummary(order: AdminOrderListItem) {
   return lines.join("\n");
 }
 
+export function buildManualPaymentInstruction(order: AdminOrderListItem) {
+  const saved = order.fulfillmentChecklist.paymentInstruction.trim();
+  if (saved) return saved;
+
+  return [
+    "Dane do płatności przelewem:",
+    "Odbiorca: [UZUPEŁNIJ]",
+    "Numer rachunku: [UZUPEŁNIJ]",
+    `Tytuł przelewu: Zamówienie #${order.shortId}`,
+    `Kwota: ${money(order.totalGross)}`,
+    "",
+    "Po zaksięgowaniu płatności przygotujemy ręczną realizację zamówienia."
+  ].join("\n");
+}
+
 function commonFooter() {
   return [
     "Pozdrawiam,",
@@ -72,13 +87,14 @@ export function buildManualOrderEmailDrafts(order: AdminOrderListItem): ManualOr
   const privateFileLine = hasPrivateFiles(order)
     ? "W panelu admina są przypięte pliki prywatne do ręcznej realizacji."
     : "W panelu admina nie widzę jeszcze przypiętych plików prywatnych do tego zamówienia.";
+  const manualPaymentInstruction = buildManualPaymentInstruction(order);
 
   return [
     {
       key: "order_confirmation",
       title: "E-mail: potwierdzenie zamówienia",
       subject: `Potwierdzenie zamówienia #${order.shortId}`,
-      copyHint: "Wyślij po przyjęciu zamówienia, zanim płatność zostanie ręcznie potwierdzona.",
+      copyHint: "Wyślij po przyjęciu zamówienia. Ten draft zawiera ręczną instrukcję przelewu.",
       body: [
         `Dzień dobry ${firstName},`,
         "",
@@ -90,7 +106,10 @@ export function buildManualOrderEmailDrafts(order: AdminOrderListItem): ManualOr
         `Łączna kwota: ${money(order.totalGross)}`,
         pdfLine,
         "",
-        "Zamówienie zostało przyjęte do ręcznej weryfikacji. Po potwierdzeniu płatności przygotujemy dalszą realizację.",
+        "Płatność jest realizowana ręcznie, po kontakcie z obsługą. Poniżej dane do przelewu:",
+        manualPaymentInstruction,
+        "",
+        "Po potwierdzeniu płatności przygotujemy dalszą realizację zamówienia.",
         "",
         commonFooter()
       ].join("\n")

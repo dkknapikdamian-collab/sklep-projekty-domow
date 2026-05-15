@@ -1,51 +1,34 @@
-# 09_CONTEXT_FOR_OBSIDIAN - Sklep z projektami domów
+# 09_CONTEXT_FOR_OBSIDIAN - indeks projektu
 
-## Cel
+## Projekt
 
-Sklep / aplikacja do sprzedaży projektów domów. Publiczny klient ma przeglądać projekty i kupować bez konta. Admin ma dodawać realne projekty, media, parametry, statusy i obsługiwać zamówienia.
+`sklep-projekty-domow`
 
-## Kierunek
+## Aktualny etap
 
-- Next.js / React + baza danych + storage + panel admina.
-- Nie czysty HTML jako produkcja.
-- Katalog tylko z realnymi, aktywnymi/opublikowanymi projektami.
-- Karta projektu jest najważniejszym ekranem sprzedażowym.
-- Zakup jako gość.
-- Logowanie głównie dla admina.
-- Prywatny link do zamówienia/pobrania zamiast konta klienta w V1.
-- Dodatek `Projekt w formacie PDF na e-mail` za +250 zł jako dodatkowa forma dostarczenia/archiwizacji.
+Etap 17: Płatność manualna / instrukcja przelewu.
 
-## Stan
+## Ostatnia ważna zmiana
 
-Trwa budowa V1. Istnieją trasy sklepu i panelu admina. Prace dotyczyły admina, koszyka, checkoutu i dodatku PDF. Aktualnie najważniejsze jest uporządkowanie pamięci projektu i potem stabilizacja ścieżki zakupowej V1.
+2026-05-15 21:15 Europe/Warsaw: checkout komunikuje płatność po kontakcie, a admin może ustawić instrukcję przelewu na stronie zamówienia. Instrukcja trafia do roboczego e-maila potwierdzenia zamówienia.
 
-## Decyzje
+## Najważniejsze ustalenia
 
-- Produkcyjny sklep nie jest czystym HTML.
-- Fikcyjne projekty nie mogą być realnymi ofertami.
-- Dane projektów mają pochodzić z panelu admina / jednego źródła prawdy.
-- Każdy projekt ma mieć stały kod.
-- V1 bez obowiązkowego konta klienta.
-- Obsidian i repo mają być aktualizowane po ważnych zmianach.
+- V1 działa na płatności manualnej,
+- nie ma Stripe/PayU,
+- status `paid_manual` oznacza ręcznie potwierdzoną płatność,
+- dane do płatności są częścią roboczego e-maila,
+- system nadal niczego sam nie wysyła.
 
-## Testy
+## Pliki techniczne ważne dla Etapu 17
 
-Najważniejsze testy ręczne:
+- `../components/order/CheckoutForm.tsx`
+- `../app/zamowienie/page.tsx`
+- `../app/admin/zamowienia/[id]/page.tsx`
+- `../lib/admin/order-email-drafts.ts`
+- `../supabase/migrations/0018_order_manual_payment_instruction.sql`
+- `../scripts/check-manual-payment-v48.cjs`
 
-- admin: lista, nowy, edycja, zapis, anuluj, status, delete,
-- katalog pokazuje tylko aktywne projekty,
-- koszyk liczy projekt i dodatek PDF +250 zł,
-- checkout tworzy zamówienie,
-- admin widzi zamówienie,
-- `npm run build` przechodzi.
+## Uwaga
 
-Guard pamięci:
-
-```bash
-node scripts/check-project-memory.cjs
-npm run check:project-memory
-```
-
-## Następny krok
-
-Po wdrożeniu pełnej pamięci: stabilizacja ścieżki `aktywny projekt -> katalog -> karta -> koszyk -> checkout -> zamówienie -> admin`.
+Obsidian jest tylko indeksem/dashboardem. Źródłem prawdy pozostaje repo.

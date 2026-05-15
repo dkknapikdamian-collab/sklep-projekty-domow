@@ -86,6 +86,10 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
           Ta strona nie generuje linków czasowych i nie wysyła maili automatycznie. Zapisuje tylko stan ręcznej realizacji zamówienia.
         </p>
         {checklist.updatedAt && <small>Ostatnia aktualizacja checklisty: {formatDate(checklist.updatedAt)}</small>}
+        <div className="admin-order-manual-payment-note" data-admin-order-manual-payment-note="true">
+          <strong>Płatność ręczna</strong>
+          <p>Status `Opłacone ręcznie` oznacza, że admin potwierdził płatność poza systemem Stripe/PayU.</p>
+        </div>
       </div>
 
       <div className="admin-order-fulfillment-grid">
@@ -141,6 +145,17 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
             </label>
           </li>
         </ul>
+
+        <label className="admin-order-payment-instruction" data-admin-order-payment-instruction="true">
+          Instrukcja przelewu
+          <textarea
+            name="paymentInstruction"
+            rows={5}
+            defaultValue={checklist.paymentInstruction}
+            placeholder="Odbiorca, numer konta, tytuł przelewu, kwota i dodatkowe uwagi dla klienta..."
+          />
+          <small>Dane do przelewu są używane w roboczym e-mailu potwierdzenia zamówienia. System niczego sam nie wysyła.</small>
+        </label>
 
         <label className="admin-order-internal-note" data-admin-order-internal-note="true">
           Notatka admina

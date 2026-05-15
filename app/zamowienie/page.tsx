@@ -6,12 +6,13 @@ export default function CheckoutPage() {
     <>
       <Header />
       <main className="page-shell">
-        <section className="catalog-header" data-checkout-v43-page-copy="true">
+        <section className="catalog-header" data-checkout-v43-page-copy="true" data-manual-payment-page-v48="true">
           <span>ZAMÓWIENIE</span>
           <h1>Zamówienie projektu</h1>
           <p>
-            Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji.
-            Zamówienie jest przyjmowane ręcznie, bez automatycznej płatności online.
+            Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji,
+            a instrukcję płatności przelewem wyślemy po weryfikacji. Zamówienie
+            jest przyjmowane ręcznie, bez Stripe, PayU i automatycznej płatności online.
           </p>
         </section>
         <CheckoutForm />

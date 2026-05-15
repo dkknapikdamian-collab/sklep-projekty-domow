@@ -1,5 +1,35 @@
 # 06_GUARDS_AND_TESTS - Guardy i testy automatyczne
 
+
+## Checki wymagane dla Etapu 17
+
+```powershell
+npm run verify:manual-payment-v48
+npm run verify:cart-order-v38
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Nowy guard płatności manualnej
+
+Dodano:
+
+```powershell
+npm run verify:manual-payment-v48
+```
+
+Guard pilnuje:
+
+- komunikatu płatności po kontakcie w checkoutcie,
+- braku automatycznej płatności online,
+- migracji `0018_order_manual_payment_instruction.sql`,
+- pola `payment_instruction`,
+- formularza instrukcji przelewu w `/admin/zamowienia/[id]`,
+- wykorzystania instrukcji przelewu w roboczym e-mailu,
+- braku Stripe/PayU/automatycznego księgowania.
+
 ## Guard pamięci projektu
 
 | Komenda | Co sprawdza | Kiedy uruchamiać | Ostatni wynik | Czego nie pokrywa |

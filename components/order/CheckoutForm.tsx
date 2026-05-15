@@ -38,8 +38,8 @@ export function CheckoutForm() {
         <h2>{state.message}</h2>
         <p>Numer zamówienia: {state.orderId}</p>
         <p>
-          Skontaktujemy się z Tobą, żeby potwierdzić dostępność projektu, płatność
-          i sposób realizacji. Pliki przekażemy po ręcznym potwierdzeniu realizacji.
+          Skontaktujemy się z Tobą, żeby potwierdzić dostępność projektu, dane do płatności przelewem i sposób realizacji.
+          Pliki przekażemy po ręcznym potwierdzeniu płatności i realizacji.
         </p>
         <Link className="empty-link" href="/projekty">Wróć do projektów</Link>
       </section>
@@ -58,7 +58,7 @@ export function CheckoutForm() {
   }
 
   return (
-    <section className="checkout-layout" data-checkout-form-v38="true">
+    <section className="checkout-layout" data-checkout-form-v38="true" data-manual-payment-checkout-v48="true">
       <form action={formAction} className="checkout-form">
         <input type="hidden" name="cartJson" value={cartJson} />
 
@@ -66,8 +66,8 @@ export function CheckoutForm() {
           <h2>Dane do zamówienia</h2>
           <p>
             Kupujesz wybrane projekty, warianty i dodatki z koszyka. Po wysłaniu
-            formularza skontaktujemy się z Tobą, aby potwierdzić dostępność,
-            płatność i sposób realizacji.
+            formularza skontaktujemy się z Tobą, aby potwierdzić dostępność, płatność i sposób realizacji.
+            Instrukcję przelewu wyślemy po weryfikacji. Na tym etapie nie pobieramy płatności online.
           </p>
         </div>
 
@@ -98,7 +98,7 @@ export function CheckoutForm() {
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="termsConsent" required />
-          <span>Akceptuję kontakt w sprawie zamówienia projektu.</span>
+          <span>Akceptuję kontakt w sprawie zamówienia projektu i ręcznej płatności.</span>
         </label>
 
         <label className="checkout-checkbox">
@@ -129,10 +129,12 @@ export function CheckoutForm() {
           </div>
         ))}
         <strong className="checkout-total">{money(cartTotal(cart))}</strong>
-        <div className="checkout-summary-note" data-checkout-v43-delivery-note="true">
+        <div className="checkout-summary-note" data-checkout-v43-delivery-note="true" data-manual-payment-summary-v48="true">
           <p>
-            Pliki projektu przekażemy po ręcznym potwierdzeniu dostępności, płatności
-            i realizacji.
+            Płatność odbywa się ręcznie po kontakcie z obsługą. Dane do przelewu wyślemy po weryfikacji zamówienia.
+          </p>
+          <p>
+            Pliki projektu przekażemy po ręcznym potwierdzeniu dostępności, płatności i realizacji.
           </p>
           {hasPdfEmailAddon && (
             <p>

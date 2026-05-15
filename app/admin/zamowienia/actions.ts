@@ -70,13 +70,16 @@ export async function updateOrderFulfillmentChecklistAction(formData: FormData) 
     redirect("/admin/zamowienia?status=error");
   }
 
+  const paymentInstruction = str(formData, "paymentInstruction");
+
   const payload = {
     orderId,
     paymentConfirmed: bool(formData, "paymentConfirmed"),
     pdfSent: bool(formData, "pdfSent"),
     zipSent: bool(formData, "zipSent"),
     orderClosed: bool(formData, "orderClosed"),
-    internalNote: str(formData, "internalNote")
+    internalNote: str(formData, "internalNote"),
+    paymentInstruction
   };
 
   await updateAdminOrderFulfillmentChecklist(payload);
@@ -91,7 +94,8 @@ export async function updateOrderFulfillmentChecklistAction(formData: FormData) 
       pdfSent: payload.pdfSent,
       zipSent: payload.zipSent,
       orderClosed: payload.orderClosed,
-      hasInternalNote: payload.internalNote.length > 0
+      hasInternalNote: payload.internalNote.length > 0,
+      hasPaymentInstruction: payload.paymentInstruction.length > 0
     }
   });
 

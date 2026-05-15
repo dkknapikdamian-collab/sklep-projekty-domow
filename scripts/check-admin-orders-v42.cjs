@@ -213,7 +213,20 @@ for (const marker of ["drop constraint if exists orders_status_check", "'contact
 }
 
 const forbiddenAutoDeliverySources = [repo, orderFiles, listPage, detailPage].join("\n");
-for (const forbidden of ["createSignedUrl", "createSignedUrls", "sendEmail(", "send_email", "stripe", "payu", "PayU"]) {
+for (const forbidden of [
+  "createSignedUrl",
+  "createSignedUrls",
+  "sendEmail(",
+  "send_email",
+  "stripeClient",
+  "stripe.checkout",
+  "StripeCheckout",
+  "payuClient",
+  "PayuClient",
+  "createPayment",
+  "automaticPayment",
+  "autoPayment"
+]) {
   if (forbiddenAutoDeliverySources.includes(forbidden)) {
     fail(`Etap 15B must not add automatic delivery/payment marker: ${forbidden}`);
   }

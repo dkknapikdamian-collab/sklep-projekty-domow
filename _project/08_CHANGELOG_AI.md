@@ -1,5 +1,49 @@
 # 08_CHANGELOG_AI - Changelog AI
 
+
+## 2026-05-15 21:15 - Etap 17: Płatność manualna / instrukcja przelewu
+
+- Checkout informuje, że płatność odbywa się po kontakcie i bez automatycznej płatności online.
+- Dodano migrację `supabase/migrations/0018_order_manual_payment_instruction.sql`.
+- Dodano pole `payment_instruction` do `order_fulfillment_checklist`.
+- Dodano zapis instrukcji przelewu w `updateOrderFulfillmentChecklistAction`.
+- Dodano pole `Instrukcja przelewu` na `/admin/zamowienia/[id]`.
+- Roboczy e-mail `E-mail: potwierdzenie zamówienia` zawiera dane do płatności.
+- Dodano guard `verify:manual-payment-v48`.
+- Nie dodano Stripe, PayU, automatycznego księgowania ani automatycznej wysyłki.
+
+### Pliki zmienione
+
+- `components/order/CheckoutForm.tsx`
+- `app/zamowienie/page.tsx`
+- `app/admin/zamowienia/[id]/page.tsx`
+- `app/admin/zamowienia/actions.ts`
+- `lib/admin/orders-admin.ts`
+- `lib/admin/order-email-drafts.ts`
+- `supabase/migrations/0018_order_manual_payment_instruction.sql`
+- `app/admin-v8.css`
+- `scripts/check-manual-payment-v48.cjs`
+- `package.json`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_2115_manual-payment-instructions.md`
+
+### Testy / guardy
+
+```powershell
+npm run verify:manual-payment-v48
+npm run verify:cart-order-v38
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
 ## 2026-05-15 - Pełny mózg projektu sklepu
 
 ### Co zmieniono
