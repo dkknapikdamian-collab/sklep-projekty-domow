@@ -1,4 +1,4 @@
-# AGENTS.md - Sklep z projektami domów
+﻿# AGENTS.md - Sklep z projektami domów
 
 ## Typ projektu
 
@@ -60,6 +60,8 @@ Nie wolno bez decyzji Damiana:
 - tworzyć nowej gałęzi bez zgody.
 
 ## FAKT / DECYZJA / HIPOTEZA / DO POTWIERDZENIA
+
+Marker zgodnoĹ›ci guardu: Fakt / Decyzja / Hipoteza / Do potwierdzenia.
 
 W dokumentacji rozdzielaj zawsze:
 
@@ -154,3 +156,17 @@ Jeśli komenda nie istnieje albo nie może zostać uruchomiona, zapisz to w rapo
 Pracuj na branchu `main`, chyba że Damian jawnie zdecyduje inaczej.
 
 Każda realna zmiana ma zostać zapisana w GitHubie. Jeśli działasz przez GitHub API, podaj pliki i wynik zapisu. Jeśli push albo zapis się nie uda, pokaż błąd i nie udawaj sukcesu.
+
+## Tryb ZIP dla ChatGPT / operatora paczek
+
+ChatGPT / operator paczek nie pushuje sam, jeĹ›li Damian wymaga trybu ZIP.
+
+DomyĹ›lny format przekazania zmian w rozmowie:
+
+- ZIP do pobrania,
+- jedno kompletne polecenie PowerShell,
+- polecenie ma wykonaÄ‡ wdroĹĽenie, checki, commit i push,
+- bez dzielenia na kilka osobnych komend, chyba ĹĽe Damian wyraĹşnie poprosi inaczej.
+
+AI developer pracujÄ…cy bezpoĹ›rednio w repo moĹĽe pushowaÄ‡ tylko wtedy, gdy Damian zleci mu to jawnie. W trybie ZIP pliki Obsidiana i `_project/` muszÄ… wejĹ›Ä‡ do paczki razem z kodem, jeĹ›li zmiana dotyczy pamiÄ™ci projektu.
+

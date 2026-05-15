@@ -1,4 +1,4 @@
-# 02_WORK_RULES - Zasady pracy AI w projekcie sklepu
+﻿# 02_WORK_RULES - Zasady pracy AI w projekcie sklepu
 
 ## Tryb pracy
 
@@ -97,3 +97,19 @@ Po każdej zmianie admina sprawdź minimum:
 Dodatek `Projekt w formacie PDF na e-mail` za +250 zł nie może sugerować, że bez niego klient nie dostaje podstawowej dokumentacji, jeśli bazowy produkt zakłada dostawę cyfrową.
 
 Interpretacja obowiązująca: dodatek jest dodatkową, wygodną formą dostarczenia/archiwizacji PDF na e-mail albo dodatkową kopią, a nie zastępstwem bazowej dostawy.
+
+## Tryb ZIP i jedno polecenie PowerShell
+
+ChatGPT / operator paczek nie pushuje sam, jeĹ›li Damian pracuje w trybie ZIP.
+
+W takim trybie wynik pracy ma zawieraÄ‡:
+
+- ZIP do pobrania,
+- jedno kompletne polecenie PowerShell,
+- wdroĹĽenie paczki,
+- wymagane checki,
+- commit,
+- push do `origin main`.
+
+Nie rozbijaj tego na kilka komend, chyba ĹĽe Damian wyraĹşnie poprosi o osobne kroki.
+

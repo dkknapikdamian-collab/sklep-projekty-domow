@@ -1,3 +1,19 @@
+﻿## 2026-05-15 21:55 - Hotfix: marker `Fakt` i zasada ZIP/jedno polecenie
+
+- Naprawiono niespĂłjnoĹ›Ä‡ guardu pamiÄ™ci projektu: `scripts/check-project-memory.cjs` wymaga markera `Fakt`, a `AGENTS.md` miaĹ‚ tylko wersjÄ™ `FAKT`.
+- Dodano jawny marker zgodnoĹ›ci guardu: `Fakt / Decyzja / Hipoteza / Do potwierdzenia`.
+- Dopisano zasadÄ™ pracy ChatGPT/operatora paczek: ZIP + jedno kompletne polecenie PowerShell, bez samodzielnego pushowania przez ChatGPT.
+- Ten hotfix nie zmienia kodu aplikacji, routingu, UI sklepu ani Etapu 19.
+
+### Testy wymagane
+
+```powershell
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
 # 08_CHANGELOG_AI - Changelog AI
 
 
@@ -148,3 +164,4 @@ npm run build
 ### Raport
 
 `_project/runs/2026-05-15_1900_sklep-pelny-mozg-projektu.md`
+
