@@ -18,6 +18,35 @@ export const ADMIN_ORDER_STATUS_LABELS: Record<AdminOrderStatus, string> = {
   cancelled: "Anulowane"
 };
 
+export const ADMIN_ORDER_PAYMENT_INSTRUCTION_FILTERS = ["all", "instruction_set", "instruction_missing"] as const;
+export type AdminOrderPaymentInstructionFilter = (typeof ADMIN_ORDER_PAYMENT_INSTRUCTION_FILTERS)[number];
+
+export const ADMIN_ORDER_PAYMENT_INSTRUCTION_FILTER_LABELS: Record<AdminOrderPaymentInstructionFilter, string> = {
+  all: "Płatność: wszystkie",
+  instruction_set: "Instrukcja ustawiona",
+  instruction_missing: "Brak instrukcji"
+};
+
+export const ADMIN_ORDER_FULFILLMENT_FILTERS = ["all", "pdf_sent", "zip_sent", "closed"] as const;
+export type AdminOrderFulfillmentFilter = (typeof ADMIN_ORDER_FULFILLMENT_FILTERS)[number];
+
+export const ADMIN_ORDER_FULFILLMENT_FILTER_LABELS: Record<AdminOrderFulfillmentFilter, string> = {
+  all: "Realizacja: wszystkie",
+  pdf_sent: "PDF wysłany",
+  zip_sent: "ZIP wysłany",
+  closed: "Zamknięte"
+};
+
+export const ADMIN_ORDER_PRIORITY_FILTERS = ["all", "requires_contact", "waiting_payment", "ready_to_send"] as const;
+export type AdminOrderPriorityFilter = (typeof ADMIN_ORDER_PRIORITY_FILTERS)[number];
+
+export const ADMIN_ORDER_PRIORITY_FILTER_LABELS: Record<AdminOrderPriorityFilter, string> = {
+  all: "Szybkie oznaczenia: wszystkie",
+  requires_contact: "Wymaga kontaktu",
+  waiting_payment: "Czeka na płatność",
+  ready_to_send: "Do wysyłki"
+};
+
 export type AdminOrderAddon = {
   id: string;
   code: string;
@@ -64,6 +93,17 @@ export type AdminOrderListItem = {
   notes: string;
   fulfillmentChecklist: AdminOrderFulfillmentChecklist;
   items: AdminOrderItem[];
+};
+
+export type AdminOrderPriorityFlags = {
+  hasPaymentInstruction: boolean;
+  paymentConfirmed: boolean;
+  pdfSent: boolean;
+  zipSent: boolean;
+  orderClosed: boolean;
+  requiresContact: boolean;
+  waitingPayment: boolean;
+  readyToSend: boolean;
 };
 
 export type UpdateAdminOrderFulfillmentChecklistInput = {
@@ -114,6 +154,44 @@ export function emptyAdminOrderFulfillmentChecklist(): AdminOrderFulfillmentChec
     paymentInstruction: "",
     updatedAt: ""
   };
+}
+
+export function getAdminOrderPriorityFlags(order: AdminOrderListItem): AdminOrderPriorityFlags {
+  const checklist = order.fulfillmentChecklist || emptyAdminOrderFulfillmentChecklist();
+  const hasPaymentInstruction = checklist.paymentInstruction.trim().length > 0;
+  const paymentConfirmed = Boolean(checklist.paymentConfirmed || order.status === "paid_manual");
+  const pdfSent = Boolean(checklist.pdfSent);
+  const zipSent = Boolean(checklist.zipSent);
+  const orderClosed = Boolean(checklist.orderClosed);
+  const terminalStatus = order.status === "sent" || order.status === "cancelled" || orderClosed;
+
+  const requiresContact = order.status === "new" && !terminalStatus;
+  const waitingPayment = !paymentConfirmed && !terminalStatus && (order.status === "contacted" || hasPaymentInstruction);
+  const readyToSend = paymentConfirmed && !terminalStatus && (!pdfSent || !zipSent);
+
+  return {
+    hasPaymentInstruction,
+    paymentConfirmed,
+    pdfSent,
+    zipSent,
+    orderClosed,
+    requiresContact,
+    waitingPayment,
+    readyToSend
+  };
+}
+
+export function getAdminOrderPriorityRank(order: AdminOrderListItem) {
+  const flags = getAdminOrderPriorityFlags(order);
+
+  if (flags.requiresContact) return 10;
+  if (flags.readyToSend) return 20;
+  if (flags.waitingPayment) return 30;
+  if (!flags.hasPaymentInstruction && !flags.paymentConfirmed && order.status !== "cancelled") return 40;
+  if (order.status === "sent" || flags.orderClosed) return 90;
+  if (order.status === "cancelled") return 99;
+
+  return 50;
 }
 
 function mapFulfillmentRow(row: FulfillmentRow | undefined): AdminOrderFulfillmentChecklist {
