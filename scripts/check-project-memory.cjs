@@ -28,6 +28,14 @@ function requireContains(rel, patterns) {
   }
 }
 
+function hasReport(dir, expectedMarkers) {
+  if (!fs.existsSync(dir)) return false;
+  return fs.readdirSync(dir).some((name) => {
+    if (!name.endsWith('.md')) return false;
+    return expectedMarkers.some((marker) => name.includes(marker));
+  });
+}
+
 const appFiles = [
   'AGENTS.md',
   '_project/00_PROJECT_STATUS.md',
@@ -54,7 +62,11 @@ requireContains('AGENTS.md', [
   '_project/',
   'ZIP',
   'Obsidian',
-  'Fakt',
+  'scan-first',
+  'FAKT',
+  'DECYZJA',
+  'HIPOTEZA / PROPOZYCJA',
+  'DO POTWIERDZENIA',
 ]);
 
 requireContains('_project/01_PROJECT_GOAL.md', [
@@ -62,6 +74,12 @@ requireContains('_project/01_PROJECT_GOAL.md', [
   'Zakres V2',
   'Projekt w formacie PDF na e-mail',
   '+250 zł',
+]);
+
+requireContains('_project/03_CURRENT_STAGE.md', [
+  'Etap 19',
+  'Filtry i priorytetyzacja zamówień',
+  '/admin/zamowienia',
 ]);
 
 requireContains('_project/04_DECISIONS.md', [
@@ -74,6 +92,7 @@ requireContains('_project/06_GUARDS_AND_TESTS.md', [
   'node scripts/check-project-memory.cjs',
   'npm run check:project-memory',
   'npm run build',
+  'verify:admin-orders-v42',
 ]);
 
 requireContains('_project/11_USER_CONFIRMED_TESTS.md', [
@@ -83,8 +102,8 @@ requireContains('_project/11_USER_CONFIRMED_TESTS.md', [
 
 const runsDir = path.join(root, '_project', 'runs');
 if (fs.existsSync(runsDir)) {
-  const reports = fs.readdirSync(runsDir).filter((name) => name.includes('sklep-pelny-mozg-projektu') && name.endsWith('.md'));
-  if (reports.length === 0) errors.push('Missing AI report in _project/runs/*sklep-pelny-mozg-projektu.md');
+  const ok = hasReport(runsDir, ['sklep-pelny-mozg-projektu', 'sklep-dziennik-scan-first']);
+  if (!ok) errors.push('Missing AI report in _project/runs/*sklep-pelny-mozg-projektu.md or *sklep-dziennik-scan-first.md');
 }
 
 if (fs.existsSync(vault)) {
@@ -119,8 +138,8 @@ if (fs.existsSync(vault)) {
   if (!fs.existsSync(reportsDir)) {
     errors.push('Missing Obsidian reports dir: _RAPORTY_AI');
   } else {
-    const reports = fs.readdirSync(reportsDir).filter((name) => name.includes('sklep-pelny-mozg-projektu') && name.endsWith('.md'));
-    if (reports.length === 0) errors.push('Missing Obsidian AI report in _RAPORTY_AI/*sklep-pelny-mozg-projektu.md');
+    const ok = hasReport(reportsDir, ['sklep-pelny-mozg-projektu', 'sklep-dziennik-scan-first']);
+    if (!ok) errors.push('Missing Obsidian AI report in _RAPORTY_AI/*sklep-pelny-mozg-projektu.md or *sklep-dziennik-scan-first.md');
   }
 } else {
   console.warn(`[WARN] Obsidian vault not found at ${vault}. Skipping Obsidian file checks.`);
