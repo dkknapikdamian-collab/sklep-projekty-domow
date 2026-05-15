@@ -1,6 +1,37 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 17:40 - Etap 11 HOTFIX: naprawa po nieudanym checku
+
+- Naprawiono błąd TypeScript w `app/admin/projekty/actions.ts`: zduplikowana deklaracja `projectStatusBeforeDelete`.
+- Zaktualizowano `scripts/check-admin-project-list-compact-v41.cjs`, który nadal oczekiwał parametrów z Etapu 10B (`min-width: 1640px`, `width: 450px`), mimo że Etap 11 poszerzył tabelę i kolumnę akcji (`1770px`, `620px`).
+- Guard listy projektów pilnuje teraz także markerów archived-first: `Archiwizuj` i `Awaryjne`.
+- Skrypt wdrożeniowy hotfixa używa twardego wrappera na komendy, więc commit/push wykona się tylko po przejściu wszystkich checków.
+- Nie zmieniano logiki publicznego katalogu, auth ani Supabase schema.
+
+### Pliki zmienione
+
+- `app/admin/projekty/actions.ts`
+- `scripts/check-admin-project-list-compact-v41.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/runs/2026-05-15_1740_etap11-hotfix.md`
+
+### Checki wymagane
+
+```powershell
+npm run verify:admin-buttons-v19
+npm run verify:admin-project-list-compact-v41
+npm run verify:public-project-data-v22
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+
 ## 2026-05-15 17:15 - Etap 11: Archived-first zamiast fizycznego delete
 
 - Dodano `archiveProjectAction` jako bezpieczną server action do ustawiania statusu `archived`.

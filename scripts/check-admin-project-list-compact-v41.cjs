@@ -11,6 +11,7 @@ function fail(message) {
 
 const page = read('app/admin/projekty/page.tsx');
 const table = read('components/admin/AdminProjectsTable.tsx');
+const deleteForm = read('components/admin/AdminProjectDeleteForm.tsx');
 const css = read('app/admin-v8.css');
 const pkg = JSON.parse(read('package.json'));
 
@@ -22,27 +23,41 @@ for (const marker of [
   'admin-project-identity',
   'title={project.canPublish ? "Gotowy do publikacji" : `Braki: ${missingText}`}',
   'title={publicHref}',
-  'targetStatus === "active" ? "Ustaw active" : "Ustaw draft"'
+  'targetStatus === "active" ? "Ustaw active" : "Ustaw draft"',
+  'AdminProjectArchiveForm',
+  'AdminProjectDeleteForm'
 ]) {
   const source = marker.includes('admin-shell') ? page : table;
   if (!source.includes(marker)) fail(`admin projects layout source missing marker: ${marker}`);
 }
 
 for (const marker of [
+  'data-admin-action="project-archive"',
+  'data-admin-action="project-hard-delete"',
+  'Awaryjne',
+  'Archiwizuj'
+]) {
+  if (!deleteForm.includes(marker) && !table.includes(marker)) {
+    fail(`admin archived-first action source missing marker: ${marker}`);
+  }
+}
+
+for (const marker of [
   'STAGE41 ADMIN PROJECT LIST COMPACT START',
   'ETAP10 ADMIN PROJECTS FULL WIDTH LAYOUT',
   'ETAP10B ADMIN PROJECTS ACTION COLUMN FIT LOCK',
+  'ETAP11 ARCHIVED FIRST ACTION FIT',
   '.admin-shell.admin-projects-shell',
   'max-width: none',
   '.admin-projects-table-card',
   'overflow-x: auto',
-  'min-width: 1640px',
+  'min-width: 1770px',
   'table-layout: fixed',
   'white-space: nowrap',
   'text-overflow: ellipsis',
   '.admin-projects-table th:nth-child(12),',
   '.admin-projects-table td:nth-child(12)',
-  'width: 450px',
+  'width: 620px',
   '.admin-projects-table .admin-project-identity',
   '.admin-projects-table .admin-project-badges',
   'flex-wrap: nowrap',
@@ -67,6 +82,8 @@ for (const forbidden of [
   'white-space: normal;',
   'width: 286px',
   'min-width: 1600px',
+  'min-width: 1640px',
+  'width: 450px',
   'gap: 5px;',
   'font-size: 10.5px'
 ]) {
@@ -83,4 +100,4 @@ if (!String(pkg.scripts.verify || '').includes('verify:admin-project-list-compac
   fail('main verify script does not include verify:admin-project-list-compact-v41.');
 }
 
-console.log('OK: V41/Etap10B admin project list responsive full-width layout guard passed.');
+console.log('OK: V41/Etap11 admin project list archived-first action layout guard passed.');

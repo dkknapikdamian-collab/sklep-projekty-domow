@@ -1,39 +1,35 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 17:15 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 17:40 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 11: Archived-first zamiast fizycznego delete jako domyślna ścieżka
+Etap 11 HOTFIX: Naprawa po nieudanym checku archived-first
 
 ## Status etapu
 
-Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guardy, build i ręczny test w przeglądarce.
+Hotfix przygotowany po tym, jak Etap 11 został wypchnięty mimo błędów `verify:admin-project-list-compact-v41`, `typecheck` i `build`.
 
 ## Cel etapu
 
-Zmniejszyć ryzyko katastrofy w panelu admina. Codzienna praca ma archiwizować projekt, a fizyczne usunięcie ma zostać operacją awaryjną.
+Doprowadzić repo do stanu, w którym Etap 11 jest realnie poprawny: archived-first działa, guardy są spójne z nowym layoutem, a `actions.ts` nie ma duplikatu zmiennej.
 
-## Co zostało zrobione
+## Co naprawiono
 
-- Dodano server action `archiveProjectAction`.
-- W tabeli projektów dodano normalną akcję `Archiwizuj`.
-- Fizyczne usuwanie zostało przeniesione do strefy awaryjnej `Awaryjne`.
-- `Usuń trwale` jest dostępne dopiero po rozwinięciu awaryjnej strefy i wpisaniu kodu projektu.
-- Fizyczne delete jest blokowane dla statusów innych niż `archived` albo `draft`.
-- Dla projektu `active` UI pokazuje ostrzeżenie, że najpierw trzeba archiwizować albo zejść do draft.
-- Server action `deleteProjectAction` również blokuje fizyczne delete, jeśli projekt nie jest `archived` albo `draft`.
-- Zaktualizowano guard `verify:admin-buttons-v19`, żeby pilnował archived-first.
-- Zaktualizowano layout tabeli admina, żeby nowa akcja `Archiwizuj` nadal mieściła się w jednym wierszu.
-- Publiczny katalog nadal pozostaje oparty o `status = active`.
+- Usunięto zduplikowany blok `projectStatusBeforeDelete` w `deleteProjectAction`.
+- Zaktualizowano `scripts/check-admin-project-list-compact-v41.cjs`, żeby pasował do layoutu Etapu 11:
+  - `min-width: 1770px`,
+  - kolumna `Akcje` `width: 620px`,
+  - marker `ETAP11 ARCHIVED FIRST ACTION FIT`.
+- Zaostrzono skrypt PowerShell: od teraz po błędzie checka skrypt przerywa pracę i nie robi commit/push.
+- Zaktualizowano pamięć projektu po hotfixie.
 
 ## Czego nie zmieniano
 
-- Nie zmieniano schematu Supabase.
+- Nie zmieniano publicznego katalogu.
+- Nie zmieniano Supabase schema.
 - Nie zmieniano auth.
-- Nie zmieniano publicznego katalogu poza utrzymaniem zasady, że tylko `active` jest publiczne.
-- Nie usuwano fizycznego delete całkowicie.
-- Nie zmieniano modelu płatności, koszyka ani zamówień.
+- Nie zmieniano modelu archived-first z Etapu 11.
 
 ## Checki wymagane
 
@@ -46,6 +42,6 @@ npm run build
 npm run check:project-memory
 ```
 
-## Kryterium zakończenia
+## Następny krok
 
-Codzienna praca admina nie wymaga fizycznego kasowania projektu. Standardowa ścieżka to archiwizacja.
+Po przejściu hotfixa sprawdzić w panelu `/admin/projekty`, czy archived-first działa i czy tabela nadal trzyma zaakceptowany układ.

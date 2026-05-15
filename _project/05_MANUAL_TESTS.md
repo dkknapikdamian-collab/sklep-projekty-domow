@@ -1,6 +1,20 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 11 HOTFIX
+
+Status: do wykonania po przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do `/admin/projekty`.
+2. Sprawdź, czy tabela nadal ma zaakceptowany układ desktopowy.
+3. Sprawdź, czy akcja `Archiwizuj` jest widoczna jako normalna akcja.
+4. Rozwiń `Awaryjne` przy projekcie `active`.
+5. Oczekiwany wynik: fizyczne `Usuń trwale` pozostaje zablokowane, dopóki projekt nie jest `archived` albo `draft`.
+6. Przy projekcie `archived` albo `draft` sprawdź, czy awaryjne usunięcie wymaga kodu projektu.
+
+
 ## Test reczny po Etapie 11
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.

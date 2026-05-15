@@ -402,11 +402,6 @@ export async function deleteProjectAction(formData: FormData) {
     redirect("/admin/projekty?status=error&reason=Najpierw%20zarchiwizuj%20projekt%20albo%20ustaw%20draft%20przed%20trwalym%20usunieciem");
   }
 
-  const projectStatusBeforeDelete = String(project.status || "");
-  if (!["archived", "draft"].includes(projectStatusBeforeDelete)) {
-    redirect("/admin/projekty?status=error&reason=Najpierw%20zarchiwizuj%20projekt%20albo%20ustaw%20draft%20przed%20trwalym%20usunieciem");
-  }
-
   const expectedCode = String(project.code || "").trim().toUpperCase();
   if (!expectedCode || confirmationCode !== expectedCode) {
     throw new Error("Wpisany kod projektu nie potwierdza usuniecia.");

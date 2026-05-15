@@ -6,27 +6,23 @@
 
 ## Aktualny etap
 
-Etap 11: Archived-first zamiast fizycznego delete jako domyślna ścieżka.
+Etap 11 HOTFIX: Naprawa po nieudanym checku archived-first.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 17:15 Europe/Warsaw: panel admina dostał bezpieczną ścieżkę `Archiwizuj`. Fizyczne `Usuń trwale` zostało przeniesione do strefy awaryjnej i jest blokowane dla projektów innych niż `archived` albo `draft`.
+2026-05-15 17:40 Europe/Warsaw: hotfix naprawia zduplikowany `projectStatusBeforeDelete` w `deleteProjectAction` oraz aktualizuje guard listy projektów do layoutu Etapu 11 (`1770px` / `620px`).
 
 ## Najważniejsze ustalenia
 
-- codzienna praca admina nie wymaga fizycznego delete,
-- standardowa ścieżka to `Archiwizuj`,
-- projekt `active` trzeba najpierw zarchiwizować albo ustawić draft,
-- `Usuń trwale` wymaga statusu `archived` albo `draft`, kodu projektu i confirmu,
-- publiczny katalog pozostaje oparty wyłącznie o status `active`.
+- Etap 11 pozostaje kierunkiem docelowym: archived-first.
+- Fizyczne delete jest operacją awaryjną.
+- Guardy muszą odzwierciedlać aktualny layout, nie poprzedni Etap 10B.
+- Skrypty wdrożeniowe muszą przerywać pracę po błędzie checka, żeby nie commitować wadliwego kodu.
 
-## Pliki techniczne ważne dla Etapu 11
+## Pliki techniczne ważne dla hotfixa
 
-- `../components/admin/AdminProjectDeleteForm.tsx`
-- `../components/admin/AdminProjectsTable.tsx`
 - `../app/admin/projekty/actions.ts`
-- `../app/admin/projekty/page.tsx`
-- `../scripts/check-admin-buttons-v19.cjs`
+- `../scripts/check-admin-project-list-compact-v41.cjs`
 
 ## Uwaga
 

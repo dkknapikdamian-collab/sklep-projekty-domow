@@ -1,6 +1,21 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Hotfix guardów po Etapie 11
+
+Naprawiono niespójność między CSS Etapu 11 a guardem `verify:admin-project-list-compact-v41`.
+
+Guard oczekuje teraz:
+
+- `min-width: 1770px`,
+- `width: 620px` dla kolumny `Akcje`,
+- marker `ETAP11 ARCHIVED FIRST ACTION FIT`,
+- obecność archived-first markerów `Archiwizuj` i `Awaryjne`,
+- brak powrotu do `min-width: 1640px` i `width: 450px`.
+
+Dodatkowo hotfixowy skrypt PowerShell przerywa pracę po błędzie komendy natywnej, żeby nie commitować repo po nieudanych checkach.
+
+
 ## Checki wymagane dla Etapu 11
 
 ```powershell
