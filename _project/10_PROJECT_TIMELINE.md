@@ -68,3 +68,4 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 Dopisywać każdą zmianę kierunku, zamrożenie funkcji, potwierdzony etap lub istotną decyzję.
 <!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
 
+| 2026-05-15 | Etap 16: robocze e-maile do klienta | Dodano trzy drafty e-maili na `/admin/zamowienia/[id]`, bez automatycznej wysyłki. | `lib/admin/order-email-drafts.ts`, `app/admin/zamowienia/[id]/page.tsx`, `scripts/check-manual-email-drafts-v47.cjs` |

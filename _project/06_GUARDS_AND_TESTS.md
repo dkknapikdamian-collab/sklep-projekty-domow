@@ -1,6 +1,33 @@
 ﻿# 06_GUARDS_AND_TESTS - guardy i testy
 
 
+
+## Checki wymagane dla Etapu 16
+
+```powershell
+npm run verify:manual-email-drafts-v47
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Nowy guard roboczych e-maili
+
+Dodano:
+
+```powershell
+npm run verify:manual-email-drafts-v47
+```
+
+Guard pilnuje:
+
+- `lib/admin/order-email-drafts.ts`,
+- funkcji `buildManualOrderEmailDrafts`,
+- trzech draftów e-maili,
+- sekcji na `/admin/zamowienia/[id]`,
+- pól `readOnly` zamiast automatycznej wysyłki,
+- braku SMTP, Resend, Mailgun, `sendEmail`, `send_email` i signed URL.
+
 ## Checki wymagane dla Etapu 15B
 
 ```powershell

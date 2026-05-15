@@ -1,6 +1,33 @@
 ﻿# 05_MANUAL_TESTS - testy reczne
 
 
+
+## Test reczny po Etapie 16
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do:
+
+```text
+/admin/zamowienia/[id]
+```
+
+2. Znajdź sekcję `Robocze e-maile do klienta`.
+
+3. Oczekiwany wynik:
+   - widać `E-mail: potwierdzenie zamówienia`,
+   - widać `E-mail: płatność potwierdzona`,
+   - widać `E-mail: wysyłka plików`,
+   - każdy draft ma temat,
+   - każdy draft ma treść w textarea,
+   - treść zawiera numer zamówienia i dane z zamówienia,
+   - system nie ma przycisku wysyłki.
+
+4. Skopiuj temat i treść jednego draftu ręcznie.
+5. Oczekiwany wynik: można użyć draftu w zewnętrznej skrzynce e-mail bez pisania od zera.
+
 ## Test reczny po Etapie 15B
 
 Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0017_order_fulfillment_checklist.sql`.

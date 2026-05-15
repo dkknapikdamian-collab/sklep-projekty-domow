@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ClipboardList } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { updateOrderFulfillmentChecklistAction, updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
+import { buildManualOrderEmailDrafts, type ManualOrderEmailDraft } from "@/lib/admin/order-email-drafts";
 import {
   ADMIN_ORDER_STATUS_LABELS,
   ADMIN_ORDER_STATUSES,
@@ -159,6 +160,56 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
   );
 }
 
+function ManualEmailDraftCard({ draft }: { draft: ManualOrderEmailDraft }) {
+  return (
+    <article className="admin-manual-email-draft" data-admin-manual-email-draft={draft.key}>
+      <header>
+        <div>
+          <span>Roboczy e-mail</span>
+          <h3>{draft.title}</h3>
+          <p>{draft.copyHint}</p>
+        </div>
+      </header>
+
+      <label>
+        Temat
+        <input readOnly value={draft.subject} data-admin-manual-email-subject="true" />
+      </label>
+
+      <label>
+        Treść do ręcznego skopiowania
+        <textarea
+          readOnly
+          rows={12}
+          value={draft.body}
+          data-admin-manual-email-body="true"
+        />
+      </label>
+    </article>
+  );
+}
+
+function ManualEmailDraftsPanel({ order }: { order: AdminOrderListItem }) {
+  const drafts = buildManualOrderEmailDrafts(order);
+
+  return (
+    <section className="admin-order-detail-panel admin-manual-email-drafts" data-admin-manual-email-drafts-v47="true">
+      <div>
+        <h2>Robocze e-maile do klienta</h2>
+        <p>
+          System niczego nie wysyła. Skopiuj temat i treść do swojej skrzynki, sprawdź dane i wyślij ręcznie.
+        </p>
+      </div>
+
+      <div className="admin-manual-email-drafts-grid">
+        {drafts.map((draft) => (
+          <ManualEmailDraftCard key={draft.key} draft={draft} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function OrderItemsPanel({ order }: { order: AdminOrderListItem }) {
   return (
     <section className="admin-order-detail-panel" data-admin-order-items="true">
@@ -284,6 +335,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
           <div className="admin-order-detail-main">
             <OrderCustomerPanel order={order} />
             <OrderItemsPanel order={order} />
+            <ManualEmailDraftsPanel order={order} />
           </div>
           <aside className="admin-order-detail-side">
             <OrderFulfillmentPanel order={order} />

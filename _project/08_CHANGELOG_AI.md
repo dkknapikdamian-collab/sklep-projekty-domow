@@ -1,6 +1,45 @@
 ﻿# 08_CHANGELOG_AI — changelog pracy AI
 
 
+
+## 2026-05-15 20:45 - Etap 16: Robocze e-maile do klienta
+
+- Dodano `lib/admin/order-email-drafts.ts`.
+- Dodano generator trzech roboczych e-maili:
+  - `E-mail: potwierdzenie zamówienia`,
+  - `E-mail: płatność potwierdzona`,
+  - `E-mail: wysyłka plików`.
+- Dodano sekcję `Robocze e-maile do klienta` na `/admin/zamowienia/[id]`.
+- Każdy draft ma temat i treść w polach `readOnly`.
+- Dodano style `STAGE47 MANUAL ORDER EMAIL DRAFTS`.
+- Dodano guard `verify:manual-email-drafts-v47`.
+- Nie dodano SMTP, Resend, Mailgun, automatycznego mailingu ani signed URL.
+
+### Pliki zmienione
+
+- `lib/admin/order-email-drafts.ts`
+- `app/admin/zamowienia/[id]/page.tsx`
+- `app/admin-v8.css`
+- `scripts/check-manual-email-drafts-v47.cjs`
+- `package.json`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_2045_manual-email-drafts.md`
+
+### Testy / guardy
+
+```powershell
+npm run verify:manual-email-drafts-v47
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
 ## 2026-05-15 20:10 - Etap 15B: Utrwalona checklista realizacji zamówienia
 
 - Dodano migrację `supabase/migrations/0017_order_fulfillment_checklist.sql`.
