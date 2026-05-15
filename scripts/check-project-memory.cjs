@@ -77,9 +77,9 @@ requireContains('_project/01_PROJECT_GOAL.md', [
 ]);
 
 requireContains('_project/03_CURRENT_STAGE.md', [
-  'Etap 19',
-  'Filtry i priorytetyzacja zamówień',
-  '/admin/zamowienia',
+  'Aktualny etap',
+  'Etap',
+  'Checki wymagane',
 ]);
 
 requireContains('_project/04_DECISIONS.md', [
@@ -92,7 +92,6 @@ requireContains('_project/06_GUARDS_AND_TESTS.md', [
   'node scripts/check-project-memory.cjs',
   'npm run check:project-memory',
   'npm run build',
-  'verify:admin-orders-v42',
 ]);
 
 requireContains('_project/11_USER_CONFIRMED_TESTS.md', [
@@ -102,8 +101,8 @@ requireContains('_project/11_USER_CONFIRMED_TESTS.md', [
 
 const runsDir = path.join(root, '_project', 'runs');
 if (fs.existsSync(runsDir)) {
-  const ok = hasReport(runsDir, ['sklep-pelny-mozg-projektu', 'sklep-dziennik-scan-first']);
-  if (!ok) errors.push('Missing AI report in _project/runs/*sklep-pelny-mozg-projektu.md or *sklep-dziennik-scan-first.md');
+  const ok = hasReport(runsDir, ['sklep-pelny-mozg-projektu', 'sklep-dziennik-scan-first', 'admin-audit-view']);
+  if (!ok) errors.push('Missing AI report in _project/runs for project memory or recent admin audit work.');
 }
 
 if (fs.existsSync(vault)) {

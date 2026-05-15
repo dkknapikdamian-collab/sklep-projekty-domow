@@ -1,3 +1,19 @@
+﻿## 2026-05-15 22:45 - Hotfix v5: audit guard i memory check
+
+- Dopasowano opis kafla `Audit` na dashboardzie do wymaganego markera `Ĺ›lad operacji`.
+- Dodano/exportowano `actionLabel` w `lib/admin/audit-log.ts`.
+- Ustabilizowano `scripts/check-project-memory.cjs`, ĹĽeby nie wymuszaĹ‚ markerĂłw konkretnego poprzedniego etapu.
+- Dodano raport `_project/runs/2026-05-15_2245_audit-guard-memory-hotfix-v5.md`.
+- Zakres: hotfix guardĂłw i pamiÄ™ci projektu, bez zmiany mechanizmu auth ani logiki operacji admina.
+
+
+## 2026-05-15 22:45 - Hotfix v4: Etap 20 audit guard + project memory
+
+- Dodano `actionLabel` do `lib/admin/audit-log.ts`, zeby `verify:admin-audit-log-v44` przechodzil zgodnie z guardem.
+- Poprawiono `scripts/check-project-memory.cjs`, zeby akceptowal aktualny Etap 20 zamiast sztywno wymagac markerow Etapu 19.
+- Skrypt paczki v4 commit/push wykonuje dopiero po zielonych checkach.
+- Ten hotfix nie zmienia publicznych stron ani logiki operacji admina.
+
 ## 2026-05-15 22:20 - Etap 20: Widok audit logu `/admin/audit`
 
 - Dodano stronę `/admin/audit`.
@@ -202,4 +218,6 @@ npm run build
 ### Raport
 
 `_project/runs/2026-05-15_1900_sklep-pelny-mozg-projektu.md`
+
+
 

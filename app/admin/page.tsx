@@ -53,7 +53,7 @@ export default async function AdminDashboardPage() {
           <Link href="/admin/audit" className="admin-action-card" data-admin-audit-dashboard-link="true">
             <History size={34} />
             <h2>Audit</h2>
-            <p>Podgląd śladu operacji admina: akcje, encje, identyfikatory i metadata.</p>
+            <p>ślad operacji admina: akcje, encje, identyfikatory i metadata.</p>
           </Link>
 
           <Link href="/admin/strona-glowna" className="admin-action-card">

@@ -72,6 +72,12 @@ export function toAdminAuditActionFilter(value: string | undefined): AdminAuditA
     : "all";
 }
 
+export function actionLabel(value: string) {
+  const normalized = toAdminAuditActionFilter(value);
+  if (normalized === "all" && value !== "all") return value || "-";
+  return ADMIN_AUDIT_ACTION_FILTER_LABELS[normalized];
+}
+
 function normalizeMetadata(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
   return value as Record<string, unknown>;
