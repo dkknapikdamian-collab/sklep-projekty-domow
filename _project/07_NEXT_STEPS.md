@@ -1,20 +1,20 @@
 ﻿# 07_NEXT_STEPS - nastepne kroki
 
-## Najblizszy rekomendowany krok po Etapie 10
+## Najblizszy rekomendowany krok po Etapie 10B
 
-Wykonać ręczny test `/admin/projekty` na desktopie i średniej szerokości okna. Najważniejsze: tabela ma używać prawie całego ekranu, wiersze mają być jednowierszowe, a akcje nie mogą układać się pionową kolumną.
+Wykonać ręczny test `/admin/projekty` na desktopie. Jeśli układ wygląda jak na zaakceptowanym zrzucie i `Ustaw active` nie jest ucięte, zamykamy temat layoutu listy projektów.
 
 ## Zasady dalszej pracy
 
-- Nie zmieniać już logiki admina podczas poprawiania samego layoutu.
-- Nie przebudowywać całego panelu admina, jeśli problem dotyczy tylko listy projektów.
-- Dla ekranów desktopowych stosować wzorzec: pełna szerokość strony + tabela z własnym poziomym overflow.
+- Tego układu tabeli nie ruszać przy kolejnych etapach, chyba że Damian jawnie poprosi.
+- Dla listy projektów admina obowiązuje wzorzec: pełna szerokość strony, jednowierszowe komórki, ellipsis dla długich wartości, akcje w jednej linii.
+- Nie dodawać nowych przycisków do kolumny `Akcje` bez ponownego sprawdzenia szerokości i guarda.
 - Długie treści w tabeli skracać przez ellipsis i `title`, nie przez łamanie wierszy.
-- Widok mobilny zostawić jako karty, nie wciskać tabeli na telefon.
+- Widok mobilny zostawić jako karty.
 
 ## Kolejne możliwe etapy
 
-1. Runtime test Etapu 10 w panelu admina.
+1. Runtime test Etapu 10B w panelu admina.
 2. Archived-first zamiast bezpośredniego fizycznego delete.
 3. Osobny audit log operacji admina.
 4. Stabilny runtime test pełnej ścieżki `/koszyk` -> `/zamowienie` -> `/admin/zamowienia`.

@@ -480,6 +480,7 @@
 
 /* STAGE41 ADMIN PROJECT LIST COMPACT START */
 /* ETAP10 ADMIN PROJECTS FULL WIDTH LAYOUT: data-dense admin page uses the viewport, table owns horizontal overflow. */
+/* ETAP10B ADMIN PROJECTS ACTION COLUMN FIT LOCK: keep every desktop action visible in one line. */
 .admin-shell.admin-projects-shell {
   width: min(100%, calc(100vw - 40px));
   max-width: none;
@@ -546,7 +547,7 @@
 
 .admin-projects-table {
   width: 100%;
-  min-width: 1600px;
+  min-width: 1640px;
   table-layout: fixed;
   font-size: 12px;
 }
@@ -577,62 +578,62 @@
 
 .admin-projects-table th:nth-child(1),
 .admin-projects-table td:nth-child(1) {
-  width: 104px;
+  width: 100px;
 }
 
 .admin-projects-table th:nth-child(2),
 .admin-projects-table td:nth-child(2) {
-  width: 190px;
+  width: 180px;
 }
 
 .admin-projects-table th:nth-child(3),
 .admin-projects-table td:nth-child(3) {
-  width: 114px;
+  width: 106px;
 }
 
 .admin-projects-table th:nth-child(4),
 .admin-projects-table td:nth-child(4) {
-  width: 90px;
+  width: 84px;
 }
 
 .admin-projects-table th:nth-child(5),
 .admin-projects-table td:nth-child(5) {
-  width: 72px;
+  width: 64px;
 }
 
 .admin-projects-table th:nth-child(6),
 .admin-projects-table td:nth-child(6) {
-  width: 70px;
+  width: 64px;
 }
 
 .admin-projects-table th:nth-child(7),
 .admin-projects-table td:nth-child(7) {
-  width: 64px;
+  width: 56px;
 }
 
 .admin-projects-table th:nth-child(8),
 .admin-projects-table td:nth-child(8) {
-  width: 110px;
+  width: 100px;
 }
 
 .admin-projects-table th:nth-child(9),
 .admin-projects-table td:nth-child(9) {
-  width: 190px;
+  width: 162px;
 }
 
 .admin-projects-table th:nth-child(10),
 .admin-projects-table td:nth-child(10) {
-  width: 180px;
+  width: 156px;
 }
 
 .admin-projects-table th:nth-child(11),
 .admin-projects-table td:nth-child(11) {
-  width: 130px;
+  width: 118px;
 }
 
 .admin-projects-table th:nth-child(12),
 .admin-projects-table td:nth-child(12) {
-  width: 286px;
+  width: 450px;
 }
 
 .admin-projects-table td > strong {
@@ -724,7 +725,7 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   min-width: 0;
   white-space: nowrap;
 }
@@ -733,8 +734,8 @@
 .admin-projects-table .admin-row-actions button {
   flex: 0 0 auto;
   min-height: 26px;
-  padding: 0 7px;
-  font-size: 10.5px;
+  padding: 0 6px;
+  font-size: 10.25px;
   line-height: 1;
   white-space: nowrap;
 }
@@ -755,12 +756,12 @@
   min-height: 26px;
   display: inline-flex;
   align-items: center;
-  padding: 0 7px;
+  padding: 0 6px;
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 4px;
   background: rgba(255,255,255,.03);
   color: #f0dfc5;
-  font-size: 10.5px;
+  font-size: 10.25px;
   line-height: 1;
   white-space: nowrap;
 }

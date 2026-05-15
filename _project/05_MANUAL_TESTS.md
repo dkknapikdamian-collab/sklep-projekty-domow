@@ -1,6 +1,29 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 10B
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do:
+
+```text
+/admin/projekty
+```
+
+2. Oczekiwany wynik na desktopie:
+   - układ tabeli zostaje taki jak zaakceptowany po Etapie 10,
+   - kolumna `Akcje` mieści `Edytuj`, `Podglad publiczny`, `Ustaw draft`, `Ustaw active` i zamknięte `Usuń projekt`,
+   - `Ustaw active` nie jest ucięte po prawej stronie,
+   - wiersze nadal są niskie i jednowierszowe,
+   - tabela nie wraca do pionowego schodkowania.
+
+3. Sprawdź projekt, którego nie można opublikować.
+4. Oczekiwany wynik: przycisk `Ustaw active` może być disabled, ale nadal musi mieścić się w kolumnie i nie może rozpychać tabeli.
+
+
 ## Test reczny po Etapie 10
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.

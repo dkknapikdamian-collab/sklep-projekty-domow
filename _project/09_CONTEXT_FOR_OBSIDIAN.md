@@ -6,24 +6,22 @@
 
 ## Aktualny etap
 
-Etap 10: Responsywny, pełnoszeroki layout listy projektów w panelu admina.
+Etap 10B: Blokada idealnego układu listy projektów i dopasowanie kolumny akcji.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 16:15 Europe/Warsaw: lista `/admin/projekty` została dostosowana do ekranów desktopowych. Strona dostała pełnoszeroki shell, tabela ma własny poziomy overflow, komórki są jednowierszowe z ellipsis, a akcje w tabeli nie układają się już pionowo.
+2026-05-15 16:45 Europe/Warsaw: zaakceptowany layout `/admin/projekty` został zachowany i zabezpieczony guardem. Poprawiono ostatni problem: `Ustaw active` nie powinno być ucinane po prawej stronie tabeli.
 
 ## Najważniejsze ustalenia
 
-- dla data-dense widoków admina nie używamy ciasnego kontenera marketingowego,
-- desktop: pełna szerokość strony + tabela z kontrolowanym poziomym overflow,
-- długie teksty w tabeli skracamy `ellipsis` i pokazujemy pełną wartość przez `title`,
-- mobile: karty zamiast tabeli,
-- layout nie zmienia logiki admina, statusów, delete ani Supabase.
+- obecny układ tabeli projektów jest docelowym układem desktopowym,
+- kolumna `Akcje` musi mieścić pełny zestaw akcji w jednej linii,
+- guard blokuje powrót do za wąskiej kolumny akcji,
+- nie ruszać tego layoutu przy kolejnych etapach bez osobnej decyzji,
+- mobile nadal używa kart.
 
-## Pliki techniczne ważne dla Etapu 10
+## Pliki techniczne ważne dla Etapu 10B
 
-- `../app/admin/projekty/page.tsx`
-- `../components/admin/AdminProjectsTable.tsx`
 - `../app/admin-v8.css`
 - `../scripts/check-admin-project-list-compact-v41.cjs`
 

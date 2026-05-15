@@ -21,7 +21,8 @@ for (const marker of [
   'data-admin-projects-table-scroll="true"',
   'admin-project-identity',
   'title={project.canPublish ? "Gotowy do publikacji" : `Braki: ${missingText}`}',
-  'title={publicHref}'
+  'title={publicHref}',
+  'targetStatus === "active" ? "Ustaw active" : "Ustaw draft"'
 ]) {
   const source = marker.includes('admin-shell') ? page : table;
   if (!source.includes(marker)) fail(`admin projects layout source missing marker: ${marker}`);
@@ -30,18 +31,24 @@ for (const marker of [
 for (const marker of [
   'STAGE41 ADMIN PROJECT LIST COMPACT START',
   'ETAP10 ADMIN PROJECTS FULL WIDTH LAYOUT',
+  'ETAP10B ADMIN PROJECTS ACTION COLUMN FIT LOCK',
   '.admin-shell.admin-projects-shell',
   'max-width: none',
   '.admin-projects-table-card',
   'overflow-x: auto',
-  'min-width: 1600px',
+  'min-width: 1640px',
   'table-layout: fixed',
   'white-space: nowrap',
   'text-overflow: ellipsis',
+  '.admin-projects-table th:nth-child(12),',
+  '.admin-projects-table td:nth-child(12)',
+  'width: 450px',
   '.admin-projects-table .admin-project-identity',
   '.admin-projects-table .admin-project-badges',
   'flex-wrap: nowrap',
   '.admin-projects-table .admin-row-actions',
+  'gap: 4px',
+  'font-size: 10.25px',
   '.admin-projects-table .admin-delete-safety'
 ]) {
   if (!css.includes(marker)) fail(`admin compact table css missing marker: ${marker}`);
@@ -57,10 +64,14 @@ const stage41Block = css.slice(stage41Start, stage41End);
 for (const forbidden of [
   'table-layout: auto',
   '.admin-table-card {\n  overflow: visible;',
-  'white-space: normal;'
+  'white-space: normal;',
+  'width: 286px',
+  'min-width: 1600px',
+  'gap: 5px;',
+  'font-size: 10.5px'
 ]) {
   if (stage41Block.includes(forbidden)) {
-    fail(`Stage41 admin projects layout reintroduced forbidden wrapping/visible overflow marker: ${forbidden}`);
+    fail(`Stage41 admin projects layout reintroduced forbidden wrapping/too-narrow action marker: ${forbidden}`);
   }
 }
 
@@ -72,4 +83,4 @@ if (!String(pkg.scripts.verify || '').includes('verify:admin-project-list-compac
   fail('main verify script does not include verify:admin-project-list-compact-v41.');
 }
 
-console.log('OK: V41/Etap10 admin project list responsive full-width layout guard passed.');
+console.log('OK: V41/Etap10B admin project list responsive full-width layout guard passed.');

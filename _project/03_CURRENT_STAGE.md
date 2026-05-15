@@ -1,10 +1,10 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 16:15 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 16:45 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 10: Responsywny, pełnoszeroki layout listy projektów w panelu admina
+Etap 10B: Blokada idealnego układu listy projektów i dopasowanie kolumny akcji
 
 ## Status etapu
 
@@ -12,25 +12,24 @@ Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guardy, bui
 
 ## Cel etapu
 
-Naprawić rozjechaną listę projektów w `/admin/projekty` bez zmiany logiki panelu admina.
+Zostawić obecny idealny układ `/admin/projekty`, ale dopiąć ostatni problem: przycisk `Ustaw active` nie może wypadać poza prawą krawędź tabeli.
 
 ## Co zostało zrobione
 
-- Lista projektów dostała osobny pełnoszeroki shell `admin-projects-shell`, zamiast ciasnego kontenera katalogowego.
-- Tabela projektów używa szerokości ekranu i ma własny poziomy overflow tylko wtedy, gdy ekran jest za wąski.
-- Komórki tabeli są jednowierszowe, z `ellipsis` i `title` dla pełnej treści.
-- Nazwa projektu i slug są pokazane w jednej linii.
-- Statusy, gotowość, link publiczny, data i akcje nie rozpychają wierszy w pionie.
-- Akcje w tabeli są zwarte i w jednej linii; strefa `Usuń projekt` pozostaje zamknięta jako kompaktowy element.
-- Widok mobilny nadal używa kart zamiast tabeli.
-- Guard `verify:admin-project-list-compact-v41` został zaostrzony pod pełnoszeroki layout i blokadę powrotu do zawijania.
+- Zachowano pełnoszeroki, jednowierszowy layout tabeli z Etapu 10.
+- Poszerzono kolumnę `Akcje` do stabilnej szerokości.
+- Lekko skompresowano część kolumn informacyjnych, żeby tabela nadal mieściła się na desktopie.
+- Zmniejszono odstęp i mikro-rozmiar tekstu w przyciskach akcji.
+- Zachowano teksty przycisków, w tym `Ustaw active` i `Ustaw draft`.
+- Guard `verify:admin-project-list-compact-v41` pilnuje teraz także action-column fit lock: minimalnej szerokości tabeli, szerokości kolumny akcji, braku powrotu do `width: 286px`, braku za dużych gapów i braku starego rozmiaru fontu akcji.
 
 ## Czego nie zmieniano
 
 - Nie zmieniano server actions.
 - Nie zmieniano routingu.
 - Nie zmieniano publicznych stron.
-- Nie zmieniano modelu usuwania ani statusów.
+- Nie zmieniano logiki statusów.
+- Nie zmieniano modelu usuwania.
 - Nie zmieniano danych Supabase.
 
 ## Checki wymagane
@@ -45,4 +44,4 @@ npm run check:project-memory
 
 ## Następny krok
 
-Po wdrożeniu sprawdzić ręcznie `/admin/projekty` przy szerokości desktopowej: tabela powinna używać prawie całego ekranu, wiersze mają być niskie, a teksty w tabeli mają zostać w jednej linii.
+Po wdrożeniu sprawdzić ręcznie `/admin/projekty`: na desktopie cały zestaw akcji w wierszu ma być widoczny, w tym `Ustaw active`.

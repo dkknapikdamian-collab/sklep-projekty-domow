@@ -27,3 +27,5 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 | 2026-05-15 | Etap 9: delete safety admina | Usuwanie projektu wymaga wpisania kodu i walidacji server-side. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |
 
 | 2026-05-15 | Etap 10: pełnoszeroka lista projektów admina | `/admin/projekty` dostało pełnoszeroki shell, jednowierszową tabelę i kontrolowany poziomy overflow. | `app/admin/projekty/page.tsx`, `components/admin/AdminProjectsTable.tsx`, `app/admin-v8.css`, `scripts/check-admin-project-list-compact-v41.cjs` |
+
+| 2026-05-15 | Etap 10B: guard idealnego układu admin projects | Zachowano zaakceptowany layout tabeli i poszerzono kolumnę akcji, żeby `Ustaw active` nie było ucinane. | `app/admin-v8.css`, `scripts/check-admin-project-list-compact-v41.cjs` |

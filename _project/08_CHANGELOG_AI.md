@@ -1,6 +1,46 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 16:45 - Etap 10B: Guard idealnego układu i dopasowanie akcji
+
+- Zachowano zaakceptowany pełnoszeroki układ `/admin/projekty`.
+- Poprawiono ostatni problem wizualny: `Ustaw active` nie powinno już wypadać poza prawą krawędź tabeli.
+- Kolumna `Akcje` została poszerzona do `450px`.
+- Tabela ma teraz `min-width: 1640px`.
+- Część kolumn informacyjnych została lekko skompresowana, żeby zachować desktopowy układ bez schodkowania.
+- Przyciski akcji dostały mniejszy gap i minimalnie mniejszy font.
+- Zaostrzono `scripts/check-admin-project-list-compact-v41.cjs`, żeby pilnował action-column fit lock i blokował powrót do poprzedniej za wąskiej kolumny.
+
+### Pliki zmienione
+
+- `app/admin-v8.css`
+- `scripts/check-admin-project-list-compact-v41.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_1645_admin-projects-action-fit-guard.md`
+
+### Testy / guardy
+
+Do uruchomienia lokalnie przez paczkę:
+
+```powershell
+npm run verify:admin-project-list-compact-v41
+npm run verify:admin-buttons-v19
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ryzyka
+
+- Guard blokuje znane przyczyny rozjazdu, ale finalną ocenę proporcji nadal trzeba potwierdzić wzrokowo w przeglądarce.
+
+
 ## 2026-05-15 16:15 - Etap 10: Pełnoszeroki layout listy projektów admina
 
 - Naprawiono layout `/admin/projekty`, który po zabezpieczeniu delete i rozbudowie akcji zaczął wyglądać jak ściśnięta tabela w zbyt wąskim kontenerze.

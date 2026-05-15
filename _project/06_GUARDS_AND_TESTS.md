@@ -1,6 +1,19 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Aktualizacja guarda po Etapie 10B
+
+`npm run verify:admin-project-list-compact-v41` pilnuje teraz także zaakceptowanego układu wizualnego:
+
+- obecność markera `ETAP10B ADMIN PROJECTS ACTION COLUMN FIT LOCK`,
+- tabela ma `min-width: 1640px`,
+- kolumna `Akcje` ma `width: 450px`,
+- akcje mają `gap: 4px`,
+- przyciski akcji mają `font-size: 10.25px`,
+- guard blokuje powrót do `width: 286px`, `min-width: 1600px`, `gap: 5px` i `font-size: 10.5px` w bloku Stage41,
+- guard nadal blokuje powrót do `table-layout: auto`, `overflow: visible` i `white-space: normal`.
+
+
 ## Checki wymagane dla Etapu 10
 
 ```powershell
