@@ -1,88 +1,61 @@
-﻿# 00_PROJECT_STATUS — status projektu
+# 00_PROJECT_STATUS - Sklep z projektami domów
 
-Ostatnia aktualizacja: 2026-05-14 21:20 Europe/Warsaw
-Aktualizował: GPT-5.5 Thinking
+## Status na 2026-05-15
 
-## Nazwa projektu
+Projekt jest w fazie budowy aplikacji sklepowej dla projektów domów. Nie jest to już luźna makieta ani czysty HTML. Kierunek operacyjny to Next.js / React, panel admina, katalog publiczny, karta projektu, koszyk, checkout oraz zamówienia.
 
-`sklep-projekty-domow`
+Ten plik opisuje stan projektu jako pamięć operacyjną. Nie zastępuje testu kodu. Aktualny kod zawsze trzeba sprawdzić w repo.
 
-## Typ projektu
+## Co już istnieje według dotychczasowych prac i logów
 
-Aplikacja webowa / sklep-katalog projektów domów.
+FAKTY / mocne przesłanki z dotychczasowej pracy:
 
-## Status projektu
+- repo aplikacji działa jako aplikacja Next.js / React,
+- istnieją publiczne trasy sklepu, m.in. strona główna, katalog/projekty, koszyk i checkout/zamówienie,
+- istnieje panel admina z logowaniem/setupem,
+- istnieją trasy admina dla projektów: lista, nowy projekt, edycja projektu, podgląd,
+- rozpoczęto/wykonano prace nad panelem admina: dodawanie projektu, edycja, zapis, anulowanie, status, usuwanie,
+- rozpoczęto/wykonano prace nad checkoutem V1,
+- dodano wymóg dodatku zakupowego `Projekt w formacie PDF na e-mail` za +250 zł,
+- projekt ma system pamięci `_project/` i powinien mieć guard pamięci projektu.
 
-Projekt w aktywnym rozwoju. Repo zawiera produkcyjny format strony sklepu z projektami domów, bez fikcyjnych aktywnych projektów.
+## Co działa, ale wymaga regularnej kontroli
 
-## Aktualny etap
+- Build aplikacji był uruchamiany w poprzednich etapach i pokazywał listę tras Next.js.
+- Panel admina był ręcznie sprawdzany przez Damiana, ale wskazywał problemy z przyciskami. Dlatego każde kolejne wdrożenie admina musi mieć test ręczny i guard/regresję.
+- Koszyk/checkout są kierunkiem V1, ale pełny przepływ zakupu musi być testowany od dodania projektu do zamówienia.
 
-Etap 0: Utworzenie pamięci projektu / AI Working Contract.
+## Co jest częściowe albo wymaga potwierdzenia
 
-## Charakter aplikacji
+- Pełna zgodność panelu admina: `Edytuj`, `Zapisz`, `Anuluj`, zmiana statusu z listy, usuwanie.
+- Pełne spięcie dodatku PDF e-mail +250 zł przez koszyk, checkout, zamówienie, płatność i e-maile.
+- Finalny model storage plików prywatnych po płatności.
+- Finalna płatność produkcyjna.
+- Automatyczna wysyłka linków do pobrania po płatności.
+- Pełna obsługa folderów mediów po kodzie projektu.
 
-- Next.js / React / TypeScript.
-- Sklep/katalog projektów domów.
-- Dane projektów mają pochodzić z realnych danych, a nie z fikcyjnych ofert.
-- Repo ma istniejące guardy `verify:*` oraz główny skrypt `npm run verify`.
+## Co nie działa / znane ryzyka
 
-## Główne aktywne obszary
+- Ryzyko powrotu ubogiej dokumentacji pamięci projektu, jeśli AI wygeneruje tylko ogólne pliki.
+- Ryzyko martwych przycisków w panelu admina po kolejnych zmianach.
+- Ryzyko mieszania danych demo/fikcyjnych z realnymi projektami.
+- Ryzyko rozjazdu między repo aplikacji a Obsidianem.
+- Ryzyko dopisywania propozycji AI jako faktów produktowych.
 
-- Strona główna.
-- Katalog projektów.
-- Dynamiczna karta projektu `/projekty/[slug]`.
-- Koszyk.
-- Checkout.
-- Panel admina i zarządzanie projektami.
-- Media projektów.
-- Supabase / źródło danych.
-- Guardy jakości i zgodności.
+## Ostatni etap
 
-## Najważniejsze ryzyka
+Etap bieżący: **uzupełnienie pełnego mózgu projektu**.
 
-- Dodanie fikcyjnych aktywnych ofert jako produkcyjnych danych.
-- Rozjazd między panelem admina, publicznym katalogiem i realnym źródłem danych.
-- Martwe guardy po zmianach UI lub funkcji.
-- Zbyt duże refaktory przy małych naprawach.
-- Brak aktualizacji pamięci projektu po etapach.
+Cel etapu: repo aplikacji i Obsidian mają zawierać pełny, użyteczny opis projektu: kierunek, zakres, decyzje, testy, guardy, potwierdzenia, braki i następny krok.
 
-## Nieustalone na podstawie repo
+## Ostatni potwierdzony test Damiana
 
-- Docelowy model płatności i pełna automatyzacja dostarczenia plików po zakupie wymagają dalszego doprecyzowania w kolejnych etapach.
+Nie ma pełnego potwierdzenia „cały sklep działa produkcyjnie”.
 
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
-# Status projektu - Sklep z projektami domów
+Znane potwierdzenia częściowe:
 
-## Status operacyjny
+- Damian potwierdził, że aplikacja po wcześniejszym wdrożeniu działa w sensie bazowym, ale wskazał, że przycisk `Edytuj` nie działał.
+- Damian wskazał, że `Zapisz dane` i `Anuluj` także wymagały sprawdzenia/podpięcia.
+- Damian wskazał problem UI z za dużą czcionką / potrzebą jednej czytelnej linijki w widoku tabeli/listy.
 
-Projekt aktywny.
-
-To jest aplikacja/sklep do sprzedaży projektów domów. Repo aplikacji pozostaje źródłem kodu, a `_project/` jest pamięcią operacyjną projektu dla AI developerów, Codexa i ChatGPT.
-
-## Aktualny typ projektu
-
-Projekt kodowy / aplikacja sklepowa.
-
-## Źródła prawdy
-
-- Kod: repo aplikacji.
-- Pamięć projektu: `AGENTS.md` + `_project/`.
-- Mózg / dashboard dla Damiana: Obsidian `10_PROJEKTY/Sklep_projekty_domow/`.
-
-## Aktualny etap pamięci
-
-Wdrożenie pełnej pamięci projektu i synchronizacji z Obsidianem.
-
-Ten etap nie zmienia UI, routingu ani logiki produktu.
-
-## Status testów
-
-- Guard pamięci projektu: `node scripts/check-project-memory.cjs` / `npm run check:project-memory`.
-- Testy produktu nie są automatycznie uznawane za wykonane przez ten etap.
-- Testy ręczne Damiana mają być zapisywane w `_project/11_USER_CONFIRMED_TESTS.md`.
-
-## Krytyczna zasada
-
-Nie zostawiać decyzji, potwierdzeń, nowych pomysłów i zmian kierunku tylko w czacie. Mają trafić do repo i Obsidiana.
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
-
+Wszystkie te potwierdzenia są częściowe i nie zastępują pełnego testu panelu admina, koszyka i checkoutu.

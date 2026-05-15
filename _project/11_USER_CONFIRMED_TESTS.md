@@ -1,40 +1,42 @@
-﻿<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
-# User confirmed tests
-
-Ten plik zapisuje rzeczy, które Damian ręcznie sprawdził i potwierdził.
+# 11_USER_CONFIRMED_TESTS - Potwierdzenia Damiana
 
 ## Zasada
 
-Jeśli Damian napisze, że coś działa, wygląda dobrze, jest poprawione, jest zaakceptowane albo przetestowane, dopisz wpis.
+Ten plik zapisuje tylko rzeczy, które Damian ręcznie potwierdził albo ręcznie zgłosił jako problem.
 
-Każdy wpis ma mieć:
+Nie wpisywać tu „AI uważa, że działa”.
 
-- datę,
-- co było sprawdzane,
-- wynik,
-- gdzie w aplikacji,
-- powiązany etap,
-- czy istnieje guard/test automatyczny,
-- jeśli guardu nie ma, wpisz: `brak guardu - tylko test ręczny`.
+## 2026-05-13 - Aplikacja działa częściowo, ale admin miał martwe przyciski
 
-## Format wpisu
+- Co Damian sprawdził: po wdrożeniu aplikacja uruchamiała się / działała w bazowym sensie.
+- Gdzie: projekt sklepu z projektami domów, panel admina.
+- Wynik: częściowo pozytywny, ale Damian zgłosił, że `Edytuj` nie działa.
+- Dalsze zgłoszenia: `Zapisz dane` i `Anuluj` też wymagały sprawdzenia/podpięcia.
+- Czy jest guard: do sprawdzenia w aktualnym repo.
+- Jeśli brak guardu: `brak guardu - tylko test ręczny`.
 
-```markdown
-## YYYY-MM-DD - Nazwa testu
+## 2026-05-14 - Problem czytelności tabeli/listy
 
-- Co sprawdzono:
-- Gdzie:
-- Wynik:
-- Potwierdzenie Damiana:
-- Powiązany etap:
-- Guard automatyczny:
-- Status:
-```
+- Co Damian sprawdził: widok tabeli/listy w sklepie/adminie na screenie.
+- Gdzie: UI sklepu/projektów.
+- Wynik: czcionka była za duża, układ rozjechany; preferencja: dosłownie jedna czytelna linijka.
+- Czy jest guard: raczej brak pełnego guardu wizualnego.
+- Jeśli brak guardu: `brak guardu - tylko test ręczny`.
 
-## Wpisy
+## 2026-05-15 - Wymóg pełnego mózgu projektu
 
-Brak nowych potwierdzeń dodanych przez ten etap.
+- Co Damian sprawdził: wcześniejsze pliki pamięci były zbyt ubogie i nie opisywały pełnego kierunku projektu.
+- Gdzie: repo projektu i Obsidian.
+- Wynik: wymagane uzupełnienie pełnej pamięci, nie generycznego template.
+- Czy jest guard: dodany `scripts/check-project-memory.cjs`.
 
-Ten etap tworzy miejsce na potwierdzenia. Nie przepisuje automatycznie dawnych testów z rozmów bez weryfikacji w aktualnym repo.
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+## Brak pełnych potwierdzeń
 
+Nie ma jeszcze w tym pliku pełnego potwierdzenia Damiana dla:
+
+- całego admina po ostatnich poprawkach,
+- pełnego checkoutu,
+- dodatku PDF e-mail +250 zł przez wszystkie warstwy,
+- produkcyjnych płatności,
+- prywatnych linków do pobrania,
+- pełnej automatycznej dostawy dokumentacji.

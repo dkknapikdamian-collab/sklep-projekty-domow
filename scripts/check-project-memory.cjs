@@ -1,11 +1,34 @@
 #!/usr/bin/env node
-/* SKLEP_PROJEKTY_DOMOW_PROJECT_MEMORY_GUARD_V1 */
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 
 const root = process.cwd();
+const defaultVault = 'C:/Users/malim/Desktop/biznesy_ai/00_OBSIDIAN_VAULT';
+const vault = process.env.OBSIDIAN_VAULT || defaultVault;
+const obsidianProjectRel = path.join('10_PROJEKTY', 'Sklep_projekty_domow');
+const errors = [];
 
-const requiredPaths = [
+function exists(rel) {
+  return fs.existsSync(path.join(root, rel));
+}
+
+function read(rel) {
+  const file = path.join(root, rel);
+  return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+}
+
+function requireFile(rel) {
+  if (!exists(rel)) errors.push(`Missing required file: ${rel}`);
+}
+
+function requireContains(rel, patterns) {
+  const text = read(rel);
+  for (const pattern of patterns) {
+    if (!text.includes(pattern)) errors.push(`File ${rel} is missing marker: ${pattern}`);
+  }
+}
+
+const appFiles = [
   'AGENTS.md',
   '_project/00_PROJECT_STATUS.md',
   '_project/01_PROJECT_GOAL.md',
@@ -21,32 +44,92 @@ const requiredPaths = [
   '_project/11_USER_CONFIRMED_TESTS.md',
   '_project/runs/.gitkeep',
   '_project/history/.gitkeep',
+  'scripts/check-project-memory.cjs',
 ];
 
-const missing = [];
-for (const rel of requiredPaths) {
-  const full = path.join(root, rel);
-  if (!fs.existsSync(full)) missing.push(rel);
+for (const file of appFiles) requireFile(file);
+
+requireContains('AGENTS.md', [
+  'Sklep z projektami domów',
+  '_project/',
+  'ZIP',
+  'Obsidian',
+  'Fakt',
+]);
+
+requireContains('_project/01_PROJECT_GOAL.md', [
+  'Zakres V1',
+  'Zakres V2',
+  'Projekt w formacie PDF na e-mail',
+  '+250 zł',
+]);
+
+requireContains('_project/04_DECISIONS.md', [
+  'Aktywne decyzje',
+  'HIPOTEZA / PROPOZYCJA',
+  'Fikcyjne projekty',
+]);
+
+requireContains('_project/06_GUARDS_AND_TESTS.md', [
+  'node scripts/check-project-memory.cjs',
+  'npm run check:project-memory',
+  'npm run build',
+]);
+
+requireContains('_project/11_USER_CONFIRMED_TESTS.md', [
+  'Potwierdzenia Damiana',
+  'brak guardu - tylko test ręczny',
+]);
+
+const runsDir = path.join(root, '_project', 'runs');
+if (fs.existsSync(runsDir)) {
+  const reports = fs.readdirSync(runsDir).filter((name) => name.includes('sklep-pelny-mozg-projektu') && name.endsWith('.md'));
+  if (reports.length === 0) errors.push('Missing AI report in _project/runs/*sklep-pelny-mozg-projektu.md');
 }
 
-const pkgPath = path.join(root, 'package.json');
-if (fs.existsSync(pkgPath)) {
-  try {
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    if (!pkg.scripts || pkg.scripts['check:project-memory'] !== 'node scripts/check-project-memory.cjs') {
-      missing.push('package.json script: check:project-memory');
-    }
-  } catch (error) {
-    console.error('ERROR: package.json is not valid JSON.');
-    console.error(error.message);
-    process.exit(1);
+if (fs.existsSync(vault)) {
+  const obsidianProject = path.join(vault, obsidianProjectRel);
+  const obsFiles = [
+    '00_START - Sklep projekty domow.md',
+    '01_KIERUNEK I ZAKRES - Sklep projekty domow.md',
+    '02_STAN OBECNY - Sklep projekty domow.md',
+    '03_DECYZJE - Sklep projekty domow.md',
+    '04_ETAPY I WDROZENIA - Sklep projekty domow.md',
+    '05_TESTY RECZNE - Sklep projekty domow.md',
+    '06_GUARDY I TESTY AUTOMATYCZNE - Sklep projekty domow.md',
+    '07_POTWIERDZENIA DAMIANA - Sklep projekty domow.md',
+    '08_HISTORIA I ZMIANY KIERUNKU - Sklep projekty domow.md',
+    '09_NASTEPNY KROK - Sklep projekty domow.md',
+    '10_ZASADY PROJEKTU - Sklep projekty domow.md',
+  ];
+
+  for (const name of obsFiles) {
+    const full = path.join(obsidianProject, name);
+    if (!fs.existsSync(full)) errors.push(`Missing Obsidian project file: ${path.join(obsidianProjectRel, name)}`);
+    if (!name.includes('Sklep projekty domow')) errors.push(`Obsidian file name must include project name: ${name}`);
   }
+
+  const forbiddenGeneric = ['INDEX.md', 'STATUS.md', 'CONTEXT.md'];
+  for (const name of forbiddenGeneric) {
+    const full = path.join(obsidianProject, name);
+    if (fs.existsSync(full)) errors.push(`Forbidden generic Obsidian file in project folder: ${name}`);
+  }
+
+  const reportsDir = path.join(obsidianProject, '_RAPORTY_AI');
+  if (!fs.existsSync(reportsDir)) {
+    errors.push('Missing Obsidian reports dir: _RAPORTY_AI');
+  } else {
+    const reports = fs.readdirSync(reportsDir).filter((name) => name.includes('sklep-pelny-mozg-projektu') && name.endsWith('.md'));
+    if (reports.length === 0) errors.push('Missing Obsidian AI report in _RAPORTY_AI/*sklep-pelny-mozg-projektu.md');
+  }
+} else {
+  console.warn(`[WARN] Obsidian vault not found at ${vault}. Skipping Obsidian file checks.`);
 }
 
-if (missing.length) {
-  console.error('Project memory guard failed. Missing or invalid:');
-  for (const item of missing) console.error(`- ${item}`);
+if (errors.length) {
+  console.error('Project memory check failed:');
+  for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log('OK: project memory files are present.');
+console.log('OK: project memory files are complete for Sklep projekty domow.');

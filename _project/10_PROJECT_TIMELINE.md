@@ -1,71 +1,84 @@
-﻿# 10_PROJECT_TIMELINE - timeline projektu
+# 10_PROJECT_TIMELINE - Oś czasu projektu
 
-## Cel pliku
+## Przed aplikacją
 
-Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu. Szczegoly operacyjne pozostaja w:
+### Kierunek wizualny / makiety
 
-- `_project/03_CURRENT_STAGE.md`
-- `_project/08_CHANGELOG_AI.md`
-- `_project/runs/`
-- `_project/history/`
+Powstały lub były rozważane materiały wizualne i makiety. Obowiązujący status: mogą służyć jako inspiracja/design lock, ale nie są realnymi ofertami projektów.
 
-## Timeline
+### Decyzja: nie produkcyjny czysty HTML
 
-| Data | Etap / decyzja | Znaczenie | Powiazane pliki |
-|---|---|---|---|
-| 2026-05-14 | Etap 0: utworzenie pamieci projektu | Repo dostalo `AGENTS.md`, `_project/` i guard pamieci. | `AGENTS.md`, `_project/*`, `scripts/check-project-memory.cjs` |
-| 2026-05-14 | Etap 1: audyt akcji admina | Panel admina dostal stabilniejsze markery i guardy akcji. | `scripts/check-admin-buttons-v19.cjs`, `components/admin/*` |
-| 2026-05-15 | Etap 2: runtime test admina | Potwierdzono bloker lokalnego Supabase Auth / anon key. | `_project/runs/2026-05-15_0802_admin-runtime-test.md` |
-| 2026-05-15 | Etap 3: spojnosc admin -> public | Publiczny katalog i karta projektu zostaly powiazane z realnymi danymi admina i statusem `active`. | `lib/project-repository.ts`, `scripts/check-public-project-data-v22.cjs` |
-| 2026-05-15 | Etap 4: karta projektu jako strona sprzedazowa | Doprecyzowano CTA, warianty, dodatki i PDF na e-mail. | `components/project/*`, `scripts/check-public-project-detail-sales-v37.cjs` |
-| 2026-05-15 | Etap 5: koszyk i lokalne liczniki | Koszyk dostal walidacje localStorage, a header liczniki koszyka i ulubionych. | `lib/cart/storage.ts`, `scripts/check-cart-order-v38.cjs` |
-| 2026-05-15 | Etap 6: zamowienia V1 | Dodano realny panel zamowien admina i reczne statusy. | `app/admin/zamowienia/*`, `lib/admin/orders-admin.ts`, `scripts/check-admin-orders-v42.cjs` |
-| 2026-05-15 | Aktualizacja standardu pamieci projektu | `AGENTS.md` zostal dostosowany do globalnego workflow Damiana; dodano timeline i history. | `AGENTS.md`, `_project/10_PROJECT_TIMELINE.md`, `_project/history/` |
-| 2026-05-15 | Etap 7: checkout polprodukcyjny V1 | Checkout przestal brzmiec testowo i jasno komunikuje reczne potwierdzenie dostepnosci, platnosci i realizacji. | `app/zamowienie/page.tsx`, `components/order/CheckoutForm.tsx`, `scripts/check-cart-order-v38.cjs` |
+Projekt ma iść w aplikację sklepową, nie w statyczny HTML.
 
-| 2026-05-15 | Etap 8: pliki prywatne i dostawa ręczna | Panel zamówień pokazuje prywatne pliki projektu, PDF na e-mail, instrukcję wysyłki i checklistę ręcznej realizacji. | `app/admin/zamowienia/page.tsx`, `lib/admin/order-files.ts`, `scripts/check-admin-orders-v42.cjs` |
-| 2026-05-15 | Etap 9: delete safety admina | Usuwanie projektu wymaga wpisania kodu i walidacji server-side. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |
+## Budowa aplikacji
 
-| 2026-05-15 | Etap 10: pełnoszeroka lista projektów admina | `/admin/projekty` dostało pełnoszeroki shell, jednowierszową tabelę i kontrolowany poziomy overflow. | `app/admin/projekty/page.tsx`, `components/admin/AdminProjectsTable.tsx`, `app/admin-v8.css`, `scripts/check-admin-project-list-compact-v41.cjs` |
+### Etapy bazowe
 
-| 2026-05-15 | Etap 10B: guard idealnego układu admin projects | Zachowano zaakceptowany layout tabeli i poszerzono kolumnę akcji, żeby `Ustaw active` nie było ucinane. | `app/admin-v8.css`, `scripts/check-admin-project-list-compact-v41.cjs` |
+Powstała aplikacja Next.js / React z trasami publicznymi i adminowymi.
 
-| 2026-05-15 | Etap 11: archived-first delete safety | Standardową ścieżką dla projektu jest archiwizacja, a fizyczne delete zostało awaryjne i blokowane dla statusów innych niż `archived`/`draft`. | `components/admin/AdminProjectDeleteForm.tsx`, `components/admin/AdminProjectsTable.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |
+Znane obszary:
 
-| 2026-05-15 | Etap 12: admin audit log | Dodano minimalny audit log dla ryzykownych operacji admina: update projektu, status projektu, archiwizacja, hard delete i status zamówienia. | `lib/admin/audit-log.ts`, `supabase/migrations/0016_admin_audit_log.sql`, `scripts/check-admin-audit-log-v44.cjs` |
+- strona główna,
+- katalog/projekty,
+- koszyk,
+- checkout/zamówienie,
+- panel admina,
+- logowanie/setup admina,
+- projekty: lista, nowy, edycja, podgląd.
 
-| 2026-05-15 | Etap 14: strona szczegółów zamówienia | Rozdzielono listę zamówień od obsługi konkretnego zamówienia na `/admin/zamowienia/[id]`. | `app/admin/zamowienia/page.tsx`, `app/admin/zamowienia/[id]/page.tsx`, `lib/admin/orders-admin.ts`, `scripts/check-admin-orders-v42.cjs` |
+### Panel admina
 
-| 2026-05-15 | Etap 15: panel awaryjnego delete w tabeli projektów | Zmieniono `Awaryjne` na `Awaryjne usunięcie`, skrócono teksty i dopasowano CSS, żeby panel nie ucinał treści w tabeli. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin-v8.css`, `scripts/check-admin-buttons-v19.cjs` |
+Damian zgłaszał, że część przycisków w panelu admina nie działała albo wymagała podpięcia:
 
-| 2026-05-15 | Etap 15B: utrwalona checklista realizacji | Dodano tabelę `order_fulfillment_checklist`, zapis checkboxów realizacji i notatkę admina na `/admin/zamowienia/[id]`. | `app/admin/zamowienia/[id]/page.tsx`, `app/admin/zamowienia/actions.ts`, `lib/admin/orders-admin.ts`, `supabase/migrations/0017_order_fulfillment_checklist.sql` |
+- `Edytuj`,
+- `Zapisz dane`,
+- `Anuluj`,
+- zmiana statusu,
+- usunięcie.
 
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
-# Timeline projektu - Sklep z projektami domów
+To stało się osobnym torem audytu i naprawy. Po każdej zmianie admina test przycisków jest obowiązkowy.
 
-## 2026-05-15 - Ustalenie pełnej pamięci projektu
+### Checkout V1
 
-- Ustalono, że repo aplikacji ma mieć `AGENTS.md` i pełny folder `_project/`.
-- Ustalono, że Obsidian ma mieć czytelny mózg projektu w `10_PROJEKTY/Sklep_projekty_domow/`.
-- Ustalono, że każda decyzja, zmiana kierunku, test, guard i potwierdzenie użytkownika mają mieć swoje miejsce.
+Rozpoczęto/wykonano etap checkoutu V1. Aktualny stan wymaga potwierdzenia pełnym testem od projektu do zamówienia.
 
-## 2026-05-15 - Kierunek produktu
+### Dodatek PDF e-mail +250 zł
 
-- Sklep/strona do sprzedaży projektów domów.
-- React/Next.js + baza danych + storage + panel admina.
-- Zakup jako gość.
-- Dostęp/pobranie przez prywatny link jako kierunek prostszy niż konto klienta w V1.
-- Admin zarządza projektami i publikacją.
-- Katalog pokazuje tylko realnie opublikowane projekty.
+2026-05-13: dodano wymóg dodatku zakupowego `Projekt w formacie PDF na e-mail` za +250 zł.
 
-## 2026-05-15 - Dodatek PDF na e-mail
+Ważna interpretacja: dodatek nie może kolidować z bazową dostawą cyfrową. Ma być dodatkową wygodną formą wysyłki/archiwizacji PDF na e-mail.
 
-- Przyjęto dodatek `Projekt w formacie PDF na e-mail` za +250 zł.
-- Ma działać jako addon zamówienia bez kolizji z bazową dostawą cyfrową.
+### UI admina / czytelność tabeli
 
-## Kolejne wpisy
+Damian wskazał problem z rozjechaną tabelą/listą i za dużą czcionką. Preferencja: jedna czytelna linijka, bez chaosu.
 
-Dopisywać każdą zmianę kierunku, zamrożenie funkcji, potwierdzony etap lub istotną decyzję.
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+## 2026-05-15 - Pełna pamięć projektu
 
-| 2026-05-15 | Etap 16: robocze e-maile do klienta | Dodano trzy drafty e-maili na `/admin/zamowienia/[id]`, bez automatycznej wysyłki. | `lib/admin/order-email-drafts.ts`, `app/admin/zamowienia/[id]/page.tsx`, `scripts/check-manual-email-drafts-v47.cjs` |
+Uzupełnienie repo i Obsidiana o pełny mózg projektu:
+
+- status,
+- cel,
+- zasady pracy,
+- aktualny etap,
+- decyzje,
+- testy ręczne,
+- guardy,
+- następne kroki,
+- changelog,
+- kontekst dla Obsidiana,
+- timeline,
+- potwierdzenia Damiana,
+- raporty AI.
+
+## Rzeczy porzucone
+
+- Czysty HTML jako produkcyjny sklep.
+- Fikcyjne projekty jako realne oferty.
+- Konto klienta jako obowiązkowy element V1.
+
+## Rzeczy zamrożone / ostrożne
+
+- Nie zmieniać UI bez zakresu.
+- Nie refaktorować szeroko przy małych etapach.
+- Nie dopisywać propozycji AI jako decyzji.
+- Nie ruszać routingu, jeśli zadanie dotyczy tylko dokumentacji/pamięci.

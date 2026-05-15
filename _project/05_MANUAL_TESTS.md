@@ -1,617 +1,112 @@
-﻿# 05_MANUAL_TESTS - testy reczne
-
-
-
-## Test reczny po Etapie 16
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do:
-
-```text
-/admin/zamowienia/[id]
-```
-
-2. Znajdź sekcję `Robocze e-maile do klienta`.
-
-3. Oczekiwany wynik:
-   - widać `E-mail: potwierdzenie zamówienia`,
-   - widać `E-mail: płatność potwierdzona`,
-   - widać `E-mail: wysyłka plików`,
-   - każdy draft ma temat,
-   - każdy draft ma treść w textarea,
-   - treść zawiera numer zamówienia i dane z zamówienia,
-   - system nie ma przycisku wysyłki.
-
-4. Skopiuj temat i treść jednego draftu ręcznie.
-5. Oczekiwany wynik: można użyć draftu w zewnętrznej skrzynce e-mail bez pisania od zera.
-
-## Test reczny po Etapie 15B
-
-Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0017_order_fulfillment_checklist.sql`.
-
-### Co sprawdzić
-
-1. Wejdź do:
-
-```text
-/admin/zamowienia
-```
-
-2. Kliknij `Obsłuż zamówienie`.
-
-3. Na `/admin/zamowienia/[id]` zaznacz:
-   - `Płatność potwierdzona`,
-   - `PDF wysłany, jeśli dotyczy`,
-   - `ZIP wysłany, jeśli dotyczy`,
-   - `Zamówienie zamknięte`.
-
-4. Wpisz notatkę admina.
-
-5. Kliknij `Zapisz realizację`.
-
-6. Oczekiwany wynik:
-   - pojawia się komunikat `Realizacja zamówienia została zapisana`,
-   - checkboxy zostają zaznaczone po odświeżeniu,
-   - notatka admina zostaje po odświeżeniu,
-   - w Supabase pojawia się/aktualizuje rekord w `order_fulfillment_checklist`.
-
-7. Sprawdź SQL:
-
-```sql
-select *
-from order_fulfillment_checklist
-order by updated_at desc;
-```
-
-8. Nie sprawdzamy automatycznej wysyłki, płatności ani signed URL, bo są poza zakresem.
-
-
-## Test reczny po Etapie 15
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do:
-
-```text
-/admin/projekty
-```
-
-2. Rozwiń panel przycisku `Awaryjne usunięcie`.
-
-3. Oczekiwany wynik:
-   - etykieta brzmi `Awaryjne usunięcie`,
-   - czerwony panel jest mniejszy niż wcześniej,
-   - teksty zawijają się w panelu,
-   - nic nie jest ucięte po prawej stronie,
-   - input kodu projektu mieści się w panelu,
-   - `Usuń trwale` jest nadal zablokowane bez kodu/statusu archived albo draft.
-
-4. Sprawdź projekt active i archived.
-5. Oczekiwany wynik:
-   - active nadal pokazuje blokadę,
-   - archived pozwala odblokować delete dopiero po wpisaniu kodu.
-
-
-## Test reczny po Etapie 14
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do:
-
-```text
-/admin/zamowienia
-```
-
-2. Oczekiwany wynik:
-   - lista pokazuje skrócone karty zamówień,
-   - nie ma rozwijanych szczegółów i checklisty w każdej karcie,
-   - przy każdym zamówieniu jest link `Obsłuż zamówienie`.
-
-3. Kliknij `Obsłuż zamówienie`.
-
-4. Oczekiwany wynik na `/admin/zamowienia/[id]`:
-   - widać dane klienta,
-   - widać status i formularz zmiany statusu,
-   - widać pozycje zamówienia,
-   - widać warianty,
-   - widać dodatki,
-   - widać PDF na e-mail,
-   - widać pliki prywatne przypięte do projektu,
-   - widać dane do faktury i uwagi klienta,
-   - widać checklistę ręcznej realizacji,
-   - jest informacja, że osobna notatka admina wymaga osobnego pola/migracji.
-
-5. Zmień status zamówienia na stronie szczegółu.
-6. Oczekiwany wynik:
-   - status zapisuje się,
-   - po odświeżeniu zostaje,
-   - wracając do listy widać nowy status.
-
-
-## Test reczny po Etapie 12B
-
-Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0016_admin_audit_log.sql`.
-
-### Co sprawdzić
-
-1. Zastosuj migrację Supabase:
-
-```text
-supabase/migrations/0016_admin_audit_log.sql
-```
-
-2. Wykonaj na danych testowych:
-   - zmianę statusu projektu,
-   - archiwizację projektu,
-   - zapis edycji projektu,
-   - zmianę statusu zamówienia.
-
-3. Sprawdź w Supabase:
-
-```sql
-select actor_email, entity_type, entity_id, action, metadata, created_at
-from admin_audit_log
-order by created_at desc;
-```
-
-4. Oczekiwany wynik:
-   - `project_status_update`,
-   - `project_archive`,
-   - `project_update`,
-   - `order_status_update`,
-   - przy awaryjnym delete: `project_hard_delete`.
-
-5. Nie testuj trwałego usunięcia na realnym projekcie produkcyjnym.
-
-
-## Test reczny po Etapie 11 HOTFIX
-
-Status: do wykonania po przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do `/admin/projekty`.
-2. Sprawdź, czy tabela nadal ma zaakceptowany układ desktopowy.
-3. Sprawdź, czy akcja `Archiwizuj` jest widoczna jako normalna akcja.
-4. Rozwiń `Awaryjne` przy projekcie `active`.
-5. Oczekiwany wynik: fizyczne `Usuń trwale` pozostaje zablokowane, dopóki projekt nie jest `archived` albo `draft`.
-6. Przy projekcie `archived` albo `draft` sprawdź, czy awaryjne usunięcie wymaga kodu projektu.
-
-
-## Test reczny po Etapie 11
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do:
-
-```text
-/admin/projekty
-```
-
-2. Przy projekcie testowym kliknij `Archiwizuj`.
-3. Oczekiwany wynik:
-   - pojawia się confirm,
-   - po potwierdzeniu projekt dostaje status `archived`,
-   - projekt nie powinien być widoczny w publicznym katalogu, bo publiczny katalog bierze tylko `active`.
-
-4. Przy projekcie `active` rozwiń `Awaryjne`.
-5. Oczekiwany wynik:
-   - widzisz ostrzeżenie, że najpierw trzeba zarchiwizować projekt albo ustawić draft,
-   - `Usuń trwale` jest zablokowane nawet po wpisaniu kodu.
-
-6. Przy projekcie `archived` albo `draft` rozwiń `Awaryjne`.
-7. Oczekiwany wynik:
-   - fizyczne usunięcie wymaga wpisania kodu projektu,
-   - bez kodu przycisk jest zablokowany,
-   - po wpisaniu kodu pojawia się confirm.
-
-8. Nie testuj fizycznego usuwania na realnym projekcie produkcyjnym.
-
-
-## Test reczny po Etapie 10B
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do:
-
-```text
-/admin/projekty
-```
-
-2. Oczekiwany wynik na desktopie:
-   - układ tabeli zostaje taki jak zaakceptowany po Etapie 10,
-   - kolumna `Akcje` mieści `Edytuj`, `Podglad publiczny`, `Ustaw draft`, `Ustaw active` i zamknięte `Usuń projekt`,
-   - `Ustaw active` nie jest ucięte po prawej stronie,
-   - wiersze nadal są niskie i jednowierszowe,
-   - tabela nie wraca do pionowego schodkowania.
-
-3. Sprawdź projekt, którego nie można opublikować.
-4. Oczekiwany wynik: przycisk `Ustaw active` może być disabled, ale nadal musi mieścić się w kolumnie i nie może rozpychać tabeli.
-
-
-## Test reczny po Etapie 10
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Uruchom lokalnie:
-
-```powershell
-npm run dev
-```
-
-2. Wejdź do:
-
-```text
-/admin/projekty
-```
-
-3. Oczekiwany wynik na desktopie:
-   - sekcja `Projekty`, filtry, licznik i tabela używają prawie całej szerokości ekranu,
-   - nie ma dużych pustych pasów po bokach,
-   - tabela nie rozpycha strony w dziwny sposób,
-   - wiersze są niskie i czytelne,
-   - nazwa projektu i slug są w jednej linii,
-   - gotowość i publiczny link nie łamią wierszy,
-   - akcje są w jednej linii, a `Usuń projekt` jest kompaktowym zamkniętym elementem.
-
-4. Zawęź okno przeglądarki.
-5. Oczekiwany wynik:
-   - na średniej szerokości tabela może dostać poziomy scroll wewnątrz tabeli,
-   - na małej szerokości przełącza się na karty mobilne,
-   - nie pojawia się pionowe „schodkowanie” akcji w tabeli.
-
-6. Kliknij `Edytuj`, `Podglad publiczny`, `Ustaw draft`, `Ustaw active` tylko na projekcie testowym.
-7. Oczekiwany wynik: zmiana layoutu nie uszkodziła istniejących akcji admina.
-
-## Test reczny po Etapie 8
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Upewnij się, że testowy projekt ma w panelu edycji przypięte prywatne pliki:
-
-- `Dokumentacja PDF`,
-- `Pełna paczka ZIP`,
-- `PDF na e-mail`.
-
-2. Dodaj projekt do koszyka z dodatkiem `PDF na e-mail` i złóż zamówienie przez `/zamowienie`.
-3. Wejdź do `/admin/zamowienia` i rozwiń `Pozycje, pliki prywatne i dane obsługi`.
-4. Oczekiwany wynik: przy pozycji widzisz prywatne pliki przypięte do projektu, ich typ, bucket, wersję i ścieżkę.
-5. Oczekiwany wynik: panel pokazuje, że PDF na e-mail jest zamówiony.
-6. Oczekiwany wynik: panel pokazuje instrukcję, co admin ma wysłać klientowi po potwierdzeniu płatności.
-7. Oczekiwany wynik: widoczna jest checklista: płatność potwierdzona, PDF wysłany, ZIP wysłany, zamówienie zamknięte.
-8. Oczekiwany wynik negatywny: panel nie generuje signed URL, nie wysyła e-maila i nie uruchamia płatności online.
-
-## Test reczny po Etapie 7
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Uruchom lokalnie:
-
-```powershell
-START_LOCAL.bat
-```
-
-albo:
-
-```powershell
-npm run dev
-```
-
-2. Dodaj aktywny projekt do koszyka i przejdź do:
-
-```text
-/zamowienie
-```
-
-3. Sprawdź nagłówek checkoutu.
-
-Oczekiwany wynik:
-
-- widzisz `Zamówienie projektu`,
-- widzisz komunikat `Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji`,
-- nie ma komunikatu `zamówienie testowe` ani tekstu o technicznym rekordzie w Supabase.
-
-4. Sprawdź opis przy formularzu.
-
-Oczekiwany wynik:
-
-- klient rozumie, że kupuje wybrane projekty, warianty i dodatki z koszyka,
-- klient rozumie, że kontakt nastąpi po złożeniu zamówienia,
-- checkout nie obiecuje automatycznej płatności online.
-
-5. Jeśli w koszyku jest dodatek `PDF na e-mail`, sprawdź podsumowanie.
-
-Oczekiwany wynik:
-
-- PDF na e-mail jest opisany jako dodatkowy pakiet PDF wysyłany na podany adres po potwierdzeniu realizacji,
-- tekst nie sugeruje natychmiastowej automatycznej wysyłki plików.
-
-6. Wyślij formularz.
-
-Oczekiwany wynik:
-
-- komunikat sukcesu potwierdza przyjęcie zamówienia projektu,
-- jest numer zamówienia,
-- tekst informuje o ręcznym potwierdzeniu dostępności, płatności i realizacji.
-
-## Test reczny po Etapie 6
-
-Status: do wykonania w runtime z dzialajacym Supabase Auth i zastosowana migracja `0015_orders_v42_statuses.sql`.
-
-### Co sprawdzic
-
-1. Uruchom lokalnie:
-
-```powershell
-START_LOCAL.bat
-```
-
-albo:
-
-```powershell
-npm run dev
-```
-
-2. Dodaj aktywny projekt do koszyka i przejdz do `/zamowienie`.
-3. Wypelnij formularz zamowienia i wyslij go.
-4. Oczekiwany wynik: checkout pokazuje sukces i techniczny numer zamowienia.
-5. Zaloguj sie do panelu admina.
-6. Wejdz na:
-
-```text
-/admin/zamowienia
-```
-
-7. Oczekiwany wynik: widac nowe zamowienie z numerem/id, klientem, e-mailem, telefonem, suma, statusem `Nowe`, data i liczba pozycji.
-8. Rozwin `Pozycje i dane obslugi`.
-9. Oczekiwany wynik: widac pozycje zamowienia, projekt, slug, wariant, dodatki, uwagi i dane do faktury.
-10. Zmien status na `Kontakt byl`, zapisz i sprawdz, czy po powrocie status jest zachowany.
-
-## Wynik proby 2026-05-15 09:19
-
-- Runtime przegladarkowy nie byl wykonywany w tym etapie.
-- Kodowo i buildowo potwierdzono trase `/admin/zamowienia`.
-- Pelny test admina nadal zalezy od dzialajacego lokalnego Supabase Auth / anon key oraz zastosowania migracji statusow.
-
-## Test reczny po Etapie 5
-
-Status: przeprowadzony lokalnie na publicznej karcie aktywnego projektu i koszyku.
-
-### Co sprawdzic
-
-1. Uruchom lokalnie:
-
-```powershell
-START_LOCAL.bat
-```
-
-albo:
-
-```powershell
-npm run dev
-```
-
-2. Wejdz na aktywny projekt, np.:
-
-```text
-/projekty/[slug-active]
-```
-
-3. Kliknij serduszko na glownej galerii albo kafelku projektu.
-4. Oczekiwany wynik: licznik `Ulubione` w headerze zmienia stan i serduszko ma stan aktywny.
-5. Zaznacz dodatek `Pakiet PDF na e-mail`, jesli projekt go ma.
-6. Kliknij `DODAJ DO KOSZYKA`.
-7. Oczekiwany wynik: przejscie do `/koszyk`, 1 pozycja w koszyku i licznik `Koszyk` w headerze rowny `1`.
-8. Odznacz/zaznacz dodatek w koszyku.
-9. Oczekiwany wynik: suma pozycji i podsumowanie zmieniaja sie zgodnie z cena dodatku.
-10. Kliknij `Usun pozycje`.
-11. Oczekiwany wynik: koszyk jest pusty, a licznik `Koszyk` w headerze wraca do `0`.
-
-## Wynik proby 2026-05-15 09:03
-
-- Runtime: `http://localhost:3100`.
-- Testowany projekt: `/projekty/31231312312`.
-- Ulubione: serduszko zapisalo stan, licznik finalnie pokazal `1`, brak bledow konsoli.
-- Koszyk: po `DODAJ DO KOSZYKA` strona przeszla do `/koszyk`, licznik pokazal `1`.
-- Pozycja koszyka miala kod `DP-2026-0001`, slug `31231312312`, wariant `Projekt podstawowy` i sume `12584` z PDF.
-- Odznaczenie dodatku zmienilo sume pozycji z `12584` na `12334`.
-- `Usun pozycje` pokazalo pusty koszyk i licznik `0`.
-## Test reczny po Etapie 4
-
-Status: przeprowadzony na publicznej karcie aktywnego projektu.
-
-### Co sprawdzic
-
-1. Uruchom lokalnie:
-
-```powershell
-START_LOCAL.bat
-```
-
-albo:
-
-```powershell
-npm run dev
-```
-
-2. Wejdz na publiczna karte aktywnego projektu:
-
-```text
-/projekty/[slug-active]
-```
-
-3. Sprawdz, czy karta ma logiczny uklad:
-
-- galeria,
-- cena,
-- warianty,
-- dodatki,
-- CTA `DODAJ DO KOSZYKA`,
-- dane techniczne,
-- rzuty,
-- pomieszczenia,
-- co zawiera projekt,
-- podobne projekty.
-
-4. Wybierz wariant projektu.
-5. Zaznacz `Pakiet PDF na e-mail`.
-6. Sprawdz, czy przy dodatku widac, ze jest to opcjonalny pakiet PDF na e-mail i nie zastepuje podstawowej dostawy.
-7. Sprawdz, czy cena sumuje wariant i dodatki.
-8. Kliknij `DODAJ DO KOSZYKA`.
-9. Oczekiwany wynik: przejscie do `/koszyk` z wybranym wariantem i dodatkami.
-
-## Wynik proby 2026-05-15 08:35
-
-- Wybrano wariant `Odbicie lustrzane + zmiany`.
-- Zaznaczono `Pakiet PDF na e-mail +250 zl`.
-- Kliknieto `DODAJ DO KOSZYKA`.
-- Strona przeszla do `/koszyk`.
-- Koszyk pokazal projekt, wariant i zaznaczony dodatek PDF.
-- Zauwazono: header pokazywal `Koszyk 0`, mimo ze koszyk zawieral pozycje. To zostaje jako osobne ryzyko/mozliwy kolejny etap.
-
-## Test reczny po Etapie 3
-
-Status: kodowo i guardowo OK; manualny runtime admin -> public nadal zalezy od dzialajacego logowania admina.
-
-### Co sprawdzic
-
-1. Upewnij sie, ze masz co najmniej jeden projekt `active` i po jednym projekcie testowym w statusach `draft`, `hidden`, `archived`.
-2. Wejdz na `/projekty`.
-3. Sprawdz, ze `active` jest widoczny, a `draft`, `hidden`, `archived` nie sa widoczne.
-4. Wejdz na `/projekty/[slug-active]` i porownaj dane z adminem: nazwa, cena, warianty, dodatki, media, pomieszczenia, parametry techniczne.
-5. Wejdz na slug projektu `draft`, `hidden` albo `archived` i sprawdz, ze karta nie jest publicznie dostepna.
-6. Na karcie projektu `active` sprawdz, ze podobne projekty nie zawieraja `draft`, `hidden`, `archived`.
-
-## Test reczny po Etapie 2
-
-Status: zablokowany przez runtime Supabase Auth.
-
-Po naprawie anon key sprawdz w adminie: Edytuj, Zapisz projekt, Anuluj, zmiana statusu, usuwanie i komunikaty po redirectach.
-
-## Test reczny po Etapie 1: panel admina / akcje
-
-Cel: sprawdzic, czy widoczne akcje panelu admina dzialaja realnie, a nie tylko wygladaja jak przyciski.
-
-Sprawdz:
-
-- `/admin` pokazuje kafelki i linki do glownych obszarow.
-- `/admin/projekty` pozwala wejsc w edycje projektu.
-- `Edytuj` otwiera `/admin/projekty/[id]/edytuj`.
-- `Podglad publiczny` otwiera `/projekty/[slug]`.
-- `Ustaw draft` i `Ustaw active` wysylaja realne akcje.
-- `Usuń` pokazuje confirm i usuwa dopiero po potwierdzeniu.
-- `Anuluj` wraca na `/admin/projekty?cancelled=1`.
-- Media w edycji trzeba sprawdzac ostroznie na projekcie testowym.
-
-## Test reczny po Etapie 0
-
-Sprawdz:
-
-1. Czy istnieje `AGENTS.md`.
-2. Czy istnieje folder `_project/`.
-3. Czy istnieja wszystkie wymagane pliki `_project`.
-4. Czy istnieje `_project/runs/.gitkeep`.
-5. Czy istnieje `scripts/check-project-memory.cjs`.
-6. Czy `package.json` ma skrypt `check:project-memory`.
-7. Czy check pamieci projektu przechodzi:
-
-```powershell
-npm run check:project-memory
-```
-
-## Wynik poprawny Etapu 0
-
-- Komenda konczy sie bez bledu.
-- Terminal pokazuje:
-
-```text
-OK: project memory structure is complete.
-```
-
-
-## Test reczny po Etapie 9
-
-Status: do wykonania po wdrożeniu paczki i przejściu checków.
-
-### Co sprawdzić
-
-1. Wejdź do `/admin/projekty`.
-2. Przy dowolnym projekcie rozwiń `Usuń projekt`.
-3. Bez wpisania kodu projektu sprawdź, że przycisk `Usuń trwale` jest zablokowany.
-4. Wpisz błędny kod i spróbuj wysłać formularz.
-5. Oczekiwany wynik: UI blokuje akcję albo pokazuje alert, a server action nie akceptuje błędnego kodu.
-6. Przy projekcie `active` sprawdź, że widoczny jest osobny komunikat ostrzegający o projekcie publicznym.
-7. Nie testuj realnego usuwania na produkcyjnym projekcie. Użyj tylko projektu testowego.
-
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
-# Manual tests - Sklep z projektami domów
+# 05_MANUAL_TESTS - Testy ręczne Damiana
 
 ## Zasada
 
-Test ręczny to coś, co Damian sprawdza w przeglądarce albo w plikach projektu.
+Test ręczny jest ważny tylko wtedy, gdy zapisujemy:
 
-Jeśli nie ma guardu automatycznego, wpisuj dokładnie:
+- datę,
+- miejsce testu,
+- kroki,
+- oczekiwany wynik,
+- wynik faktyczny,
+- czy istnieje guard.
 
-`brak guardu - tylko test ręczny`
+## Test 1 - Panel admina: lista projektów i przyciski
 
-## Testy ręczne dla etapu pamięci projektu
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/admin/projekty` |
+| Kroki | Zaloguj się jako admin, wejdź w listę projektów, sprawdź przyciski `Edytuj`, zmiana statusu, `Usuń`, powrót po akcji. |
+| Oczekiwany wynik | Każdy przycisk wykonuje realną akcję albo pokazuje jasny komunikat. Brak martwych przycisków. |
+| Status | Do powtórzenia po każdym patchu admina. |
+| Guard | Częściowo: powinien istnieć test/guard panelu admina, do potwierdzenia w repo. |
 
-### MT-001 - Sprawdzenie plików pamięci repo
+## Test 2 - Panel admina: nowy projekt
 
-- Gdzie: repo aplikacji, `AGENTS.md` i `_project/`.
-- Co sprawdzić: czy pliki są czytelne, mają sensowne nazwy i pokazują kierunek projektu.
-- Guard automatyczny: `npm run check:project-memory` sprawdza istnienie plików.
-- Status: do sprawdzenia ręcznie przez Damiana.
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/admin/projekty/nowy` |
+| Kroki | Utwórz projekt testowy z kodem, tytułem, ceną, metrażem, statusem roboczym, zapisz. |
+| Oczekiwany wynik | Projekt zapisuje się, wraca do listy albo pokazuje sukces, projekt widoczny w adminie. |
+| Status | Do wykonania. |
+| Guard | Brak pełnego potwierdzenia. |
 
-### MT-002 - Sprawdzenie Obsidian brain
+## Test 3 - Panel admina: edycja projektu
 
-- Gdzie: `C:\Users\malim\Desktop\biznesy_ai\00_OBSIDIAN_VAULT\10_PROJEKTY\Sklep_projekty_domow`.
-- Co sprawdzić: czy ekran startowy prowadzi do kierunku, decyzji, etapów, testów, guardów i następnego kroku.
-- Guard automatyczny: brak guardu - tylko test ręczny.
-- Status: do sprawdzenia ręcznie przez Damiana.
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/admin/projekty/[id]/edytuj` |
+| Kroki | Otwórz istniejący projekt, zmień tytuł/cenę/status, kliknij `Zapisz dane`, sprawdź po powrocie. |
+| Oczekiwany wynik | Dane są zapisane, nie ma błędu JS, po odświeżeniu zmiany zostają. |
+| Status | Krytyczny, bo wcześniej Damian zgłaszał problem z `Edytuj`, `Zapisz dane`, `Anuluj`. |
+| Guard | Wymagany guard regresji. |
 
-## Krytyczne testy ręczne produktu do utrzymywania przy kolejnych etapach
+## Test 4 - Panel admina: anulowanie edycji
 
-### MT-ADMIN-001 - Panel admina: lista projektów i akcje
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/admin/projekty/[id]/edytuj` |
+| Kroki | Zmień pole, kliknij `Anuluj`. |
+| Oczekiwany wynik | Brak zapisu zmian, powrót do poprzedniego widoku/listy. |
+| Status | Do wykonania. |
+| Guard | Do sprawdzenia. |
 
-- Gdzie: panel admina, lista projektów.
-- Sprawdzić: edytuj, zapisz, anuluj, zmiana statusu, usuń.
-- Guard automatyczny: zależy od aktualnych testów w repo; jeśli brak, wpisać `brak guardu - tylko test ręczny`.
-- Status: do utrzymania w kolejnych etapach.
+## Test 5 - Panel admina: usunięcie projektu aktywnego
 
-### MT-SHOP-001 - Koszyk + checkout + addon PDF +250 zł
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/admin/projekty` lub edycja projektu |
+| Kroki | Spróbuj usunąć projekt aktywny/opublikowany. |
+| Oczekiwany wynik | System wymaga świadomego potwierdzenia i pokazuje ostrzeżenie. |
+| Status | Do wykonania. |
+| Guard | Wymagany marker typu `data-admin-delete-active-warning` albo równoważny. |
 
-- Gdzie: koszyk i checkout.
-- Sprawdzić: dodanie projektu, dodanie dodatku PDF na e-mail, suma ceny, przejście zamówienia.
-- Guard automatyczny: zależy od aktualnych testów w repo; jeśli brak, wpisać `brak guardu - tylko test ręczny`.
-- Status: do utrzymania w kolejnych etapach.
+## Test 6 - Publiczny katalog nie pokazuje roboczych projektów
 
-### MT-CATALOG-001 - Widoczność tylko opublikowanych projektów
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/projekty` |
+| Kroki | Dodaj projekt roboczy i aktywny. Wejdź w katalog publiczny. |
+| Oczekiwany wynik | Publiczny katalog pokazuje tylko aktywny/opublikowany projekt. Roboczy nie jest widoczny. |
+| Status | Do wykonania. |
+| Guard | Wymagany guard źródła prawdy katalogu. |
 
-- Gdzie: publiczny katalog projektów.
-- Sprawdzić: projekt nieopublikowany nie pojawia się jako realna oferta.
-- Guard automatyczny: zależy od aktualnych testów w repo; jeśli brak, wpisać `brak guardu - tylko test ręczny`.
-- Status: do utrzymania w kolejnych etapach.
+## Test 7 - Koszyk i dodatek PDF e-mail +250 zł
 
-## Wpisy testów ręcznych
+| Pole | Wartość |
+|---|---|
+| Gdzie | karta projektu / koszyk / checkout |
+| Kroki | Dodaj projekt do koszyka, zaznacz dodatek `Projekt w formacie PDF na e-mail`, sprawdź sumę. |
+| Oczekiwany wynik | Cena zamówienia rośnie o 250 zł, dodatek jest widoczny w koszyku, checkout i zamówieniu. |
+| Status | Do wykonania po wdrożeniu/kontrze tego dodatku. |
+| Guard | Wymagany test regresji ceny dodatku. |
 
-Nowe wpisy dopisywać poniżej z datą, zakresem i wynikiem.
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+## Test 8 - Checkout V1
 
+| Pole | Wartość |
+|---|---|
+| Gdzie | `/koszyk`, checkout / zamówienie |
+| Kroki | Przejdź od projektu do koszyka, wpisz dane klienta, złóż zamówienie. |
+| Oczekiwany wynik | Zamówienie powstaje, admin może je zobaczyć, klient dostaje jasny komunikat. |
+| Status | Do wykonania. |
+| Guard | Do sprawdzenia w repo. |
+
+## Test 9 - Build produkcyjny
+
+| Pole | Wartość |
+|---|---|
+| Gdzie | terminal |
+| Kroki | Uruchom `npm run build`. |
+| Oczekiwany wynik | Build kończy się sukcesem i pokazuje trasy aplikacji. |
+| Status | Do uruchamiania po istotnych zmianach. |
+| Guard | Build jest guardem ogólnym. |
+
+## Test 10 - Guard pamięci projektu
+
+| Pole | Wartość |
+|---|---|
+| Gdzie | terminal w repo |
+| Kroki | Uruchom `node scripts/check-project-memory.cjs` i `npm run check:project-memory`. |
+| Oczekiwany wynik | Guard potwierdza komplet plików `_project/` i Obsidiana. |
+| Status | Dodany w tym etapie. |
+| Guard | Tak. |

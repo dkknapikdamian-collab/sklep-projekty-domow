@@ -1,59 +1,68 @@
-# 03_CURRENT_STAGE - aktualny etap
+# 03_CURRENT_STAGE - Aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 20:45 Europe/Warsaw
+## Etap aktualny
 
-## Aktualny etap
-
-Etap 16: Robocze e-maile do klienta bez automatycznej wysyłki
-
-## Status etapu
-
-Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guard, typecheck, build i test ręczny na stronie szczegółu zamówienia.
+**Pełny mózg projektu sklepu z projektami domów.**
 
 ## Cel etapu
 
-Przyspieszyć obsługę zamówień bez ryzyka automatyzacji. System ma generować treści e-maili, które admin kopiuje i wysyła ręcznie.
+Uzupełnić pamięć projektu w repo aplikacji i w Obsidianie tak, żeby kolejny AI developer nie zgadywał:
 
-## Co zostało zrobione
+- co budujemy,
+- jaki jest zakres V1,
+- co jest V2,
+- co już zostało wdrożone,
+- co zostało porzucone,
+- jakie decyzje obowiązują,
+- co jest hipotezą,
+- jakie testy i guardy istnieją,
+- co Damian potwierdził ręcznie,
+- czego jeszcze nie wiadomo,
+- jaki jest kolejny krok.
 
-- Dodano `lib/admin/order-email-drafts.ts`.
-- Dodano generator trzech roboczych e-maili:
-  - `E-mail: potwierdzenie zamówienia`,
-  - `E-mail: płatność potwierdzona`,
-  - `E-mail: wysyłka plików`.
-- Dodano sekcję `Robocze e-maile do klienta` na `/admin/zamowienia/[id]`.
-- Każdy draft ma temat i treść w polach `readOnly`.
-- Treści korzystają z danych zamówienia:
-  - numer zamówienia,
-  - klient,
-  - pozycje,
-  - warianty,
-  - dodatki,
-  - suma,
-  - informacja o PDF na e-mail,
-  - informacja o plikach prywatnych.
-- Dodano guard `verify:manual-email-drafts-v47`.
-- Dodano style `STAGE47 MANUAL ORDER EMAIL DRAFTS`.
+## Pliki do sprawdzenia przed dalszą pracą
 
-## Czego nie zmieniano
+- `AGENTS.md`,
+- `_project/00_PROJECT_STATUS.md`,
+- `_project/01_PROJECT_GOAL.md`,
+- `_project/04_DECISIONS.md`,
+- `_project/05_MANUAL_TESTS.md`,
+- `_project/06_GUARDS_AND_TESTS.md`,
+- `_project/07_NEXT_STEPS.md`,
+- `_project/11_USER_CONFIRMED_TESTS.md`,
+- `package.json`,
+- `scripts/check-project-memory.cjs`,
+- aktualne trasy aplikacji i panel admina.
 
-- Nie dodano SMTP.
-- Nie dodano Resend.
-- Nie dodano Mailgun.
-- Nie dodano automatycznego mailingu.
-- Nie dodano signed URL.
-- Nie zmieniano płatności.
-- Nie zmieniano checkoutu klienta.
+## Czego nie ruszać w tym etapie
 
-## Checki wymagane
+- UI,
+- routing,
+- logika produktu,
+- checkout,
+- model danych,
+- panel admina,
+- płatności,
+- storage,
+- style.
 
-```powershell
-npm run verify:manual-email-drafts-v47
-npm run typecheck
-npm run build
-npm run check:project-memory
-```
+Ten etap jest dokumentacyjno-operacyjny: pamięć, guard, raporty, Obsidian.
 
 ## Kryterium zakończenia
 
-Admin nie musi pisać maili od zera, ale system nadal niczego sam nie wysyła.
+Etap jest zakończony, gdy:
+
+1. repo ma pełny `AGENTS.md`,
+2. repo ma pełny folder `_project/`,
+3. Obsidian ma sekcję `10_PROJEKTY/Sklep_projekty_domow/` z plikami nazwanymi `Sklep projekty domow`,
+4. istnieje raport AI w repo i Obsidianie,
+5. istnieje guard `scripts/check-project-memory.cjs`,
+6. `npm run check:project-memory` działa,
+7. dostępne `typecheck` i `build` zostały uruchomione albo brak komendy został zapisany w raporcie,
+8. zmiany są skomitowane i wypchnięte albo błąd push jest zapisany.
+
+## Następny etap po pamięci
+
+Po zakończeniu pamięci projektu najrozsądniejszy kierunek to **Etap 10: stabilizacja przepływu katalog -> karta projektu -> koszyk -> checkout -> zamówienie**, bez dokładania nowych bajerów.
+
+To nie jest jeszcze decyzja implementacyjna tego etapu, ale rekomendowany kolejny krok operacyjny.

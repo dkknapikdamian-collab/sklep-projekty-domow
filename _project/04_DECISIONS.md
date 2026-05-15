@@ -1,75 +1,106 @@
-﻿# 04_DECISIONS - decyzje projektowe
+# 04_DECISIONS - Aktywne decyzje projektu
 
-| Data | Decyzja | Powod | Skutek | Status |
-|---|---|---|---|---|
-| 2026-05-14 | Repo jest zrodlem prawdy dla projektu. | Czat i pojedyncze sesje AI gubia kontekst. | Wazne ustalenia maja trafiac do repo. | Aktywna |
-| 2026-05-14 | `AGENTS.md` i `_project/` sa obowiazkowa pamiecia projektu. | Kolejni agenci musza startowac z tych samych zasad. | Przed praca trzeba czytac pliki pamieci projektu. | Aktywna |
-| 2026-05-14 | Kazdy wiekszy etap musi aktualizowac pamiec projektu. | Bez tego dokumentacja szybko stanie sie martwa. | Aktualizowac aktualny etap, testy, guardy, changelog, Obsidian i run report. | Aktywna |
-| 2026-05-14 | Aktywne projekty w katalogu maja byc realne, nie fikcyjne. | README wskazuje produkcyjny format bez fikcyjnych aktywnych projektow. | Dane demonstracyjne nie moga udawac realnej oferty. | Aktywna |
-| 2026-05-15 | Projekt przyjmuje globalny workflow Damiana dla pamieci projektu. | Ten sam standard ma obowiazywac w roznych repozytoriach. | `AGENTS.md`, `_project/10_PROJECT_TIMELINE.md`, `_project/history/` i guard pamieci projektu musza byc utrzymywane. | Aktywna |
-| 2026-05-15 | Checkout V1 ma brzmiec polprodukcyjnie, nie testowo. | Sklep nie moze wygladac jak zabawka, ale nie wolno udawac automatycznych platnosci ani automatycznej dostawy plikow. | Komunikacja checkoutu mowi o zamowieniu projektu, recznym potwierdzeniu dostepnosci, platnosci i realizacji oraz jasno opisuje PDF na e-mail. | Aktywna |
+## Jak czytać ten plik
 
-| 2026-05-15 | Pliki prywatne w Etapie 8 są tylko instrukcją do ręcznej realizacji. | Sklep ma obsłużyć sprzedaż V1 bez udawania automatycznych linków, maili i płatności. | Panel zamówień pokazuje przypięte pliki prywatne, PDF na e-mail i checklistę realizacji, ale nie wysyła nic automatycznie. | Aktywna |
-| 2026-05-15 | Operacje destrukcyjne admina muszą mieć twarde potwierdzenie kodem projektu. | Delete usuwa rekord i próbuje usuwać pliki ze Storage, więc sam confirm jest za słaby. | Formularz usuwania wymaga kodu projektu i walidacji po stronie server action. | Aktywna |
+Tu są wyłącznie aktywne decyzje. Pomysły i kierunki niezatwierdzone trafiają do sekcji „Hipotezy / propozycje”.
 
-| 2026-05-15 | Domyślna ścieżka usuwania projektów to archived-first. | Fizyczne delete jest zbyt ryzykowne jako codzienna akcja admina. | Panel ma używać `Archiwizuj`, a `Usuń trwale` zostaje tylko jako awaryjna operacja po statusie `archived` albo `draft` i po wpisaniu kodu projektu. | Aktywna |
+## Aktywne decyzje
 
-| 2026-05-15 | Ryzykowne operacje admina muszą zostawiać audit log. | Przy archiwizacji, trwałym delete, update projektu i zmianie statusu zamówienia trzeba mieć ślad kto/co/kiedy zrobił. | Dodano tabelę `admin_audit_log`, helper `writeAdminAuditLog` i guard `verify:admin-audit-log-v44`. | Aktywna |
+### 1. Projekt jest aplikacją sklepową, nie statycznym HTML
 
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
-# Decyzje - Sklep z projektami domów
+- Źródło: ustalenia Damiana i obecny kierunek prac.
+- Uzasadnienie: sklep wymaga katalogu, koszyka, checkoutu, panelu admina, danych projektów i docelowo storage plików.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: wyraźna decyzja Damiana o zrobieniu tylko landing page / makiety.
 
-## Aktywne decyzje produktowe
+### 2. Preferowany stack to React/Next.js + baza danych + storage + panel admina
 
-### 2026-05-15 - Projekt jest aplikacją sklepową, nie czystym HTML
+- Źródło: ustalenia projektu i aktualna struktura aplikacji.
+- Uzasadnienie: potrzebny jest produkt sklepowy, nie ręczne strony HTML.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: decyzja o migracji technologii z uzasadnieniem kosztu/ryzyka.
 
-- Status: aktywne.
-- Decyzja: produkcyjny kierunek to React/Next.js + baza danych + storage plików + panel admina.
-- Uzasadnienie: sklep wymaga danych, admina, zamówień, plików i bezpieczeństwa dostępu.
-- Ryzyko: większa złożoność niż statyczna strona, ale statyczny HTML nie dowiezie sprzedaży i obsługi zakupów.
+### 3. Publiczny katalog pokazuje tylko realne, aktywne/opublikowane projekty
 
-### 2026-05-15 - Zakup bez konta klienta
+- Źródło: decyzja projektowa Damiana.
+- Uzasadnienie: nie wolno sprzedawać fikcyjnych projektów jako realnych ofert.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: nic bez jasnej zmiany modelu biznesowego i oznaczenia treści jako demo/concept.
 
-- Status: aktywne.
-- Decyzja: użytkownik ogląda projekty bez logowania i może kupić jako gość.
-- Uzasadnienie: mniej tarcia w zakupie.
-- Konsekwencja: dostęp do pobrania może być przez prywatny link do zamówienia/pobrania.
+### 4. Wygenerowane wizualizacje są referencją, nie treścią produkcyjną
 
-### 2026-05-15 - Admin jest głównym miejscem zarządzania projektami
+- Źródło: ustalenia projektu.
+- Uzasadnienie: wizualny kierunek może inspirować styl, ale nie może udawać gotowej dokumentacji.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: legalne i techniczne przygotowanie realnego projektu z pełnymi prawami i dokumentacją.
 
-- Status: aktywne.
-- Decyzja: projekty, parametry, media, rzuty i status publikacji mają być zarządzane przez panel admina.
-- Konsekwencja: admin edit/save/cancel/status/delete to krytyczne akcje i powinny mieć testy/guardy lub testy ręczne.
+### 5. Zakup jako gość jest ważniejszy niż konto klienta w V1
 
-### 2026-05-15 - Katalog pokazuje tylko realne opublikowane projekty
+- Źródło: ustalenia kierunku V1.
+- Uzasadnienie: mniejszy tarcie zakupowe, prostszy MVP.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: konieczność panelu klienta od razu, np. przez wymagania prawne, licencyjne albo obsługę pobrań.
 
-- Status: aktywne.
-- Decyzja: nie publikować fikcyjnych projektów jako realnych ofert.
-- Konsekwencja: status publikacji projektu jest elementem sprzedażowym i prawnym, nie tylko UI.
+### 6. Logowanie jest głównie dla admina
 
-### 2026-05-15 - Stały kod projektu
+- Źródło: ustalenia zakresu.
+- Uzasadnienie: admin musi zarządzać projektami; klient nie musi mieć konta w V1.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: decyzja o panelu klienta w V1.
 
-- Status: aktywne.
-- Decyzja: każdy projekt ma mieć stały kod, np. `DP-AUR-014`.
-- Konsekwencja: kod projektu powinien być obecny w danych, adminie, karcie projektu, zamówieniu i komunikacji z klientem.
+### 7. Każdy projekt ma mieć stały kod
 
-### 2026-05-15 - Styl wizualny
+- Źródło: ustalenia projektu, przykład `DP-AUR-014`.
+- Uzasadnienie: kod porządkuje katalog, foldery mediów, zamówienia i komunikację z klientem.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: brak sensownego powodu do zmiany; raczej tylko zmiana formatu kodu.
 
-- Status: aktywne.
-- Decyzja: ciemny grafit, szarości, złote/beżowe akcenty, wysoka czytelność, brak przeładowania.
-- Konsekwencja: zmiany UI muszą pilnować elegancji i czytelności, nie efektów dla efektów.
+### 8. Dane projektów mają być dodawane przez panel admina
 
-### 2026-05-15 - Dodatek PDF na e-mail za +250 zł
+- Źródło: kierunek aplikacji.
+- Uzasadnienie: Damian nie ma ręcznie edytować kodu przy każdym nowym projekcie.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: tymczasowy import CSV/JSON jako etap przejściowy, ale docelowy admin zostaje.
 
-- Status: aktywne.
-- Decyzja: płatny dodatek `Projekt w formacie PDF na e-mail` kosztuje +250 zł.
-- Interpretacja: dodatkowy pakiet PDF wysłany bezpośrednio na e-mail, bez kolizji z bazową dostawą cyfrową.
-- Konsekwencja: addon powinien przejść przez koszyk, checkout, płatność/zamówienie, e-mail/admin i docelowo automatyczną wysyłkę.
+### 9. Dodatek `Projekt w formacie PDF na e-mail` kosztuje +250 zł
 
-### 2026-05-15 - Pamięć projektu jest obowiązkowa
+- Źródło: decyzja Damiana z 2026-05-13.
+- Uzasadnienie: dodatkowa wygodna forma dostarczenia/archiwizacji PDF na e-mail.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: zmiana ceny albo modelu dostawy przez Damiana.
 
-- Status: aktywne.
-- Decyzja: `AGENTS.md` + `_project/` + Obsidian są obowiązkowe dla dalszych prac.
-- Konsekwencja: ustalenia nie zostają tylko w rozmowie.
-<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+### 10. Dodatek PDF e-mail nie może kolidować z bazową dostawą cyfrową
 
+- Źródło: interpretacja zatwierdzona jako rekomendowany kierunek.
+- Uzasadnienie: klient nie może odnieść wrażenia, że płaci 250 zł za coś, co jest podstawą zakupu, jeśli bazowa oferta obejmuje dokumentację cyfrową.
+- Status: aktywna decyzja operacyjna.
+- Co zmieniłoby decyzję: inny model produktu opisany jawnie w regulaminie/ofercie.
+
+### 11. Każda istotna zmiana projektu ma aktualizować repo i Obsidiana
+
+- Źródło: globalne zasady pracy Damiana.
+- Uzasadnienie: czat nie jest źródłem prawdy; projekt ma mieć pamięć w plikach.
+- Status: aktywna decyzja.
+- Co zmieniłoby decyzję: brak.
+
+## Hipotezy / propozycje, nie decyzje
+
+### HIPOTEZA / PROPOZYCJA - Etap po pamięci: stabilizacja pełnej ścieżki zakupu
+
+Najrozsądniej po tym etapie przejść przez ścieżkę:
+
+`aktywny projekt -> katalog -> karta projektu -> koszyk -> checkout -> zamówienie -> admin widzi zamówienie`
+
+To jest propozycja kolejności prac, nie decyzja o wdrożeniu w tym commitcie.
+
+### HIPOTEZA / PROPOZYCJA - najpierw zamówienie/formularz, płatność online później
+
+Jeśli płatności produkcyjne spowolnią projekt, można rozważyć V1 z zamówieniem i ręczną obsługą płatności, a płatności online wdrożyć później.
+
+Nie wdrażać bez decyzji Damiana.
+
+## Decyzje porzucone / nieaktywne
+
+- Czysty HTML jako produkcyjny sklep: porzucone.
+- Fikcyjne projekty jako realne oferty: zakazane.
+- Panel klienta jako konieczny element V1: odłożone do V2/później.
