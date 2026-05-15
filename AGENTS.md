@@ -9,7 +9,8 @@ Projekt kodowy / aplikacja sklepowa.
 - `AGENTS.md`,
 - cały folder `_project/`,
 - aktualny kod aplikacji,
-- aktualne testy i guardy.
+- aktualne testy i guardy,
+- raporty AI w `_project/runs/`.
 
 Obsidian jest dashboardem i operacyjnym indeksem projektu, ale dla kodu źródłem prawdy pozostaje repo aplikacji.
 
@@ -24,9 +25,18 @@ Przed zmianą kodu albo dokumentacji przeczytaj:
 5. `scripts/`, jeśli dotyczy zadania,
 6. `tests/`, jeśli dotyczy zadania,
 7. ostatnie raporty w `_project/runs/`,
-8. istotne notatki w `_project/history/`.
+8. istotne notatki w `_project/history/`,
+9. aktualne pliki Obsidiana w `10_PROJEKTY/Sklep_projekty_domow/`, jeśli praca dotyczy decyzji, etapu, testów, guardów albo dziennika.
 
 Nie zaczynaj pracy bez zrozumienia celu projektu, aktualnego etapu, decyzji, ograniczeń, testów i następnego kroku.
+
+## Tryb scan-first
+
+Najpierw skanuj źródła, potem opisuj projekt lub zmieniaj pliki.
+
+Nie traktuj promptu, rozmowy ani własnej propozycji jako faktu produktowego. Prompt może określać sposób pracy, ścieżki i wymagany format, ale stan produktu, roadmapę, zakres i wdrożenia trzeba odtworzyć z repo, kodu, testów, raportów i Obsidiana.
+
+Jeśli czegoś nie da się potwierdzić w źródłach, wpisz `DO POTWIERDZENIA`.
 
 ## Cel projektu
 
@@ -46,18 +56,45 @@ Nie wolno bez decyzji Damiana:
 - mieszać fikcyjnych projektów z realnymi ofertami,
 - publikować przykładowych projektów jako realnych,
 - dopisywać hipotez AI jako aktywnych decyzji,
-- robić szerokiego refaktoru przy małej poprawce.
+- robić szerokiego refaktoru przy małej poprawce,
+- tworzyć nowej gałęzi bez zgody.
 
-## Fakty, decyzje, hipotezy
+## FAKT / DECYZJA / HIPOTEZA / DO POTWIERDZENIA
 
 W dokumentacji rozdzielaj zawsze:
 
-- **FAKT** - wynika z kodu, plików, testów albo potwierdzenia użytkownika,
+- **FAKT** - wynika z kodu, plików, testów, raportu albo potwierdzenia użytkownika,
 - **DECYZJA** - ustalone przez Damiana albo zapisane jako obowiązujące,
 - **HIPOTEZA / PROPOZYCJA** - sensowny kierunek, ale jeszcze niezatwierdzony,
-- **DO SPRAWDZENIA** - rzecz niepewna albo wymagająca testu.
+- **DO POTWIERDZENIA** - rzecz niepewna albo wymagająca testu.
 
 Nie wolno wpisywać hipotez do listy aktywnych decyzji.
+
+## Czysty dziennik projektu
+
+Projekt ma mieć aktualny dziennik w repo i Obsidianie.
+
+W repo utrzymuj:
+
+- `_project/00_PROJECT_STATUS.md`,
+- `_project/01_PROJECT_GOAL.md`,
+- `_project/02_WORK_RULES.md`,
+- `_project/03_CURRENT_STAGE.md`,
+- `_project/04_DECISIONS.md`,
+- `_project/05_MANUAL_TESTS.md`,
+- `_project/06_GUARDS_AND_TESTS.md`,
+- `_project/07_NEXT_STEPS.md`,
+- `_project/08_CHANGELOG_AI.md`,
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`,
+- `_project/10_PROJECT_TIMELINE.md`,
+- `_project/11_USER_CONFIRMED_TESTS.md`,
+- raporty w `_project/runs/`.
+
+W Obsidianie aktywna sekcja projektu to:
+
+`10_PROJEKTY/Sklep_projekty_domow/`
+
+Aktywne pliki Obsidiana mają mieć w nazwie `Sklep projekty domow`. Nie zostawiaj tam generycznych `INDEX.md`, `STATUS.md`, `CONTEXT.md` ani kilku wersji tej samej informacji.
 
 ## ZIP i Obsidian
 
@@ -111,3 +148,9 @@ npm run build
 ```
 
 Jeśli komenda nie istnieje albo nie może zostać uruchomiona, zapisz to w raporcie. Nie udawaj wyniku.
+
+## GitHub
+
+Pracuj na branchu `main`, chyba że Damian jawnie zdecyduje inaczej.
+
+Każda realna zmiana ma zostać zapisana w GitHubie. Jeśli działasz przez GitHub API, podaj pliki i wynik zapisu. Jeśli push albo zapis się nie uda, pokaż błąd i nie udawaj sukcesu.
