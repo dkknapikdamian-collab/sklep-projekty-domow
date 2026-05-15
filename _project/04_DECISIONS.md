@@ -126,3 +126,7 @@ Nie wdrażać bez decyzji Damiana.
 ## Guard wording fix - 2026-05-15
 
 - DECYZJA: projekt jest prowadzony jako aplikacja sklepowa do sprzedaży projektów domów, a nie jako statyczna strona HTML.
+
+## Guard wording fix - komplet fraz V6 - 2026-05-15
+
+- DECYZJA: Katalog produkcyjny może pokazywać tylko realne projekty dodane przez admina i aktywnie opublikowane; dane fikcyjne mogą być wyłącznie demo/dev/seed.
