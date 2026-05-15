@@ -1,16 +1,115 @@
-# 06_GUARDS_AND_TESTS — guardy i testy
+﻿# 06_GUARDS_AND_TESTS - guardy i testy
 
-## Istniejące skrypty z `package.json`
+## Checki wymagane dla Etapu 4
 
-Repo ma wiele guardów `verify:*` oraz główny skrypt:
+Uruchomione 2026-05-15:
 
 ```powershell
-npm run verify
+npm run verify:public-project-detail-sales-v37
+npm run verify:cart-order-v38
+npm run typecheck
+npm run build
+npm run check:project-memory
 ```
 
-`npm run verify` uruchamia serię guardów, typecheck, check źródła danych i build.
+Wynik:
 
-## Guard pamięci projektu
+- `verify:public-project-detail-sales-v37` - OK
+- `verify:cart-order-v38` - OK
+- `typecheck` - OK
+- `build` - OK
+- `check:project-memory` - OK
+
+## Guard karty projektu jako strony sprzedazowej
+
+Zaostrzony w Etapie 4:
+
+```powershell
+npm run verify:public-project-detail-sales-v37
+```
+
+Guard sprawdza teraz dodatkowo:
+
+- uklad glownej karty: galeria -> purchase box -> statystyki -> sekcje -> podobne projekty,
+- alias `ProjectMediaGallery` do realnej galerii,
+- obecnosc sekcji: opis, rzuty, elewacje, pomieszczenia, dane techniczne, co zawiera projekt, dodatki, podobne projekty,
+- obecnosc wyboru wariantu,
+- obecnosc wyboru dodatkow,
+- obecnosc czytelnego CTA `DODAJ DO KOSZYKA`,
+- przekazanie wariantu i dodatkow do koszyka,
+- specjalne oznaczenie dodatku `send_pdf_email`,
+- domyslny dodatek `Pakiet PDF na e-mail` z cena `250` w formularzu tworzenia projektu,
+- minimalna liczba opcji w slownikach admina i mozliwosc dodania opcji recznie.
+
+## Checki wymagane dla Etapu 3
+
+Uruchomione 2026-05-15:
+
+```powershell
+npm run verify:public-project-data-v22
+npm run verify:public-catalog-filters-v22b
+npm run verify:public-project-detail-sales-v37
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+Wynik:
+
+- `verify:public-project-data-v22` - OK
+- `verify:public-catalog-filters-v22b` - OK
+- `verify:public-project-detail-sales-v37` - OK
+- `typecheck` - OK
+- `build` - OK
+- `check:project-memory` - OK
+
+## Guard publicznej widocznosci projektow
+
+Zaostrzony w Etapie 3:
+
+```powershell
+npm run verify:public-project-data-v22
+```
+
+Guard sprawdza:
+
+- `lib/project-repository.ts` pobiera publiczne projekty z jawnym `.eq("status", "active")`.
+- `/projekty/[slug]` korzysta z `getPublicProjects()`.
+- Podobne projekty korzystaja z `getPublicProjects()`.
+- Publiczne strony i komponenty nie robia bezposredniego `.from("projects")` poza repozytorium.
+- Publiczny katalog i karta projektu sa powiazane z danymi z admina.
+
+## Checki wymagane dla Etapu 2
+
+Uruchomione 2026-05-15:
+
+```powershell
+npm run verify:admin-buttons-v19
+npm run check:project-memory
+npm run typecheck
+npm run build
+```
+
+Wynik:
+
+- `verify:admin-buttons-v19` - OK
+- `check:project-memory` - OK
+- `typecheck` - OK
+- `build` - OK
+
+Runtime test admina byl zablokowany przez `Invalid API key` z Supabase Auth przy uzyciu lokalnego `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
+## Checki wymagane dla Etapu 1
+
+Etap 1 zaostrzyl:
+
+```powershell
+npm run verify:admin-buttons-v19
+```
+
+Guard pilnuje realnych linkow, formularzy i server actions dla adminowych akcji: edit, save, cancel, status, delete.
+
+## Guard pamieci projektu
 
 ```powershell
 npm run check:project-memory
@@ -24,82 +123,14 @@ node scripts/check-project-memory.cjs
 
 Sprawdza:
 
-- istnienie `AGENTS.md`,
-- istnienie wymaganych plików `_project`,
-- istnienie `_project/runs/.gitkeep`,
-- podstawowe odwołania w `AGENTS.md` do plików pamięci projektu.
+- Istnienie `AGENTS.md`.
+- Istnienie wymaganych plikow `_project`.
+- Istnienie `_project/runs/.gitkeep`.
+- Podstawowe odwolywania w `AGENTS.md` do plikow pamieci projektu.
 
-## Guard akcji panelu admina po Etapie 1
+## Kiedy aktualizowac guardy
 
-```powershell
-npm run verify:admin-buttons-v19
-```
-
-Uruchamia:
-
-```powershell
-node scripts/check-admin-buttons-v19.cjs
-```
-
-Po Etapie 1 guard został zaostrzony. Ma pilnować, że:
-
-- `app/admin/projekty/actions.ts` eksportuje realne server actions dla statusu, usuwania i edycji.
-- `AdminProjectsTable` ma realne linki i formularze dla:
-  - `Edytuj`,
-  - `Podglad publiczny`,
-  - `Ustaw draft`,
-  - `Ustaw active`,
-  - `Usuń`.
-- `AdminProjectDeleteForm` ma realne `deleteProjectAction`, submit button, pending state i confirm.
-- `AdminProjectEditForm` ma realny `useActionState(updateProjectAction)`, submit zapisu, link anulowania i select statusu.
-- Strona edycji nie może przechodzić guarda przez komentarz typu legacy marker.
-- Widoczne `<button>` w skanowanych plikach mają jawny `type`.
-- W tabeli projektów nie ma akcji typu `href="#"` albo pustego `onClick={() => {}}`.
-
-## Krytyczna zmiana w guardzie
-
-Poprzednio część kontroli edycji przechodziła dzięki komentarzowi w `app/admin/projekty/[id]/edytuj/page.tsx`. To było ryzykowne, bo guard mógł udawać pokrycie akcji, które realnie są w osobnym komponencie.
-
-Po Etapie 1 guard ma sprawdzać realny komponent:
-
-```text
-components/admin/AdminProjectEditForm.tsx
-```
-
-a nie komentarz w stronie.
-
-## Rekomendowane komendy po zmianach admina
-
-Minimum dla zmian w akcjach admina:
-
-```powershell
-npm run verify:admin-buttons-v19
-npm run check:project-memory
-```
-
-Pełniej lokalnie:
-
-```powershell
-npm run typecheck
-npm run build
-```
-
-Pełny zestaw, gdy czas pozwala:
-
-```powershell
-npm run verify
-```
-
-## Kiedy aktualizować guardy
-
-- Gdy zmienia się struktura `_project`.
-- Gdy zmienia się lista obowiązkowych plików pamięci projektu.
-- Gdy `AGENTS.md` dostaje nowe obowiązkowe sekcje.
-- Gdy zmienia się akcja, przycisk, formularz, redirect albo handler w panelu admina.
-- Gdy funkcja produktu zostaje usunięta albo zastąpiona i stary guard pilnuje już nieaktualnego zachowania.
-
-## Czego guardy nadal nie zastępują
-
-- Ręcznego testu w przeglądarce.
-- Realnego testu Supabase dla zapisu, zmiany statusu i usuwania.
-- Kontroli uprawnień admina w środowisku produkcyjnym.
+- Gdy zmienia sie struktura `_project`.
+- Gdy zmienia sie lista obowiazkowych plikow pamieci projektu.
+- Gdy funkcja produktu zostaje usunieta albo zastapiona i stary guard pilnuje juz nieaktualnego zachowania.
+- Gdy runtime test wykaze blad w przeplywie admina albo publicznej sprzedazy, ktory mozna zabezpieczyc automatycznie.

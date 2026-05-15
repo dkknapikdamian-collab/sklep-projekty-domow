@@ -1,92 +1,113 @@
-# 05_MANUAL_TESTS — testy ręczne
+﻿# 05_MANUAL_TESTS - testy reczne
 
-## Test ręczny po Etapie 1: panel admina / akcje
+## Test reczny po Etapie 4
 
-Cel: sprawdzić, czy widoczne akcje panelu admina działają realnie, a nie tylko wyglądają jak przyciski.
+Status: przeprowadzony na publicznej karcie aktywnego projektu.
 
-### 1. Panel admina
+### Co sprawdzic
 
-Wejdź na:
-
-```text
-/admin
-```
-
-Sprawdź widoczne kafelki:
-
-- `Projekty` prowadzi do `/admin/projekty`.
-- `Dodaj projekt` prowadzi do `/admin/projekty/nowy`.
-- `Podglad karty` prowadzi do `/admin/projekty/podglad`.
-- `Strona glowna` prowadzi do `/admin/strona-glowna`.
-- `Debug admina` prowadzi do `/admin/debug`.
-- `Ustawienia sklepu` jest celowo nieaktywne / muted na później.
-
-### 2. Lista projektów
-
-Wejdź na:
-
-```text
-/admin/projekty
-```
-
-Sprawdź:
-
-1. `Dodaj projekt` otwiera formularz nowego projektu.
-2. Wyszukiwarka filtruje projekty po nazwie, kodzie, slug albo statusie.
-3. Select statusu filtruje `Wszystkie / Aktywne / Drafty / Niekompletne / Bez zdjec / Bez pomieszczen`.
-4. `Wyczyść` resetuje filtry, jeśli są aktywne.
-5. Przy każdym projekcie `Edytuj` otwiera `/admin/projekty/[id]/edytuj`.
-6. `Podglad publiczny` otwiera `/projekty/[slug]` w nowej karcie.
-7. `Ustaw draft` wysyła zmianę statusu i wraca na listę z komunikatem sukcesu.
-8. `Ustaw active` działa tylko dla projektów gotowych do publikacji; dla niekompletnych ma być zablokowane albo pokazać braki.
-9. `Usuń` pokazuje confirm i usuwa dopiero po potwierdzeniu.
-
-### 3. Edycja projektu
-
-Wejdź z listy przez `Edytuj`.
-
-Sprawdź:
-
-1. `Lista projektow` wraca do `/admin/projekty`.
-2. `Podglad publiczny` pokazuje się tylko przy projekcie `active` i otwiera publiczną kartę.
-3. Zmiana zwykłego pola, np. podtytułu, plus `Zapisz projekt` zapisuje dane.
-4. Po zapisie wracasz na listę albo widzisz komunikat zapisu zgodnie z aktualnym redirectem.
-5. `Anuluj` wraca na `/admin/projekty?cancelled=1` i pokazuje komunikat anulowania bez zapisu.
-6. Select `Status` w formularzu edycji zapisuje status dopiero po kliknięciu `Zapisz projekt`.
-7. `Usuń` w strefie usuwania pokazuje confirm i usuwa dopiero po potwierdzeniu.
-
-### 4. Media w edycji
-
-Na projekcie z mediami sprawdź ostrożnie:
-
-1. `Ustaw jako hero` zmienia typ media na hero.
-2. `Ustaw jako miniature` zmienia typ media na thumbnail.
-3. `Usun media` usuwa wybrane media po wysłaniu akcji.
-4. `Usun plik prywatny` usuwa prywatny plik z listy.
-
-## Komendy po Etapie 1
+1. Uruchom lokalnie:
 
 ```powershell
-npm run verify:admin-buttons-v19
+START_LOCAL.bat
+```
+
+albo:
+
+```powershell
+npm run dev
+```
+
+2. Wejdz na publiczna karte aktywnego projektu:
+
+```text
+/projekty/[slug-active]
+```
+
+3. Sprawdz, czy karta ma logiczny uklad:
+
+- galeria,
+- cena,
+- warianty,
+- dodatki,
+- CTA `DODAJ DO KOSZYKA`,
+- dane techniczne,
+- rzuty,
+- pomieszczenia,
+- co zawiera projekt,
+- podobne projekty.
+
+4. Wybierz wariant projektu.
+5. Zaznacz `Pakiet PDF na e-mail`.
+6. Sprawdz, czy przy dodatku widac, ze jest to opcjonalny pakiet PDF na e-mail i nie zastepuje podstawowej dostawy.
+7. Sprawdz, czy cena sumuje wariant i dodatki.
+8. Kliknij `DODAJ DO KOSZYKA`.
+9. Oczekiwany wynik: przejscie do `/koszyk` z wybranym wariantem i dodatkami.
+
+## Wynik proby 2026-05-15 08:35
+
+- Wybrano wariant `Odbicie lustrzane + zmiany`.
+- Zaznaczono `Pakiet PDF na e-mail +250 zl`.
+- Kliknieto `DODAJ DO KOSZYKA`.
+- Strona przeszla do `/koszyk`.
+- Koszyk pokazal projekt, wariant i zaznaczony dodatek PDF.
+- Zauwazono: header pokazywal `Koszyk 0`, mimo ze koszyk zawieral pozycje. To zostaje jako osobne ryzyko/mozliwy kolejny etap.
+
+## Test reczny po Etapie 3
+
+Status: kodowo i guardowo OK; manualny runtime admin -> public nadal zalezy od dzialajacego logowania admina.
+
+### Co sprawdzic
+
+1. Upewnij sie, ze masz co najmniej jeden projekt `active` i po jednym projekcie testowym w statusach `draft`, `hidden`, `archived`.
+2. Wejdz na `/projekty`.
+3. Sprawdz, ze `active` jest widoczny, a `draft`, `hidden`, `archived` nie sa widoczne.
+4. Wejdz na `/projekty/[slug-active]` i porownaj dane z adminem: nazwa, cena, warianty, dodatki, media, pomieszczenia, parametry techniczne.
+5. Wejdz na slug projektu `draft`, `hidden` albo `archived` i sprawdz, ze karta nie jest publicznie dostepna.
+6. Na karcie projektu `active` sprawdz, ze podobne projekty nie zawieraja `draft`, `hidden`, `archived`.
+
+## Test reczny po Etapie 2
+
+Status: zablokowany przez runtime Supabase Auth.
+
+Po naprawie anon key sprawdz w adminie: Edytuj, Zapisz projekt, Anuluj, zmiana statusu, usuwanie i komunikaty po redirectach.
+
+## Test reczny po Etapie 1: panel admina / akcje
+
+Cel: sprawdzic, czy widoczne akcje panelu admina dzialaja realnie, a nie tylko wygladaja jak przyciski.
+
+Sprawdz:
+
+- `/admin` pokazuje kafelki i linki do glownych obszarow.
+- `/admin/projekty` pozwala wejsc w edycje projektu.
+- `Edytuj` otwiera `/admin/projekty/[id]/edytuj`.
+- `Podglad publiczny` otwiera `/projekty/[slug]`.
+- `Ustaw draft` i `Ustaw active` wysylaja realne akcje.
+- `Usuń` pokazuje confirm i usuwa dopiero po potwierdzeniu.
+- `Anuluj` wraca na `/admin/projekty?cancelled=1`.
+- Media w edycji trzeba sprawdzac ostroznie na projekcie testowym.
+
+## Test reczny po Etapie 0
+
+Sprawdz:
+
+1. Czy istnieje `AGENTS.md`.
+2. Czy istnieje folder `_project/`.
+3. Czy istnieja wszystkie wymagane pliki `_project`.
+4. Czy istnieje `_project/runs/.gitkeep`.
+5. Czy istnieje `scripts/check-project-memory.cjs`.
+6. Czy `package.json` ma skrypt `check:project-memory`.
+7. Czy check pamieci projektu przechodzi:
+
+```powershell
 npm run check:project-memory
 ```
 
-Rekomendowane przed uznaniem etapu za domknięty lokalnie:
+## Wynik poprawny Etapu 0
 
-```powershell
-npm run typecheck
-npm run build
+- Komenda konczy sie bez bledu.
+- Terminal pokazuje:
+
+```text
+OK: project memory structure is complete.
 ```
-
-## Wynik poprawny
-
-- Guard `verify:admin-buttons-v19` przechodzi.
-- Guard `check:project-memory` przechodzi.
-- Nie ma martwych przycisków w głównych akcjach admina.
-- Edycja, zapis, anulowanie, status i usuwanie są ręcznie potwierdzone.
-
-## Wynik błędny
-
-- Kliknięcie `Edytuj`, `Zapisz projekt`, `Anuluj`, `Ustaw draft`, `Ustaw active` albo `Usuń` nic nie robi.
-- Komunikat po akcji nie pojawia się albo pojawia się błędnie.
-- Guard przechodzi mimo usunięcia realnego handlera lub linku.

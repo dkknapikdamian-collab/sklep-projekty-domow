@@ -40,6 +40,35 @@ for (const needle of [
   }
 }
 
+if (!/from\(\s*["']projects["']\s*\)\s*\.\s*select\(\s*["']\*["']\s*\)\s*\.\s*eq\(\s*["']status["']\s*,\s*["']active["']\s*\)/s.test(repo)) {
+  console.error("FAIL: public project repository must query projects with an explicit status=active filter at the data source.");
+  process.exit(1);
+}
+
+if (!/export async function getPublicProjectBySlug[\s\S]*?const projects = await getPublicProjects\(\);[\s\S]*?projects\.find\(\(item\) => item\.slug === slug\)/.test(repo)) {
+  console.error("FAIL: /projekty/[slug] must resolve projects through getPublicProjects() so draft/hidden/archived slugs cannot leak.");
+  process.exit(1);
+}
+
+if (!/export async function getRelatedPublicProjects[\s\S]*?const projects = await getPublicProjects\(\);[\s\S]*?const pool = projects\.filter\(\(item\) => item\.slug !== project\.slug\)/.test(repo)) {
+  console.error("FAIL: related projects must be selected from getPublicProjects() so only active projects can appear.");
+  process.exit(1);
+}
+
+for (const forbidden of [
+  '.neq("status"',
+  ".neq('status'",
+  '.not("status"',
+  ".not('status'",
+  '.in("status"',
+  ".in('status'"
+]) {
+  if (repo.includes(forbidden)) {
+    console.error(`FAIL: public repository must not broaden public status filtering with ${forbidden}. Use status=active only.`);
+    process.exit(1);
+  }
+}
+
 if (!repo.includes("createSupabaseServiceRoleClient")) {
   console.error("FAIL: project repository missing V27/V29 server-only service role public read.");
   process.exit(1);
@@ -61,10 +90,44 @@ for (const forbidden of [
   }
 }
 
+const publicPages = [
+  "app/projekty/page.tsx",
+  "app/projekty/[slug]/page.tsx",
+  "components/project/ProjectDetailPage.tsx",
+  "components/project/RelatedProjects.tsx"
+];
+
+for (const file of publicPages) {
+  const source = read(file);
+  if (/\.from\(\s*["']projects["']\s*\)/.test(source)) {
+    console.error(`FAIL: ${file} must not query projects directly; use lib/project-repository.ts active-only helpers.`);
+    process.exit(1);
+  }
+}
+
 const slugPage = read("app/projekty/[slug]/page.tsx");
 if (!slugPage.includes("notFound()")) {
   console.error("FAIL: /projekty/[slug] must call notFound() for unavailable project.");
   process.exit(1);
+}
+
+const card = read("components/project/ProjectCard.tsx");
+for (const needle of [
+  "project.media.thumbnail",
+  "project.media.hero",
+  "project.media.gallery[0]",
+  "project.media.elevations[0]?.url",
+  "project.name",
+  "project.usableArea",
+  "project.roomsCount",
+  "project.garage",
+  "project.priceGross",
+  "`/projekty/${project.slug}`"
+]) {
+  if (!card.includes(needle)) {
+    console.error(`FAIL: ProjectCard is missing admin/public data binding: ${needle}`);
+    process.exit(1);
+  }
 }
 
 const tabs = read("components/project/ProjectTabs.tsx");
@@ -80,10 +143,86 @@ if (tabs.includes("project.privateFilesInfo")) {
   process.exit(1);
 }
 
+for (const needle of [
+  "project.description",
+  "project.features",
+  "project.media.plans",
+  "project.media.elevations",
+  "project.rooms",
+  "project.addons",
+  "project.usableArea",
+  "project.buildingArea",
+  "project.roomsCount",
+  "project.bathroomsCount",
+  "project.garage",
+  "project.type",
+  "project.technology",
+  "project.roof",
+  "project.minPlotWidth",
+  "project.minPlotLength",
+  "project.buildingHeight"
+]) {
+  if (!tabs.includes(needle)) {
+    console.error(`FAIL: ProjectTabs is missing admin/public detail binding: ${needle}`);
+    process.exit(1);
+  }
+}
+
 const purchase = read("components/project/ProjectPurchaseBox.tsx");
 for (const needle of ["project.variants", "project.addons", "Projekt podstawowy"]) {
   if (!purchase.includes(needle)) {
     console.error(`FAIL: ProjectPurchaseBox missing V22 variants/addons rendering: ${needle}`);
+    process.exit(1);
+  }
+}
+
+for (const needle of [
+  "project.priceGross",
+  "project.code",
+  "project.slug",
+  "project.name",
+  "variant.name",
+  "variant.priceGross",
+  "addon.code",
+  "addon.name",
+  "addon.priceGross",
+  "addon.description",
+  "addon.deliveryAction"
+]) {
+  if (!purchase.includes(needle)) {
+    console.error(`FAIL: ProjectPurchaseBox is missing admin/public purchase binding: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const gallery = read("components/project/ProjectGallery.tsx");
+for (const needle of [
+  "project.media.hero",
+  "project.media.thumbnail",
+  "project.media.gallery",
+  "project.media.elevations",
+  "project.media.plans",
+  "MediaSlot"
+]) {
+  if (!gallery.includes(needle)) {
+    console.error(`FAIL: ProjectGallery is missing admin/public media binding: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const stats = read("components/project/ProjectStats.tsx");
+for (const needle of [
+  "project.usableArea",
+  "project.roomsCount",
+  "project.bathroomsCount",
+  "project.garage",
+  "project.type",
+  "project.roof",
+  "project.minPlotWidth",
+  "project.technology"
+]) {
+  if (!stats.includes(needle)) {
+    console.error(`FAIL: ProjectStats is missing admin/public technical binding: ${needle}`);
     process.exit(1);
   }
 }

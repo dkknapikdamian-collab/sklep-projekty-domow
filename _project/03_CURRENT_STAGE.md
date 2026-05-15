@@ -1,67 +1,78 @@
-# 03_CURRENT_STAGE — aktualny etap
+﻿# 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-14 22:35 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 08:35 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 1: Audyt i stabilizacja akcji panelu admina
+Etap 4: Karta projektu jako glowna strona sprzedazowa
 
 ## Status etapu
 
-Zakończony kodowo po statycznym audycie repo i aktualizacji guarda `verify:admin-buttons-v19`.
+Zakonczony.
+
+Karta projektu ma dopiety sprzedazowy flow: galeria, cena, warianty, dodatki, CTA do koszyka, dane techniczne, rzuty, pomieszczenia, co zawiera projekt i podobne projekty.
 
 ## Cel etapu
 
-Zmapować widoczne akcje panelu admina i upewnić się, że kluczowe przepływy `edit / save / cancel / status / delete` nie są tylko przyciskami dekoracyjnymi, ale mają realne linki, formularze albo server actions.
+Dopiac karte projektu tak, zeby nie tylko wyswietlala dane, ale prowadzila uzytkownika do wyboru wariantu, dodatkow i koszyka.
 
 ## Zakres
 
-- Lista projektów admina.
-- Edycja projektu admina.
-- Formularze zmiany statusu.
-- Formularze usuwania projektu.
-- Guard odpowiedzialny za akcje admina.
-- Pamięć projektu i raport run.
+- `components/project/ProjectDetailPage.tsx`
+- `components/project/ProjectGallery.tsx`
+- `components/project/ProjectMediaGallery.tsx`
+- `components/project/ProjectPurchaseBox.tsx`
+- `components/project/ProjectTabs.tsx`
+- `components/project/RelatedProjects.tsx`
+- `components/project/ProjectCard.tsx`
+- `lib/project-repository.ts`
+- `types/project.ts`
+- `scripts/check-public-project-detail-sales-v37.cjs`
+- `START_LOCAL.bat`
 
-## Pliki dotknięte w tym etapie
+## Co zostalo zrobione
 
-- `components/admin/AdminProjectsTable.tsx`
-- `components/admin/AdminProjectDeleteForm.tsx`
-- `components/admin/AdminProjectEditForm.tsx`
-- `app/admin/projekty/[id]/edytuj/page.tsx`
-- `scripts/check-admin-buttons-v19.cjs`
-- `_project/03_CURRENT_STAGE.md`
-- `_project/05_MANUAL_TESTS.md`
-- `_project/06_GUARDS_AND_TESTS.md`
-- `_project/07_NEXT_STEPS.md`
-- `_project/08_CHANGELOG_AI.md`
-- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
-- `_project/runs/2026-05-14_2235_admin-action-audit.md`
+- Doprecyzowano publiczny wybor dodatku PDF na e-mail.
+- Dodatek `send_pdf_email` jest oznaczany jako opcjonalny pakiet PDF na e-mail.
+- Dodano tekst, ze PDF na e-mail nie zastepuje podstawowej dostawy projektu.
+- CTA `DODAJ DO KOSZYKA` ma stabilny marker `data-project-cart-cta="true"` i opis `aria-label` z aktualna kwota.
+- Mikrokomunikat dostawy nie miesza juz podstawowej dostawy z dodatkiem PDF.
+- Dodano anchor/marker sekcji podobnych projektow.
+- Dodano `ProjectMediaGallery.tsx` jako bezpieczny alias do istniejacego `ProjectGallery`.
+- Zaostrzono `scripts/check-public-project-detail-sales-v37.cjs`.
+- Dodano `START_LOCAL.bat` do prostego uruchamiania lokalnego.
+- Sprawdzono przeplyw w przegladarce: wariant + PDF na e-mail +250 zl -> CTA -> `/koszyk`.
 
-## Co zostało zrobione
+## Czego nie zmieniano
 
-- Zmapowano główne akcje panelu admina.
-- Dodano jawne markery `data-admin-action` do realnych akcji listy projektów, edycji, zmiany statusu i usuwania.
-- Usunięto fałszywy legacy marker z komentarza w stronie edycji projektu.
-- Zaostrzono guard `check-admin-buttons-v19.cjs`, żeby sprawdzał realny formularz edycji, a nie komentarz.
-- Nie zmieniano stylu wizualnego.
+- Nie dodawano fikcyjnych danych projektow.
 - Nie zmieniano routingu.
-- Nie zmieniano modelu danych.
+- Nie zmieniano admina poza sprawdzeniem opcji i domyslnego dodatku PDF w guardzie.
+- Nie zmieniano checkoutu.
 
-## Czego nie ruszano
+## Wyniki checkow
 
-- Nie przebudowywano panelu admina.
-- Nie zmieniano CSS.
-- Nie zmieniano publicznego katalogu ani karty projektu.
-- Nie zmieniano koszyka ani checkoutu.
-- Nie dodawano fikcyjnych projektów.
+- `npm run verify:public-project-detail-sales-v37` - OK
+- `npm run verify:cart-order-v38` - OK
+- `npm run typecheck` - OK
+- `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
+- `npm run check:project-memory` - OK
+
+## Wynik testu przegladarkowego
+
+Na publicznej karcie aktywnego projektu:
+
+- wybrano wariant `Odbicie lustrzane + zmiany`,
+- zaznaczono `Pakiet PDF na e-mail` z cena `+250 zl`,
+- kliknieto `DODAJ DO KOSZYKA`,
+- strona przeszla do `/koszyk`,
+- koszyk zawieral wybrany wariant i zaznaczony dodatek PDF.
 
 ## Znane problemy / ryzyka
 
-- Audyt był statyczny po repo. Ręczny test w przeglądarce nadal jest wymagany.
-- Nie wykonano runtime testu Supabase, więc status/delete/save trzeba potwierdzić na realnym projekcie testowym albo roboczym szkicu.
-- Część akcji mediów w edycji działa przez `formAction` w tym samym formularzu edycji; wymaga ręcznego sprawdzenia, czy nie koliduje z zapisem całego formularza.
+- Lokalny admin runtime z Etapu 2 nadal moze byc blokowany przez niestabilny anon key.
+- Header koszyka w testowanym runtime pokazywal `Koszyk 0`, mimo ze strona koszyka zawierala dodana pozycje. Nie ruszano tego w Etapie 4, bo kryterium dotyczylo przejscia z karty do koszyka i wyboru wariantu/dodatkow.
 
-## Następny krok
+## Nastepny krok
 
-Ręcznie sprawdzić panel admina w przeglądarce: wejście w edycję z listy, zapis danych, anulowanie, zmiana statusu na draft/active, usuwanie projektu oraz komunikaty po powrocie na listę.
+Jesli kolejnym etapem bedzie koszyk/header, warto dopiac licznik koszyka w headerze jako osobny, maly etap. Karta projektu jako strona sprzedazowa ma teraz guard i przeszla flow wyboru do koszyka.

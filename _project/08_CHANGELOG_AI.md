@@ -72,3 +72,58 @@ Każdy większy etap ma dopisać nowy wpis z:
 - wynikiem testów,
 - znanymi ryzykami,
 - następnym krokiem.
+
+## 2026-05-15 08:02 - Etap 2: Runtime test panelu admina
+
+- Sprawdzono wskazane pliki panelu admina bez zmian w kodzie.
+- Uruchomiono lokalny runtime Next na porcie `3100`.
+- Utworzono tymczasowe konto admina i tymczasowy projekt testowy w Supabase.
+- Potwierdzono, ze service role dziala dla tworzenia i sprzatania danych testowych.
+- Proba logowania w przegladarce na `/admin/login` zakonczyla sie bledem Supabase Auth: `Invalid API key`.
+- Usunieto tymczasowy projekt, profil i uzytkownika testowego.
+- Nie zmieniano UI, routingu, publicznego katalogu, koszyka ani checkoutu.
+- Nie zmieniano `components/admin/*` ani `app/admin/projekty/actions.ts`, bo test nie wykazal bledu w kodzie przyciskow; wykazal bloker konfiguracji anon key.
+- Uruchomione testy:
+  - `npm run verify:admin-buttons-v19` - OK
+  - `npm run check:project-memory` - OK
+  - `npm run typecheck` - OK
+  - `npm run build` - OK, z istniejacymi ostrzezeniami autoprefixera
+- Znane ryzyko: kryterium zakonczenia etapu nie jest spelnione, dopoki Damian nie potwierdzi recznie edycji, zapisu, anulowania, statusu i usuwania po naprawie anon key.
+- Nastepny krok: poprawic lokalne `NEXT_PUBLIC_SUPABASE_ANON_KEY` tak, aby pasowal do projektu Supabase z `SUPABASE_SERVICE_ROLE_KEY`, potem powtorzyc runtime test.
+
+## 2026-05-15 08:19 - Etap 3: Spojnosc admin -> publiczny katalog -> karta projektu
+
+- Sprawdzono `lib/project-repository.ts`, publiczny katalog, karte projektu, komponenty publiczne i adminowe mapowanie danych.
+- Zaostrzono `scripts/check-public-project-data-v22.cjs`.
+- Guard wymaga teraz jawnego publicznego filtra `.eq("status", "active")` przy pobieraniu projektow.
+- Guard pilnuje, ze `/projekty/[slug]` i podobne projekty korzystaja z `getPublicProjects()`, a nie z osobnego pobierania po slugu/statusie.
+- Guard blokuje bezposrednie publiczne query `.from("projects")` poza `lib/project-repository.ts`.
+- Guard sprawdza powiazania publicznej karty z danymi admina: nazwa, cena, slug, kod, warianty, dodatki, media, pomieszczenia i parametry techniczne.
+- Nie zmieniano designu karty, stylu katalogu, filtrowania, koszyka ani checkoutu.
+- Uruchomione testy:
+  - `npm run verify:public-project-data-v22` - OK
+  - `npm run verify:public-catalog-filters-v22b` - OK
+  - `npm run verify:public-project-detail-sales-v37` - OK
+  - `npm run typecheck` - OK
+  - `npm run build` - OK
+  - `npm run check:project-memory` - OK
+- Znane ryzyko: pelny runtime admin -> public nadal zalezy od dzialajacego logowania admina, ktore lokalnie blokowal anon key w Etapie 2.
+
+## 2026-05-15 08:35 - Etap 4: Karta projektu jako glowna strona sprzedazowa
+
+- Doprecyzowano publiczny dodatek PDF na e-mail w `ProjectPurchaseBox`.
+- Dodano komunikat, ze PDF na e-mail jest opcjonalny i nie zastepuje podstawowej dostawy projektu.
+- CTA `DODAJ DO KOSZYKA` dostalo stabilny marker `data-project-cart-cta="true"` i opis `aria-label` z aktualna kwota.
+- Zmieniono mikrokomunikat dostawy, zeby nie mylil podstawowej dostawy z dodatkiem PDF.
+- Dodano anchor i marker sekcji podobnych projektow.
+- Dodano `components/project/ProjectMediaGallery.tsx` jako alias do istniejacego `ProjectGallery`.
+- Zaostrzono `scripts/check-public-project-detail-sales-v37.cjs`, aby pilnowal kluczowych sekcji sprzedazowych, PDF +250 zl, CTA, danych koszyka oraz minimalnej liczby opcji selectow admina.
+- Dodano `START_LOCAL.bat` do prostego uruchamiania projektu lokalnie.
+- Test przegladarkowy: wariant + PDF na e-mail +250 zl -> `DODAJ DO KOSZYKA` -> `/koszyk` z poprawna pozycja.
+- Uruchomione testy:
+  - `npm run verify:public-project-detail-sales-v37` - OK
+  - `npm run verify:cart-order-v38` - OK
+  - `npm run typecheck` - OK
+  - `npm run build` - OK, ze starymi ostrzezeniami autoprefixera
+  - `npm run check:project-memory` - OK
+- Znane ryzyko: header koszyka pokazal `Koszyk 0`, mimo ze koszyk zawieral dodana pozycje. To nie blokuje Etapu 4, ale warto naprawic jako osobny etap.

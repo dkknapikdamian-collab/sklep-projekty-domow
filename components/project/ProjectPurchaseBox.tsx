@@ -6,6 +6,11 @@ import type { Project } from "@/types/project";
 import { money } from "@/lib/format";
 import { addCartItem } from "@/lib/cart/storage";
 
+function isPdfEmailAddon(addon: Project["addons"][number]) {
+  const haystack = `${addon.code} ${addon.name}`.toLowerCase();
+  return addon.deliveryAction === "send_pdf_email" || haystack.includes("pdf") || haystack.includes("e-mail") || haystack.includes("email");
+}
+
 export function ProjectPurchaseBox({ project }: { project: Project }) {
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
@@ -65,7 +70,7 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
   }
 
   return (
-    <aside className="purchase-card">
+    <aside className="purchase-card" data-project-purchase-box="true">
       <div className="code-line">KOD PROJEKTU: <strong>{project.shortCode}</strong></div>
 
       <div className="price-line">
@@ -109,27 +114,50 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
         )}
       </div>
 
-      <div className="purchase-block">
+      <div className="purchase-block" data-project-addons-picker="true">
         <h4>DODATKI</h4>
         {orderedAddons.length > 0 ? (
-          orderedAddons.map((addon) => (
-            <label className="addon-row" key={addon.code} title={addon.description}>
-              <input
-                type="checkbox"
-                checked={selectedAddons.includes(addon.code)}
-                onChange={() => toggleAddon(addon.code)}
-              />
-              <span>{addon.name}</span>
-              <strong>+{money(addon.priceGross)}</strong>
-              <Info size={14} />
-            </label>
-          ))
+          orderedAddons.map((addon) => {
+            const pdfEmailAddon = isPdfEmailAddon(addon);
+            return (
+              <label
+                className={pdfEmailAddon ? "addon-row addon-row-pdf-email" : "addon-row"}
+                key={addon.code}
+                title={addon.description}
+                data-project-pdf-email-addon={pdfEmailAddon ? "true" : undefined}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedAddons.includes(addon.code)}
+                  onChange={() => toggleAddon(addon.code)}
+                />
+                <span>
+                  {addon.name}
+                  {pdfEmailAddon && (
+                    <small>
+                      Opcjonalny pakiet PDF na e-mail. Nie zastepuje podstawowej dostawy projektu.
+                    </small>
+                  )}
+                </span>
+                <strong>+{money(addon.priceGross)}</strong>
+                <Info size={14} />
+              </label>
+            );
+          })
         ) : (
           <p className="muted-note">Dodatki zostana uzupelnione przez administratora.</p>
         )}
       </div>
 
-      <button className="buy-button" type="button" onClick={handleAddToCart}><ShoppingCart size={18} /> DODAJ DO KOSZYKA</button>
+      <button
+        className="buy-button"
+        type="button"
+        onClick={handleAddToCart}
+        data-project-cart-cta="true"
+        aria-label={`Dodaj projekt ${project.name} do koszyka za ${money(total)}`}
+      >
+        <ShoppingCart size={18} /> DODAJ DO KOSZYKA
+      </button>
       {cartMessage && <p className="muted-note" role="status">{cartMessage}</p>}
       <a className="ask-button" href={`mailto:kontakt@domprojekt.pl?subject=Pytanie o projekt ${encodeURIComponent(project.name)}`}>
         <Mail size={17} /> ZAPYTAJ O PROJEKT
@@ -138,7 +166,7 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
       <div className="micro-trust">
         <span><Truck size={16} /> Dostawa zgodnie z zamowieniem</span>
         <span><ShieldCheck size={16} /> Bezpieczne platnosci online</span>
-        <span><BadgeCheck size={16} /> PDF/link po platnosci</span>
+        <span><BadgeCheck size={16} /> Pliki zgodnie z wybrana wersja</span>
       </div>
     </aside>
   );

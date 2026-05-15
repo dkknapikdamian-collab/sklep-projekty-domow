@@ -7,7 +7,7 @@ export function RelatedProjects({ projects }: { projects: Project[] }) {
   if (projects.length === 0) return null;
 
   return (
-    <section className="related">
+    <section className="related" id="related-projects" data-related-projects-section="true">
       <div className="related-head">
         <h2>Podobne projekty</h2>
         <Link href="/projekty">ZOBACZ WSZYSTKIE <ChevronRight size={15} /></Link>

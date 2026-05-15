@@ -59,6 +59,7 @@ export function ProjectTabs({ project }: { project: Project }) {
     { label: "DANE TECHNICZNE", href: "#project-technical" },
     { label: "CO ZAWIERA PROJEKT", href: "#project-included" },
     { label: "DODATKI", href: "#project-addons" },
+    { label: "PODOBNE PROJEKTY", href: "#related-projects" },
     { label: "DLACZEGO WARTO", href: "#project-why" }
   ];
   const technicalRows = [
