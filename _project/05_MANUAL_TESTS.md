@@ -1,4 +1,4 @@
-# 05_MANUAL_TESTS - testy reczne
+﻿# 05_MANUAL_TESTS - testy reczne
 
 
 ## Test reczny po Etapie 15B
@@ -532,3 +532,59 @@ Status: do wykonania po wdrożeniu paczki i przejściu checków.
 5. Oczekiwany wynik: UI blokuje akcję albo pokazuje alert, a server action nie akceptuje błędnego kodu.
 6. Przy projekcie `active` sprawdź, że widoczny jest osobny komunikat ostrzegający o projekcie publicznym.
 7. Nie testuj realnego usuwania na produkcyjnym projekcie. Użyj tylko projektu testowego.
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# Manual tests - Sklep z projektami domów
+
+## Zasada
+
+Test ręczny to coś, co Damian sprawdza w przeglądarce albo w plikach projektu.
+
+Jeśli nie ma guardu automatycznego, wpisuj dokładnie:
+
+`brak guardu - tylko test ręczny`
+
+## Testy ręczne dla etapu pamięci projektu
+
+### MT-001 - Sprawdzenie plików pamięci repo
+
+- Gdzie: repo aplikacji, `AGENTS.md` i `_project/`.
+- Co sprawdzić: czy pliki są czytelne, mają sensowne nazwy i pokazują kierunek projektu.
+- Guard automatyczny: `npm run check:project-memory` sprawdza istnienie plików.
+- Status: do sprawdzenia ręcznie przez Damiana.
+
+### MT-002 - Sprawdzenie Obsidian brain
+
+- Gdzie: `C:\Users\malim\Desktop\biznesy_ai\00_OBSIDIAN_VAULT\10_PROJEKTY\Sklep_projekty_domow`.
+- Co sprawdzić: czy ekran startowy prowadzi do kierunku, decyzji, etapów, testów, guardów i następnego kroku.
+- Guard automatyczny: brak guardu - tylko test ręczny.
+- Status: do sprawdzenia ręcznie przez Damiana.
+
+## Krytyczne testy ręczne produktu do utrzymywania przy kolejnych etapach
+
+### MT-ADMIN-001 - Panel admina: lista projektów i akcje
+
+- Gdzie: panel admina, lista projektów.
+- Sprawdzić: edytuj, zapisz, anuluj, zmiana statusu, usuń.
+- Guard automatyczny: zależy od aktualnych testów w repo; jeśli brak, wpisać `brak guardu - tylko test ręczny`.
+- Status: do utrzymania w kolejnych etapach.
+
+### MT-SHOP-001 - Koszyk + checkout + addon PDF +250 zł
+
+- Gdzie: koszyk i checkout.
+- Sprawdzić: dodanie projektu, dodanie dodatku PDF na e-mail, suma ceny, przejście zamówienia.
+- Guard automatyczny: zależy od aktualnych testów w repo; jeśli brak, wpisać `brak guardu - tylko test ręczny`.
+- Status: do utrzymania w kolejnych etapach.
+
+### MT-CATALOG-001 - Widoczność tylko opublikowanych projektów
+
+- Gdzie: publiczny katalog projektów.
+- Sprawdzić: projekt nieopublikowany nie pojawia się jako realna oferta.
+- Guard automatyczny: zależy od aktualnych testów w repo; jeśli brak, wpisać `brak guardu - tylko test ręczny`.
+- Status: do utrzymania w kolejnych etapach.
+
+## Wpisy testów ręcznych
+
+Nowe wpisy dopisywać poniżej z datą, zakresem i wynikiem.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+

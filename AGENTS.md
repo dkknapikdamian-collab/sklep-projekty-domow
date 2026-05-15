@@ -1,4 +1,4 @@
-# GLOBAL AGENTS.md - DAMIAN PROJECT WORKFLOW
+﻿# GLOBAL AGENTS.md - DAMIAN PROJECT WORKFLOW
 
 ## Core rule
 
@@ -157,3 +157,107 @@ Nie wolno zostawiac martwych guardow, ktore sprawdzaja cos, czego juz nie ma.
 ## Obsidian
 
 `_project/09_CONTEXT_FOR_OBSIDIAN.md` jest indeksem/dashboardem dla Obsidiana. Nie jest nadrzednym zrodlem prawdy. Zrodlem prawdy pozostaje repo.
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# AI working contract - Sklep z projektami domów
+
+## Projekt
+
+Sklep / strona do sprzedaży projektów domów i projektów architektonicznych.
+
+Repo aplikacji:
+
+`C:\Users\malim\Desktop\biznesy_ai\strony\strona z projektami`
+
+Centralny vault Obsidiana:
+
+`C:\Users\malim\Desktop\biznesy_ai\00_OBSIDIAN_VAULT`
+
+Sekcja Obsidiana:
+
+`10_PROJEKTY\Sklep_projekty_domow`
+
+## Obowiązkowy start każdej pracy
+
+Przed zmianami czytaj:
+
+1. `AGENTS.md`
+2. cały folder `_project/`
+3. `README.md`, jeśli istnieje
+4. `package.json`, jeśli istnieje
+5. istotne testy/guardy z `scripts/`, `tests/`, `tools/`, jeśli dotyczą zadania
+6. Obsidian: `10_PROJEKTY/Sklep_projekty_domow/`, jeśli zadanie dotyczy decyzji, testów, kierunku albo raportu
+
+Nie zaczynaj zmian bez zrozumienia aktualnego celu, etapu, decyzji, testów ręcznych, guardów i następnego kroku.
+
+## Źródła prawdy
+
+- Kod i implementacja produktu: repo aplikacji.
+- Pamięć operacyjna repo: `_project/`.
+- Dashboard i mózg projektu dla Damiana: Obsidian `10_PROJEKTY/Sklep_projekty_domow/`.
+- Kierunek aplikacji: `_project/01_PROJECT_GOAL.md` oraz Obsidian `01_KIERUNEK - Sklep projekty domow.md`.
+- Aktywne decyzje: `_project/04_DECISIONS.md` oraz Obsidian `02_DECYZJE - Sklep projekty domow.md`.
+- Aktualny etap: `_project/03_CURRENT_STAGE.md` oraz Obsidian `03_ETAPY - Sklep projekty domow.md`.
+- Manualne testy Damiana: `_project/05_MANUAL_TESTS.md` oraz Obsidian `04_TESTY - Sklep projekty domow.md`.
+- Guardy/testy automatyczne: `_project/06_GUARDS_AND_TESTS.md` oraz Obsidian `05_GUARDY - Sklep projekty domow.md`.
+- Potwierdzone testy użytkownika: `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidian `09_POTWIERDZONE_TESTY - Sklep projekty domow.md`.
+
+## Zakazy domyślne
+
+- Nie zmieniaj UI bez wyraźnego zakresu.
+- Nie zmieniaj routingu bez wyraźnego zakresu.
+- Nie zmieniaj logiki produktu przy zadaniach dokumentacyjnych/pamięciowych.
+- Nie rób refaktoru przy okazji.
+- Nie usuwaj działających funkcji poza zakresem zadania.
+- Nie udawaj testów. Jeśli test nie był uruchomiony, wpisz to w raporcie.
+- Nie wpisuj, że Damian coś potwierdził, jeśli nie ma takiego potwierdzenia.
+- Nie publikuj fikcyjnych projektów jako realnych ofert.
+
+## Zasada aktualizacji po pracy
+
+Po każdej sensownej zmianie aktualizuj:
+
+- `_project/03_CURRENT_STAGE.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- raport w `_project/runs/`
+
+Jeśli zmienił się kierunek lub zakres:
+
+- `_project/01_PROJECT_GOAL.md`
+- `_project/04_DECISIONS.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- wpis w `_project/history/`
+- odpowiednie pliki Obsidiana
+
+Jeśli zmieniły się testy:
+
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/11_USER_CONFIRMED_TESTS.md`, jeśli Damian potwierdził wynik
+- odpowiednie pliki Obsidiana
+
+## Guard pamięci projektu
+
+Po zmianach w pamięci projektu uruchom:
+
+```bash
+npm run check:project-memory
+```
+
+Jeśli `npm` albo script nie istnieje, uruchom bezpośrednio:
+
+```bash
+node scripts/check-project-memory.cjs
+```
+
+## Raportowanie
+
+Każdy etap ma mieć raport w:
+
+`_project/runs/YYYY-MM-DD_HHMM_nazwa-etapu.md`
+
+Raport musi mówić, co przeczytano, co zmieniono, czego nie ruszano, jakie testy uruchomiono, czego nie uruchomiono i co Damian ma sprawdzić ręcznie.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+

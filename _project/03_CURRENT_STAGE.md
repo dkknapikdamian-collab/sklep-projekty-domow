@@ -1,4 +1,4 @@
-# 03_CURRENT_STAGE - aktualny etap
+﻿# 03_CURRENT_STAGE - aktualny etap
 
 Ostatnia aktualizacja: 2026-05-15 20:10 Europe/Warsaw
 
@@ -64,3 +64,51 @@ supabase/migrations/0017_order_fulfillment_checklist.sql
 ## Kryterium zakończenia
 
 Admin może odhaczyć realizację i stan zostaje po odświeżeniu strony.
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# Aktualny etap - Sklep z projektami domów
+
+## Etap aktywny
+
+Project memory + Obsidian brain setup.
+
+## Cel etapu
+
+Wdrożyć pełną pamięć projektu w repo aplikacji oraz czytelny mózg projektu w Obsidianie.
+
+## Zakres tego etapu
+
+- `AGENTS.md` z kontraktem pracy AI.
+- `_project/` z pełnymi plikami pamięci.
+- `scripts/check-project-memory.cjs` jako guard istnienia pamięci.
+- Script `check:project-memory` w `package.json`, jeśli istnieje `package.json`.
+- Obsidian `10_PROJEKTY/Sklep_projekty_domow/` z dashboardem projektu.
+- Raport w repo aplikacji i Obsidianie.
+
+## Poza zakresem tego etapu
+
+- UI.
+- Routing.
+- Logika koszyka/checkoutu.
+- Logika admina.
+- Refaktoryzacja kodu.
+- Usuwanie funkcji.
+
+## Następny etap produktowy po pamięci
+
+Po zatwierdzeniu pamięci projektu sensowny następny kierunek to domknięcie kolejki V1 według realnego stanu kodu:
+
+1. zweryfikować panel admina i zapis/status/delete jako funkcje krytyczne,
+2. zweryfikować koszyk + checkout + dodatek PDF +250 zł end-to-end,
+3. uporządkować model zamówień i dostawy plików,
+4. dopiero potem rozwijać płatności, automatyczną dostawę i panel klienta.
+
+## Kryterium zakończenia tego etapu
+
+- Guard `npm run check:project-memory` przechodzi.
+- Pliki `_project/` istnieją.
+- Sekcja Obsidiana istnieje.
+- Raporty są utworzone.
+- Terminal pokazuje wynik testów i git.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+

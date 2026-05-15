@@ -1,4 +1,4 @@
-# 02_WORK_RULES - zasady pracy
+﻿# 02_WORK_RULES - zasady pracy
 
 1. Repo jest zrodlem prawdy.
 2. Czat nie jest zrodlem prawdy.
@@ -49,3 +49,74 @@ Jesli zmienil sie kierunek projektu:
 - dodaj notatke w `_project/history/YYYY-MM-DD_direction-change.md`.
 
 Nie wolno wymyslac metryk, feedbacku, reakcji rynku, publikacji ani zakonczonej pracy, ktora realnie nie zostala wykonana.
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# Zasady pracy - Sklep z projektami domów
+
+## Tryb pracy
+
+Pracuj etapami. Każdy etap ma mieć jasny zakres, pliki, guardy/testy i raport.
+
+## Przed zmianami
+
+Czytaj:
+
+- `AGENTS.md`,
+- cały folder `_project/`,
+- `README.md`, jeśli istnieje,
+- `package.json`, jeśli istnieje,
+- istniejące testy/guardy powiązane z zadaniem,
+- Obsidian `10_PROJEKTY/Sklep_projekty_domow/`, jeśli zadanie dotyczy kierunku, decyzji, testów lub raportów.
+
+## Zakres i bezpieczeństwo
+
+- Nie zmieniaj UI, jeśli zadanie tego nie wymaga.
+- Nie zmieniaj routingu, jeśli zadanie tego nie wymaga.
+- Nie zmieniaj logiki produktu przy zadaniach pamięci/dokumentacji.
+- Nie rób refaktoru „przy okazji”.
+- Nie usuwaj istniejących funkcji bez wyraźnej decyzji.
+- Nie zmieniaj działających wizualizacji bez wyraźnej prośby Damiana.
+- Nie mieszaj tego projektu z CloseFlow, SZEFCIO, pomysłami biznesowymi ani innymi repo.
+
+## Testy i guardy
+
+- Jeśli dodajesz funkcję, dodaj guard/test albo wpisz dokładnie, dlaczego nie ma guardu.
+- Jeśli coś jest tylko testem ręcznym, zapisz: `brak guardu - tylko test ręczny`.
+- Nie wpisuj testu jako zaliczonego, jeśli nie był uruchomiony.
+- Nie wpisuj potwierdzenia użytkownika, jeśli Damian tego nie napisał.
+
+## Aktualizacja pamięci
+
+Po każdej pracy aktualizuj odpowiednie pliki:
+
+- current stage,
+- decisions,
+- manual tests,
+- guards/tests,
+- next steps,
+- changelog,
+- context for Obsidian,
+- timeline/historia,
+- confirmed user tests, jeśli dotyczy.
+
+## Obsidian
+
+Obsidian ma być dashboardem i mózgiem projektu, nie kopią kodu.
+
+Do Obsidiana trafiają:
+
+- kierunek,
+- decyzje,
+- etapy,
+- testy,
+- guardy,
+- historia,
+- następne kroki,
+- potwierdzone testy użytkownika,
+- raporty AI.
+
+## Raport
+
+Każdy etap kończ raportem w `_project/runs/` oraz, jeśli dotyczy, w Obsidianie `_RAPORTY_AI/`.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+

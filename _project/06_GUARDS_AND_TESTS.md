@@ -1,4 +1,4 @@
-# 06_GUARDS_AND_TESTS - guardy i testy
+﻿# 06_GUARDS_AND_TESTS - guardy i testy
 
 
 ## Checki wymagane dla Etapu 15B
@@ -497,3 +497,63 @@ npm run check:project-memory
 - przycisk jest zablokowany bez poprawnego kodu,
 - zachowane jest `window.confirm`,
 - active project ma marker `data-admin-delete-active-warning`.
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# Guardy i testy - Sklep z projektami domów
+
+## Guard pamięci projektu
+
+### `npm run check:project-memory`
+
+Komenda:
+
+```bash
+npm run check:project-memory
+```
+
+Fallback:
+
+```bash
+node scripts/check-project-memory.cjs
+```
+
+Zakres:
+
+- sprawdza istnienie `AGENTS.md`,
+- sprawdza istnienie wymaganych plików `_project/`,
+- sprawdza `.gitkeep` w `_project/runs/` i `_project/history/`,
+- sprawdza, czy `package.json` ma script `check:project-memory`, jeśli `package.json` istnieje.
+
+## Guardy produktowe
+
+Ten etap nie dodaje guardów produktowych, bo nie zmienia produktu.
+
+Przy kolejnych etapach dopisywać tutaj dokładne komendy, np.:
+
+```bash
+npm run typecheck
+npm run build
+node scripts/nazwa-guarda.cjs
+```
+
+## Ważna zasada
+
+Nie wpisuj, że guard istnieje, jeśli nie ma komendy.
+
+Jeśli coś jest tylko testem ręcznym, zapisz:
+
+`brak guardu - tylko test ręczny`
+
+## Komendy sugerowane po każdej zmianie kodu
+
+Uruchamiać tylko wtedy, gdy istnieją w repo:
+
+```bash
+npm run check:project-memory
+npm run typecheck
+npm run build
+```
+
+Jeśli komenda nie istnieje, wpisać w raporcie: `komenda nie istnieje`.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+

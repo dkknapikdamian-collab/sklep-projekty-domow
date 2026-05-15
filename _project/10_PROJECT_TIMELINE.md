@@ -1,4 +1,4 @@
-# 10_PROJECT_TIMELINE - timeline projektu
+﻿# 10_PROJECT_TIMELINE - timeline projektu
 
 ## Cel pliku
 
@@ -39,3 +39,32 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 | 2026-05-15 | Etap 15: panel awaryjnego delete w tabeli projektów | Zmieniono `Awaryjne` na `Awaryjne usunięcie`, skrócono teksty i dopasowano CSS, żeby panel nie ucinał treści w tabeli. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin-v8.css`, `scripts/check-admin-buttons-v19.cjs` |
 
 | 2026-05-15 | Etap 15B: utrwalona checklista realizacji | Dodano tabelę `order_fulfillment_checklist`, zapis checkboxów realizacji i notatkę admina na `/admin/zamowienia/[id]`. | `app/admin/zamowienia/[id]/page.tsx`, `app/admin/zamowienia/actions.ts`, `lib/admin/orders-admin.ts`, `supabase/migrations/0017_order_fulfillment_checklist.sql` |
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# Timeline projektu - Sklep z projektami domów
+
+## 2026-05-15 - Ustalenie pełnej pamięci projektu
+
+- Ustalono, że repo aplikacji ma mieć `AGENTS.md` i pełny folder `_project/`.
+- Ustalono, że Obsidian ma mieć czytelny mózg projektu w `10_PROJEKTY/Sklep_projekty_domow/`.
+- Ustalono, że każda decyzja, zmiana kierunku, test, guard i potwierdzenie użytkownika mają mieć swoje miejsce.
+
+## 2026-05-15 - Kierunek produktu
+
+- Sklep/strona do sprzedaży projektów domów.
+- React/Next.js + baza danych + storage + panel admina.
+- Zakup jako gość.
+- Dostęp/pobranie przez prywatny link jako kierunek prostszy niż konto klienta w V1.
+- Admin zarządza projektami i publikacją.
+- Katalog pokazuje tylko realnie opublikowane projekty.
+
+## 2026-05-15 - Dodatek PDF na e-mail
+
+- Przyjęto dodatek `Projekt w formacie PDF na e-mail` za +250 zł.
+- Ma działać jako addon zamówienia bez kolizji z bazową dostawą cyfrową.
+
+## Kolejne wpisy
+
+Dopisywać każdą zmianę kierunku, zamrożenie funkcji, potwierdzony etap lub istotną decyzję.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+

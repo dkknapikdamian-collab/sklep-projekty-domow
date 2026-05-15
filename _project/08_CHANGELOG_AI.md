@@ -1,4 +1,4 @@
-# 08_CHANGELOG_AI — changelog pracy AI
+﻿# 08_CHANGELOG_AI — changelog pracy AI
 
 
 ## 2026-05-15 20:10 - Etap 15B: Utrwalona checklista realizacji zamówienia
@@ -651,3 +651,21 @@ npm run check:project-memory
 ### Ryzyka
 
 - Fizyczne delete nadal istnieje. Dla większego bezpieczeństwa kolejnym etapem powinien być archived-first.
+
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_START -->
+# Changelog AI - Sklep z projektami domów
+
+## 2026-05-15 - Project memory + Obsidian brain setup
+
+- Dodano / uzupełniono `AGENTS.md` jako kontrakt pracy AI.
+- Dodano / uzupełniono pełny folder `_project/`.
+- Dodano plik `_project/11_USER_CONFIRMED_TESTS.md` na potwierdzone testy Damiana.
+- Dodano guard `scripts/check-project-memory.cjs`.
+- Dodano script `check:project-memory` do `package.json`, jeśli `package.json` istnieje.
+- Dodano Obsidian brain dla projektu w `10_PROJEKTY/Sklep_projekty_domow/`.
+- Nie zmieniano UI.
+- Nie zmieniano routingu.
+- Nie zmieniano logiki produktu.
+- Nie wykonywano refaktoru.
+<!-- SKLEP_PROJEKTY_DOMOW_MEMORY_V1_END -->
+
