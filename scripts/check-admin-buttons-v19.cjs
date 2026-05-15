@@ -97,15 +97,25 @@ for (const needle of [
   "data-admin-emergency-delete-panel",
   "canAttemptPhysicalDelete",
   "projectStatus === \"archived\" || projectStatus === \"draft\"",
-  "Ostatni guzik pod szkłem",
+  "Trwałe usunięcie",
+  "Awaryjne usunięcie",
   "Najpierw zarchiwizuj projekt albo ustaw draft",
-  "Awaryjne",
   "window.confirm",
   "type=\"submit\"",
   "Usuwanie..."
 ]) {
   if (!deleteForm.includes(needle)) {
     console.error(`FAIL: AdminProjectDeleteForm missing ${needle}`);
+    process.exit(1);
+  }
+}
+
+for (const forbidden of [
+  "Ostatni guzik pod szkłem",
+  "Codzienna praca admina ma używać archiwizacji. Fizyczne usunięcie jest operacją awaryjną i usuwa rekord projektu oraz powiązane dane z bazy."
+]) {
+  if (deleteForm.includes(forbidden)) {
+    console.error(`FAIL: AdminProjectDeleteForm still contains oversized emergency panel copy: ${forbidden}`);
     process.exit(1);
   }
 }
@@ -124,6 +134,21 @@ for (const needle of [
 ]) {
   if (!deleteForm.includes(needle)) {
     console.error(`FAIL: AdminProjectDeleteForm missing delete safety marker: ${needle}`);
+    process.exit(1);
+  }
+}
+
+const css = read("app/admin-v8.css");
+for (const needle of [
+  "STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT START",
+  ".admin-projects-table .admin-delete-safety-panel",
+  "width: min(270px, calc(100vw - 40px))",
+  "white-space: normal",
+  "overflow-wrap: anywhere",
+  "min-height: 30px"
+]) {
+  if (!css.includes(needle)) {
+    console.error(`FAIL: admin delete safety fit css missing ${needle}`);
     process.exit(1);
   }
 }

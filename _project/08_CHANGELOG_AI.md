@@ -1,6 +1,41 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 19:35 - Etap 15: Dopasowanie panelu awaryjnego usunięcia
+
+- Zmieniono etykietę `Awaryjne` na `Awaryjne usunięcie`.
+- Skrócono teksty w czerwonym panelu, żeby mieściły się w tabeli.
+- Zmieniono nagłówek panelu na `Trwałe usunięcie`.
+- Dodano CSS `STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT`.
+- Panel awaryjnego delete w tabeli ma mniejszą szerokość, padding, font i input.
+- Wymuszono zawijanie tekstów w panelu, żeby nie dziedziczył jednowierszowego zachowania tabeli.
+- Zaktualizowano `verify:admin-buttons-v19`.
+
+### Pliki zmienione
+
+- `components/admin/AdminProjectDeleteForm.tsx`
+- `app/admin-v8.css`
+- `scripts/check-admin-buttons-v19.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_1935_admin-emergency-delete-panel-fit.md`
+
+### Testy / guardy
+
+```powershell
+npm run verify:admin-buttons-v19
+npm run verify:admin-project-list-compact-v41
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+
 ## 2026-05-15 19:05 - Etap 14: Strona szczegółów zamówienia
 
 - Dodano dedykowaną stronę `/admin/zamowienia/[id]`.

@@ -1235,3 +1235,65 @@
   }
 }
 /* STAGE44 ADMIN ORDER DETAIL END */
+
+
+/* STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT START */
+.admin-projects-table .admin-delete-safety {
+  position: relative;
+}
+
+.admin-projects-table .admin-delete-safety summary {
+  min-height: 24px;
+  gap: 4px;
+  padding: 0 6px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.admin-projects-table .admin-delete-safety[open] {
+  min-width: 270px;
+}
+
+.admin-projects-table .admin-delete-safety-panel {
+  width: min(270px, calc(100vw - 40px));
+  max-width: 270px;
+  gap: 7px;
+  margin-top: 6px;
+  padding: 9px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.admin-projects-table .admin-delete-safety-panel strong {
+  font-size: 11px;
+  line-height: 1.15;
+}
+
+.admin-projects-table .admin-delete-safety-panel p,
+.admin-projects-table .admin-delete-safety-panel label {
+  font-size: 10.5px;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.admin-projects-table .admin-delete-safety-panel code {
+  font-size: 10px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.admin-projects-table .admin-delete-safety-panel input {
+  min-height: 30px;
+  padding: 0 8px;
+  font-size: 10.5px;
+}
+
+.admin-projects-table .admin-delete-safety-panel .admin-danger-button {
+  min-height: 24px;
+  width: fit-content;
+  padding: 0 7px;
+  font-size: 10px;
+}
+/* STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT END */

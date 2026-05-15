@@ -1,6 +1,35 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Checki wymagane dla Etapu 15
+
+```powershell
+npm run verify:admin-buttons-v19
+npm run verify:admin-project-list-compact-v41
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda panelu awaryjnego delete
+
+Zaostrzono:
+
+```powershell
+npm run verify:admin-buttons-v19
+```
+
+Guard pilnuje teraz:
+
+- etykiety `Awaryjne usunięcie`,
+- tytułu `Trwałe usunięcie`,
+- braku starej za długiej kopii `Ostatni guzik pod szkłem`,
+- obecności CSS `STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT`,
+- mniejszej szerokości panelu,
+- zawijania tekstów przez `white-space: normal`,
+- ochrony przed ucinaniem tekstu przez `overflow-wrap: anywhere`.
+
+
 ## Checki wymagane dla Etapu 14
 
 ```powershell

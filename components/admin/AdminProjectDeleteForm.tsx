@@ -54,7 +54,7 @@ function DeleteProjectSubmitButton({
       aria-busy={pending}
       data-admin-action="project-delete-submit"
     >
-      <Trash2 size={15} /> {pending ? "Usuwanie..." : "Usuń trwale"}
+      <Trash2 size={14} /> {pending ? "Usuwanie..." : "Usuń trwale"}
     </button>
   );
 }
@@ -105,24 +105,24 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, pr
 
   return (
     <details className={`admin-delete-safety ${className || ""}`} data-admin-action="project-hard-delete">
-      <summary><ShieldAlert size={13} /> Awaryjne</summary>
+      <summary><ShieldAlert size={12} /> Awaryjne usunięcie</summary>
       <div className="admin-delete-safety-panel" data-admin-emergency-delete-panel="true">
-        <strong>Ostatni guzik pod szkłem</strong>
+        <strong>Trwałe usunięcie</strong>
         <p>
-          Codzienna praca admina ma używać archiwizacji. Fizyczne usunięcie jest operacją awaryjną i usuwa rekord projektu oraz powiązane dane z bazy. System spróbuje też usunąć powiązane pliki ze Storage.
+          Domyślnie używaj archiwizacji. Trwałe usunięcie kasuje projekt i powiązane dane z bazy. System spróbuje też usunąć pliki ze Storage.
         </p>
         {!canAttemptPhysicalDelete && (
           <p className="admin-delete-active-warning" data-admin-delete-active-warning="true">
-            Najpierw zarchiwizuj projekt albo ustaw draft. Fizyczne usunięcie jest zablokowane dla statusu {projectStatus || "nieznanego"}.
+            Najpierw zarchiwizuj projekt albo ustaw draft. Delete jest zablokowany dla statusu {projectStatus || "nieznanego"}.
           </p>
         )}
         {isActiveProject && (
           <p className="admin-delete-active-warning" data-admin-delete-active-first-warning="true">
-            Ten projekt jest active i może być widoczny publicznie. Nie wolno usuwać go trwale bez wcześniejszej archiwizacji albo zejścia do draft.
+            Projekt active może być publiczny. Nie usuwaj go trwale bez archiwizacji albo draftu.
           </p>
         )}
         <p>
-          Aby odblokować usuwanie awaryjne, wpisz kod projektu: <code>{expectedProjectCode || "BRAK KODU"}</code>.
+          Wpisz kod projektu: <code>{expectedProjectCode || "BRAK KODU"}</code>.
         </p>
         <form
           action={deleteProjectAction}
@@ -149,7 +149,7 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, pr
           <input type="hidden" name="projectCode" value={projectCode || ""} />
           <input type="hidden" name="projectName" value={projectName || ""} />
           <label>
-            Kod projektu wymagany do usunięcia awaryjnego
+            Kod projektu
             <input
               name="deleteConfirmCode"
               value={typedConfirmCode}

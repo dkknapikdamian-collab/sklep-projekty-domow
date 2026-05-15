@@ -1,6 +1,34 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 15
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Wejdź do:
+
+```text
+/admin/projekty
+```
+
+2. Rozwiń panel przycisku `Awaryjne usunięcie`.
+
+3. Oczekiwany wynik:
+   - etykieta brzmi `Awaryjne usunięcie`,
+   - czerwony panel jest mniejszy niż wcześniej,
+   - teksty zawijają się w panelu,
+   - nic nie jest ucięte po prawej stronie,
+   - input kodu projektu mieści się w panelu,
+   - `Usuń trwale` jest nadal zablokowane bez kodu/statusu archived albo draft.
+
+4. Sprawdź projekt active i archived.
+5. Oczekiwany wynik:
+   - active nadal pokazuje blokadę,
+   - archived pozwala odblokować delete dopiero po wpisaniu kodu.
+
+
 ## Test reczny po Etapie 14
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.

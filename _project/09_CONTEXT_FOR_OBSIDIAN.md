@@ -6,26 +6,25 @@
 
 ## Aktualny etap
 
-Etap 14: Osobna strona szczegółów zamówienia `/admin/zamowienia/[id]`.
+Etap 15: Dopasowanie panelu awaryjnego usunięcia w tabeli projektów.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 19:05 Europe/Warsaw: lista zamówień została rozdzielona od obsługi zamówienia. `/admin/zamowienia` jest listą, a operacyjna obsługa konkretnego zamówienia jest na `/admin/zamowienia/[id]`.
+2026-05-15 19:35 Europe/Warsaw: panel `Awaryjne usunięcie` w `/admin/projekty` został zmniejszony i dostał zawijanie tekstów, żeby nie rozjeżdżał tabeli i nie ucinał treści.
 
 ## Najważniejsze ustalenia
 
-- lista zamówień nie powinna rosnąć w nieskończoność,
-- status, pliki, PDF na e-mail i checklisty są na stronie szczegółu,
-- brak trwałej notatki admina bez migracji,
-- nie dodano automatycznych maili, płatności, signed URL ani automatycznej wysyłki.
+- etykieta ma brzmieć `Awaryjne usunięcie`,
+- panel ma być mały i techniczny,
+- długie ostrzeżenia nie pasują do komórki tabeli,
+- fizyczne delete zostaje operacją awaryjną,
+- logika archiwizacji/delete po stronie server action nie została zmieniona.
 
-## Pliki techniczne ważne dla Etapu 14
+## Pliki techniczne ważne dla Etapu 15
 
-- `../app/admin/zamowienia/page.tsx`
-- `../app/admin/zamowienia/[id]/page.tsx`
-- `../lib/admin/orders-admin.ts`
-- `../scripts/check-admin-orders-v42.cjs`
+- `../components/admin/AdminProjectDeleteForm.tsx`
 - `../app/admin-v8.css`
+- `../scripts/check-admin-buttons-v19.cjs`
 
 ## Uwaga
 
