@@ -1,5 +1,35 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
+
+## Checki wymagane dla Etapu 10
+
+```powershell
+npm run verify:admin-project-list-compact-v41
+npm run verify:admin-buttons-v19
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+## Aktualizacja guarda layoutu listy projektów admina
+
+Zaostrzono:
+
+```powershell
+npm run verify:admin-project-list-compact-v41
+```
+
+Guard pilnuje teraz dodatkowo:
+
+- `/admin/projekty` używa page-specific klasy `admin-projects-shell`,
+- tabela ma wrapper z poziomym overflow `data-admin-projects-table-scroll`,
+- karta tabeli ma klasę `admin-projects-table-card`,
+- tabela ma `min-width: 1600px` i `table-layout: fixed`,
+- komórki są jednowierszowe z `white-space: nowrap` i `text-overflow: ellipsis`,
+- akcje tabeli mają `flex-wrap: nowrap`,
+- delete safety w tabeli nie wymusza `width: 100%`,
+- stary problematyczny układ `table-layout: auto`, `overflow: visible` i `white-space: normal` nie wraca w bloku Stage41.
+
 ## Checki wymagane dla Etapu 8
 
 Skrypt wdrożeniowy uruchamia:

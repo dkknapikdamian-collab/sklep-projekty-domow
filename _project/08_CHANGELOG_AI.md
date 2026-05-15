@@ -1,5 +1,50 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
+
+## 2026-05-15 16:15 - Etap 10: Pełnoszeroki layout listy projektów admina
+
+- Naprawiono layout `/admin/projekty`, który po zabezpieczeniu delete i rozbudowie akcji zaczął wyglądać jak ściśnięta tabela w zbyt wąskim kontenerze.
+- Dodano page-specific shell `admin-projects-shell`, żeby tylko lista projektów admina mogła używać prawie całej szerokości ekranu.
+- Tabela dostała własny wrapper z poziomym overflow zamiast rozpychać albo zawijać całą stronę.
+- Ustawiono `table-layout: fixed`, `min-width: 1600px`, stałe szerokości kolumn i jednowierszowe komórki z `ellipsis`.
+- Nazwa projektu i slug są teraz w jednej linii.
+- Gotowość, publiczny link i data nie łamią już wierszy.
+- Akcje w tabeli są zwarte, bez pionowego schodkowania; zamknięte `Usuń projekt` nie wymusza już pełnej szerokości w komórce.
+- Widok mobilny nadal korzysta z kart.
+- Zaostrzono `verify:admin-project-list-compact-v41`, żeby blokował powrót do starego zawijania i `overflow: visible`.
+
+### Pliki zmienione
+
+- `app/admin/projekty/page.tsx`
+- `components/admin/AdminProjectsTable.tsx`
+- `app/admin-v8.css`
+- `scripts/check-admin-project-list-compact-v41.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_1615_admin-projects-full-width-layout.md`
+
+### Testy / guardy
+
+Do uruchomienia lokalnie przez paczkę:
+
+```powershell
+npm run verify:admin-project-list-compact-v41
+npm run verify:admin-buttons-v19
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ryzyka
+
+- Guard jest statyczny i nie zastępuje oceny wizualnej w przeglądarce.
+- Przy bardzo wąskim desktopowym oknie tabela będzie miała poziomy scroll, co jest celowe i lepsze niż łamanie wierszy.
+
 ## 2026-05-15 10:05 - Etap 8: Pliki prywatne i dostawa ręczna
 
 - Dodano `lib/admin/order-files.ts` do pobierania prywatnych plików projektów dla pozycji zamówienia.

@@ -25,3 +25,5 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 
 | 2026-05-15 | Etap 8: pliki prywatne i dostawa ręczna | Panel zamówień pokazuje prywatne pliki projektu, PDF na e-mail, instrukcję wysyłki i checklistę ręcznej realizacji. | `app/admin/zamowienia/page.tsx`, `lib/admin/order-files.ts`, `scripts/check-admin-orders-v42.cjs` |
 | 2026-05-15 | Etap 9: delete safety admina | Usuwanie projektu wymaga wpisania kodu i walidacji server-side. | `components/admin/AdminProjectDeleteForm.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |
+
+| 2026-05-15 | Etap 10: pełnoszeroka lista projektów admina | `/admin/projekty` dostało pełnoszeroki shell, jednowierszową tabelę i kontrolowany poziomy overflow. | `app/admin/projekty/page.tsx`, `components/admin/AdminProjectsTable.tsx`, `app/admin-v8.css`, `scripts/check-admin-project-list-compact-v41.cjs` |

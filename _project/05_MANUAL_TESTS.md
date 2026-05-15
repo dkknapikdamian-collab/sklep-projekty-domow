@@ -1,5 +1,42 @@
 # 05_MANUAL_TESTS - testy reczne
 
+
+## Test reczny po Etapie 10
+
+Status: do wykonania po wdrożeniu paczki i przejściu checków.
+
+### Co sprawdzić
+
+1. Uruchom lokalnie:
+
+```powershell
+npm run dev
+```
+
+2. Wejdź do:
+
+```text
+/admin/projekty
+```
+
+3. Oczekiwany wynik na desktopie:
+   - sekcja `Projekty`, filtry, licznik i tabela używają prawie całej szerokości ekranu,
+   - nie ma dużych pustych pasów po bokach,
+   - tabela nie rozpycha strony w dziwny sposób,
+   - wiersze są niskie i czytelne,
+   - nazwa projektu i slug są w jednej linii,
+   - gotowość i publiczny link nie łamią wierszy,
+   - akcje są w jednej linii, a `Usuń projekt` jest kompaktowym zamkniętym elementem.
+
+4. Zawęź okno przeglądarki.
+5. Oczekiwany wynik:
+   - na średniej szerokości tabela może dostać poziomy scroll wewnątrz tabeli,
+   - na małej szerokości przełącza się na karty mobilne,
+   - nie pojawia się pionowe „schodkowanie” akcji w tabeli.
+
+6. Kliknij `Edytuj`, `Podglad publiczny`, `Ustaw draft`, `Ustaw active` tylko na projekcie testowym.
+7. Oczekiwany wynik: zmiana layoutu nie uszkodziła istniejących akcji admina.
+
 ## Test reczny po Etapie 8
 
 Status: do wykonania po wdrożeniu paczki i przejściu checków.

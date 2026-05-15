@@ -90,7 +90,7 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
   return (
     <>
       <AdminHeader />
-      <main className="admin-shell">
+      <main className="admin-shell admin-projects-shell">
         <section className="admin-page-head">
           <div>
             <span>ADMIN / PROJEKTY</span>

@@ -1,41 +1,42 @@
 # 03_CURRENT_STAGE - aktualny etap
 
-Ostatnia aktualizacja: 2026-05-15 10:35 Europe/Warsaw
+Ostatnia aktualizacja: 2026-05-15 16:15 Europe/Warsaw
 
 ## Aktualny etap
 
-Etap 9: Minimum bezpieczeństwa admina i operacji destrukcyjnych
+Etap 10: Responsywny, pełnoszeroki layout listy projektów w panelu admina
 
 ## Status etapu
 
-Przygotowany w paczce naprawczej FIX3 po błędach wcześniejszych patcherów. Do potwierdzenia lokalnie przez wymagane guardy i build.
+Przygotowany w paczce wdrożeniowej. Do potwierdzenia lokalnie przez guardy, build i ręczny test w przeglądarce.
 
 ## Cel etapu
 
-Nie dać przypadkowo usunąć projektu jednym szybkim kliknięciem.
+Naprawić rozjechaną listę projektów w `/admin/projekty` bez zmiany logiki panelu admina.
 
 ## Co zostało zrobione
 
-- Usuwanie projektu jest ukryte w rozwijanej strefie destrukcyjnej.
-- Admin musi wpisać kod projektu przed usunięciem.
-- Przycisk usuwania jest zablokowany bez poprawnego kodu.
-- `deleteProjectAction` waliduje kod projektu po stronie serwera przed usunięciem.
-- Projekt `active` pokazuje osobne ostrzeżenie.
-- Guard `verify:admin-buttons-v19` pilnuje, że delete nie jest zwykłym linkiem i wymaga potwierdzenia kodem.
-- Naprawiono zaległe błędy typecheck po Etapie 8: `AdminProjectFileItem.bucket` oraz nullable `supabase` w `order-files.ts`.
+- Lista projektów dostała osobny pełnoszeroki shell `admin-projects-shell`, zamiast ciasnego kontenera katalogowego.
+- Tabela projektów używa szerokości ekranu i ma własny poziomy overflow tylko wtedy, gdy ekran jest za wąski.
+- Komórki tabeli są jednowierszowe, z `ellipsis` i `title` dla pełnej treści.
+- Nazwa projektu i slug są pokazane w jednej linii.
+- Statusy, gotowość, link publiczny, data i akcje nie rozpychają wierszy w pionie.
+- Akcje w tabeli są zwarte i w jednej linii; strefa `Usuń projekt` pozostaje zamknięta jako kompaktowy element.
+- Widok mobilny nadal używa kart zamiast tabeli.
+- Guard `verify:admin-project-list-compact-v41` został zaostrzony pod pełnoszeroki layout i blokadę powrotu do zawijania.
 
 ## Czego nie zmieniano
 
-- Nie zmieniano całego auth.
+- Nie zmieniano server actions.
 - Nie zmieniano routingu.
 - Nie zmieniano publicznych stron.
-- Nie zmieniano fizycznego delete na archived-first.
+- Nie zmieniano modelu usuwania ani statusów.
+- Nie zmieniano danych Supabase.
 
 ## Checki wymagane
 
 ```powershell
-npm run verify:admin-project-media-v34
-npm run verify:project-media-controls-v34
+npm run verify:admin-project-list-compact-v41
 npm run verify:admin-buttons-v19
 npm run typecheck
 npm run build
@@ -44,4 +45,4 @@ npm run check:project-memory
 
 ## Następny krok
 
-Po wdrożeniu sprawdzić w panelu admina, czy projekt bez wpisania kodu nie da się usunąć, a projekt aktywny pokazuje dodatkowe ostrzeżenie.
+Po wdrożeniu sprawdzić ręcznie `/admin/projekty` przy szerokości desktopowej: tabela powinna używać prawie całego ekranu, wiersze mają być niskie, a teksty w tabeli mają zostać w jednej linii.

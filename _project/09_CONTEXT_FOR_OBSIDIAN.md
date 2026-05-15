@@ -6,26 +6,26 @@
 
 ## Aktualny etap
 
-Etap 9: Minimum bezpieczeństwa admina i operacji destrukcyjnych.
+Etap 10: Responsywny, pełnoszeroki layout listy projektów w panelu admina.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 10:35 Europe/Warsaw: usuwanie projektu w panelu admina zostało zabezpieczone wymogiem wpisania kodu projektu oraz walidacją po stronie server action. Naprawiono też zaległe błędy typecheck po Etapie 8 dotyczące `AdminProjectFileItem.bucket` i nullable `supabase` w `lib/admin/order-files.ts`.
+2026-05-15 16:15 Europe/Warsaw: lista `/admin/projekty` została dostosowana do ekranów desktopowych. Strona dostała pełnoszeroki shell, tabela ma własny poziomy overflow, komórki są jednowierszowe z ellipsis, a akcje w tabeli nie układają się już pionowo.
 
 ## Najważniejsze ustalenia
 
-- fizyczne delete nadal istnieje, ale nie powinno dać się go odpalić jednym szybkim kliknięciem,
-- projekt `active` pokazuje dodatkowe ostrzeżenie,
-- zwykłe testy nie mogą usuwać realnych projektów produkcyjnych,
-- archived-first zostaje sensownym kolejnym etapem bezpieczeństwa.
+- dla data-dense widoków admina nie używamy ciasnego kontenera marketingowego,
+- desktop: pełna szerokość strony + tabela z kontrolowanym poziomym overflow,
+- długie teksty w tabeli skracamy `ellipsis` i pokazujemy pełną wartość przez `title`,
+- mobile: karty zamiast tabeli,
+- layout nie zmienia logiki admina, statusów, delete ani Supabase.
 
-## Pliki techniczne ważne dla Etapu 9
+## Pliki techniczne ważne dla Etapu 10
 
-- `../components/admin/AdminProjectDeleteForm.tsx`
-- `../app/admin/projekty/actions.ts`
-- `../scripts/check-admin-buttons-v19.cjs`
-- `../lib/admin/projects-admin.ts`
-- `../lib/admin/order-files.ts`
+- `../app/admin/projekty/page.tsx`
+- `../components/admin/AdminProjectsTable.tsx`
+- `../app/admin-v8.css`
+- `../scripts/check-admin-project-list-compact-v41.cjs`
 
 ## Uwaga
 

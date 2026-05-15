@@ -61,8 +61,8 @@ function StatusActionForm({ project, targetStatus }: { project: AdminProjectList
 
 export function AdminProjectsTable({ projects }: { projects: AdminProjectListItem[] }) {
   return (
-    <section className="admin-table-card">
-      <div className="admin-projects-table-wrap">
+    <section className="admin-table-card admin-projects-table-card">
+      <div className="admin-projects-table-wrap" data-admin-projects-table-scroll="true">
         <table className="admin-table admin-projects-table">
           <thead>
             <tr>
@@ -83,17 +83,22 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
           <tbody>
             {projects.map((project) => {
               const missing = missingList(project);
+              const missingText = missing.join(", ") || "-";
+              const badges = statusBadges(project);
+              const publicHref = `/projekty/${project.slug}`;
 
               return (
                 <tr key={project.id}>
-                  <td><strong>{project.code}</strong></td>
-                  <td>
-                    <strong className="admin-project-name">{project.name}</strong>
-                    <small>{project.slug}</small>
+                  <td title={project.code}><strong>{project.code}</strong></td>
+                  <td title={`${project.name} / ${project.slug}`}>
+                    <div className="admin-project-identity">
+                      <strong className="admin-project-name">{project.name}</strong>
+                      <small>{project.slug}</small>
+                    </div>
                   </td>
-                  <td>
+                  <td title={badges.join(", ")}>
                     <div className="admin-project-badges">
-                      {statusBadges(project).map((badge) => (
+                      {badges.map((badge) => (
                         <span key={`${project.id}-${badge}`} className="admin-project-badge">{badge}</span>
                       ))}
                     </div>
@@ -103,23 +108,23 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                   <td>{project.roomsCount > 0 ? project.roomsCount : "-"}</td>
                   <td>{project.mediaCount}</td>
                   <td>{project.projectRoomsCount}</td>
-                  <td>
+                  <td title={project.canPublish ? "Gotowy do publikacji" : `Braki: ${missingText}`}>
                     {project.canPublish ? (
                       <span className="admin-project-ready">Gotowy</span>
                     ) : (
-                      <span className="admin-project-missing">Braki: {missing.join(", ") || "-"}</span>
+                      <span className="admin-project-missing">Braki: {missingText}</span>
                     )}
                   </td>
-                  <td>
-                    <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">
-                      /projekty/{project.slug}
+                  <td title={publicHref}>
+                    <Link href={publicHref} target="_blank" rel="noreferrer">
+                      {publicHref}
                     </Link>
                   </td>
-                  <td>{formatDate(project.updatedAt)}</td>
+                  <td title={formatDate(project.updatedAt)}>{formatDate(project.updatedAt)}</td>
                   <td>
                     <div className="admin-row-actions" data-admin-project-row-actions="true">
                       <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
-                      <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                      <Link href={publicHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
                       <StatusActionForm project={project} targetStatus="draft" />
                       <StatusActionForm project={project} targetStatus="active" />
                       <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} />
@@ -135,6 +140,8 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
       <div className="admin-project-mobile-list">
         {projects.map((project) => {
           const missing = missingList(project);
+          const badges = statusBadges(project);
+          const publicHref = `/projekty/${project.slug}`;
           return (
             <article key={`mobile-${project.id}`} className="admin-project-mobile-card">
               <header>
@@ -143,7 +150,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                 <small>{project.slug}</small>
               </header>
               <div className="admin-project-mobile-badges">
-                {statusBadges(project).map((badge) => (
+                {badges.map((badge) => (
                   <span key={`mobile-badge-${project.id}-${badge}`} className="admin-project-badge">{badge}</span>
                 ))}
               </div>
@@ -166,13 +173,13 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                 </div>
               </dl>
               <p className="admin-project-mobile-link">
-                <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer">
-                  /projekty/{project.slug}
+                <Link href={publicHref} target="_blank" rel="noreferrer">
+                  {publicHref}
                 </Link>
               </p>
               <div className="admin-row-actions" data-admin-project-row-actions="true">
                 <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
-                <Link href={`/projekty/${project.slug}`} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                <Link href={publicHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
                 <StatusActionForm project={project} targetStatus="draft" />
                 <StatusActionForm project={project} targetStatus="active" />
                 <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} />
