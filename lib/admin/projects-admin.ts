@@ -78,6 +78,7 @@ export type AdminProjectMediaItem = {
 
 export type AdminProjectFileItem = {
   id: string;
+  bucket: string;
   fileType: string;
   title: string;
   path: string;
@@ -275,6 +276,7 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     })),
     privateFiles: (files || []).map((item) => ({
       id: String(item.id || ""),
+      bucket: String(item.bucket || "project-private-files"),
       fileType: String(item.file_type || ""),
       title: String(item.title || ""),
       path: String(item.path || ""),

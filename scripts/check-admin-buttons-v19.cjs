@@ -100,10 +100,10 @@ if (!/disabled=\{[^}]*pending[^}]*\}/.test(deleteForm) && !deleteForm.includes("
 }
 
 for (const needle of [
-  "confirmationCode",
+  "typedConfirmCode",
   "expectedProjectCode",
   "Wpisz kod projektu",
-  "Projekt jest ACTIVE",
+  "data-admin-delete-active-warning",
   "window.confirm"
 ]) {
   if (!deleteForm.includes(needle)) {
