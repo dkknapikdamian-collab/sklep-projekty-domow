@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getAdminSession } from "@/lib/auth/admin";
 import { ADMIN_ORDER_STATUSES, type AdminOrderStatus, updateAdminOrderStatus } from "@/lib/admin/orders-admin";
+import { writeAdminAuditLog } from "@/lib/admin/audit-log";
 
 function str(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
@@ -23,6 +24,17 @@ export async function updateOrderStatusAction(formData: FormData) {
   }
 
   await updateAdminOrderStatus(orderId, status);
+
+  await writeAdminAuditLog({
+    admin,
+    entityType: "order",
+    entityId: orderId,
+    action: "order_status_update",
+    metadata: {
+      toStatus: status
+    }
+  });
+
   revalidatePath("/admin/zamowienia");
   redirect(`/admin/zamowienia?updated=${orderId}`);
 }

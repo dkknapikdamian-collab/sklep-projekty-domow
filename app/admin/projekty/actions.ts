@@ -9,6 +9,7 @@ import {
   PROJECT_PUBLICATION_MISSING_LABELS
 } from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
+import { writeAdminAuditLog } from "@/lib/admin/audit-log";
 
 export type UpdateProjectState = {
   ok: boolean;
@@ -262,38 +263,44 @@ export async function updateProjectStatusAction(formData: FormData) {
     redirect("/admin/projekty?status=error&reason=invalid_status");
   }
 
+  let admin: { ok: true; userId: string; email?: string; role: "admin" } | null = null;
   let supabase: ReturnType<typeof createSupabaseServiceRoleClient> | null = null;
 
   try {
     const resolved = await requireAdminAndClient();
+    admin = resolved.admin;
     supabase = resolved.supabase;
   } catch (error) {
     const reason = error instanceof Error ? encodeURIComponent(error.message) : "auth_or_env_error";
     redirect(`/admin/projekty?status=error&reason=${reason}`);
   }
 
+  if (!admin || !supabase) {
+    redirect("/admin/projekty?status=error&reason=auth_or_env_error");
+  }
+
+  const { data: projectBeforeStatusChange, error: projectBeforeStatusChangeError } = await supabase
+    .from("projects")
+    .select("id, code, slug, name, status, price_gross, usable_area, rooms_count")
+    .eq("id", projectId)
+    .maybeSingle();
+
+  if (projectBeforeStatusChangeError) {
+    redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(projectBeforeStatusChangeError.message)}`);
+  }
+
+  if (!projectBeforeStatusChange?.id) {
+    redirect("/admin/projekty?status=error&reason=Nie%20znaleziono%20projektu");
+  }
+
   if (status === "active") {
-    const { data: project, error: projectError } = await supabase
-      .from("projects")
-      .select("name, slug, price_gross, usable_area, rooms_count")
-      .eq("id", projectId)
-      .maybeSingle();
-
-    if (projectError) {
-      redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(projectError.message)}`);
-    }
-
-    if (!project) {
-      redirect("/admin/projekty?status=error&reason=Nie%20znaleziono%20projektu%20do%20publikacji");
-    }
-
     const { mediaRows, roomRows } = await getProjectPublicationContext(supabase, projectId);
     const readiness = getProjectPublicationReadiness({
-      name: String(project.name || ""),
-      slug: String(project.slug || ""),
-      priceGross: Number(project.price_gross || 0),
-      usableArea: Number(project.usable_area || 0),
-      roomsCount: Number(project.rooms_count || 0),
+      name: String(projectBeforeStatusChange.name || ""),
+      slug: String(projectBeforeStatusChange.slug || ""),
+      priceGross: Number(projectBeforeStatusChange.price_gross || 0),
+      usableArea: Number(projectBeforeStatusChange.usable_area || 0),
+      roomsCount: Number(projectBeforeStatusChange.rooms_count || 0),
       media: mediaRows,
       rooms: roomRows
     });
@@ -316,6 +323,21 @@ export async function updateProjectStatusAction(formData: FormData) {
     redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(error.message)}`);
   }
 
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project",
+    entityId: projectId,
+    action: "project_status_update",
+    metadata: {
+      projectCode: projectBeforeStatusChange.code || null,
+      projectName: projectBeforeStatusChange.name || null,
+      projectSlug: projectBeforeStatusChange.slug || slug || null,
+      fromStatus: projectBeforeStatusChange.status || null,
+      toStatus: status
+    }
+  });
+
   revalidatePath("/");
   revalidatePath("/projekty");
   if (slug) revalidatePath(`/projekty/${slug}`);
@@ -333,19 +355,25 @@ export async function archiveProjectAction(formData: FormData) {
     redirect("/admin/projekty?status=error&reason=missing_project_id");
   }
 
+  let admin: { ok: true; userId: string; email?: string; role: "admin" } | null = null;
   let supabase: ReturnType<typeof createSupabaseServiceRoleClient> | null = null;
 
   try {
     const resolved = await requireAdminAndClient();
+    admin = resolved.admin;
     supabase = resolved.supabase;
   } catch (error) {
     const reason = error instanceof Error ? encodeURIComponent(error.message) : "auth_or_env_error";
     redirect(`/admin/projekty?status=error&reason=${reason}`);
   }
 
+  if (!admin || !supabase) {
+    redirect("/admin/projekty?status=error&reason=auth_or_env_error");
+  }
+
   const { data: project, error: projectError } = await supabase
     .from("projects")
-    .select("id, slug, status")
+    .select("id, code, name, slug, status")
     .eq("id", projectId)
     .maybeSingle();
 
@@ -370,6 +398,21 @@ export async function archiveProjectAction(formData: FormData) {
 
   const projectSlug = String(project.slug || slug || "");
 
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project",
+    entityId: projectId,
+    action: "project_archive",
+    metadata: {
+      projectCode: project.code || null,
+      projectName: project.name || null,
+      projectSlug,
+      fromStatus: String(project.status || ""),
+      toStatus: "archived"
+    }
+  });
+
   revalidatePath("/");
   revalidatePath("/projekty");
   if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
@@ -379,14 +422,13 @@ export async function archiveProjectAction(formData: FormData) {
   redirect("/admin/projekty?archived=1");
 }
 
-
 export async function deleteProjectAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const confirmationCode = str(formData, "deleteConfirmCode").toUpperCase();
 
   if (!projectId) throw new Error("Brak ID projektu.");
 
-  const { supabase } = await requireAdminAndClient();
+  const { admin, supabase } = await requireAdminAndClient();
 
   const { data: project, error: projectError } = await supabase
     .from("projects")
@@ -406,6 +448,20 @@ export async function deleteProjectAction(formData: FormData) {
   if (!expectedCode || confirmationCode !== expectedCode) {
     throw new Error("Wpisany kod projektu nie potwierdza usuniecia.");
   }
+
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project",
+    entityId: projectId,
+    action: "project_hard_delete",
+    metadata: {
+      projectCode: project.code || null,
+      projectName: project.name || null,
+      projectSlug: project.slug || null,
+      statusBeforeDelete: projectStatusBeforeDelete
+    }
+  });
 
   const { data: mediaRows } = await supabase.from("project_media").select("bucket, path").eq("project_id", projectId);
   const { data: privateRows } = await supabase.from("project_files").select("bucket, path").eq("project_id", projectId);
@@ -434,7 +490,6 @@ export async function deleteProjectAction(formData: FormData) {
 
   redirect("/admin/projekty?deleted=1");
 }
-
 
 export async function deleteProjectMediaItemAction(formData: FormData) {
   const projectId = str(formData, "projectId");
@@ -606,7 +661,7 @@ export async function updateProjectAction(
     if (!name || !slug) throw new Error("Uzupelnij nazwe i slug projektu.");
     assertStatus(status);
 
-    const { supabase } = await requireAdminAndClient();
+    const { admin, supabase } = await requireAdminAndClient();
 
     const { data: duplicateSlug, error: duplicateError } = await supabase
       .from("projects")
@@ -735,6 +790,21 @@ export async function updateProjectAction(
 
     await uploadPublicMedia({ supabase, projectId, projectCode: oldProject.code, formData });
     await uploadPrivateFiles({ supabase, projectId, projectCode: oldProject.code, formData });
+
+    await writeAdminAuditLog({
+      supabase,
+      admin,
+      entityType: "project",
+      entityId: projectId,
+      action: "project_update",
+      metadata: {
+        projectCode: oldProject.code,
+        previousSlug: oldProject.slug,
+        newSlug: slug,
+        status,
+        name
+      }
+    });
 
     revalidatePath("/");
     revalidatePath("/projekty");

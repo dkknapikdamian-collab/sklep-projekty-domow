@@ -31,3 +31,5 @@ Ten plik pokazuje chronologie waznych etapow, decyzji i zmian kierunku projektu.
 | 2026-05-15 | Etap 10B: guard idealnego układu admin projects | Zachowano zaakceptowany layout tabeli i poszerzono kolumnę akcji, żeby `Ustaw active` nie było ucinane. | `app/admin-v8.css`, `scripts/check-admin-project-list-compact-v41.cjs` |
 
 | 2026-05-15 | Etap 11: archived-first delete safety | Standardową ścieżką dla projektu jest archiwizacja, a fizyczne delete zostało awaryjne i blokowane dla statusów innych niż `archived`/`draft`. | `components/admin/AdminProjectDeleteForm.tsx`, `components/admin/AdminProjectsTable.tsx`, `app/admin/projekty/actions.ts`, `scripts/check-admin-buttons-v19.cjs` |
+
+| 2026-05-15 | Etap 12: admin audit log | Dodano minimalny audit log dla ryzykownych operacji admina: update projektu, status projektu, archiwizacja, hard delete i status zamówienia. | `lib/admin/audit-log.ts`, `supabase/migrations/0016_admin_audit_log.sql`, `scripts/check-admin-audit-log-v44.cjs` |

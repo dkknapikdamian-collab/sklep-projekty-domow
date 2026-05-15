@@ -6,23 +6,26 @@
 
 ## Aktualny etap
 
-Etap 11 HOTFIX: Naprawa po nieudanym checku archived-first.
+Etap 12B: Hotfix patchera audit logu.
 
 ## Ostatnia ważna zmiana
 
-2026-05-15 17:40 Europe/Warsaw: hotfix naprawia zduplikowany `projectStatusBeforeDelete` w `deleteProjectAction` oraz aktualizuje guard listy projektów do layoutu Etapu 11 (`1770px` / `620px`).
+2026-05-15 18:20 Europe/Warsaw: poprawiono paczkę Etapu 12 po błędzie markera w `updateProjectStatusAction`. Nowy patcher wymienia całe funkcje server actions, zamiast polegać na kruchym fragmencie tekstu.
 
 ## Najważniejsze ustalenia
 
-- Etap 11 pozostaje kierunkiem docelowym: archived-first.
-- Fizyczne delete jest operacją awaryjną.
-- Guardy muszą odzwierciedlać aktualny layout, nie poprzedni Etap 10B.
-- Skrypty wdrożeniowe muszą przerywać pracę po błędzie checka, żeby nie commitować wadliwego kodu.
+- cel Etapu 12 pozostaje bez zmian: ryzykowne operacje admina mają zostawiać audit log,
+- runtime wymaga migracji `0016_admin_audit_log.sql`,
+- publiczny sklep, płatności i checkout klienta nie są ruszane,
+- patcher ma przerywać pracę po błędach checków.
 
-## Pliki techniczne ważne dla hotfixa
+## Pliki techniczne ważne
 
+- `../lib/admin/audit-log.ts`
+- `../supabase/migrations/0016_admin_audit_log.sql`
 - `../app/admin/projekty/actions.ts`
-- `../scripts/check-admin-project-list-compact-v41.cjs`
+- `../app/admin/zamowienia/actions.ts`
+- `../scripts/check-admin-audit-log-v44.cjs`
 
 ## Uwaga
 

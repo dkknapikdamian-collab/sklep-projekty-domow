@@ -1,6 +1,20 @@
 # 06_GUARDS_AND_TESTS - guardy i testy
 
 
+## Hotfix guarda/pacthera po Etapie 12B
+
+Poprzedni patcher Etapu 12 był zbyt kruchy i zatrzymał się na markerze w `updateProjectStatusAction`.
+
+Etap 12B zmienia strategię:
+
+- pełna wymiana funkcji `updateProjectStatusAction`,
+- pełna wymiana funkcji `archiveProjectAction`,
+- pełna wymiana funkcji `deleteProjectAction`,
+- pełna wymiana `app/admin/zamowienia/actions.ts`,
+- guard `verify:admin-audit-log-v44` pilnuje migracji, helpera i logowania operacji,
+- guard V41 nadal pilnuje layoutu Etapu 11.
+
+
 ## Hotfix guardów po Etapie 11
 
 Naprawiono niespójność między CSS Etapu 11 a guardem `verify:admin-project-list-compact-v41`.

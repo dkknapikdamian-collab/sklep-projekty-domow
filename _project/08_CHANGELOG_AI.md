@@ -1,6 +1,33 @@
 # 08_CHANGELOG_AI — changelog pracy AI
 
 
+## 2026-05-15 18:20 - Etap 12B: hotfix patchera audit logu
+
+- Poprawiono błąd poprzedniej paczki: patcher nie znalazł markera w `updateProjectStatusAction`.
+- Nowy patcher nie próbuje delikatnie podmieniać środka funkcji, tylko wymienia całe funkcje:
+  - `updateProjectStatusAction`,
+  - `archiveProjectAction`,
+  - `deleteProjectAction`.
+- `app/admin/zamowienia/actions.ts` jest nadpisywany wersją z `order_status_update`.
+- Dodano/utrzymano migrację `0016_admin_audit_log.sql`, helper `writeAdminAuditLog` i guard `verify:admin-audit-log-v44`.
+- Skrypt nadal zatrzymuje się po błędzie i nie robi commit/push, jeśli checki nie przejdą.
+
+### Pliki zmienione
+
+- `lib/admin/audit-log.ts`
+- `supabase/migrations/0016_admin_audit_log.sql`
+- `app/admin/projekty/actions.ts`
+- `app/admin/zamowienia/actions.ts`
+- `scripts/check-admin-audit-log-v44.cjs`
+- `scripts/check-admin-project-list-compact-v41.cjs`
+- `package.json`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/runs/2026-05-15_1820_admin-audit-log-patcher-hotfix.md`
+
+
 ## 2026-05-15 17:40 - Etap 11 HOTFIX: naprawa po nieudanym checku
 
 - Naprawiono błąd TypeScript w `app/admin/projekty/actions.ts`: zduplikowana deklaracja `projectStatusBeforeDelete`.

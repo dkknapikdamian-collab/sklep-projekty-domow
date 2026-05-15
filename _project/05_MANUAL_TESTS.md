@@ -1,6 +1,42 @@
 # 05_MANUAL_TESTS - testy reczne
 
 
+## Test reczny po Etapie 12B
+
+Status: do wykonania po wdrożeniu paczki, przejściu checków i zastosowaniu migracji `0016_admin_audit_log.sql`.
+
+### Co sprawdzić
+
+1. Zastosuj migrację Supabase:
+
+```text
+supabase/migrations/0016_admin_audit_log.sql
+```
+
+2. Wykonaj na danych testowych:
+   - zmianę statusu projektu,
+   - archiwizację projektu,
+   - zapis edycji projektu,
+   - zmianę statusu zamówienia.
+
+3. Sprawdź w Supabase:
+
+```sql
+select actor_email, entity_type, entity_id, action, metadata, created_at
+from admin_audit_log
+order by created_at desc;
+```
+
+4. Oczekiwany wynik:
+   - `project_status_update`,
+   - `project_archive`,
+   - `project_update`,
+   - `order_status_update`,
+   - przy awaryjnym delete: `project_hard_delete`.
+
+5. Nie testuj trwałego usunięcia na realnym projekcie produkcyjnym.
+
+
 ## Test reczny po Etapie 11 HOTFIX
 
 Status: do wykonania po przejściu checków.
