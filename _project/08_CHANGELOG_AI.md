@@ -1,6 +1,48 @@
 # 08_CHANGELOG_AI - Changelog AI
 
 
+## 2026-05-15 21:45 - Etap 19: Filtry i priorytetyzacja zamówień w adminie
+
+- Dodano panel szybkich liczników na `/admin/zamowienia`: `Wymaga kontaktu`, `Czeka na płatność`, `Do wysyłki`.
+- Dodano filtrowanie zamówień po statusie: `new`, `contacted`, `paid_manual`, `sent`, `cancelled`.
+- Dodano filtrowanie po płatności: instrukcja ustawiona / brak instrukcji.
+- Dodano filtrowanie po realizacji: PDF wysłany / ZIP wysłany / zamknięte.
+- Dodano filtrowanie po szybkim oznaczeniu: wymaga kontaktu / czeka na płatność / do wysyłki.
+- Dodano oznaczenia na karcie zamówienia: priorytet, instrukcja płatności, PDF, ZIP, status zamknięcia.
+- Dodano helpery priorytetu w `lib/admin/orders-admin.ts`.
+- Zaktualizowano guard `verify:admin-orders-v42`, żeby pilnował filtrów, priorytetów i braku automatyzacji płatności/wysyłki.
+- Nie dodano CRM, Stripe, PayU, automatycznej wysyłki ani automatycznego księgowania.
+
+### Pliki zmienione
+
+- `app/admin/zamowienia/page.tsx`
+- `lib/admin/orders-admin.ts`
+- `app/admin-v8.css`
+- `scripts/check-admin-orders-v42.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/runs/2026-05-15_2145_admin-order-filters-priority.md`
+
+### Testy / guardy
+
+Do uruchomienia lokalnie:
+
+```powershell
+npm run verify:admin-orders-v42
+npm run typecheck
+npm run build
+npm run check:project-memory
+```
+
+### Ograniczenie
+
+Zmiana została wykonana przez GitHub API. W tym środowisku nie było dostępu do zwykłego `git clone`/`npm`, więc nie udaję lokalnego wyniku testów.
+
 ## 2026-05-15 21:15 - Etap 17: Płatność manualna / instrukcja przelewu
 
 - Checkout informuje, że płatność odbywa się po kontakcie i bez automatycznej płatności online.
