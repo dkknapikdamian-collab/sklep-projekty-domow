@@ -122,3 +122,7 @@ Nie wdrażać bez decyzji Damiana.
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 
+
+## Guard wording fix - 2026-05-15
+
+- DECYZJA: projekt jest prowadzony jako aplikacja sklepowa do sprzedaży projektów domów, a nie jako statyczna strona HTML.
