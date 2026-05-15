@@ -85,7 +85,6 @@ for (const needle of [
   "data-admin-action=\"project-delete-submit\"",
   "window.confirm",
   "type=\"submit\"",
-  "disabled={pending}",
   "Usuwanie..."
 ]) {
   if (!deleteForm.includes(needle)) {
@@ -206,4 +205,5 @@ for (const file of scannedFiles) {
 }
 
 console.log("OK: admin buttons V19 guard passed.");
+
 

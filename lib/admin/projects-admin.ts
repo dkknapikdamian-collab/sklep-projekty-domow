@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+﻿import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 
 export type AdminProjectListItem = {
@@ -293,3 +293,4 @@ export async function getAdminProjectMetrics(): Promise<AdminProjectMetrics> {
     hidden: projects.filter((project) => project.status === "hidden").length
   };
 }
+
