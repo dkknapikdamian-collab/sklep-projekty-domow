@@ -1,4 +1,4 @@
-﻿# 03_CURRENT_STAGE - aktualny etap
+# 03_CURRENT_STAGE - aktualny etap
 
 Ostatnia aktualizacja: 2026-05-15 22:20 Europe/Warsaw
 
@@ -62,3 +62,40 @@ This stage does not change storefront logic, admin UI, checkout or routing.
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 
+
+<!-- ETAP21_ADMIN_AUDIT_REAL_COVERAGE_2026_05_16 -->
+
+## 2026-05-16 - Etap 21: realne domkniecie audit logu admina
+
+FAKT:
+- Dodano realne markery i pokrycie audit logu dla brakujacych mutacji admina:
+  - project_create,
+  - project_sample_create,
+  - project_media_delete,
+  - project_media_type_update,
+  - project_private_file_delete.
+- Guard statyczny verify:admin-audit-log-v44 ma sprawdzac nie tylko widok /admin/audit, ale tez realne markery implementacji w akcjach admina.
+
+TEST RÄCZNY DO WYKONANIA:
+- Runtime audit w /admin/audit po realnych operacjach admina: utworzenie projektu, sample project, media delete/type update, private file delete.
+
+BRAK POTWIERDZONEGO TESTU:
+- Do momentu klikniecia flow lokalnie przez Damiana runtime wpisy w admin_audit_log pozostaja niepotwierdzone.
+
+## 2026-05-16 - Etap 21 real audit coverage V6
+
+### FAKT
+- Domknięto realne pokrycie admin audit log dla tworzenia projektu, projektu przykładowego, usuwania mediów, zmiany typu mediów i usuwania prywatnego pliku projektu.
+- Guard verify:admin-audit-log-v44 sprawdza teraz markery w poprawnych plikach: project_create w app/admin/projekty/nowy/actions.ts, a operacje mediów/sample/private file w app/admin/projekty/actions.ts.
+
+### TESTY AUTOMATYCZNE
+- npm run verify:admin-audit-log-v44
+- npm run verify:admin-orders-v42
+- npm run verify:manual-email-drafts-v47
+- npm run verify:manual-payment-v48
+- npm run typecheck
+- npm run build
+- npm run check:project-memory
+
+### TEST RĘCZNY DO WYKONANIA
+- Runtime audit w /admin/audit po realnych operacjach admina: create project, status update, media delete/type update, private file delete, order status/checklist.

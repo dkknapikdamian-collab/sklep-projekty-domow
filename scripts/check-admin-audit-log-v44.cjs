@@ -6,7 +6,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const exists = (file) => fs.existsSync(path.join(root, file));
 
 function fail(message) {
-  console.error(`FAIL: ${message}`);
+  console.error("FAIL: " + message);
   process.exit(1);
 }
 
@@ -18,12 +18,13 @@ const requiredFiles = [
   "app/admin-v8.css",
   "supabase/migrations/0016_admin_audit_log.sql",
   "app/admin/projekty/actions.ts",
+  "app/admin/projekty/nowy/actions.ts",
   "app/admin/zamowienia/actions.ts",
   "package.json"
 ];
 
 for (const file of requiredFiles) {
-  if (!exists(file)) fail(`missing admin audit log file: ${file}`);
+  if (!exists(file)) fail("missing admin audit log file: " + file);
 }
 
 const migration = read("supabase/migrations/0016_admin_audit_log.sql");
@@ -41,7 +42,7 @@ for (const needle of [
   "admin_audit_log_entity_idx",
   "admin_audit_log_actor_idx"
 ]) {
-  if (!migration.includes(needle)) fail(`migration missing marker: ${needle}`);
+  if (!migration.includes(needle)) fail("migration missing marker: " + needle);
 }
 
 const helper = read("lib/admin/audit-log.ts");
@@ -67,7 +68,29 @@ for (const needle of [
   ".eq(\"action\", action)",
   "throw new Error"
 ]) {
-  if (!helper.includes(needle)) fail(`audit helper missing marker: ${needle}`);
+  if (!helper.includes(needle)) fail("audit helper missing marker: " + needle);
+}
+
+for (const needle of [
+  "project_create",
+  "project_sample_create",
+  "project_media_delete",
+  "project_media_type_update",
+  "project_private_file_delete"
+]) {
+  if (!helper.includes(needle)) fail("audit helper missing Etap 21 action marker: " + needle);
+}
+
+for (const duplicate of [
+  "project_media_delete",
+  "project_media_type_update",
+  "project_private_file_delete",
+  "project_create",
+  "project_sample_create"
+]) {
+  const count = (helper.match(new RegExp(duplicate, "g")) || []).length;
+  if (count < 2) fail("audit helper missing filter/label pair for: " + duplicate);
+  if (count > 2) fail("audit helper has duplicate filter/label markers for: " + duplicate + " count=" + count);
 }
 
 const auditPage = read("app/admin/audit/page.tsx");
@@ -95,7 +118,7 @@ for (const needle of [
   "adminAuditMetadataJson",
   "actionLabel"
 ]) {
-  if (!auditPage.includes(needle)) fail(`admin audit page missing marker: ${needle}`);
+  if (!auditPage.includes(needle)) fail("admin audit page missing marker: " + needle);
 }
 
 for (const forbidden of [
@@ -107,7 +130,7 @@ for (const forbidden of [
   "archiveAdminProject"
 ]) {
   if (auditPage.includes(forbidden)) {
-    fail(`admin audit page must be read-only and not call mutation marker: ${forbidden}`);
+    fail("admin audit page must be read-only and not call mutation marker: " + forbidden);
   }
 }
 
@@ -117,7 +140,7 @@ for (const needle of [
   "History",
   "Audit"
 ]) {
-  if (!header.includes(needle)) fail(`AdminHeader missing audit nav marker: ${needle}`);
+  if (!header.includes(needle)) fail("AdminHeader missing audit nav marker: " + needle);
 }
 
 const dashboard = read("app/admin/page.tsx");
@@ -127,7 +150,7 @@ for (const needle of [
   "Audit",
   "ślad operacji"
 ]) {
-  if (!dashboard.includes(needle)) fail(`admin dashboard missing audit card marker: ${needle}`);
+  if (!dashboard.includes(needle)) fail("admin dashboard missing audit card marker: " + needle);
 }
 
 const css = read("app/admin-v8.css");
@@ -140,7 +163,20 @@ for (const needle of [
   ".admin-audit-table",
   "STAGE50 ADMIN AUDIT VIEW END"
 ]) {
-  if (!css.includes(needle)) fail(`admin audit CSS missing marker: ${needle}`);
+  if (!css.includes(needle)) fail("admin audit CSS missing marker: " + needle);
+}
+
+const projectCreateActions = read("app/admin/projekty/nowy/actions.ts");
+for (const needle of [
+  'import { writeAdminAuditLog } from "@/lib/admin/audit-log";',
+  "writeAdminAuditLog",
+  'action: "project_create"',
+  'entityType: "project"',
+  "roomsCount: roomRows.length",
+  "variantsCount: variantRows.length",
+  "addonsCount: addonRows.length"
+]) {
+  if (!projectCreateActions.includes(needle)) fail("project create actions missing Etap 21 real audit marker: " + needle);
 }
 
 const projectActions = read("app/admin/projekty/actions.ts");
@@ -155,12 +191,24 @@ for (const needle of [
   "projectStatusBeforeDelete",
   '![\"archived\", \"draft\"].includes(projectStatusBeforeDelete)'
 ]) {
-  if (!projectActions.includes(needle)) fail(`project actions missing audit marker: ${needle}`);
+  if (!projectActions.includes(needle)) fail("project actions missing audit marker: " + needle);
+}
+
+for (const needle of [
+  'action: "project_media_delete"',
+  'entityType: "project_media"',
+  'action: "project_media_type_update"',
+  'action: "project_private_file_delete"',
+  'entityType: "project_private_file"',
+  'action: "project_sample_create"',
+  'source: "createSampleProjectAction"'
+]) {
+  if (!projectActions.includes(needle)) fail("project actions missing Etap 21 real audit marker: " + needle);
 }
 
 const statusDeclCount = (projectActions.match(/const projectStatusBeforeDelete = String\(project\.status \|\| ""\);/g) || []).length;
 if (statusDeclCount !== 1) {
-  fail(`expected exactly one projectStatusBeforeDelete declaration, got ${statusDeclCount}`);
+  fail("expected exactly one projectStatusBeforeDelete declaration, got " + statusDeclCount);
 }
 
 const orderActions = read("app/admin/zamowienia/actions.ts");
@@ -172,7 +220,7 @@ for (const needle of [
   'action: "order_fulfillment_checklist_update"',
   "toStatus: status"
 ]) {
-  if (!orderActions.includes(needle)) fail(`order actions missing audit marker: ${needle}`);
+  if (!orderActions.includes(needle)) fail("order actions missing audit marker: " + needle);
 }
 
 const pkg = JSON.parse(read("package.json"));
@@ -184,4 +232,4 @@ if (!String(pkg.scripts.verify || "").includes("verify:admin-audit-log-v44")) {
   fail("main verify script does not include verify:admin-audit-log-v44.");
 }
 
-console.log("OK: admin audit log V44/V50 visible audit page guard passed.");
+console.log("OK: admin audit log V44/V50 + Etap 21 real coverage guard passed.");

@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -938,6 +938,35 @@ export async function createSampleProjectAction() {
   if (error) {
     throw new Error(`Nie udalo sie utworzyc przykladowego projektu: ${error.message}`);
   }
+
+
+  // ETAP21_PROJECT_SAMPLE_CREATE_AUDIT_START
+  const { data: sampleProjectForAudit, error: sampleProjectForAuditError } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("slug", baseSlug)
+    .maybeSingle();
+
+  if (sampleProjectForAuditError || !sampleProjectForAudit?.id) {
+    throw new Error(
+      sampleProjectForAuditError?.message ||
+        "Nie udalo sie pobrac ID przykladowego projektu do admin audit log."
+    );
+  }
+
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project",
+    entityId: String(sampleProjectForAudit.id),
+    action: "project_sample_create",
+    metadata: {
+      projectCode: String(nextCode).toUpperCase(),
+      projectSlug: baseSlug,
+      source: "createSampleProjectAction"
+    }
+  });
+  // ETAP21_PROJECT_SAMPLE_CREATE_AUDIT_END
 
   revalidatePath("/");
   revalidatePath("/projekty");
