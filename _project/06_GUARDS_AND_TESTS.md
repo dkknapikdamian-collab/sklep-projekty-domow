@@ -356,3 +356,78 @@ Sprawdza:
 Status:
 - TEST AUTOMATYCZNY / GUARD.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_GUARD_START -->
+## Etap 22C - runtime audit admina / SQL i guard
+
+Nowy guard:
+
+`npm run verify:admin-audit-runtime-v53`
+
+Co sprawdza:
+- istnieje SQL runtime verification,
+- SQL obejmuje krytyczne akcje audit logu,
+- project memory ma status `TEST RĘCZNY DO WYKONANIA`,
+- raport run Etapu 22C istnieje,
+- `package.json` ma wpis guarda.
+
+SQL runtime verification:
+
+`supabase/manual/2026-05-16_etap22_runtime_admin_audit_verification.sql`
+
+Uwaga: Guard nie zastępuje kliknięcia runtime w panelu admina. Guard pilnuje paczki i kontraktu; prawdziwe zamknięcie wymaga testu Damiana i wyniku SQL `failed_actions = 0`.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_GUARD_END -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## Etap 23Z - guard archiwizacji i hard delete runtime acceptance
+
+Dodany guard:
+
+`powershell
+npm run verify:admin-archive-delete-runtime-v23z
+`
+
+Co sprawdza:
+- kontrakt rchiveProjectAction,
+- weryfikacje statusu rchived po update,
+- audit project_archive,
+- wymaganie kodu projektu dla hard delete,
+- audit project_hard_delete_blocked,
+- audit project_hard_delete,
+- wpisy project memory dla Etapu 23Z.
+
+Czego nie sprawdza:
+- realnego klikniecia w UI,
+- realnego usuniecia w Supabase,
+- realnych wpisow runtime w /admin/audit.
+
+Status reczny: TEST RECZNY DO WYKONANIA.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->
+## 2026-05-16 - Etap 23Z V3: BOM-safe guard fix
+
+FAKT:
+- V2 przerwalo sie na erify:admin-archive-delete-runtime-v23z, bo package.json mial BOM, a guard robil bezposredni JSON.parse(read("package.json")).
+- V3 podmienia guard na wersje z stripBom i normalizuje zapis package.json do UTF-8 bez BOM.
+- Zakres funkcjonalny Etapu 23Z bez zmian.
+
+TESTY AUTOMATYCZNE:
+- 
+pm run verify:admin-archive-delete-runtime-v23z
+- 
+pm run verify:admin-archive-delete-runtime-v23
+- 
+pm run verify:admin-action-feedback-v24
+- 
+pm run verify:admin-audit-log-v44
+- 
+pm run check:project-memory
+- 
+pm run typecheck
+- 
+pm run build
+
+TEST RECZNY:
+- Nadal TEST RECZNY DO WYKONANIA. V3 nie potwierdza runtime.
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->

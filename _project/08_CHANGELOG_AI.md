@@ -242,3 +242,50 @@ DECYZJA: płatności ręczne nie są docelowym modelem; docelowo automatyczne p�
 TESTY: dodano guard `verify:project-stage-status-b`; do uruchomienia z `check:project-memory`.
 OBSIDIAN: dashboard i roadmapa wymagają tej samej korekty statusu.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_CHANGELOG_START -->
+## 2026-05-16 - Etap 22C runtime admin audit SQL package
+
+- Dodano SQL do ręcznej weryfikacji runtime audit logu w Supabase.
+- Dodano guard `verify:admin-audit-runtime-v53`.
+- Doprecyzowano status Etapu 22: automatyczne guardy nie są ręcznym potwierdzeniem runtime.
+- Dodano zasadę Damiana: ChatGPT/operator nie robi bezpośredniego commit/push przez connector; dostarcza ZIP + polecenie.
+- Dodano aktualizacje Obsidiana w paczce.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_CHANGELOG_END -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## 2026-05-16 - Etap 23Z archive/delete runtime acceptance
+
+- Dodano guard erify:admin-archive-delete-runtime-v23z.
+- Dodano checklist runtime _project/17_ETAP23Z_ARCHIVE_HARD_DELETE_RUNTIME_ACCEPTANCE.md.
+- Zaktualizowano project memory i Obsidiana.
+- Nie oznaczono testu recznego jako PASS.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->
+## 2026-05-16 - Etap 23Z V3: BOM-safe guard fix
+
+FAKT:
+- V2 przerwalo sie na erify:admin-archive-delete-runtime-v23z, bo package.json mial BOM, a guard robil bezposredni JSON.parse(read("package.json")).
+- V3 podmienia guard na wersje z stripBom i normalizuje zapis package.json do UTF-8 bez BOM.
+- Zakres funkcjonalny Etapu 23Z bez zmian.
+
+TESTY AUTOMATYCZNE:
+- 
+pm run verify:admin-archive-delete-runtime-v23z
+- 
+pm run verify:admin-archive-delete-runtime-v23
+- 
+pm run verify:admin-action-feedback-v24
+- 
+pm run verify:admin-audit-log-v44
+- 
+pm run check:project-memory
+- 
+pm run typecheck
+- 
+pm run build
+
+TEST RECZNY:
+- Nadal TEST RECZNY DO WYKONANIA. V3 nie potwierdza runtime.
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->

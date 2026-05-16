@@ -1,4 +1,4 @@
-## Test ręczny po Etapie 20
+﻿## Test ręczny po Etapie 20
 
 Status: do wykonania po wdrożeniu paczki, przejściu guardów, typecheck i build.
 
@@ -367,3 +367,96 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_MANUAL_CHECK_START -->
+## Etap 22C - runtime audit admina
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+### Sprawdzić ręcznie
+
+1. Utworzenie projektu.
+2. Edycja projektu.
+3. Zmiana statusu projektu.
+4. Archiwizacja projektu.
+5. Trwałe usunięcie projektu.
+6. Usunięcie medium.
+7. Zmiana typu medium.
+8. Usunięcie prywatnego pliku.
+9. Zmiana statusu zamówienia.
+10. Zapis checklisty realizacji.
+
+### Po każdej operacji /admin/audit musi pokazać
+
+- poprawne `action`,
+- poprawne `entity_type`,
+- poprawne `entity_id`,
+- sensowne `metadata`,
+- wpis z realnej tabeli Supabase `public.admin_audit_log`.
+
+### SQL proof
+
+Uruchomić w Supabase SQL Editor:
+
+`supabase/manual/2026-05-16_etap22_runtime_admin_audit_verification.sql`
+
+Zamknięcie dopiero przy: `failed_actions = 0`.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_MANUAL_CHECK_END -->
+
+<!-- ETAP22C_RUNTIME_SQL_RESULT_5_PASS_5_FAIL -->
+## 2026-05-16 18:43:07 - Etap 22C runtime audit admina - wynik SQL 5/10
+
+FAKT:
+- Supabase SQL runtime verification został uruchomiony ponownie.
+- Wynik: 5 PASS / 5 FAIL.
+- PASS:
+  - project_archive
+  - project_create
+  - project_hard_delete
+  - project_status_update
+  - project_update
+- FAIL:
+  - order_fulfillment_checklist_update
+  - order_status_update
+  - project_media_delete
+  - project_media_type_update
+  - project_private_file_delete
+- Wszystkie FAIL są typu: FAIL_MISSING_RUNTIME_ROW.
+
+INTERPRETACJA:
+- Audit log działa dla podstawowych operacji projektu.
+- Brakuje runtime wpisów dla operacji zamówień, mediów i prywatnych plików.
+- Najpierw trzeba przeklikać brakujące ścieżki.
+- Jeśli po kliknięciu dalej będzie FAIL_MISSING_RUNTIME_ROW, wymagany Etap 22D - naprawa zapisu audit logu dla brakujących operacji.
+
+STATUS:
+- CZĘŚCIOWO POTWIERDZONE RUNTIME.
+- TEST RĘCZNY DO WYKONANIA.
+- Etap 22 nadal NIEZAMKNIĘTY.
+
+NASTĘPNY KROK:
+- Kliknąć: order status, order checklist, media type update, media delete, private file delete.
+- Ponowić SQL.
+- Zamknąć etap tylko przy 10 PASS / 0 FAIL.
+<!-- ETAP22C_RUNTIME_SQL_RESULT_5_PASS_5_FAIL -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## Etap 23Z - manual runtime test archiwizacji i hard delete
+
+Status: TEST RECZNY DO WYKONANIA.
+
+Checklist:
+1. Projekt testowy utworzony do zniszczenia.
+2. Archiwizacja z listy PASS/FAIL.
+3. Archiwizacja z edycji PASS/FAIL.
+4. OdĹ›wieĹĽenie po archiwizacji PASS/FAIL.
+5. Brak martwego guzika PASS/FAIL.
+6. Bledny kod blokuje hard delete PASS/FAIL.
+7. Poprawny kod usuwa projekt testowy PASS/FAIL.
+8. Audit zapisuje blokade i sukces PASS/FAIL.
+9. Projekt nie wraca po odswiezeniu PASS/FAIL.
+10. Publiczny katalog nie pokazuje usunietego projektu testowego PASS/FAIL.
+
+Wynik wolno zmienic na TEST RECZNY POTWIERDZONY PRZEZ DAMIANA tylko po realnym potwierdzeniu Damiana.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+

@@ -353,3 +353,101 @@ TESTY:
 TEST RĘCZNY:
 - TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP29_GUARD_BLOCKERS_FIX_V7_END -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_TEST_HISTORY_START -->
+## 2026-05-16 - Etap 22C runtime audit admina
+
+| Test | Status | Wynik / źródło |
+|---|---|---|
+| `npm run verify:admin-audit-runtime-v53` | TEST AUTOMATYCZNY / GUARD | Do uruchomienia po zastosowaniu paczki. |
+| `npm run verify:admin-audit-log-v44` | TEST AUTOMATYCZNY / GUARD | Do uruchomienia po zastosowaniu paczki. |
+| SQL `admin_audit_runtime_last_24h` | TEST RĘCZNY DO WYKONANIA | SQL ma pokazać `failed_actions = 0` po realnych operacjach. |
+| Runtime `/admin/audit` po 10 operacjach admina | TEST RĘCZNY DO WYKONANIA | To nie jest ręcznym potwierdzeniem runtime, dopóki Damian nie wykona i nie potwierdzi. |
+
+Uwaga: automatyczne guardy po Etapie 22 nie są ręcznym potwierdzeniem runtime. Etap pozostaje niezamknięty do potwierdzenia Damiana.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_TEST_HISTORY_END -->
+
+<!-- ETAP22C_RUNTIME_SQL_RESULT_5_PASS_5_FAIL -->
+## 2026-05-16 18:43:07 - Etap 22C runtime audit admina - wynik SQL 5/10
+
+FAKT:
+- Supabase SQL runtime verification został uruchomiony ponownie.
+- Wynik: 5 PASS / 5 FAIL.
+- PASS:
+  - project_archive
+  - project_create
+  - project_hard_delete
+  - project_status_update
+  - project_update
+- FAIL:
+  - order_fulfillment_checklist_update
+  - order_status_update
+  - project_media_delete
+  - project_media_type_update
+  - project_private_file_delete
+- Wszystkie FAIL są typu: FAIL_MISSING_RUNTIME_ROW.
+
+INTERPRETACJA:
+- Audit log działa dla podstawowych operacji projektu.
+- Brakuje runtime wpisów dla operacji zamówień, mediów i prywatnych plików.
+- Najpierw trzeba przeklikać brakujące ścieżki.
+- Jeśli po kliknięciu dalej będzie FAIL_MISSING_RUNTIME_ROW, wymagany Etap 22D - naprawa zapisu audit logu dla brakujących operacji.
+
+STATUS:
+- CZĘŚCIOWO POTWIERDZONE RUNTIME.
+- TEST RĘCZNY DO WYKONANIA.
+- Etap 22 nadal NIEZAMKNIĘTY.
+
+NASTĘPNY KROK:
+- Kliknąć: order status, order checklist, media type update, media delete, private file delete.
+- Ponowić SQL.
+- Zamknąć etap tylko przy 10 PASS / 0 FAIL.
+<!-- ETAP22C_RUNTIME_SQL_RESULT_5_PASS_5_FAIL -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## Etap 23Z - manual runtime test archiwizacji i hard delete
+
+Status: TEST RECZNY DO WYKONANIA.
+
+Checklist:
+1. Projekt testowy utworzony do zniszczenia.
+2. Archiwizacja z listy PASS/FAIL.
+3. Archiwizacja z edycji PASS/FAIL.
+4. OdĹ›wieĹĽenie po archiwizacji PASS/FAIL.
+5. Brak martwego guzika PASS/FAIL.
+6. Bledny kod blokuje hard delete PASS/FAIL.
+7. Poprawny kod usuwa projekt testowy PASS/FAIL.
+8. Audit zapisuje blokade i sukces PASS/FAIL.
+9. Projekt nie wraca po odswiezeniu PASS/FAIL.
+10. Publiczny katalog nie pokazuje usunietego projektu testowego PASS/FAIL.
+
+Wynik wolno zmienic na TEST RECZNY POTWIERDZONY PRZEZ DAMIANA tylko po realnym potwierdzeniu Damiana.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->
+## 2026-05-16 - Etap 23Z V3: BOM-safe guard fix
+
+FAKT:
+- V2 przerwalo sie na erify:admin-archive-delete-runtime-v23z, bo package.json mial BOM, a guard robil bezposredni JSON.parse(read("package.json")).
+- V3 podmienia guard na wersje z stripBom i normalizuje zapis package.json do UTF-8 bez BOM.
+- Zakres funkcjonalny Etapu 23Z bez zmian.
+
+TESTY AUTOMATYCZNE:
+- 
+pm run verify:admin-archive-delete-runtime-v23z
+- 
+pm run verify:admin-archive-delete-runtime-v23
+- 
+pm run verify:admin-action-feedback-v24
+- 
+pm run verify:admin-audit-log-v44
+- 
+pm run check:project-memory
+- 
+pm run typecheck
+- 
+pm run build
+
+TEST RECZNY:
+- Nadal TEST RECZNY DO WYKONANIA. V3 nie potwierdza runtime.
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->

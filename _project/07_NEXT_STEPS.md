@@ -1,4 +1,4 @@
-# 07_NEXT_STEPS - nastepne kroki
+﻿# 07_NEXT_STEPS - nastepne kroki
 
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
 ## Najbliższy realny kierunek - po korekcie pamięci projektu
@@ -249,3 +249,31 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_NEXT_STEP_START -->
+## Następny krok - Etap 22C runtime audit admina
+
+Nie zaczynać kolejnego dużego etapu przed domknięciem runtime audit admina.
+
+Kolejność:
+1. Zastosować paczkę ZIP.
+2. Uruchomić focused guardy.
+3. W panelu admina wykonać 10 operacji z checklisty.
+4. Po każdej operacji sprawdzić `/admin/audit`.
+5. W Supabase SQL Editor uruchomić SQL runtime verification.
+6. Zamknąć dopiero, gdy summary pokaże `failed_actions = 0`.
+7. Wpisać potwierdzenie Damiana do `_project/11_USER_CONFIRMED_TESTS.md` i Obsidiana.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_NEXT_STEP_END -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## Nastepny krok - Etap 23Z
+
+Najkrotszy sensowny krok:
+- uruchomic aplikacje lokalnie,
+- wykonac test na projekcie testowym,
+- sprawdzic /admin/audit,
+- wpisac wynik w _project/11_USER_CONFIRMED_TESTS.md, _project/14_TEST_HISTORY.md i Obsidianie.
+
+Nie zaczynac kolejnej naprawy Etapu 23 bez wskazania konkretnego punktu FAIL.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+

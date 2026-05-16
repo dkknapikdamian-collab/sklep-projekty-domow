@@ -1,4 +1,4 @@
-# 15_ACTIVE_SOURCE_MAP - Sklep projekty domow
+﻿# 15_ACTIVE_SOURCE_MAP - Sklep projekty domow
 
 ## Mapa zrodel
 
@@ -70,3 +70,19 @@ Dozwolone statusy sa zdefiniowane w `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTAN
 <!-- ETAP22_29_PRODUCTION_ROADMAP_ACCEPTANCE_2026_05_16 -->
 
 Dodano aktywna roadmapa produkcyjna i ledger odhaczania. Ten plik ma byc czytany przed kazdym kolejnym etapem.
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## Etap 23Z - aktywne zrodla
+
+Aktywne pliki dla archiwizacji i hard delete:
+- pp/admin/projekty/actions.ts
+- components/admin/AdminProjectDeleteForm.tsx
+- pp/admin/projekty/[id]/edytuj/page.tsx
+- scripts/check-admin-archive-delete-runtime-v23.cjs
+- scripts/check-admin-archive-delete-runtime-v23z.cjs
+- _project/17_ETAP23Z_ARCHIVE_HARD_DELETE_RUNTIME_ACCEPTANCE.md
+
+Obsidian:
+- 10_PROJEKTY/Sklep_projekty_domow/2026-05-16 - Etap 23Z archiwizacja i hard delete runtime.md
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+

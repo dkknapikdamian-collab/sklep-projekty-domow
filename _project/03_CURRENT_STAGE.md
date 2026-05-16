@@ -313,3 +313,102 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_SQL_PACKAGE_START -->
+## Etap 22C - runtime audit admina / SQL proof package
+
+Status: CZĘŚCIOWO WDROŻONE. NIEZAMKNIĘTE RUNTIME.
+Data: 2026-05-16.
+
+### FAKTY
+
+- Kod i guardy auditowe istnieją.
+- `verify:admin-audit-log-v44` pilnuje statycznego kontraktu audit logu.
+- Automatyczne checki po Etapie 22 nie są ręcznym potwierdzeniem runtime.
+- Dodano SQL proof: `supabase/manual/2026-05-16_etap22_runtime_admin_audit_verification.sql`.
+- Dodano guard dokumentacyjny/runtime package: `verify:admin-audit-runtime-v53`.
+
+### DECYZJA DAMIANA
+
+- Nie robić bezpośredniego commit/push przez ChatGPT connector.
+- Dostarczać ZIP + jedno polecenie PowerShell.
+- Obsidian aktualizować w paczce.
+
+### STATUS TESTU RĘCZNEGO
+
+TEST RĘCZNY DO WYKONANIA.
+
+### KRYTERIUM ZAMKNIĘCIA
+
+Etap 22C można zamknąć dopiero, gdy po realnych operacjach admina:
+- `/admin/audit` pokazuje poprawne wpisy,
+- SQL `admin_audit_runtime_last_24h` pokazuje `failed_actions = 0`,
+- Damian potwierdzi test ręczny.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_SQL_PACKAGE_END -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## 2026-05-16 - Etap 23Z: archiwizacja i hard delete runtime acceptance
+
+FAKTY:
+- Etap 23 mial wiele poprawek: V4, V5, V7, V8 i V9.
+- Kod archiwizacji ma guard statyczny V23 oraz rozszerzenie V23Z.
+- Hard delete jest dopuszczony tylko po wpisaniu kodu projektu i ma audit dla blokady oraz sukcesu.
+- Ten wpis nie zamyka testu recznego.
+
+GUARDY:
+- 
+pm run verify:admin-archive-delete-runtime-v23z
+- 
+pm run verify:admin-archive-delete-runtime-v23
+- 
+pm run verify:admin-action-feedback-v24
+- 
+pm run verify:admin-audit-log-v44
+- 
+pm run check:project-memory
+- 
+pm run typecheck
+- 
+pm run build
+
+TEST RECZNY:
+- Status: TEST RECZNY DO WYKONANIA.
+- Wykonac tylko na projekcie testowym przeznaczonym do usuniecia.
+
+KRYTERIUM ZAMKNIECIA:
+- Etap 23 mozna oznaczyc jako zamkniety dopiero po TEST RECZNY POTWIERDZONY PRZEZ DAMIANA.
+
+RYZYKO:
+- Hard delete jest destrukcyjny. Blad testu na realnym projekcie moze usunac dane i pliki.
+
+NASTEPNY KROK:
+- Wykonac checklist z _project/17_ETAP23Z_ARCHIVE_HARD_DELETE_RUNTIME_ACCEPTANCE.md.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->
+## 2026-05-16 - Etap 23Z V3: BOM-safe guard fix
+
+FAKT:
+- V2 przerwalo sie na erify:admin-archive-delete-runtime-v23z, bo package.json mial BOM, a guard robil bezposredni JSON.parse(read("package.json")).
+- V3 podmienia guard na wersje z stripBom i normalizuje zapis package.json do UTF-8 bez BOM.
+- Zakres funkcjonalny Etapu 23Z bez zmian.
+
+TESTY AUTOMATYCZNE:
+- 
+pm run verify:admin-archive-delete-runtime-v23z
+- 
+pm run verify:admin-archive-delete-runtime-v23
+- 
+pm run verify:admin-action-feedback-v24
+- 
+pm run verify:admin-audit-log-v44
+- 
+pm run check:project-memory
+- 
+pm run typecheck
+- 
+pm run build
+
+TEST RECZNY:
+- Nadal TEST RECZNY DO WYKONANIA. V3 nie potwierdza runtime.
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->

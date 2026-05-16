@@ -216,3 +216,47 @@ TEST RECZNY:
 
 Porządkowanie pamięci projektu po etapach 22-29. Etap 29 nie oznacza zamknięcia V1. Runtime audit i pełny flow sklepu pozostają do ręcznego potwierdzenia przez Damiana.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_TIMELINE_START -->
+## 2026-05-16 - Etap 22C runtime admin audit SQL/manual proof
+
+Status: przygotowano paczkę ZIP do lokalnego wdrożenia.
+
+Cel: zamienić ogólne "sprawdź audit" na konkretną procedurę runtime: lista operacji, SQL proof, guard paczki i aktualizacja Obsidiana.
+
+Manual status: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP22C_RUNTIME_ADMIN_AUDIT_TIMELINE_END -->
+
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+## 2026-05-16 - Etap 23Z
+
+Ustalono i wdrozono guard/checkliste akceptacyjna dla archiwizacji i hard delete po niestabilnych poprawkach Etapu 23. Status reczny nadal TEST RECZNY DO WYKONANIA.
+<!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
+
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->
+## 2026-05-16 - Etap 23Z V3: BOM-safe guard fix
+
+FAKT:
+- V2 przerwalo sie na erify:admin-archive-delete-runtime-v23z, bo package.json mial BOM, a guard robil bezposredni JSON.parse(read("package.json")).
+- V3 podmienia guard na wersje z stripBom i normalizuje zapis package.json do UTF-8 bez BOM.
+- Zakres funkcjonalny Etapu 23Z bez zmian.
+
+TESTY AUTOMATYCZNE:
+- 
+pm run verify:admin-archive-delete-runtime-v23z
+- 
+pm run verify:admin-archive-delete-runtime-v23
+- 
+pm run verify:admin-action-feedback-v24
+- 
+pm run verify:admin-audit-log-v44
+- 
+pm run check:project-memory
+- 
+pm run typecheck
+- 
+pm run build
+
+TEST RECZNY:
+- Nadal TEST RECZNY DO WYKONANIA. V3 nie potwierdza runtime.
+<!-- ETAP23Z_V3_BOM_GUARD_FIX_2026_05_16 -->
