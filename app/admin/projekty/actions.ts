@@ -369,9 +369,19 @@ export async function archiveProjectAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const slug = str(formData, "slug");
   const returnTo = str(formData, "returnTo");
+  const archiveRedirectPath = safeAdminProjectReturnPath(returnTo);
+
+  function redirectArchiveError(message: string): never {
+    redirect(
+      archiveRedirectPath +
+        (archiveRedirectPath.includes("?") ? "&" : "?") +
+        "status=error&archive_error=1&reason=" +
+        encodeURIComponent(message)
+    );
+  }
 
   if (!projectId) {
-    redirect("/admin/projekty?status=error&reason=missing_project_id");
+    redirectArchiveError("Brak ID projektu do archiwizacji.");
   }
 
   let admin: { ok: true; userId: string; email?: string; role: "admin" } | null = null;
@@ -382,12 +392,11 @@ export async function archiveProjectAction(formData: FormData) {
     admin = resolved.admin;
     supabase = resolved.supabase;
   } catch (error) {
-    const reason = error instanceof Error ? encodeURIComponent(error.message) : "auth_or_env_error";
-    redirect(`/admin/projekty?status=error&reason=${reason}`);
+    redirectArchiveError(error instanceof Error ? error.message : "auth_or_env_error");
   }
 
   if (!admin || !supabase) {
-    redirect("/admin/projekty?status=error&reason=auth_or_env_error");
+    redirectArchiveError("Brak admina albo klienta Supabase.");
   }
 
   const { data: project, error: projectError } = await supabase
@@ -397,25 +406,39 @@ export async function archiveProjectAction(formData: FormData) {
     .maybeSingle();
 
   if (projectError) {
-    redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(projectError.message)}`);
+    redirectArchiveError("Nie udalo sie pobrac projektu przed archiwizacja: " + projectError.message);
   }
 
   if (!project?.id) {
-    redirect("/admin/projekty?status=error&reason=Nie%20znaleziono%20projektu%20do%20archiwizacji");
-  }
-
-  if (project.status !== "archived") {
-    const { error } = await supabase
-      .from("projects")
-      .update({ status: "archived", updated_at: new Date().toISOString() })
-      .eq("id", projectId);
-
-    if (error) {
-      redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(error.message)}`);
-    }
+    redirectArchiveError("Nie znaleziono projektu do archiwizacji.");
   }
 
   const projectSlug = String(project.slug || slug || "");
+  let archivedStatus = String(project.status || "");
+
+  if (project.status !== "archived") {
+    const { data: archiveUpdateResult, error: archiveUpdateError } = await supabase
+      .from("projects")
+      .update({ status: "archived", updated_at: new Date().toISOString() })
+      .eq("id", projectId)
+      .select("id, status, updated_at")
+      .maybeSingle();
+
+    if (archiveUpdateError) {
+      redirectArchiveError("Nie udalo sie zapisac archiwizacji: " + archiveUpdateError.message);
+    }
+
+    if (!archiveUpdateResult?.id) {
+      redirectArchiveError("Archiwizacja nie zwrocila zaktualizowanego rekordu projektu.");
+    }
+
+    archivedStatus = String(archiveUpdateResult.status || "");
+    if (archivedStatus !== "archived") {
+      redirectArchiveError("Archiwizacja nie zmienila statusu projektu. Aktualny status: " + (archivedStatus || "brak"));
+    }
+  } else {
+    archivedStatus = "archived";
+  }
 
   await tryWriteAdminAuditLog({
     supabase,
@@ -431,18 +454,25 @@ export async function archiveProjectAction(formData: FormData) {
       fromStatus: String(project.status || ""),
       toStatus: "archived",
       previousStatus: String(project.status || ""),
-      newStatus: "archived"
+      newStatus: "archived",
+      archiveUpdateVerified: true,
+      archiveRedirectPath
     }
   });
 
   revalidatePath("/");
   revalidatePath("/projekty");
-  if (projectSlug) revalidatePath(`/projekty/${projectSlug}`);
+  if (projectSlug) revalidatePath("/projekty/" + projectSlug);
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
+  revalidatePath("/admin/projekty/" + projectId + "/edytuj");
 
-  const archiveRedirectPath = safeAdminProjectReturnPath(returnTo);
-  redirect(`${archiveRedirectPath}${archiveRedirectPath.includes("?") ? "&" : "?"}archived=1`);
+  redirect(
+    archiveRedirectPath +
+      (archiveRedirectPath.includes("?") ? "&" : "?") +
+      "archived=1&archive_status=" +
+      encodeURIComponent(archivedStatus)
+  );
 }
 
 export async function deleteProjectAction(formData: FormData) {

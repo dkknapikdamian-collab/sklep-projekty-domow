@@ -43,7 +43,11 @@ const actions = requireIncludes("app/admin/projekty/actions.ts", [
   "tryWriteAdminAuditLog",
   "returnTo",
   "archiveRedirectPath",
-  'redirect(`${archiveRedirectPath}${archiveRedirectPath.includes("?") ? "&" : "?"}archived=1`)',
+  "redirectArchiveError",
+  "archiveUpdateResult",
+  ".select(\"id, status, updated_at\")",
+  "archiveUpdateVerified: true",
+  "archived=1&archive_status=",
   "projectStatusBeforeDelete",
   "hardDeleteAllowedByTypedCode",
   "project_hard_delete"
@@ -186,4 +190,4 @@ for (const file of scannedFiles) {
   }
 }
 
-console.log("OK: admin buttons V19 guard passed with Etap 23 V7 archive/delete runtime repair.");
+console.log("OK: admin buttons V19 guard passed with Etap 23 V8/V9 archive runtime repair.");

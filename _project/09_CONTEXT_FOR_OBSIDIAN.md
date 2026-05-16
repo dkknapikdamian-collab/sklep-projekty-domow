@@ -118,3 +118,39 @@ TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
 <!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
 
+
+<!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
+## Etap 23 V8 - archiwizacja runtime projektu
+
+FAKT:
+- Po V7 Damian potwierdzil, ze archiwizacja nadal nie dziala runtime.
+- Wzmocniono server action archiwizacji: update zwraca zaktualizowany rekord przez select(id,status,updated_at) i sprawdza, czy status faktycznie jest archived.
+- Ekran edycji pokazuje teraz blad akcji admina przez data-admin-edit-archive-error, zamiast tylko migac ekranem.
+
+GUARDY:
+- Dodano npm run verify:admin-archive-delete-runtime-v23.
+- Guard pilnuje returnTo, archiveUpdateResult, weryfikacji statusu archived, komunikatu bledu i rewalidacji edycji.
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: kliknac Archiwizuj na edycji, sprawdzic status i /admin/audit.
+<!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
+
+<!-- ETAP23_ARCHIVE_RUNTIME_FIX_V9 -->
+## Etap 23 V9 - naprawa guarda po V8 archive runtime
+
+FAKT:
+- V8 poprawnie wzmocnil archiwizacje runtime i nowy guard przeszedl.
+- Stary guard V19 nadal oczekiwal starego jednowierszowego redirectu archive, wiec blokowal commit mimo poprawnego flow.
+- V9 dopasowuje V19 do nowego kontraktu: redirectArchiveError, archiveUpdateResult, select(id,status,updated_at), archiveUpdateVerified i archived=1&archive_status.
+
+GUARDY:
+- verify:admin-archive-delete-runtime-v23
+- verify:admin-buttons-v19
+- verify:admin-audit-log-v44
+- typecheck
+- build
+- check:project-memory
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: kliknac Archiwizuj na ekranie edycji, sprawdzic status i /admin/audit.
+<!-- ETAP23_ARCHIVE_RUNTIME_FIX_V9 -->

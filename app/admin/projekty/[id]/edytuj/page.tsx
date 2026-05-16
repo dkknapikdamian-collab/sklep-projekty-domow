@@ -17,6 +17,15 @@ function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function decodeQueryValue(value: string | string[] | undefined) {
+  const raw = firstParam(value) || "";
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 export default async function EditAdminProjectPage({ params, searchParams }: EditAdminProjectPageProps) {
   const { id } = await params;
   const query = searchParams ? await searchParams : {};
@@ -26,6 +35,8 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
 
   const saved = firstParam(query.saved) === "1";
   const archived = firstParam(query.archived) === "1";
+  const archiveError = firstParam(query.archive_error) === "1" || firstParam(query.status) === "error";
+  const archiveErrorReason = decodeQueryValue(query.reason) || "Nieznany blad akcji admina.";
   const editReturnTo = `/admin/projekty/${project.id}/edytuj`;
 
   return (
@@ -59,6 +70,13 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
         {archived && (
           <section className="admin-form-success" role="status" data-admin-edit-archive-success="true">
             Projekt zostal zarchiwizowany. Status powinien byc widoczny po odswiezeniu danych edycji.
+          </section>
+        )}
+
+        {archiveError && (
+          <section className="admin-form-error" role="alert" data-admin-edit-archive-error="true">
+            <p>Nie udalo sie wykonac akcji projektu.</p>
+            <p>{archiveErrorReason}</p>
           </section>
         )}
 
