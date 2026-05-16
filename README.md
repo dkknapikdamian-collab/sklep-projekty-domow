@@ -70,6 +70,36 @@ oraz w katalogu `/projekty`.
 Jeżeli dodasz projekt bez zdjęć, strona pokaże eleganckie placeholdery w docelowym układzie.  
 Dzięki temu można testować dane bez wrzucania obrazów.
 
+## Etap 29 — pre-release checklist V1
+
+Etap 29 jest bramką pre-release, a nie wdrożeniem płatności, faktur, panelu klienta ani automatycznej wysyłki.
+
+Cel: sprawdzić, czy V1 może być użyte do testowej sprzedaży realnego projektu bez udawania automatyzacji, której jeszcze nie ma.
+
+Checklist znajduje się w:
+
+```txt
+_project/16_PRODUCTION_READINESS_CHECKLIST.md
+```
+
+Guard:
+
+```powershell
+npm run verify:production-readiness-v52
+```
+
+Pełna weryfikacja:
+
+```powershell
+npm run verify
+```
+
+Minimalny runtime test ręczny po etapach 22-28:
+
+```txt
+realny projekt active -> karta projektu -> koszyk -> checkout/zamówienie -> admin zamówień -> audit log -> checklist -> Obsidian
+```
+
 ## Uruchomienie
 
 ```powershell
