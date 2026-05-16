@@ -40,15 +40,34 @@ Tylko jeżeli checklist nie ma statusu BLOKADA i test ręczny Damiana jest zapis
 | Admin zamówień działa | DO POTWIERDZENIA | /admin/zamowienia i szczegół zamówienia | Workflow operacyjny V1. |
 | Admin audit działa | DO POTWIERDZENIA | /admin/audit po realnych operacjach | Guard statyczny nie wystarczy. |
 | Audit zapisuje realne operacje admina | DO POTWIERDZENIA | Realne wpisy admin_audit_log | Krytyczne po etapach 22-28. |
-| Typecheck przechodzi | DO POTWIERDZENIA | npm run typecheck | Wynik wpisać po lokalnym uruchomieniu. |
-| Build przechodzi | DO POTWIERDZENIA | npm run build | Wynik wpisać po lokalnym uruchomieniu. |
+| Typecheck przechodzi | OK | Damian wkleił wynik `npm run build`: `Linting and checking validity of types` oraz build przeszedł | To potwierdza etap walidacji typów w buildzie; osobny `npm run typecheck` nadal warto odpalić przy pełnym verify. |
+| Build przechodzi | OK | Damian wkleił wynik `npm run build`: `Compiled successfully`, `Generating static pages (9/9)`, `Finalizing page optimization` | Wystąpiły tylko warningi autoprefixer `start/end value has mixed support`; nie blokują buildu. |
 | Guardy przechodzą | DO POTWIERDZENIA | npm run verify | Wynik wpisać po lokalnym uruchomieniu. |
 | Ręczny test Damiana zapisany | BLOKADA | _project/11_USER_CONFIRMED_TESTS.md | Brak potwierdzenia blokuje pełne zamknięcie V1. |
-| Obsidian zaktualizowany | OK | Utworzona notatka Etapu 29 w repo Obsidiana | Dotyczy planu checklisty, nie runtime wyniku. |
+| Obsidian zaktualizowany | OK | Utworzona notatka Etapu 29 w repo Obsidiana i dopisany wynik builda | Dotyczy planu checklisty i wyniku builda, nie runtime wyniku. |
 | Brak sprzecznych tekstów o płatnościach | DO POTWIERDZENIA | Guard i ręczny przegląd tekstów publicznych | Nie obiecywać Stripe/PayU ani ręcznych płatności, jeśli nie są aktualnym zakresem. |
 | Brak fikcyjnych obietnic automatycznej wysyłki | DO POTWIERDZENIA | Guard i ręczny przegląd tekstów publicznych | Automatyczna wysyłka jest V2/później bez decyzji. |
 | Brak obietnicy natychmiastowego dostępu do plików | DO POTWIERDZENIA | Publiczne komunikaty i checkout | V1 może mieć ręczny workflow obsługi zamówienia. |
 | Brak obietnicy faktury automatycznej | DO POTWIERDZENIA | Publiczne komunikaty i checkout | Faktury poza zakresem V1 bez decyzji. |
+
+## Wynik builda od Damiana - 2026-05-16
+
+Status: TEST AUTOMATYCZNY / GUARD - build PASS na lokalnym komputerze Damiana.
+
+Wynik:
+- `Compiled successfully in 3.3s`,
+- `Linting and checking validity of types`,
+- `Generating static pages (9/9)`,
+- `Finalizing page optimization`,
+- route manifest wygenerowany.
+
+Ostrzeżenia:
+- `app/admin-v8.css`: autoprefixer sugeruje `flex-start` zamiast `start`,
+- `app/globals.css`: autoprefixer sugeruje `flex-end` zamiast `end`.
+
+Ocena:
+- Warningi nie blokują builda.
+- Do osobnego małego cleanupu CSS można poprawić `start/end` na `flex-start/flex-end`.
 
 ## Najkrótszy test praktyczny
 
