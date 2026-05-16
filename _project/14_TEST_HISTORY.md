@@ -768,3 +768,4 @@ RYZYKO:
 - Ten etap celowo nie zmienia funkcji checkoutu. Naprawia kodowanie, guard i standard paczek.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
 
+

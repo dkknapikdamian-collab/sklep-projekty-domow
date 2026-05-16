@@ -567,3 +567,4 @@ W~iosek:
 - Realna prewencja to standard generowania paczek: ASCII-only APPLY + Base64 UTF-8 payload + brak ryzykownej interpolacji PowerShell.
 <!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_END -->
 
+
