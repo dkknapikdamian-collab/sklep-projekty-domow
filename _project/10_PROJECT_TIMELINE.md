@@ -81,3 +81,64 @@ Od tego momentu kazdy etap ma odhaczac: kod, guardy, test reczny, potwierdzenie 
 - Przygotowano ręczną checklistę testu runtime /admin/audit.
 - Etap pozostaje niezamknięty manualnie do potwierdzenia Damiana.
 <!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->
+
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_START -->
+## Etap 23 - poprawka archiwizacji i trwalego usuwania projektu
+
+FAKT:
+- Zgloszono runtime regresje: nie dalo sie usunac projektu active, a archiwizacja nie dawala jasnego efektu.
+- Hard delete active jest teraz dozwolony po wpisaniu kodu projektu i dodatkowym confirm.
+- Ekran edycji projektu ma bezposredni przycisk archiwizacji w strefie usuwania.
+
+TEST RECZNY:
+- Status: TEST RECZNY DO WYKONANIA.
+- Sprawdzic: archiwizacja z listy, archiwizacja z edycji, hard delete projektu active po kodzie, wpis w /admin/audit.
+
+RYZYKO:
+- Operacja hard delete active jest destrukcyjna. Bezpieczniki: kod projektu, confirm, audit log.
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_END -->
+
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V4_START -->
+## Etap 23 V4 - repair archiwizacji i trwalego usuwania
+
+FAKT:
+- Naprawiono workflow admina po zgloszeniu Damiana: archiwizacja nie dawala czytelnego efektu, a hard delete byl blokowany dla active.
+- Hard delete active jest dozwolony po wpisaniu kodu projektu i confirmie.
+- Ekran edycji ma teraz archiwizacje w strefie usuwania.
+- Guardy pilnuja nowego kontraktu: returnTo dla archiwizacji, kod projektu dla hard delete, audit log.
+
+TEST RECZNY:
+- Status: TEST RECZNY DO WYKONANIA.
+- Sprawdzic: archiwizacja z edycji, archiwizacja z listy, hard delete active po kodzie, wpisy /admin/audit.
+
+RYZYKO:
+- Hard delete active jest destrukcyjny. Bezpieczniki: wpisanie kodu, confirm, audit log.
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V4_END -->
+
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V5 -->
+## Etap 23 V5 — repair archiwizacji i trwałego usuwania projektu
+
+FAKT:
+- Naprawiono przeplyw admina: archiwizacja dostaje returnTo i moze wracac na ekran edycji.
+- Trwale usuniecie nie jest juz blokowane samym statusem active; wymaga kodu projektu i potwierdzenia.
+- Active project nadal pokazuje ostrzezenie i confirm, ale nie zamienia sie w martwy guzik.
+
+TESTY:
+- Automatyczne checki do uruchomienia przez APPLY V5: verify:admin-buttons-v19, verify:admin-audit-log-v44, typecheck, build, check:project-memory.
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: archiwizacja z edycji, hard delete po wpisaniu kodu, wpisy w /admin/audit.
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V5 -->
+
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
+## Etap 23 V7 - admin archive/delete runtime repair
+
+FAKT:
+- Naprawiono workflow archiwizacji i trwałego usuwania projektu w adminie po regresji zgłoszonej przez Damiana.
+- Usuniecie trwałe nie jest juz blokowane samym statusem active; nadal wymaga wpisania kodu projektu i confirmu.
+- Archiwizacja jest dostepna bezposrednio na ekranie edycji i moze wracac przez returnTo.
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
+<!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
+

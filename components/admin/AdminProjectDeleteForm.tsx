@@ -19,6 +19,7 @@ type AdminProjectArchiveFormProps = {
   projectName?: string;
   projectSlug?: string;
   projectStatus?: string;
+  returnTo?: string;
 };
 
 function ArchiveProjectSubmitButton({ isArchived }: { isArchived: boolean }) {
@@ -64,7 +65,8 @@ export function AdminProjectArchiveForm({
   projectCode,
   projectName,
   projectSlug,
-  projectStatus
+  projectStatus,
+  returnTo
 }: AdminProjectArchiveFormProps) {
   const isArchived = projectStatus === "archived";
   const projectLabel = [projectCode, projectName].filter(Boolean).join(" — ") || "ten projekt";
@@ -87,6 +89,7 @@ export function AdminProjectArchiveForm({
     >
       <input type="hidden" name="projectId" value={projectId} />
       <input type="hidden" name="slug" value={projectSlug || ""} />
+      <input type="hidden" name="returnTo" value={returnTo || ""} />
       <ArchiveProjectSubmitButton isArchived={isArchived} />
     </form>
   );
@@ -96,7 +99,7 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, pr
   const expectedProjectCode = String(projectCode || "").trim().toUpperCase();
   const projectLabel = [projectCode, projectName].filter(Boolean).join(" — ") || "ten projekt";
   const isActiveProject = projectStatus === "active";
-  const canAttemptPhysicalDelete = projectStatus === "archived" || projectStatus === "draft";
+  const canAttemptPhysicalDelete = Boolean(expectedProjectCode);
   const [typedConfirmCode, setTypedConfirmCode] = useState("");
 
   const isCodeConfirmed = useMemo(() => {
@@ -111,14 +114,12 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, pr
         <p>
           Domyślnie używaj archiwizacji. Trwałe usunięcie kasuje projekt i powiązane dane z bazy. System spróbuje też usunąć pliki ze Storage.
         </p>
-        {!canAttemptPhysicalDelete && (
-          <p className="admin-delete-active-warning" data-admin-delete-active-warning="true">
-            Najpierw zarchiwizuj projekt albo ustaw draft. Delete jest zablokowany dla statusu {projectStatus || "nieznanego"}.
-          </p>
-        )}
+        <p className="admin-delete-active-warning" data-admin-delete-active-warning="true">
+          Usunięcie działa także dla statusu active po wpisaniu kodu projektu, ale to operacja awaryjna i nieodwracalna.
+        </p>
         {isActiveProject && (
           <p className="admin-delete-active-warning" data-admin-delete-active-first-warning="true">
-            Projekt active może być publiczny. Nie usuwaj go trwale bez archiwizacji albo draftu.
+            Projekt active może być publiczny. Najbezpieczniej najpierw go zarchiwizować, a dopiero potem usuwać trwale.
           </p>
         )}
         <p>
@@ -128,9 +129,9 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, pr
           action={deleteProjectAction}
           data-admin-action="project-delete-form"
           onSubmit={(event) => {
-            if (!canAttemptPhysicalDelete) {
+            if (!expectedProjectCode) {
               event.preventDefault();
-              window.alert("Najpierw zarchiwizuj projekt albo ustaw draft. Dopiero potem można użyć awaryjnego usunięcia.");
+              window.alert("Brak kodu projektu. Bez kodu nie można wykonać trwałego usunięcia.");
               return;
             }
 
@@ -140,7 +141,8 @@ export function AdminProjectDeleteForm({ projectId, projectCode, projectName, pr
               return;
             }
 
-            if (!window.confirm("Awaryjnie usunąć trwale projekt " + projectLabel + "? Tej operacji nie cofniemy.")) {
+            const activeSuffix = isActiveProject ? " Projekt ma status active." : "";
+            if (!window.confirm("Awaryjnie usunąć trwale projekt " + projectLabel + "? Tej operacji nie cofniemy." + activeSuffix)) {
               event.preventDefault();
             }
           }}

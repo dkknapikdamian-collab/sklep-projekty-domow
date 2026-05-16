@@ -1,8 +1,8 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { getAdminProjectById } from "@/lib/admin/projects-admin";
-import { AdminProjectDeleteForm } from "@/components/admin/AdminProjectDeleteForm";
+import { AdminProjectArchiveForm, AdminProjectDeleteForm } from "@/components/admin/AdminProjectDeleteForm";
 import { AdminProjectEditForm } from "@/components/admin/AdminProjectEditForm";
 import { ArrowLeft } from "lucide-react";
 
@@ -25,6 +25,8 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
   if (!project) notFound();
 
   const saved = firstParam(query.saved) === "1";
+  const archived = firstParam(query.archived) === "1";
+  const editReturnTo = `/admin/projekty/${project.id}/edytuj`;
 
   return (
     <>
@@ -54,15 +56,36 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
           </section>
         )}
 
+        {archived && (
+          <section className="admin-form-success" role="status" data-admin-edit-archive-success="true">
+            Projekt zostal zarchiwizowany. Status powinien byc widoczny po odswiezeniu danych edycji.
+          </section>
+        )}
+
         <AdminProjectEditForm project={project} />
 
         <section className="admin-form-section admin-danger-zone">
           <h2>Strefa usuwania</h2>
           <p>Usuniecie projektu usuwa rekord projektu i powiazane dane z bazy. System sprobuje tez usunac powiazane pliki ze Storage.</p>
-          <AdminProjectDeleteForm projectId={project.id} projectCode={project.code} projectName={project.name} projectStatus={project.status} className="admin-danger-zone-form" />
+          <div className="admin-edit-danger-actions" data-admin-edit-danger-actions="true">
+            <AdminProjectArchiveForm
+              projectId={project.id}
+              projectCode={project.code}
+              projectName={project.name}
+              projectSlug={project.slug}
+              projectStatus={project.status}
+              returnTo={editReturnTo}
+            />
+            <AdminProjectDeleteForm
+              projectId={project.id}
+              projectCode={project.code}
+              projectName={project.name}
+              projectStatus={project.status}
+              className="admin-danger-zone-form"
+            />
+          </div>
         </section>
       </main>
     </>
   );
 }
-

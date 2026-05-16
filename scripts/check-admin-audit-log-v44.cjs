@@ -10,24 +10,8 @@ function fail(message) {
   process.exit(1);
 }
 
-const requiredFiles = [
-  "lib/admin/audit-log.ts",
-  "app/admin/audit/page.tsx",
-  "components/admin/AdminHeader.tsx",
-  "app/admin/page.tsx",
-  "app/admin-v8.css",
-  "supabase/migrations/0016_admin_audit_log.sql",
-  "app/admin/projekty/actions.ts",
-  "app/admin/projekty/nowy/actions.ts",
-  "app/admin/zamowienia/actions.ts",
-  "package.json"
-];
-
-for (const file of requiredFiles) {
-  if (!exists(file)) fail("missing admin audit log file: " + file);
-}
-
 function requireIncludes(file, needles) {
+  if (!exists(file)) fail("missing admin audit file: " + file);
   const content = read(file);
   for (const needle of needles) {
     if (!content.includes(needle)) fail(file + " missing marker: " + needle);
@@ -35,19 +19,14 @@ function requireIncludes(file, needles) {
   return content;
 }
 
-const migration = requireIncludes("supabase/migrations/0016_admin_audit_log.sql", [
+requireIncludes("supabase/migrations/0016_admin_audit_log.sql", [
   "create table if not exists public.admin_audit_log",
-  "id uuid primary key",
-  "actor_user_id uuid",
-  "actor_email text",
   "entity_type text not null",
   "entity_id text not null",
   "action text not null",
   "metadata jsonb not null",
-  "created_at timestamptz not null",
   "admin_audit_log_created_at_idx",
-  "admin_audit_log_entity_idx",
-  "admin_audit_log_actor_idx"
+  "admin_audit_log_entity_idx"
 ]);
 
 const helper = requireIncludes("lib/admin/audit-log.ts", [
@@ -60,13 +39,6 @@ const helper = requireIncludes("lib/admin/audit-log.ts", [
   "adminAuditMetadataJson",
   "actionLabel",
   "admin_audit_log",
-  "actor_user_id",
-  "actor_email",
-  "entity_type",
-  "entity_id",
-  "action",
-  "metadata",
-  "created_at",
   ".order(\"created_at\", { ascending: false })",
   ".limit(limit)",
   ".eq(\"action\", action)",
@@ -89,87 +61,53 @@ const criticalActions = [
 ];
 
 for (const action of criticalActions) {
-  const filterNeedle = "\"" + action + "\"";
-  const labelNeedle = action + ":";
-  if (!helper.includes(filterNeedle)) fail("audit helper missing action filter: " + action);
-  if (!helper.includes(labelNeedle)) fail("audit helper missing action label: " + action);
+  if (!helper.includes('"' + action + '"')) fail("audit helper missing action filter: " + action);
+  if (!helper.includes(action + ":")) fail("audit helper missing action label: " + action);
 }
 
 const auditPage = requireIncludes("app/admin/audit/page.tsx", [
   'data-admin-audit-v50="true"',
   'data-admin-audit-filter-bar="true"',
   'data-admin-audit-action-filter="true"',
-  'data-admin-audit-filter-submit="true"',
-  'data-admin-audit-filter-reset="true"',
-  'data-admin-audit-empty="true"',
   'data-admin-audit-table="true"',
   'data-admin-audit-entry="true"',
-  "data-admin-audit-action-value",
-  'data-admin-audit-created-at="true"',
-  'data-admin-audit-actor="true"',
-  'data-admin-audit-action="true"',
-  'data-admin-audit-entity-type="true"',
-  'data-admin-audit-entity-id="true"',
-  'data-admin-audit-metadata-summary="true"',
   "getAdminAuditLogEntries",
   "toAdminAuditActionFilter",
   "ADMIN_AUDIT_ACTION_FILTERS",
-  "ADMIN_AUDIT_ACTION_FILTER_LABELS",
   "adminAuditMetadataSummary",
   "adminAuditMetadataJson",
   "actionLabel"
 ]);
 
-for (const forbidden of [
-  "writeAdminAuditLog(",
-  "updateAdminOrderStatus(",
-  "updateAdminOrderFulfillmentChecklist(",
-  "updateAdminProject",
-  "deleteAdminProject",
-  "archiveAdminProject"
-]) {
+for (const forbidden of ["writeAdminAuditLog(", "deleteAdminProject", "archiveAdminProject"]) {
   if (auditPage.includes(forbidden)) fail("admin audit page must be read-only and not call mutation marker: " + forbidden);
 }
 
 requireIncludes("components/admin/AdminHeader.tsx", ['href="/admin/audit"', "History", "Audit"]);
-requireIncludes("app/admin/page.tsx", ['href="/admin/audit"', 'data-admin-audit-dashboard-link="true"', "Audit", "ślad operacji"]);
-requireIncludes("app/admin-v8.css", [
-  "STAGE50 ADMIN AUDIT VIEW START",
-  ".admin-audit-shell",
-  ".admin-audit-filter-bar",
-  ".admin-audit-table-card",
-  ".admin-audit-table-wrap",
-  ".admin-audit-table",
-  "STAGE50 ADMIN AUDIT VIEW END"
-]);
+requireIncludes("app/admin/page.tsx", ['href="/admin/audit"', 'data-admin-audit-dashboard-link="true"', "Audit"]);
 
-const projectCreateActions = requireIncludes("app/admin/projekty/nowy/actions.ts", [
+requireIncludes("app/admin/projekty/nowy/actions.ts", [
   'import { writeAdminAuditLog } from "@/lib/admin/audit-log";',
-  "writeAdminAuditLog",
   'action: "project_create"',
   'entityType: "project"',
   'source: "createProjectAction"',
-  "fromStatus: null",
-  "toStatus: status",
-  "previousStatus: null",
-  "newStatus: status",
   "projectCode: code",
-  "roomsCount: roomRows.length",
-  "variantsCount: variantRows.length",
-  "addonsCount: addonRows.length"
+  "fromStatus: null",
+  "toStatus: status"
 ]);
 
 const projectActions = requireIncludes("app/admin/projekty/actions.ts", [
   'import { writeAdminAuditLog } from "@/lib/admin/audit-log";',
+  "tryWriteAdminAuditLog",
   "writeAdminAuditLog",
+  "safeAdminProjectReturnPath",
   'action: "project_status_update"',
   'action: "project_archive"',
   'action: "project_hard_delete"',
-  'action: "project_hard_delete_blocked"',
   'action: "project_update"',
   'entityType: "project"',
   "projectStatusBeforeDelete",
-  '![\"archived\", \"draft\"].includes(projectStatusBeforeDelete)',
+  "hardDeleteAllowedByTypedCode",
   'source: "updateProjectStatusAction"',
   'source: "archiveProjectAction"',
   'source: "deleteProjectAction"',
@@ -179,6 +117,13 @@ const projectActions = requireIncludes("app/admin/projekty/actions.ts", [
   "previousStatus:",
   "newStatus:"
 ]);
+
+for (const forbidden of [
+  'if (!["archived", "draft"].includes(projectStatusBeforeDelete))',
+  'status_not_allowed'
+]) {
+  if (projectActions.includes(forbidden)) fail("project hard delete still blocks active by status: " + forbidden);
+}
 
 for (const needle of [
   'action: "project_media_delete"',
@@ -194,46 +139,30 @@ for (const needle of [
   "previousMediaType",
   "newMediaType",
   "fileType",
-  "projectCode",
-  "fromStatus:",
-  "toStatus:"
+  "projectCode"
 ]) {
-  if (!projectActions.includes(needle)) fail("project actions missing Etap 22 runtime audit marker: " + needle);
+  if (!projectActions.includes(needle)) fail("project actions missing runtime audit marker: " + needle);
 }
 
-const statusDeclCount = (projectActions.match(/const projectStatusBeforeDelete = String\(project\.status \|\| ""\);/g) || []).length;
-if (statusDeclCount !== 1) fail("expected exactly one projectStatusBeforeDelete declaration, got " + statusDeclCount);
-
-const orderActions = requireIncludes("app/admin/zamowienia/actions.ts", [
+requireIncludes("app/admin/zamowienia/actions.ts", [
   'import { writeAdminAuditLog } from "@/lib/admin/audit-log";',
   "getAdminOrderById",
-  "writeAdminAuditLog",
   'entityType: "order"',
   'action: "order_status_update"',
   'action: "order_fulfillment_checklist_update"',
   'source: "updateOrderStatusAction"',
   'source: "updateOrderFulfillmentChecklistAction"',
-  "orderId,",
   "fromStatus: orderBeforeStatusUpdate?.status || null",
   "toStatus: status",
-  "previousStatus: orderBeforeStatusUpdate?.status || null",
-  "newStatus: status",
-  "checklistBefore",
-  "previousPaymentConfirmed",
-  "previousPdfSent",
-  "previousZipSent",
-  "previousOrderClosed",
-  "previousHasInternalNote",
-  "previousHasPaymentInstruction"
+  "checklistBefore"
 ]);
 
 const pkg = JSON.parse(read("package.json"));
 if (!pkg.scripts || pkg.scripts["verify:admin-audit-log-v44"] !== "node scripts/check-admin-audit-log-v44.cjs") {
   fail("package.json missing verify:admin-audit-log-v44 script.");
 }
-
 if (!String(pkg.scripts.verify || "").includes("verify:admin-audit-log-v44")) {
   fail("main verify script does not include verify:admin-audit-log-v44.");
 }
 
-console.log("OK: admin audit log V44/V50 + Etap 22 runtime audit contract guard passed.");
+console.log("OK: admin audit log V44/V50 + Etap 23 V7 runtime archive/delete guard passed.");

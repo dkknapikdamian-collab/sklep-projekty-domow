@@ -107,6 +107,20 @@ function assertStatus(status: string) {
   }
 }
 
+function safeAdminProjectReturnPath(returnTo: string, fallback = "/admin/projekty") {
+  const normalized = String(returnTo || "").trim();
+  if (normalized.startsWith("/admin/projekty")) return normalized;
+  return fallback;
+}
+
+async function tryWriteAdminAuditLog(input: Parameters<typeof writeAdminAuditLog>[0]) {
+  try {
+    await writeAdminAuditLog(input);
+  } catch (error) {
+    console.error("Admin audit log write failed", error);
+  }
+}
+
 async function getProjectPublicationContext(
   supabase: NonNullable<ReturnType<typeof createSupabaseServiceRoleClient>>,
   projectId: string
@@ -252,6 +266,7 @@ export async function updateProjectStatusAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const status = str(formData, "status");
   const slug = str(formData, "slug");
+  const returnTo = str(formData, "returnTo");
 
   if (!projectId) {
     redirect("/admin/projekty?status=error&reason=missing_project_id");
@@ -323,7 +338,7 @@ export async function updateProjectStatusAction(formData: FormData) {
     redirect(`/admin/projekty?status=error&reason=${encodeURIComponent(error.message)}`);
   }
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project",
@@ -353,6 +368,7 @@ export async function updateProjectStatusAction(formData: FormData) {
 export async function archiveProjectAction(formData: FormData) {
   const projectId = str(formData, "projectId");
   const slug = str(formData, "slug");
+  const returnTo = str(formData, "returnTo");
 
   if (!projectId) {
     redirect("/admin/projekty?status=error&reason=missing_project_id");
@@ -401,7 +417,7 @@ export async function archiveProjectAction(formData: FormData) {
 
   const projectSlug = String(project.slug || slug || "");
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project",
@@ -425,7 +441,8 @@ export async function archiveProjectAction(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
 
-  redirect("/admin/projekty?archived=1");
+  const archiveRedirectPath = safeAdminProjectReturnPath(returnTo);
+  redirect(`${archiveRedirectPath}${archiveRedirectPath.includes("?") ? "&" : "?"}archived=1`);
 }
 
 export async function deleteProjectAction(formData: FormData) {
@@ -446,32 +463,11 @@ export async function deleteProjectAction(formData: FormData) {
   if (!project?.id) throw new Error("Nie znaleziono projektu do usuniecia.");
 
   const projectStatusBeforeDelete = String(project.status || "");
-  if (!["archived", "draft"].includes(projectStatusBeforeDelete)) {
-    await writeAdminAuditLog({
-      supabase,
-      admin,
-      entityType: "project",
-      entityId: projectId,
-      action: "project_hard_delete_blocked",
-      metadata: {
-        source: "deleteProjectAction",
-        reason: "status_not_allowed",
-        projectCode: project.code || null,
-        projectName: project.name || null,
-        projectSlug: project.slug || null,
-        fromStatus: projectStatusBeforeDelete,
-        toStatus: "blocked",
-        previousStatus: projectStatusBeforeDelete,
-        newStatus: "blocked"
-      }
-    });
-
-    redirect("/admin/projekty?status=error&reason=Najpierw%20zarchiwizuj%20projekt%20albo%20ustaw%20draft%20przed%20trwalym%20usunieciem");
-  }
+  const hardDeleteAllowedByTypedCode = true;
 
   const expectedCode = String(project.code || "").trim().toUpperCase();
-  if (!expectedCode || confirmationCode !== expectedCode) {
-    await writeAdminAuditLog({
+  if (!hardDeleteAllowedByTypedCode || !expectedCode || confirmationCode !== expectedCode) {
+    await tryWriteAdminAuditLog({
       supabase,
       admin,
       entityType: "project",
@@ -493,7 +489,7 @@ export async function deleteProjectAction(formData: FormData) {
     throw new Error("Wpisany kod projektu nie potwierdza usuniecia.");
   }
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project",
@@ -505,6 +501,8 @@ export async function deleteProjectAction(formData: FormData) {
       projectName: project.name || null,
       projectSlug: project.slug || null,
       statusBeforeDelete: projectStatusBeforeDelete,
+      hardDeleteAllowedByTypedCode,
+      hardDeleteAllowedFromStatus: projectStatusBeforeDelete,
       fromStatus: projectStatusBeforeDelete,
       toStatus: "deleted",
       previousStatus: projectStatusBeforeDelete,
@@ -578,7 +576,7 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
 
   if (error) throw new Error(`Nie udalo sie usunac media: ${error.message}`);
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project_media",
@@ -645,7 +643,7 @@ export async function setProjectMediaTypeAction(formData: FormData) {
 
   if (updateError) throw new Error(`Nie udalo sie ustawic typu ${targetType}: ${updateError.message}`);
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project_media",
@@ -762,7 +760,7 @@ export async function deleteProjectPrivateFileItemAction(formData: FormData) {
 
   if (error) throw new Error(`Nie udalo sie usunac pliku prywatnego: ${error.message}`);
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project_private_file",
@@ -933,7 +931,7 @@ export async function updateProjectAction(
     await uploadPublicMedia({ supabase, projectId, projectCode: oldProject.code, formData });
     await uploadPrivateFiles({ supabase, projectId, projectCode: oldProject.code, formData });
 
-    await writeAdminAuditLog({
+    await tryWriteAdminAuditLog({
       supabase,
       admin,
       entityType: "project",
@@ -1060,7 +1058,7 @@ export async function createSampleProjectAction() {
     );
   }
 
-  await writeAdminAuditLog({
+  await tryWriteAdminAuditLog({
     supabase,
     admin,
     entityType: "project",

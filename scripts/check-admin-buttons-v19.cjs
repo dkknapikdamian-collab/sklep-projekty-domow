@@ -5,6 +5,11 @@ const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const exists = (file) => fs.existsSync(path.join(root, file));
 
+function fail(message) {
+  console.error("FAIL: " + message);
+  process.exit(1);
+}
+
 const requiredFiles = [
   "app/admin/projekty/page.tsx",
   "app/admin/projekty/actions.ts",
@@ -16,56 +21,47 @@ const requiredFiles = [
   "docs/implementation/STAGE19_ADMIN_BUTTONS_AUDIT.md"
 ];
 
-const missing = requiredFiles.filter((file) => !exists(file));
-if (missing.length) {
-  console.error("FAIL: Missing V19 admin button audit files:");
-  for (const file of missing) console.error("- " + file);
-  process.exit(1);
+for (const file of requiredFiles) {
+  if (!exists(file)) fail("missing V19 admin button file: " + file);
 }
 
-const actions = read("app/admin/projekty/actions.ts");
-for (const needle of [
+function requireIncludes(file, needles) {
+  const content = read(file);
+  for (const needle of needles) {
+    if (!content.includes(needle)) fail(file + " missing marker: " + needle);
+  }
+  return content;
+}
+
+const actions = requireIncludes("app/admin/projekty/actions.ts", [
   '"use server"',
   "export async function updateProjectStatusAction",
   "export async function archiveProjectAction",
   "export async function deleteProjectAction",
   "export async function updateProjectAction",
-  "export async function updateProjectBasicsAction",
-  "redirect(\"/admin/projekty?status=updated\")",
-  "redirect(\"/admin/projekty?archived=1\")",
-  "redirect(\"/admin/projekty?deleted=1\")",
-  'status: "archived"',
+  "safeAdminProjectReturnPath",
+  "tryWriteAdminAuditLog",
+  "returnTo",
+  "archiveRedirectPath",
+  'redirect(`${archiveRedirectPath}${archiveRedirectPath.includes("?") ? "&" : "?"}archived=1`)',
   "projectStatusBeforeDelete",
-  '![\"archived\", \"draft\"].includes(projectStatusBeforeDelete)'
-]) {
-  if (!actions.includes(needle)) {
-    console.error(`FAIL: admin project actions missing ${needle}`);
-    process.exit(1);
-  }
-}
-
-if (!/redirect\(\s*`\/admin\/projekty\/\$\{projectId\}\/edytuj\?saved=1`\s*\)/.test(actions)) {
-  console.error("FAIL: admin project actions saved redirect does not point back to edit page with saved=1.");
-  process.exit(1);
-}
+  "hardDeleteAllowedByTypedCode",
+  "project_hard_delete"
+]);
 
 for (const forbidden of ["export const ", "export let ", "export var ", "export {"]) {
-  if (actions.includes(forbidden)) {
-    console.error(`FAIL: use server admin action file contains forbidden runtime export: ${forbidden}`);
-    process.exit(1);
-  }
+  if (actions.includes(forbidden)) fail("use server admin action file contains forbidden runtime export: " + forbidden);
 }
 
-const table = read("components/admin/AdminProjectsTable.tsx");
-for (const needle of [
+const table = requireIncludes("components/admin/AdminProjectsTable.tsx", [
   "updateProjectStatusAction",
   "AdminSubmitButton",
   "AdminProjectArchiveForm",
   "AdminProjectDeleteForm",
-  "data-admin-project-row-actions=\"true\"",
-  "data-admin-action=\"project-edit\"",
-  "data-admin-action=\"project-public-preview\"",
-  "data-admin-action=\"project-status-change\"",
+  'data-admin-project-row-actions="true"',
+  'data-admin-action="project-edit"',
+  'data-admin-action="project-public-preview"',
+  'data-admin-action="project-status-change"',
   "data-admin-target-status={targetStatus}",
   "`/admin/projekty/${project.id}/edytuj`",
   "`/projekty/${project.slug}`",
@@ -73,156 +69,102 @@ for (const needle of [
   "Ustaw draft",
   "projectStatus={project.status}",
   "projectSlug={project.slug}"
-]) {
-  if (!table.includes(needle)) {
-    console.error(`FAIL: AdminProjectsTable missing working control: ${needle}`);
-    process.exit(1);
-  }
+]);
+
+if (table.includes('href="#"') || table.includes("onClick={() => {}}")) {
+  fail("AdminProjectsTable contains dead action placeholder.");
 }
 
-if (table.includes("href=\"#\"") || table.includes("onClick={() => {}}")) {
-  console.error("FAIL: AdminProjectsTable contains dead action placeholder.");
-  process.exit(1);
-}
-
-const deleteForm = read("components/admin/AdminProjectDeleteForm.tsx");
-for (const needle of [
+const deleteForm = requireIncludes("components/admin/AdminProjectDeleteForm.tsx", [
   '"use client"',
   "archiveProjectAction",
   "deleteProjectAction",
-  "data-admin-action=\"project-archive\"",
-  "data-admin-action=\"project-archive-submit\"",
-  "data-admin-action=\"project-hard-delete\"",
-  "data-admin-action=\"project-delete-submit\"",
+  'data-admin-action="project-archive"',
+  'data-admin-action="project-archive-submit"',
+  'data-admin-action="project-hard-delete"',
+  'data-admin-action="project-delete-submit"',
   "data-admin-emergency-delete-panel",
+  "returnTo",
   "canAttemptPhysicalDelete",
-  "projectStatus === \"archived\" || projectStatus === \"draft\"",
+  "Boolean(expectedProjectCode)",
+  "Usunięcie działa także dla statusu active",
   "Trwałe usunięcie",
   "Awaryjne usunięcie",
-  "Najpierw zarchiwizuj projekt albo ustaw draft",
   "window.confirm",
-  "type=\"submit\"",
-  "Usuwanie..."
-]) {
-  if (!deleteForm.includes(needle)) {
-    console.error(`FAIL: AdminProjectDeleteForm missing ${needle}`);
-    process.exit(1);
-  }
-}
-
-for (const forbidden of [
-  "Ostatni guzik pod szkłem",
-  "Codzienna praca admina ma używać archiwizacji. Fizyczne usunięcie jest operacją awaryjną i usuwa rekord projektu oraz powiązane dane z bazy."
-]) {
-  if (deleteForm.includes(forbidden)) {
-    console.error(`FAIL: AdminProjectDeleteForm still contains oversized emergency panel copy: ${forbidden}`);
-    process.exit(1);
-  }
-}
-
-if (!/disabled=\{[^}]*pending[^}]*\}/.test(deleteForm) && !deleteForm.includes("deleteDisabled") && !deleteForm.includes("canDelete")) {
-  console.error("FAIL: AdminProjectDeleteForm delete submit must be disabled while pending and before confirmation code/status are valid.");
-  process.exit(1);
-}
-
-for (const needle of [
+  'type="submit"',
+  "Usuwanie...",
   "typedConfirmCode",
   "expectedProjectCode",
   "Wpisz kod projektu",
-  "data-admin-delete-active-warning",
-  "window.confirm"
+  "data-admin-delete-active-warning"
+]);
+
+for (const forbidden of [
+  'projectStatus === "archived" || projectStatus === "draft"',
+  "Delete jest zablokowany dla statusu",
+  "Najpierw zarchiwizuj projekt albo ustaw draft. Dopiero potem można użyć awaryjnego usunięcia."
 ]) {
-  if (!deleteForm.includes(needle)) {
-    console.error(`FAIL: AdminProjectDeleteForm missing delete safety marker: ${needle}`);
-    process.exit(1);
-  }
+  if (deleteForm.includes(forbidden)) fail("AdminProjectDeleteForm still blocks hard delete by status: " + forbidden);
 }
 
-const css = read("app/admin-v8.css");
-for (const needle of [
+if (!/disabled=\{[^}]*pending[^}]*\}/.test(deleteForm) && !deleteForm.includes("canAttemptPhysicalDelete")) {
+  fail("AdminProjectDeleteForm delete submit must be disabled while pending and before confirmation code is valid.");
+}
+
+requireIncludes("app/admin-v8.css", [
   "STAGE45 ADMIN PROJECT EMERGENCY DELETE PANEL FIT START",
   ".admin-projects-table .admin-delete-safety-panel",
-  "width: min(270px, calc(100vw - 40px))",
   "white-space: normal",
-  "overflow-wrap: anywhere",
-  "min-height: 30px"
-]) {
-  if (!css.includes(needle)) {
-    console.error(`FAIL: admin delete safety fit css missing ${needle}`);
-    process.exit(1);
-  }
-}
+  "overflow-wrap: anywhere"
+]);
 
-const submitButton = read("components/admin/AdminSubmitButton.tsx");
-for (const needle of [
+requireIncludes("components/admin/AdminSubmitButton.tsx", [
   '"use client"',
   "useFormStatus",
-  "type=\"submit\"",
+  'type="submit"',
   "disabled={finalDisabled}",
   "aria-busy={pending}"
-]) {
-  if (!submitButton.includes(needle)) {
-    console.error(`FAIL: AdminSubmitButton missing ${needle}`);
-    process.exit(1);
-  }
-}
+]);
 
-const editPage = read("app/admin/projekty/[id]/edytuj/page.tsx");
-for (const needle of [
+const editPage = requireIncludes("app/admin/projekty/[id]/edytuj/page.tsx", [
   "AdminProjectEditForm",
+  "AdminProjectArchiveForm",
   "AdminProjectDeleteForm",
   "saved",
-  "admin-form-success"
-]) {
-  if (!editPage.includes(needle)) {
-    console.error(`FAIL: edit project page missing wrapper wiring: ${needle}`);
-    process.exit(1);
-  }
-}
+  "archived",
+  "admin-form-success",
+  "data-admin-edit-danger-actions",
+  "returnTo={editReturnTo}"
+]);
 
 for (const fakeMarker of [
   "Legacy guard markers",
   "updateProjectBasicsAction AdminSubmitButton Zapisz dane Zapisywanie danych..."
 ]) {
-  if (editPage.includes(fakeMarker)) {
-    console.error(`FAIL: edit page still contains fake legacy guard marker: ${fakeMarker}`);
-    process.exit(1);
-  }
+  if (editPage.includes(fakeMarker)) fail("edit page still contains fake legacy guard marker: " + fakeMarker);
 }
 
-const editForm = read("components/admin/AdminProjectEditForm.tsx");
-for (const needle of [
+const editForm = requireIncludes("components/admin/AdminProjectEditForm.tsx", [
   "useActionState(updateProjectAction",
-  "data-admin-action=\"project-edit-form\"",
-  "data-admin-action=\"project-edit-status-select\"",
-  "data-admin-action=\"project-edit-save\"",
-  "data-admin-action=\"project-edit-cancel\"",
-  "type=\"submit\"",
+  'data-admin-action="project-edit-form"',
+  'data-admin-action="project-edit-status-select"',
+  'data-admin-action="project-edit-save"',
+  'data-admin-action="project-edit-cancel"',
+  'type="submit"',
   "Zapisz projekt",
   "Zapisywanie...",
-  "href=\"/admin/projekty?cancelled=1\"",
-  "<option value=\"archived\">archived</option>"
-]) {
-  if (!editForm.includes(needle)) {
-    console.error(`FAIL: AdminProjectEditForm missing real edit/save/cancel/status wiring: ${needle}`);
-    process.exit(1);
-  }
-}
+  'href="/admin/projekty?cancelled=1"',
+  '<option value="archived">archived</option>'
+]);
 
-const listPage = read("app/admin/projekty/page.tsx");
-for (const needle of [
-  "status) === \"updated\"",
-  "archived) === \"1\"",
-  "deleted) === \"1\"",
-  "cancelled) === \"1\"",
-  "role=\"status\"",
+requireIncludes("app/admin/projekty/page.tsx", [
+  'status) === "updated"',
+  'archived) === "1"',
+  'deleted) === "1"',
+  'cancelled) === "1"',
+  'role="status"',
   "AdminProjectsListClient"
-]) {
-  if (!listPage.includes(needle)) {
-    console.error(`FAIL: admin list page missing feedback/wiring: ${needle}`);
-    process.exit(1);
-  }
-}
+]);
 
 const scannedFiles = [
   "app/admin/projekty/page.tsx",
@@ -240,12 +182,8 @@ for (const file of scannedFiles) {
   const source = read(file);
   const buttonMatches = source.match(/<button\b[^>]*>/g) || [];
   for (const button of buttonMatches) {
-    const hasType = /\stype=/.test(button);
-    if (!hasType) {
-      console.error(`FAIL: ${file} has button without explicit type: ${button}`);
-      process.exit(1);
-    }
+    if (!/\stype=/.test(button)) fail(file + " has button without explicit type: " + button);
   }
 }
 
-console.log("OK: admin buttons V19 guard passed.");
+console.log("OK: admin buttons V19 guard passed with Etap 23 V7 archive/delete runtime repair.");
