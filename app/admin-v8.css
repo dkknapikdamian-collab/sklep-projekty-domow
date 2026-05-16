@@ -1762,3 +1762,120 @@
 }
 /* STAGE50 ADMIN AUDIT VIEW END */
 
+
+/* STAGE24 ADMIN ACTION BUTTON FEEDBACK START */
+.admin-row-actions a,
+.admin-row-actions button,
+.admin-primary-button,
+.admin-secondary-button,
+.admin-archive-submit,
+.admin-danger-button,
+.admin-delete-safety summary {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transform: translateY(0) scale(1);
+  transition:
+    background-color .14s ease,
+    border-color .14s ease,
+    color .14s ease,
+    box-shadow .14s ease,
+    opacity .14s ease,
+    transform .08s ease,
+    filter .14s ease;
+}
+
+.admin-row-actions a:hover,
+.admin-row-actions button:hover:not(:disabled),
+.admin-primary-button:hover,
+.admin-secondary-button:hover,
+.admin-archive-submit:hover:not(:disabled),
+.admin-danger-button:hover:not(:disabled),
+.admin-delete-safety summary:hover {
+  border-color: rgba(240, 223, 197, .42);
+  background: rgba(240, 223, 197, .105);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(240, 223, 197, .10), 0 10px 24px rgba(0, 0, 0, .20);
+  transform: translateY(-1px) scale(1.01);
+  filter: brightness(1.05);
+}
+
+.admin-row-actions a:active,
+.admin-row-actions button:active:not(:disabled),
+.admin-primary-button:active,
+.admin-secondary-button:active,
+.admin-archive-submit:active:not(:disabled),
+.admin-danger-button:active:not(:disabled),
+.admin-delete-safety summary:active {
+  transform: translateY(1px) scale(.985);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, .30);
+  filter: brightness(.96);
+}
+
+.admin-row-actions a:focus-visible,
+.admin-row-actions button:focus-visible,
+.admin-primary-button:focus-visible,
+.admin-secondary-button:focus-visible,
+.admin-archive-submit:focus-visible,
+.admin-danger-button:focus-visible,
+.admin-delete-safety summary:focus-visible {
+  outline: 2px solid rgba(240, 223, 197, .78);
+  outline-offset: 2px;
+}
+
+.admin-row-actions button[aria-busy="true"],
+.admin-archive-submit[aria-busy="true"],
+.admin-danger-button[aria-busy="true"],
+.admin-row-actions button[data-pending="true"],
+.admin-archive-submit[data-pending="true"] {
+  cursor: progress;
+  opacity: .82;
+  box-shadow: inset 0 0 0 1px rgba(240, 223, 197, .20), 0 0 18px rgba(205, 164, 99, .10);
+}
+
+.admin-row-actions button:disabled,
+.admin-archive-submit:disabled,
+.admin-danger-button:disabled,
+.admin-archive-state,
+[aria-disabled="true"].admin-archive-state {
+  cursor: not-allowed;
+  opacity: .58;
+  filter: saturate(.62);
+  transform: none;
+  box-shadow: none;
+}
+
+.admin-archive-state {
+  min-height: 32px;
+  border: 1px dashed rgba(255, 255, 255, .18);
+  border-radius: 4px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: rgba(244, 241, 234, .68);
+  background: rgba(255, 255, 255, .018);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-archive-state svg {
+  opacity: .72;
+}
+
+.admin-projects-table .admin-archive-state {
+  min-height: 26px;
+  padding: 0 6px;
+  font-size: 10.25px;
+  line-height: 1;
+}
+
+.admin-edit-danger-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+/* STAGE24 ADMIN ACTION BUTTON FEEDBACK END */

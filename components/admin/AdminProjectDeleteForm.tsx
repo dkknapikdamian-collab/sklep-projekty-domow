@@ -22,18 +22,20 @@ type AdminProjectArchiveFormProps = {
   returnTo?: string;
 };
 
-function ArchiveProjectSubmitButton({ isArchived }: { isArchived: boolean }) {
+function ArchiveProjectSubmitButton() {
   const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
       className="admin-archive-submit"
-      disabled={pending || isArchived}
+      disabled={pending}
       aria-busy={pending}
       data-admin-action="project-archive-submit"
+      data-admin-action-feedback-button="true"
+      data-pending={pending ? "true" : "false"}
     >
-      <Archive size={14} /> {pending ? "Archiwizowanie..." : isArchived ? "Zarchiwizowany" : "Archiwizuj"}
+      <Archive size={14} /> {pending ? "Archiwizowanie..." : "Archiwizuj"}
     </button>
   );
 }
@@ -71,16 +73,27 @@ export function AdminProjectArchiveForm({
   const isArchived = projectStatus === "archived";
   const projectLabel = [projectCode, projectName].filter(Boolean).join(" — ") || "ten projekt";
 
+  if (isArchived) {
+    return (
+      <div
+        className="admin-archive-state"
+        role="status"
+        aria-disabled="true"
+        data-admin-action="project-archive-state"
+        data-admin-archive-state="already-archived"
+        title="Projekt ma już status archived. To status, nie przycisk."
+      >
+        <Archive size={14} /> Zarchiwizowany
+      </div>
+    );
+  }
+
   return (
     <form
       action={archiveProjectAction}
       className="admin-inline-form"
       data-admin-action="project-archive"
       onSubmit={(event) => {
-        if (isArchived) {
-          event.preventDefault();
-          return;
-        }
 
         if (!window.confirm("Zarchiwizować projekt " + projectLabel + "? Zniknie z codziennej pracy i nie będzie publiczny.")) {
           event.preventDefault();
@@ -90,7 +103,7 @@ export function AdminProjectArchiveForm({
       <input type="hidden" name="projectId" value={projectId} />
       <input type="hidden" name="slug" value={projectSlug || ""} />
       <input type="hidden" name="returnTo" value={returnTo || ""} />
-      <ArchiveProjectSubmitButton isArchived={isArchived} />
+      <ArchiveProjectSubmitButton />
     </form>
   );
 }

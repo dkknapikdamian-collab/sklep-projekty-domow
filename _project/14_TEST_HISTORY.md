@@ -157,3 +157,19 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Archiwizuj na ekranie edycji, sprawdzic status i /admin/audit.
 <!-- ETAP23_ARCHIVE_RUNTIME_FIX_V9 -->
+
+<!-- ETAP24_ADMIN_ACTION_FEEDBACK_ARCHIVE_FIX -->
+## Etap 24 - admin action feedback i archiwizacja bez martwych przyciskow
+
+FAKT:
+- Po V9 Damian pokazal, ze przycisk Zarchiwizowany wyglada jak martwy guzik i akcje admina nie maja czytelnego hover/active/pending.
+- Zarchiwizowany projekt nie renderuje juz przycisku submit; renderuje status role=status z data-admin-action="project-archive-state".
+- Aktywne akcje admina dostaly wspolna warstwe hover, active, focus-visible, pending i disabled.
+
+GUARDY:
+- Dodano npm run verify:admin-action-feedback-v24.
+- Guard pilnuje braku starej warstwy disabled archived button oraz obecnosci hover/active/pending CSS.
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: sprawdzic hover, klik/active, pending oraz archiwizacje projektu niearchived.
+<!-- ETAP24_ADMIN_ACTION_FEEDBACK_ARCHIVE_FIX -->
