@@ -23,6 +23,8 @@ for (const file of [
 const drafts = read("lib/admin/order-email-drafts.ts");
 for (const marker of [
   "buildManualOrderEmailDrafts",
+  "buildManualPaymentInstruction",
+  "paymentInstruction",
   "ManualOrderEmailDraft",
   "order_confirmation",
   "payment_confirmed",
