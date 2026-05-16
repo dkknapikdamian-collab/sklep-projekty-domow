@@ -1948,3 +1948,59 @@
   }
 }
 /* STAGE25 ADMIN PUBLIC PREVIEW NO 404 END */
+
+/* STAGE52 PROJECT PUBLICATION READINESS START */
+.admin-publication-readiness-box {
+  display: grid;
+  gap: 16px;
+  border: 1px solid rgba(212, 185, 124, 0.28);
+}
+
+.admin-publication-readiness-box[data-publication-readiness-can-publish="true"] {
+  border-color: rgba(34, 197, 94, 0.55);
+}
+
+.admin-publication-readiness-box[data-publication-readiness-can-publish="false"] {
+  border-color: rgba(239, 68, 68, 0.62);
+}
+
+.admin-publication-readiness-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-publication-readiness-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.admin-publication-readiness-item[data-publication-readiness-status="ok"] {
+  border-color: rgba(34, 197, 94, 0.58);
+  background: rgba(22, 101, 52, 0.16);
+}
+
+.admin-publication-readiness-item[data-publication-readiness-status="missing"] {
+  border-color: rgba(239, 68, 68, 0.64);
+  background: rgba(127, 29, 29, 0.18);
+}
+
+.admin-publication-readiness-item strong {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-publication-readiness-state {
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* STAGE52 PROJECT PUBLICATION READINESS END */

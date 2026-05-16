@@ -297,3 +297,13 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP27_STAGE52_PUBLICATION_READINESS_GUARD -->
+## Etap 27 / STAGE52 - guard gotowości publikacji
+
+Komenda:
+
+`npm run verify:project-publication-readiness-v35`
+
+Guard sprawdza twardą bramkę active: nazwa, slug, kod, cena, metraż, pokoje, opis, hero, thumbnail, rzut, prywatna dokumentacja PDF, wariant/projekt podstawowy oraz UI box Gotowość publikacji.
+<!-- ETAP27_STAGE52_PUBLICATION_READINESS_GUARD -->

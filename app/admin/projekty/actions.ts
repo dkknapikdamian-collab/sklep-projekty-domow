@@ -125,22 +125,28 @@ async function getProjectPublicationContext(
   supabase: NonNullable<ReturnType<typeof createSupabaseServiceRoleClient>>,
   projectId: string
 ) {
-  const [{ data: mediaRows, error: mediaError }, { data: roomRows, error: roomsError }] = await Promise.all([
+  const [
+    { data: mediaRows, error: mediaError },
+    { data: roomRows, error: roomsError },
+    { data: variantRows, error: variantsError },
+    { data: privateFileRows, error: privateFilesError }
+  ] = await Promise.all([
     supabase.from("project_media").select("media_type").eq("project_id", projectId),
-    supabase.from("project_rooms").select("name").eq("project_id", projectId)
+    supabase.from("project_rooms").select("name").eq("project_id", projectId),
+    supabase.from("project_variants").select("name, active").eq("project_id", projectId),
+    supabase.from("project_files").select("file_type, path").eq("project_id", projectId)
   ]);
 
-  if (mediaError) {
-    throw new Error(`Nie udalo sie sprawdzic mediow projektu: ${mediaError.message}`);
-  }
-
-  if (roomsError) {
-    throw new Error(`Nie udalo sie sprawdzic tabeli pomieszczen: ${roomsError.message}`);
-  }
+  if (mediaError) throw new Error(`Nie udalo sie sprawdzic mediow projektu: ${mediaError.message}`);
+  if (roomsError) throw new Error(`Nie udalo sie sprawdzic tabeli pomieszczen: ${roomsError.message}`);
+  if (variantsError) throw new Error(`Nie udalo sie sprawdzic wariantow projektu: ${variantsError.message}`);
+  if (privateFilesError) throw new Error(`Nie udalo sie sprawdzic prywatnych plikow projektu: ${privateFilesError.message}`);
 
   return {
     mediaRows: mediaRows || [],
-    roomRows: roomRows || []
+    roomRows: roomRows || [],
+    variantRows: variantRows || [],
+    privateFileRows: privateFileRows || []
   };
 }
 
@@ -296,7 +302,7 @@ export async function updateProjectStatusAction(formData: FormData) {
 
   const { data: projectBeforeStatusChange, error: projectBeforeStatusChangeError } = await supabase
     .from("projects")
-    .select("id, code, slug, name, status, price_gross, usable_area, rooms_count")
+    .select("id, code, slug, name, description, status, price_gross, usable_area, rooms_count")
     .eq("id", projectId)
     .maybeSingle();
 
@@ -309,15 +315,20 @@ export async function updateProjectStatusAction(formData: FormData) {
   }
 
   if (status === "active") {
-    const { mediaRows, roomRows } = await getProjectPublicationContext(supabase, projectId);
+    const { mediaRows, roomRows, variantRows, privateFileRows } = await getProjectPublicationContext(supabase, projectId);
     const readiness = getProjectPublicationReadiness({
       name: String(projectBeforeStatusChange.name || ""),
       slug: String(projectBeforeStatusChange.slug || ""),
+      code: String(projectBeforeStatusChange.code || ""),
+      description: String(projectBeforeStatusChange.description || ""),
       priceGross: Number(projectBeforeStatusChange.price_gross || 0),
       usableArea: Number(projectBeforeStatusChange.usable_area || 0),
       roomsCount: Number(projectBeforeStatusChange.rooms_count || 0),
       media: mediaRows,
-      rooms: roomRows
+      rooms: roomRows,
+      variants: variantRows,
+      privateFiles: privateFileRows,
+      baseVariantConfirmed: variantRows.length === 0
     });
 
     if (!readiness.canPublish) {

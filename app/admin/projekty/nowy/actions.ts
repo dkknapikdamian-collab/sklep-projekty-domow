@@ -341,15 +341,29 @@ export async function createProjectAction(
   const addons = parseJsonArray<AddonInput>(formData, "addonsJson");
 
   if (status === "active") {
-    const hasHeroUpload = isRealFile(formData.get("heroFile"));
-    const hasThumbnailUpload = isRealFile(formData.get("thumbnailFile"));
+    const mediaForReadiness = [
+      isRealFile(formData.get("heroFile")) ? { media_type: "hero" } : null,
+      isRealFile(formData.get("thumbnailFile")) ? { media_type: "thumbnail" } : null,
+      isRealFile(formData.get("floorPlanGroundFile")) ? { media_type: "floor_plan" } : null,
+      isRealFile(formData.get("floorPlanRoofFile")) ? { media_type: "roof_plan" } : null
+    ].filter((item): item is { media_type: string } => Boolean(item));
+
+    const privateFilesForReadiness = [
+      isRealFile(formData.get("documentationFile")) ? { file_type: "documentation", path: "documentation-v1.pdf" } : null
+    ].filter((item): item is { file_type: string; path: string } => Boolean(item));
+
     const readiness = getProjectPublicationReadiness({
       name,
       slug,
+      code,
+      description: str(formData, "description"),
       priceGross: num(formData, "priceGross"),
       usableArea: num(formData, "usableArea"),
       roomsCount: intNum(formData, "roomsCount"),
-      media: hasHeroUpload || hasThumbnailUpload ? [{ media_type: "hero" }] : [],
+      media: mediaForReadiness,
+      privateFiles: privateFilesForReadiness,
+      variants: variants.map((variant) => ({ name: variant.name, active: true })),
+      baseVariantConfirmed: variants.length === 0,
       rooms: rooms.map((room) => ({ name: room.name }))
     });
 

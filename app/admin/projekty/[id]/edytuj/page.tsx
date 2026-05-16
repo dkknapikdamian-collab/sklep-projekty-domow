@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { getAdminProjectById } from "@/lib/admin/projects-admin";
+import { getAdminProjectById, type AdminProjectEditItem } from "@/lib/admin/projects-admin";
+import { getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 import { AdminProjectArchiveForm, AdminProjectDeleteForm } from "@/components/admin/AdminProjectDeleteForm";
 import { AdminProjectEditForm } from "@/components/admin/AdminProjectEditForm";
 import { ArrowLeft } from "lucide-react";
@@ -24,6 +25,69 @@ function decodeQueryValue(value: string | string[] | undefined) {
   } catch {
     return raw;
   }
+}
+
+function ProjectPublicationReadinessBox({ project }: { project: AdminProjectEditItem }) {
+  const readiness = getProjectPublicationReadiness({
+    name: project.name,
+    slug: project.slug,
+    code: project.code,
+    description: project.description,
+    priceGross: project.priceGross,
+    usableArea: project.usableArea,
+    roomsCount: project.roomsCount,
+    media: project.media.map((item) => ({ mediaType: item.mediaType })),
+    rooms: project.rooms.map((room) => ({ name: room.name })),
+    variants: project.variants.map((variant) => ({ name: variant.name, active: true })),
+    privateFiles: project.privateFiles.map((file) => ({ fileType: file.fileType, path: file.path })),
+    baseVariantConfirmed: project.variants.length === 0
+  });
+
+  return (
+    <section
+      className="admin-form-section admin-publication-readiness-box"
+      data-admin-publication-readiness-v52="true"
+      data-publication-readiness-can-publish={readiness.canPublish ? "true" : "false"}
+    >
+      <div>
+        <span>ADMIN / GOTOWOŚĆ PUBLIKACJI</span>
+        <h2>Gotowość publikacji</h2>
+        <p>
+          Status active jest blokowany, jeśli projekt wygląda jak oferta sprzedażowa, ale nie ma danych potrzebnych do sprzedaży.
+        </p>
+      </div>
+
+      <ul className="admin-publication-readiness-list" data-admin-publication-readiness-list="true">
+        {readiness.checks.map((check) => (
+          <li
+            key={check.key}
+            className="admin-publication-readiness-item"
+            data-publication-readiness-check={check.key}
+            data-publication-readiness-status={check.ok ? "ok" : "missing"}
+          >
+            <strong>
+              {check.label}
+              <span className="admin-publication-readiness-state">{check.ok ? "OK" : "BRAK"}</span>
+            </strong>
+            <small>{check.help}</small>
+          </li>
+        ))}
+      </ul>
+
+      {!readiness.canPublish && (
+        <div className="admin-form-error" role="alert" data-admin-publication-readiness-blocker="true">
+          <p>Aktywacja projektu zostanie zablokowana.</p>
+          <p>Braki: {readiness.missing.join(", ")}</p>
+        </div>
+      )}
+
+      {readiness.canPublish && (
+        <div className="admin-form-success" role="status" data-admin-publication-readiness-ok="true">
+          Projekt ma komplet minimalnych danych sprzedażowych do publikacji.
+        </div>
+      )}
+    </section>
+  );
 }
 
 export default async function EditAdminProjectPage({ params, searchParams }: EditAdminProjectPageProps) {
@@ -80,6 +144,7 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
           </section>
         )}
 
+        <ProjectPublicationReadinessBox project={project} />
         <AdminProjectEditForm project={project} />
 
         <section className="admin-form-section admin-danger-zone">

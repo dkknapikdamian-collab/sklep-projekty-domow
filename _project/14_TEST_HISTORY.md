@@ -189,3 +189,15 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP27_STAGE52_PUBLICATION_READINESS_TEST_HISTORY -->
+## 2026-05-16 - Etap 27 / STAGE52
+
+Status testu ręcznego: TEST RĘCZNY DO WYKONANIA.
+
+Do sprawdzenia na Vercelu:
+- Gotowość publikacji widoczna na edycji projektu.
+- Projekt z brakami nie przechodzi na active.
+- Komplet sprzedażowy przechodzi na active.
+- Katalog nadal pokazuje tylko active.
+<!-- ETAP27_STAGE52_PUBLICATION_READINESS_TEST_HISTORY -->

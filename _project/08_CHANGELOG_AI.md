@@ -201,3 +201,15 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP27_STAGE52_PUBLICATION_READINESS -->
+## 2026-05-16 - Etap 27 / STAGE52: produkcyjne sanity checki publikacji projektu
+
+FAKT:
+- Rozszerzono gotowość publikacji projektu przed statusem active.
+- Dodano box Gotowość publikacji na edycji projektu.
+- Rozszerzono guard verify:project-publication-readiness-v35.
+
+TEST RĘCZNY:
+- TEST RĘCZNY DO WYKONANIA: sprawdzić blokadę active dla projektu z brakami oraz publikację kompletnego projektu.
+<!-- ETAP27_STAGE52_PUBLICATION_READINESS -->
