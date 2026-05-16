@@ -4,9 +4,9 @@ Data: 2026-05-15 21:55 Europe/Warsaw
 Repo: `dkknapikdamian-collab/sklep-projekty-domow`  
 Branch: `main`
 
-## PowĂłd
+## Powód
 
-`npm run check:project-memory` zwrĂłciĹ‚ bĹ‚Ä…d:
+`npm run check:project-memory` zwrócił błąd:
 
 ```text
 Project memory check failed:
@@ -15,13 +15,13 @@ Project memory check failed:
 
 ## Diagnoza
 
-Guard `scripts/check-project-memory.cjs` sprawdza marker `Fakt` z wielkÄ… pierwszÄ… literÄ…. `AGENTS.md` zawieraĹ‚ sekcjÄ™ `FAKT / DECYZJA / HIPOTEZA / DO POTWIERDZENIA`, ale nie zawieraĹ‚ dokĹ‚adnego tekstu `Fakt`.
+Guard `scripts/check-project-memory.cjs` sprawdza marker `Fakt` z wielką pierwszą literą. `AGENTS.md` zawierał sekcję `FAKT / DECYZJA / HIPOTEZA / DO POTWIERDZENIA`, ale nie zawierał dokładnego tekstu `Fakt`.
 
 ## Zmiana
 
-- Dodano dokĹ‚adny marker zgodnoĹ›ci guardu w `AGENTS.md`.
-- Dopisano zasadÄ™: ChatGPT/operator paczek ma przekazywaÄ‡ ZIP + jedno kompletne polecenie PowerShell i nie pushowaÄ‡ sam.
-- Dopisano tÄ™ zasadÄ™ takĹĽe do `_project/02_WORK_RULES.md`.
+- Dodano dokładny marker zgodności guardu w `AGENTS.md`.
+- Dopisano zasadę: ChatGPT/operator paczek ma przekazywać ZIP + jedno kompletne polecenie PowerShell i nie pushować sam.
+- Dopisano tę zasadę także do `_project/02_WORK_RULES.md`.
 - Zaktualizowano `_project/08_CHANGELOG_AI.md`.
 
 ## Testy wymagane
@@ -35,4 +35,4 @@ npm run check:project-memory
 
 ## Zakres
 
-To jest hotfix pamiÄ™ci projektu i workflow. Nie zmienia funkcji sklepu.
+To jest hotfix pamięci projektu i workflow. Nie zmienia funkcji sklepu.

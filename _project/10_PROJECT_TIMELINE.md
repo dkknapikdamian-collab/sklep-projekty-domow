@@ -396,36 +396,21 @@ RYZYKO:
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
 
 
+
+\n
+\n
+
 <!-- ETAP31_CHECKOUT_NONPUBLIC_PAYMENT_LATER_START -->
 ## 2026-05-16 - Etap 31: checkout jako aplikacja niepubliczna, płatności później
 
-STATUS: WDROŻONE W PACZCE ZIP / DO APLIKACJI LOKALNIE.
+STATUS: WDROŻONE LOKALNIE / DO TESTU RĘCZNEGO.
 
 FAKTY:
-- Checkout /zamowienie ma być komunikowany jako techniczny test zamówienia.
+- Checkout /zamowienie jest komunikowany jako techniczny test zamówienia.
 - Zamówienie jest bez płatności.
 - To etap przed integracją płatności online, webhooków i statusów płatności.
 - Checkout ma pozostać niewidoczny publicznie do czasu gotowości sklepu.
 - Nie komunikujemy klientowi ręcznego przelewu jako docelowego flow.
-
-ZMIENIONE PLIKI:
-- pp/zamowienie/page.tsx
-- components/order/CheckoutForm.tsx
-- scripts/check-manual-payment-v48.cjs
-- package.json
-
-GUARDY:
-- 
-pm run verify:payment-direction-v48
-- 
-pm run verify:manual-payment-v48 jako kompatybilny alias do guarda Etapu 31.
-
-TESTY AUTOMATYCZNE:
-- Do uruchomienia lokalnie przez APPLY: 
-pm run verify:payment-direction-v48, 
-pm run typecheck, 
-pm run build, 
-pm run check:project-memory.
 
 TEST RĘCZNY:
 - TEST RĘCZNY DO WYKONANIA.
@@ -437,40 +422,22 @@ RYZYKA:
 <!-- ETAP31_CHECKOUT_NONPUBLIC_PAYMENT_LATER_END -->
 
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_START -->
-## 2026-05-16 - Etap 31B: naprawa mojibake UTF-8 po Etapie 31
+## 2026-05-16 - Etap 31B: naprawa mojibake UTF-8 po checkout cleanup
 
-STATUS: DO WDROŻENIA Z PACZKI / TEST AUTOMATYCZNY I BUILD DO URUCHOMIENIA LOKALNIE.
+STATUS: NAPRAWA TECHNICZNA ETAPU 31 / TEST RĘCZNY DO WYKONANIA.
 
 FAKTY:
-- Etap 31 wdrożył kierunek checkoutu: aplikacja niepubliczna, zamówienie bez płatności, płatności później.
-- Po wdrożeniu wykryto mojibake w checkoutcie, guardzie i wpisach `_project`.
-- Poprzednia paczka 31B V1 miała błąd parsera PowerShell przez zapis `"$Label: $Path"`.
+- Po Etapie 31 build przechodził, ale w checkoutcie i notatkach pojawiły się uszkodzone polskie znaki.
+- Etap 31B naprawia widoczny checkout, guard kierunku płatności i dodaje guard anty-mojibake dla aktywnego checkoutu.
+- Dodano zasadę paczek PowerShell: APPLY ASCII-only, payload UTF-8 jako pliki, brak ||, && i $Zmienna: w stringach.
 
-DECYZJA:
-- Najpierw naprawić kodowanie i standard paczek, potem wracać do kolejnych etapów funkcjonalnych.
-- APPLY generowany przez AI ma być ASCII-only, a treści UTF-8 mają być dekodowane z Base64.
-
-ZMIENIONE / NAPRAWIANE:
-- `app/zamowienie/page.tsx`
-- `components/order/CheckoutForm.tsx`
-- `scripts/check-manual-payment-v48.cjs`
-- `scripts/check-checkout-mojibake-v31b.cjs`
-- `package.json`
-- `_project/*` z wpisami Etapu 31 / zasadą paczek PowerShell
-- Obsidian: globalna instrukcja AI i notatki Sklep_projekty_domow
-
-TESTY AUTOMATYCZNE:
-- `node scripts/check-checkout-mojibake-v31b.cjs`
-- `npm run verify:payment-direction-v48`
-- `npm run typecheck`
-- `npm run build`
-- `npm run check:project-memory`
+GUARDY:
+- npm run verify:payment-direction-v48
+- npm run verify:checkout-mojibake-v31b
 
 TEST RĘCZNY:
-- TEST RĘCZNY DO WYKONANIA: otworzyć `/zamowienie` i potwierdzić brak krzaków w UI.
+- TEST RĘCZNY DO WYKONANIA: otworzyć /zamowienie i potwierdzić poprawne polskie znaki oraz brak narracji o ręcznym przelewie.
 
-RYZYKO:
-- Ten etap celowo nie zmienia funkcji checkoutu. Naprawia kodowanie, guard i standard paczek.
+RYZYKA:
+- Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
-
-

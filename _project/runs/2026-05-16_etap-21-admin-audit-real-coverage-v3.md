@@ -29,7 +29,7 @@ Do wykonania przez skrypt apply:
 - `npm run build`
 - `npm run check:project-memory`
 
-## TEST RÄCZNY
+## TEST RĘCZNY
 BRAK POTWIERDZONEGO TESTU runtime do czasu klikniecia flow w panelu:
 - /admin/audit,
 - create project,

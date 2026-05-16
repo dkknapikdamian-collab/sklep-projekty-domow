@@ -19,7 +19,7 @@ Test wykonac wylacznie na projekcie testowym przeznaczonym do usuniecia.
 1. Utworzyc albo wskazac projekt testowy.
 2. Archiwizacja z listy projektow - PASS/FAIL.
 3. Archiwizacja z ekranu edycji - PASS/FAIL.
-4. OdĹ›wieĹĽenie po archiwizacji pokazuje status archived - PASS/FAIL.
+4. Odświeżenie po archiwizacji pokazuje status archived - PASS/FAIL.
 5. Brak martwego guzika dla stanu zarchiwizowanego - PASS/FAIL.
 6. Hard delete z blednym kodem jest zablokowany - PASS/FAIL.
 7. Hard delete z poprawnym kodem usuwa tylko projekt testowy - PASS/FAIL.

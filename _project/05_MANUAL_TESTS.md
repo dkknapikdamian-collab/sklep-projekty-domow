@@ -202,7 +202,7 @@ FAKT:
   - project_private_file_delete.
 - Guard statyczny verify:admin-audit-log-v44 ma sprawdzac nie tylko widok /admin/audit, ale tez realne markery implementacji w akcjach admina.
 
-TEST RÄCZNY DO WYKONANIA:
+TEST RĘCZNY DO WYKONANIA:
 - Runtime audit w /admin/audit po realnych operacjach admina: utworzenie projektu, sample project, media delete/type update, private file delete.
 
 BRAK POTWIERDZONEGO TESTU:
@@ -449,7 +449,7 @@ Checklist:
 1. Projekt testowy utworzony do zniszczenia.
 2. Archiwizacja z listy PASS/FAIL.
 3. Archiwizacja z edycji PASS/FAIL.
-4. OdĹ›wieĹĽenie po archiwizacji PASS/FAIL.
+4. Odświeżenie po archiwizacji PASS/FAIL.
 5. Brak martwego guzika PASS/FAIL.
 6. Bledny kod blokuje hard delete PASS/FAIL.
 7. Poprawny kod usuwa projekt testowy PASS/FAIL.

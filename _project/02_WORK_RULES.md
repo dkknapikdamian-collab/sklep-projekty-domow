@@ -132,29 +132,19 @@ DECYZJA DAMIANA / GLOBALNA DLA TEGO PROJEKTU:
 - Push wykonuje Damian lokalnie przez polecenie z paczki albo AI tylko po wyraźnej decyzji Damiana w danej wiadomości.
 - Każda paczka musi zawierać aktualizację repo, _project i Obsidiana.
 <!-- ZIP_PUSH_ONLY_RULE_2026_05_16_END -->
+\n
+\n
 
 <!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_START -->
-## Zasada prewencji: paczki PowerShell i UTF-8
+## Zasada paczek ZIP i PowerShell dla projektów Damiana
 
-Status: OBOWIĄZKOWE DLA KAŻDEGO AI-DEVELOPERA / OPERATORA PACZEK.
-Data: 2026-05-16.
-
-Przyczyna błędów z Etapu 31B:
-- PowerShell parsuje zapis `"$Label: $Path"` jako niepoprawną referencję zmiennej, bo dwukropek po nazwie zmiennej ma znaczenie specjalne.
-- Surowe polskie znaki w generowanych `.ps1` i blokach markdown mogą przejść przez złe kodowanie i stworzyć mojibake typu `Ă`, `Ĺ`, `Ä`.
-
-Zasada wykonawcza:
-1. APPLY `.ps1` ma być ASCII-only, jeśli jest generowany przez AI.
-2. Treści z polskimi znakami mają być zapisywane jako Base64 UTF-8 i dekodowane do plików przez `.NET UTF8Encoding(false)` albo `WriteAllBytes`.
-3. Nie wolno pisać w PowerShellu interpolacji zmiennej bezpośrednio przed dwukropkiem: `"$Label: ..."`.
-4. Zamiast tego używać `("Brak {0}: {1}" -f $Label, $Path)` albo `${Label}`.
-5. Paczka ma być składana tak, żeby treść użytkowa była payloadem danych, a skrypt był cienkim, prostym loaderem.
-6. Przed oddaniem paczki operator ma sprawdzić tekst skryptu pod kątem wzorca `$zmienna:` oraz surowych polskich znaków w `.ps1`.
-7. Ta zasada nie zastępuje testów, ale usuwa główną przyczynę powstawania błędu na etapie generowania paczki.
-
-W~iosek:
-- Guard jest tylko siatką bezpieczeństwa.
-- Realna prewencja to standard generowania paczek: ASCII-only APPLY + Base64 UTF-8 payload + brak ryzykownej interpolacji PowerShell.
+DECYZJA PROCESOWA:
+- Paczki ZIP dla Windows mają celować w Windows PowerShell 5.1, nie w PowerShell 7 ani bash.
+- APPLY.ps1 ma być cienkim runnerem ASCII-only.
+- Pliki z polskimi znakami mają być osobnymi plikami UTF-8 w ZIP albo payloadem Base64, nie dużym stringiem w PowerShell.
+- Nie używać operatorów || ani && w APPLY.ps1.
+- Nie pisać interpolacji typu $Zmienna: w stringach PowerShell. Używać ${Zmienna} albo formatowania typu ("tekst {0}: {1}" -f $A, $B).
+- Nie generować dynamicznie dużego skryptu JS z PowerShella, jeśli ten JS zawiera markdown, znaki polskie, backticki albo znaki dolara.
+- Preferowany układ paczki: APPLY.ps1 + payload/apply.cjs + payload/files/*.
+- Guardy są drugą linią obrony. Pierwszą linią jest prosty format paczki, który nie produkuje mojibake i błędów parsera.
 <!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_END -->
-
-

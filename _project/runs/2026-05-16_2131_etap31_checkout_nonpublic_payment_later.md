@@ -8,16 +8,16 @@
 - Active source of truth: repo for code/guards/_project; Obsidian for dashboard/status.
 - Planned changed files: checkout page, checkout form, payment-direction guard, package scripts, _project memory, Obsidian notes.
 
-## FAKTY Z KODU / PLIKĂ“W
+## FAKTY Z KODU / PLIKÓW
 
-- Poprzedni checkout mĂłwiĹ‚ o tymczasowym flow i automatycznym providerze, ale nadal wyglÄ…daĹ‚ jak normalny zakup.
-- Etap 31 zmienia narracjÄ™ na techniczny test zamĂłwienia bez pĹ‚atnoĹ›ci.
+- Poprzedni checkout mówił o tymczasowym flow i automatycznym providerze, ale nadal wyglądał jak normalny zakup.
+- Etap 31 zmienia narrację na techniczny test zamówienia bez płatności.
 
 ## DECYZJE DAMIANA
 
 - Aplikacja niepubliczna.
-- PĹ‚atnoĹ›ci pĂłĹşniej.
-- Nie pisaÄ‡ klientowi o rÄ™cznym przelewie jako docelowym flow.
+- Płatności później.
+- Nie pisać klientowi o ręcznym przelewie jako docelowym flow.
 
 ## TESTY AUTOMATYCZNE
 
@@ -29,17 +29,17 @@ APPLY uruchamia:
 
 ## GUARDY
 
-- scripts/check-manual-payment-v48.cjs pilnuje markerĂłw Etapu 31 i blokuje copy o rÄ™cznym przelewie/manual-payment.
+- scripts/check-manual-payment-v48.cjs pilnuje markerów Etapu 31 i blokuje copy o ręcznym przelewie/manual-payment.
 
-## TESTY RÄCZNE
+## TESTY RĘCZNE
 
-- TEST RÄCZNY DO WYKONANIA: otworzyÄ‡ /zamowienie, sprawdziÄ‡ copy, wysĹ‚aÄ‡ testowe zamĂłwienie i potwierdziÄ‡ brak narracji o rÄ™cznym przelewie.
+- TEST RĘCZNY DO WYKONANIA: otworzyć /zamowienie, sprawdzić copy, wysłać testowe zamówienie i potwierdzić brak narracji o ręcznym przelewie.
 
-## WPĹYW NA OBSIDIANA
+## WPŁYW NA OBSIDIANA
 
 - APPLY aktualizuje dashboard i status projektu w 10_PROJEKTY/Sklep_projekty_domow/.
 
 ## GIT / ZIP STATUS
 
 - Dostarczenie: ZIP + lokalne polecenie PowerShell.
-- Push wykonuje Damian lokalnie po przejĹ›ciu testĂłw.
+- Push wykonuje Damian lokalnie po przejściu testów.
