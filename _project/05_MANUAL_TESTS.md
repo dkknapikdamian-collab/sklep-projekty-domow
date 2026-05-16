@@ -533,3 +533,36 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
+
+<!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
+## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
+
+STATUS:
+- WDROZONE W KODZIE - TEST AUTOMATYCZNY / GUARD DO URUCHOMIENIA LOKALNIE.
+- TEST RECZNY DO WYKONANIA.
+- BRAK POTWIERDZONEGO TESTU RECZNEGO na realnych danych Supabase.
+
+FAKTY:
+- `app/admin/projekty/actions.ts` sprawdza readiness przy probie ustawienia `status === "active"`.
+- Naprawiono luke: `projectRooms` nie moze byc warunkowe od `rooms.length > 0`, bo projekt bez pomieszczen ma blokowac publikacje.
+- Dodano guard: `npm run verify:project-publication-runtime-v27`.
+- Guard sprawdza brak hero, brak miniatury, brak rzutu, brak prywatnej dokumentacji, brak wariantu/projektu podstawowego, brak pomieszczen, kompletny projekt i czytelnosc komunikatow.
+
+TESTY AUTOMATYCZNE:
+- `npm run verify:project-publication-runtime-v27`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+- `npm run check:project-memory`
+
+TEST RECZNY DO WYKONANIA:
+- Na realnych danych Supabase sprawdzic: projekt bez hero, bez miniatury, bez rzutu, bez prywatnego PDF, bez pomieszczen oraz kompletny projekt.
+- Komunikaty brakow maja byc czytelne w adminie.
+
+RYZYKO:
+- Guard nie zastępuje testu klikniecia w adminie na realnym projekcie i realnych plikach Supabase/storage.
+
+NASTEPNY KROK:
+- Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
+<!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
+
