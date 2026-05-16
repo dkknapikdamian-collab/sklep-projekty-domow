@@ -34,14 +34,19 @@ export function CheckoutForm() {
 
   if (state.ok) {
     return (
-      <section className="checkout-success" data-order-success-v38="true">
+      <section
+        className="checkout-success"
+        data-order-success-v38="true"
+        data-checkout-non-public-success-v31="true"
+      >
         <h2>{state.message}</h2>
-        <p>Numer zamówienia: {state.orderId}</p>
+        <p>Numer zamĂłwienia testowego: {state.orderId}</p>
         <p>
-          Skontaktujemy się z Tobą, żeby potwierdzić dostępność projektu i dalszy sposób realizacji.
-          Obecny flow zamówienia nie jest docelowym modelem płatności. Przed publicznym uruchomieniem zostanie zastąpiony automatycznym providerem płatności.
+          ZamĂłwienie zostaĹ‚o zapisane bez uruchamiania pĹ‚atnoĹ›ci. To techniczny test
+          procesu przed integracjÄ… pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
+          Ekran nie jest przeznaczony do publicznego uĹĽycia.
         </p>
-        <Link className="empty-link" href="/projekty">Wróć do projektów</Link>
+        <Link className="empty-link" href="/projekty">WrĂłÄ‡ do projektĂłw</Link>
       </section>
     );
   }
@@ -49,30 +54,37 @@ export function CheckoutForm() {
   if (cart.items.length === 0) {
     return (
       <section className="empty-state">
-        <span>ZAMÓWIENIE</span>
+        <span>ZAMĂ“WIENIE TESTOWE</span>
         <h1>Nie masz pozycji w koszyku.</h1>
         <p>Najpierw wybierz projekt, wariant i dodatki na karcie projektu.</p>
-        <Link className="empty-link" href="/projekty">Przejdź do projektów</Link>
+        <Link className="empty-link" href="/projekty">PrzejdĹş do projektĂłw</Link>
       </section>
     );
   }
 
   return (
-    <section className="checkout-layout" data-checkout-form-v38="true" data-payment-direction-v48="true" data-legacy-manual-payment-flow-v48="temporary-internal-only">
+    <section
+      className="checkout-layout"
+      data-checkout-form-v38="true"
+      data-checkout-non-public-v31="true"
+      data-order-without-payment-v31="true"
+      data-payment-later-v31="true"
+    >
       <form action={formAction} className="checkout-form">
         <input type="hidden" name="cartJson" value={cartJson} />
 
         <div className="checkout-form-intro" data-checkout-v43-copy="true">
-          <h2>Dane do zamówienia</h2>
+          <h2>Dane do zamĂłwienia testowego</h2>
           <p>
-            Kupujesz wybrane projekty, warianty i dodatki z koszyka. Po wysłaniu
-            formularza skontaktujemy się z Tobą, aby potwierdzić dostępność i dalszy sposób realizacji.
-            Obecny flow jest legacy / temporary / internal only i nie jest docelowym modelem płatności. Przed publicznym uruchomieniem zostanie zastąpiony automatycznym providerem płatności.
+            Ten formularz sĹ‚uĹĽy do technicznego sprawdzenia zapisu zamĂłwienia z koszyka.
+            WysĹ‚anie formularza nie uruchamia pĹ‚atnoĹ›ci ani dostarczenia plikĂłw. Publiczne
+            udostÄ™pnienie checkoutu wymaga osobnego etapu integracji pĹ‚atnoĹ›ci online,
+            webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
           </p>
         </div>
 
         <label>
-          Imię i nazwisko *
+          ImiÄ™ i nazwisko *
           <input name="customerName" required />
         </label>
 
@@ -98,26 +110,27 @@ export function CheckoutForm() {
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="termsConsent" required />
-          <span>Akceptuję kontakt w sprawie zamówienia projektu i dalszej realizacji.</span>
+          <span>AkceptujÄ™ zapis danych w technicznym teĹ›cie zamĂłwienia.</span>
         </label>
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="contactConsent" required />
-          <span>Potwierdzam poprawność danych i wybranych pozycji koszyka.</span>
+          <span>Potwierdzam poprawnoĹ›Ä‡ danych i wybranych pozycji koszyka.</span>
         </label>
 
         {state.message && <p className="admin-form-error">{state.message}</p>}
 
         <button className="buy-button" type="submit" disabled={pending}>
-          <Send size={17} /> {pending ? "Wysyłanie..." : "Wyślij zamówienie"}
+          <Send size={17} /> {pending ? "Zapisywanie..." : "Zapisz zamĂłwienie testowe"}
         </button>
       </form>
 
       <aside className="checkout-summary">
-        <h2>Co zamawiasz?</h2>
+        <h2>Zakres testowego zamĂłwienia</h2>
         <p>
-          Podsumowanie obejmuje wybrany projekt, wariant oraz dodatki. Zamówienie
-          nie uruchamia jeszcze automatycznej płatności ani automatycznej wysyłki plików, bo obecny flow jest tymczasowy i wewnętrzny.
+          Podsumowanie obejmuje projekt, wariant oraz dodatki wybrane w koszyku. Ten etap
+          nie obsĹ‚uguje pĹ‚atnoĹ›ci online, potwierdzenia pĹ‚atnoĹ›ci ani automatycznej wysyĹ‚ki
+          plikĂłw. Checkout ma pozostaÄ‡ niewidoczny publicznie do czasu gotowoĹ›ci sklepu.
         </p>
         {cart.items.map((item) => (
           <div className="checkout-summary-item" key={item.id}>
@@ -129,18 +142,23 @@ export function CheckoutForm() {
           </div>
         ))}
         <strong className="checkout-total">{money(cartTotal(cart))}</strong>
-        <div className="checkout-summary-note" data-checkout-v43-delivery-note="true" data-payment-direction-summary-v48="true" data-legacy-manual-payment-flow-v48="temporary-internal-only">
+        <div
+          className="checkout-summary-note"
+          data-checkout-v43-delivery-note="true"
+          data-checkout-non-public-summary-v31="true"
+        >
           <p>
-            Obecny flow zamówienia jest legacy / temporary / internal only. Przed publicznym uruchomieniem zostanie zastąpiony automatycznym providerem płatności.
+            ZamĂłwienie jest zapisem technicznym bez pĹ‚atnoĹ›ci. Publiczne uĹĽycie checkoutu
+            wymaga osobnej integracji pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
           </p>
           <p>
-            Pliki projektu przekażemy dopiero po potwierdzeniu zamówienia i realizacji. Docelowo statusy płatności będą obsługiwane automatycznie.
+            Pliki projektu nie sÄ… wydawane automatycznie w tym etapie. Dostarczanie plikĂłw
+            pozostaje poza publicznym flow do czasu decyzji o docelowym modelu realizacji.
           </p>
           {hasPdfEmailAddon && (
             <p>
-              PDF na e-mail oznacza dodatkowy pakiet PDF wysłany na podany adres
-              po potwierdzeniu realizacji. Nie zastępuje on docelowego flow płatności
-              online, które musi zostać wdrożone przed publicznym uruchomieniem.
+              PDF na e-mail pozostaje dodatkiem zapisanym w zamĂłwieniu testowym. Jego
+              finalna obsĹ‚uga musi zostaÄ‡ spiÄ™ta z docelowym procesem pĹ‚atnoĹ›ci i realizacji.
             </p>
           )}
         </div>

@@ -478,3 +478,43 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
+
+<!-- ETAP31_CHECKOUT_NONPUBLIC_PAYMENT_LATER_START -->
+## 2026-05-16 - Etap 31: checkout jako aplikacja niepubliczna, pĹ‚atnoĹ›ci pĂłĹşniej
+
+STATUS: WDROĹ»ONE W PACZCE ZIP / DO APLIKACJI LOKALNIE.
+
+FAKTY:
+- Checkout /zamowienie ma byÄ‡ komunikowany jako techniczny test zamĂłwienia.
+- ZamĂłwienie jest bez pĹ‚atnoĹ›ci.
+- To etap przed integracjÄ… pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
+- Checkout ma pozostaÄ‡ niewidoczny publicznie do czasu gotowoĹ›ci sklepu.
+- Nie komunikujemy klientowi rÄ™cznego przelewu jako docelowego flow.
+
+ZMIENIONE PLIKI:
+- pp/zamowienie/page.tsx
+- components/order/CheckoutForm.tsx
+- scripts/check-manual-payment-v48.cjs
+- package.json
+
+GUARDY:
+- 
+pm run verify:payment-direction-v48
+- 
+pm run verify:manual-payment-v48 jako kompatybilny alias do guarda Etapu 31.
+
+TESTY AUTOMATYCZNE:
+- Do uruchomienia lokalnie przez APPLY: 
+pm run verify:payment-direction-v48, 
+pm run typecheck, 
+pm run build, 
+pm run check:project-memory.
+
+TEST RÄCZNY:
+- TEST RÄCZNY DO WYKONANIA.
+- SprawdziÄ‡ /zamowienie: brak jÄ™zyka o rÄ™cznym przelewie, ekran opisuje techniczny test, zamĂłwienie bez pĹ‚atnoĹ›ci i etap przed integracjÄ… pĹ‚atnoĹ›ci.
+
+RYZYKA:
+- Bez rÄ™cznego sprawdzenia UI nie potwierdzamy finalnego brzmienia copy w przeglÄ…darce.
+- Checkout nadal istnieje technicznie, wiÄ™c przed publicznym release trzeba kontrolowaÄ‡ ekspozycjÄ™ routingu/linkĂłw.
+<!-- ETAP31_CHECKOUT_NONPUBLIC_PAYMENT_LATER_END -->

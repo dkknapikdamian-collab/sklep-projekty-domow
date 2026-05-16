@@ -68,8 +68,8 @@
                     "verify:no-demo-content":  "node scripts/check-no-demo-content.cjs",
                     "verify:admin-audit-runtime-v53":  "node scripts/check-admin-audit-runtime-v53.cjs",
                     "verify:order-price-runtime-v25":  "node scripts/check-order-price-runtime-v25.cjs",
-                    "verify:manual-payment-v48":  "node scripts/check-manual-payment-legacy-v48.cjs",
-                    "verify:payment-direction-v48":  "node scripts/check-manual-payment-legacy-v48.cjs"
+                    "verify:manual-payment-v48":  "node scripts/check-manual-payment-v48.cjs",
+                    "verify:payment-direction-v48":  "node scripts/check-manual-payment-v48.cjs"
                 },
     "dependencies":  {
                          "next":  "^15.0.0",

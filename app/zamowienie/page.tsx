@@ -13,12 +13,12 @@ export default function CheckoutPage() {
           data-order-without-payment-v31="true"
           data-payment-later-v31="true"
         >
-          <span>ZAMÓWIENIE TESTOWE</span>
-          <h1>Techniczny test zamówienia</h1>
+          <span>ZAMĂ“WIENIE TESTOWE</span>
+          <h1>Techniczny test zamĂłwienia</h1>
           <p>
-            Ten ekran zapisuje zamówienie bez płatności. To etap techniczny przed integracją
-            płatności online, webhooków i statusów płatności. Checkout pozostaje niewidoczny
-            publicznie do czasu gotowości sklepu.
+            Ten ekran zapisuje zamĂłwienie bez pĹ‚atnoĹ›ci. To etap techniczny przed integracjÄ…
+            pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci. Checkout pozostaje niewidoczny
+            publicznie do czasu gotowoĹ›ci sklepu.
           </p>
         </section>
         <CheckoutForm />
