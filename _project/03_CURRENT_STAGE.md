@@ -1,5 +1,31 @@
 # 03_CURRENT_STAGE - aktualny etap
 
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## Aktualny etap - Etap A
+
+Etap A - korekta kierunku płatności i usunięcie ręcznych płatności jako docelowego modelu.
+
+### Decyzja
+
+Nie wdrażamy płatności ręcznych jako docelowego modelu.
+
+### Obecny stan
+
+Manual-payment flow może istnieć wyłącznie jako legacy / temporary / internal only, ponieważ aplikacja nie jest jeszcze publicznie udostępniona.
+
+### Warunek przed publicznym uruchomieniem
+
+Manual-payment flow musi zostać usunięty albo zastąpiony automatycznymi płatnościami.
+
+### Docelowo
+
+Stripe/payment provider, webhooki i statusy płatności.
+
+### Test ręczny
+
+TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
+
 Ostatnia aktualizacja: 2026-05-15 22:20 Europe/Warsaw
 
 ## Aktualny etap

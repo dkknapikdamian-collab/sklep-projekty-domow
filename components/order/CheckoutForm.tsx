@@ -38,8 +38,8 @@ export function CheckoutForm() {
         <h2>{state.message}</h2>
         <p>Numer zamówienia: {state.orderId}</p>
         <p>
-          Skontaktujemy się z Tobą, żeby potwierdzić dostępność projektu, dane do płatności przelewem i sposób realizacji.
-          Pliki przekażemy po ręcznym potwierdzeniu płatności i realizacji.
+          Skontaktujemy się z Tobą, żeby potwierdzić dostępność projektu i dalszy sposób realizacji.
+          Obecny flow zamówienia nie jest docelowym modelem płatności. Przed publicznym uruchomieniem zostanie zastąpiony automatycznym providerem płatności.
         </p>
         <Link className="empty-link" href="/projekty">Wróć do projektów</Link>
       </section>
@@ -58,7 +58,7 @@ export function CheckoutForm() {
   }
 
   return (
-    <section className="checkout-layout" data-checkout-form-v38="true" data-manual-payment-checkout-v48="true">
+    <section className="checkout-layout" data-checkout-form-v38="true" data-payment-direction-v48="true" data-legacy-manual-payment-flow-v48="temporary-internal-only">
       <form action={formAction} className="checkout-form">
         <input type="hidden" name="cartJson" value={cartJson} />
 
@@ -66,8 +66,8 @@ export function CheckoutForm() {
           <h2>Dane do zamówienia</h2>
           <p>
             Kupujesz wybrane projekty, warianty i dodatki z koszyka. Po wysłaniu
-            formularza skontaktujemy się z Tobą, aby potwierdzić dostępność, płatność i sposób realizacji.
-            Instrukcję przelewu wyślemy po weryfikacji. Na tym etapie nie pobieramy płatności online.
+            formularza skontaktujemy się z Tobą, aby potwierdzić dostępność i dalszy sposób realizacji.
+            Obecny flow jest legacy / temporary / internal only i nie jest docelowym modelem płatności. Przed publicznym uruchomieniem zostanie zastąpiony automatycznym providerem płatności.
           </p>
         </div>
 
@@ -98,7 +98,7 @@ export function CheckoutForm() {
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="termsConsent" required />
-          <span>Akceptuję kontakt w sprawie zamówienia projektu i ręcznej płatności.</span>
+          <span>Akceptuję kontakt w sprawie zamówienia projektu i dalszej realizacji.</span>
         </label>
 
         <label className="checkout-checkbox">
@@ -117,7 +117,7 @@ export function CheckoutForm() {
         <h2>Co zamawiasz?</h2>
         <p>
           Podsumowanie obejmuje wybrany projekt, wariant oraz dodatki. Zamówienie
-          nie uruchamia jeszcze automatycznej płatności ani automatycznej wysyłki plików.
+          nie uruchamia jeszcze automatycznej płatności ani automatycznej wysyłki plików, bo obecny flow jest tymczasowy i wewnętrzny.
         </p>
         {cart.items.map((item) => (
           <div className="checkout-summary-item" key={item.id}>
@@ -129,18 +129,18 @@ export function CheckoutForm() {
           </div>
         ))}
         <strong className="checkout-total">{money(cartTotal(cart))}</strong>
-        <div className="checkout-summary-note" data-checkout-v43-delivery-note="true" data-manual-payment-summary-v48="true">
+        <div className="checkout-summary-note" data-checkout-v43-delivery-note="true" data-payment-direction-summary-v48="true" data-legacy-manual-payment-flow-v48="temporary-internal-only">
           <p>
-            Płatność odbywa się ręcznie po kontakcie z obsługą. Dane do przelewu wyślemy po weryfikacji zamówienia.
+            Obecny flow zamówienia jest legacy / temporary / internal only. Przed publicznym uruchomieniem zostanie zastąpiony automatycznym providerem płatności.
           </p>
           <p>
-            Pliki projektu przekażemy po ręcznym potwierdzeniu dostępności, płatności i realizacji.
+            Pliki projektu przekażemy dopiero po potwierdzeniu zamówienia i realizacji. Docelowo statusy płatności będą obsługiwane automatycznie.
           </p>
           {hasPdfEmailAddon && (
             <p>
               PDF na e-mail oznacza dodatkowy pakiet PDF wysłany na podany adres
-              po potwierdzeniu realizacji. Nie zastępuje on ręcznego potwierdzenia
-              zamówienia.
+              po potwierdzeniu realizacji. Nie zastępuje on docelowego flow płatności
+              online, które musi zostać wdrożone przed publicznym uruchomieniem.
             </p>
           )}
         </div>

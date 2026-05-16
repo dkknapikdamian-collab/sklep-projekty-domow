@@ -24,6 +24,23 @@ Tylko jeżeli checklist nie ma statusu BLOKADA i test ręczny Damiana jest zapis
 
 ## Checklist pre-release V1
 
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## Płatności - blocker przed publicznym uruchomieniem
+
+- [ ] Ręczne płatności usunięte jako docelowy model.
+- [ ] Obecny manual-payment flow oznaczony jako legacy / temporary / internal only.
+- [ ] Automatyczne płatności zaprojektowane.
+- [ ] Payment provider wybrany.
+- [ ] Webhooki zaplanowane.
+- [ ] Statusy płatności zaplanowane.
+- [ ] Guardy payment flow zaplanowane albo wdrożone.
+- [ ] Manual-payment flow usunięty albo zastąpiony przed publicznym udostępnieniem.
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+Decyzja: Nie wdrażamy płatności ręcznych jako docelowego modelu.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
+
 | Obszar | Status | Dowód / co sprawdzić | Uwagi |
 |---|---|---|---|
 | Env Supabase ustawiony | DO POTWIERDZENIA | Sprawdzić env lokalny/Vercel/Supabase po etapach 22-28 | Nie wpisywać OK bez realnego sprawdzenia. |

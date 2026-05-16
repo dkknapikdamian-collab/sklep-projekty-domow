@@ -181,3 +181,19 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## 2026-05-16 - Etap A payment direction fix
+
+FAKT:
+- Repo miało aktywny `verify:manual-payment-v48`, który utrwalał ręczny model płatności.
+- Decyzja Damiana zmienia kierunek: ręczne płatności nie są docelowym modelem.
+
+WDROŻENIE:
+- aktywny guard zmieniony na `verify:payment-direction-v48`,
+- publiczny checkout opisuje obecny flow jako legacy / temporary / internal only,
+- roadmapa i checklist zawierają blocker automatycznych płatności.
+
+TEST RĘCZNY:
+- TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->

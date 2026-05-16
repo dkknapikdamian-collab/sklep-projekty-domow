@@ -39,8 +39,21 @@ Kazdy etap musi aktualizowac oba miejsca albo jasno wskazac blocker.
 
 ## Najblizsza kolejnosc
 
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## Korekta aktywnej mapy - płatności
+
+Decyzja Damiana: Nie wdrażamy płatności ręcznych jako docelowego modelu.
+
+Aktywny kierunek płatności:
+- obecny manual-payment flow = legacy / temporary / internal only,
+- przed publicznym uruchomieniem trzeba go usunąć albo zastąpić,
+- docelowo: automatyczne płatności, Stripe/payment provider, webhooki i statusy płatności.
+
+Status testu: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
+
 1. Etap 22 - runtime audit admina.
-2. Etap 23 - spojnosc komunikacji platnosci recznej.
+2. Etap A - korekta kierunku platnosci: platnosci reczne nie sa docelowym modelem.
 3. Etap 24 - pelny runtime flow V1.
 4. Etap 25 - walidacja zamowienia i cen wzgledem bazy.
 5. Etap 26 - obsluga plikow zakupowych w adminie.

@@ -7,6 +7,34 @@
 - TEST RECZNY POTWIERDZONY PRZEZ DAMIANA
 - BRAK POTWIERDZONEGO TESTU
 
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## 2026-05-16 - Etap A: korekta kierunku płatności
+
+### Zakres
+
+Zmieniono kierunek testów i guardów dotyczących checkoutu/płatności.
+
+### Decyzja Damiana
+
+Nie wdrażamy płatności ręcznych jako docelowego modelu. Docelowo mają być automatyczne płatności online: Stripe/payment provider, webhooki i statusy płatności.
+
+### Status obecnego flow
+
+Obecny manual-payment flow jest legacy / temporary / internal only.
+
+### Guard
+
+`verify:manual-payment-v48` został wycofany z aktywnego `npm run verify`. Nowy aktywny guard: `verify:payment-direction-v48`.
+
+### Status testu
+
+TEST RĘCZNY DO WYKONANIA.
+
+### Ryzyko
+
+Dopóki automatyczne płatności nie są wdrożone, obecny flow zamówienia nie może być traktowany jako gotowy do publicznego uruchomienia.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
+
 ## 2026-05-16 - Etap 29 guard regression V47/V51
 
 | Test | Status | Wynik / zrodlo |

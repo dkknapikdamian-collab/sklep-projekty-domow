@@ -1,5 +1,19 @@
 # 07_NEXT_STEPS - nastepne kroki
 
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## Najbliższy kierunek - płatności
+
+Decyzja: Nie wdrażamy płatności ręcznych jako docelowego modelu.
+
+1. Usunąć z dokumentacji założenie, że ręczne płatności są docelowym modelem.
+2. Oznaczyć obecny manual-payment flow jako legacy / temporary / internal only.
+3. Przepisać guard aktywny z `verify:manual-payment-v48` na `verify:payment-direction-v48`.
+4. Przygotować etap pod automatyczne płatności: Stripe/payment provider, webhooki, statusy płatności.
+5. Przed publicznym udostępnieniem aplikacji usunąć albo zastąpić manual-payment flow.
+
+Status testu: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
+
 ## Najblizszy rekomendowany krok
 
 Etap 22: runtime audit admina i zamkniecie audit logu.
@@ -16,7 +30,7 @@ Czytac i aktualizowac:
 ## Kolejnosc etapow
 
 1. Etap 22 - runtime audit admina.
-2. Etap 23 - spojnosc komunikacji platnosci recznej.
+2. Etap A - korekta kierunku platnosci: platnosci reczne nie sa docelowym modelem.
 3. Etap 24 - pelny runtime flow V1.
 4. Etap 25 - walidacja zamowienia i cen wzgledem bazy.
 5. Etap 26 - obsluga plikow zakupowych w adminie.

@@ -318,3 +318,18 @@ Komendy:
 
 Guard pilnuje, ze sample nie tworzy active i nie pojawia sie w publicznym flow.
 <!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_GUARD -->
+
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## Etap A - payment direction guard
+
+Aktywny guard:
+- `npm run verify:payment-direction-v48`
+
+Rola guarda:
+- blokuje powrót `verify:manual-payment-v48` jako aktywnego guarda,
+- sprawdza, że publiczny checkout nie promuje ręcznych płatności jako docelowego modelu,
+- wymaga zapisu decyzji w `_project`,
+- wymaga kierunku: automatyczne płatności, Stripe/payment provider, webhooki i statusy płatności.
+
+Status testu ręcznego: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->

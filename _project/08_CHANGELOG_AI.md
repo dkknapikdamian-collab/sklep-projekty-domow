@@ -221,3 +221,15 @@ TEST RĘCZNY:
 - Publiczny katalog filtruje demo/sample.
 - Dodano guard `verify:no-demo-content`.
 <!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_CHANGELOG -->
+
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
+## 2026-05-16 - Etap A payment direction fix
+
+- Usunięto ręczne płatności jako docelowy kierunek z aktywnej roadmapy.
+- Zmieniono aktywny guard z `verify:manual-payment-v48` na `verify:payment-direction-v48`.
+- Oznaczono obecny manual-payment flow jako legacy / temporary / internal only.
+- Dodano blocker automatycznych płatności przed publicznym uruchomieniem.
+- Uzupełniono Obsidian i raport run.
+
+Status testu ręcznego: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
