@@ -6,12 +6,19 @@ export default function CheckoutPage() {
     <>
       <Header />
       <main className="page-shell">
-        <section className="catalog-header" data-checkout-v43-page-copy="true" data-payment-direction-page-v48="true" data-legacy-manual-payment-flow-v48="temporary-internal-only">
-          <span>ZAMÓWIENIE</span>
-          <h1>Zamówienie projektu</h1>
+        <section
+          className="catalog-header"
+          data-checkout-v43-page-copy="true"
+          data-checkout-non-public-v31="true"
+          data-order-without-payment-v31="true"
+          data-payment-later-v31="true"
+        >
+          <span>ZAMÓWIENIE TESTOWE</span>
+          <h1>Techniczny test zamówienia</h1>
           <p>
-            To tymczasowy wewnętrzny flow zamówienia. Nie jest docelowym modelem płatności.
-            Przed publicznym udostępnieniem sklepu checkout zostanie spięty z automatycznym providerem płatności, webhookami i statusami płatności.
+            Ten ekran zapisuje zamówienie bez płatności. To etap techniczny przed integracją
+            płatności online, webhooków i statusów płatności. Checkout pozostaje niewidoczny
+            publicznie do czasu gotowości sklepu.
           </p>
         </section>
         <CheckoutForm />
