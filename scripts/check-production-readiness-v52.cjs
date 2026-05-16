@@ -31,16 +31,25 @@ function requireIncludes(rel, needles) {
 }
 
 const checklist = "_project/16_PRODUCTION_READINESS_CHECKLIST.md";
-requireFile(checklist);
-requireFile("_project/00_PROJECT_STATUS.md");
-requireFile("_project/03_CURRENT_STAGE.md");
-requireFile("_project/05_MANUAL_TESTS.md");
-requireFile("_project/06_GUARDS_AND_TESTS.md");
-requireFile("_project/07_NEXT_STEPS.md");
-requireFile("_project/11_USER_CONFIRMED_TESTS.md");
-requireFile("_project/14_TEST_HISTORY.md");
-requireFile("README.md");
-requireFile("package.json");
+const runReport = "_project/runs/2026-05-16_1500_etap29_pre_release_checklist_v1.md";
+const docsFile = "docs/production-readiness-v1.md";
+
+for (const rel of [
+  checklist,
+  runReport,
+  docsFile,
+  "_project/00_PROJECT_STATUS.md",
+  "_project/03_CURRENT_STAGE.md",
+  "_project/05_MANUAL_TESTS.md",
+  "_project/06_GUARDS_AND_TESTS.md",
+  "_project/07_NEXT_STEPS.md",
+  "_project/11_USER_CONFIRMED_TESTS.md",
+  "_project/14_TEST_HISTORY.md",
+  "README.md",
+  "package.json"
+]) {
+  requireFile(rel);
+}
 
 requireIncludes(checklist, [
   "Etap 29 pre-release V1",
@@ -71,13 +80,18 @@ requireIncludes(checklist, [
 ]);
 
 const checklistText = read(checklist);
-const requiredStatuses = ["OK", "BLOKADA", "DO POTWIERDZENIA", "NIE DOTYCZY V1"];
-for (const status of requiredStatuses) {
+for (const status of ["OK", "BLOKADA", "DO POTWIERDZENIA", "NIE DOTYCZY V1"]) {
   if (!checklistText.includes(status)) fail(`Checklist missing status option: ${status}`);
 }
 
-const requiredSections = ["## Teza", "## Kryterium końcowe", "## Checklist pre-release V1", "## Najkrótszy test praktyczny", "## Czego ten etap nie robi", "## Wymagany guard"];
-for (const section of requiredSections) {
+for (const section of [
+  "## Teza",
+  "## Kryterium końcowe",
+  "## Checklist pre-release V1",
+  "## Najkrótszy test praktyczny",
+  "## Czego ten etap nie robi",
+  "## Wymagany guard"
+]) {
   if (!checklistText.includes(section)) fail(`Checklist missing section: ${section}`);
 }
 
@@ -98,24 +112,18 @@ if (packageJson) {
   }
 }
 
-const docsMarkers = [
-  "Etap 29",
-  "pre-release",
-  "testowej sprzedaży realnego projektu",
-  "bez udawania automatyzacji"
-];
-requireIncludes("README.md", ["verify:production-readiness-v52"]);
-for (const rel of [
-  "_project/00_PROJECT_STATUS.md",
-  "_project/03_CURRENT_STAGE.md",
-  "_project/05_MANUAL_TESTS.md",
-  "_project/06_GUARDS_AND_TESTS.md",
-  "_project/07_NEXT_STEPS.md",
-  "_project/14_TEST_HISTORY.md"
-]) {
-  requireIncludes(rel, docsMarkers.slice(0, 2));
-}
-requireIncludes("_project/11_USER_CONFIRMED_TESTS.md", ["Brak potwierdzenia Etapu 29", "TEST RĘCZNY DO WYKONANIA"]);
+requireIncludes("README.md", ["Etap 29", "verify:production-readiness-v52", "testowej sprzedaży realnego projektu"]);
+requireIncludes(docsFile, ["Production readiness V1", "Etap 29", "TEST RĘCZNY DO WYKONANIA"]);
+requireIncludes(runReport, [
+  "Run report - Etap 29 pre-release checklist V1",
+  "DOWOD SKANU",
+  "FAKTY Z KODU / PLIKOW",
+  "DECYZJE DAMIANA",
+  "TEST RĘCZNY DO WYKONANIA",
+  "WPLYW NA OBSIDIANA",
+  "CZY ETAP ZAMKNIETY"
+]);
+requireIncludes("_project/11_USER_CONFIRMED_TESTS.md", ["Brak pełnych potwierdzeń"]);
 
 const forbiddenPublicClaims = [
   "automatyczna wysyłka plików",
