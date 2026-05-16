@@ -198,3 +198,36 @@ TEST RĘCZNY:
 - TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
 
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## 2026-05-16_1810 - Etap B: naprawa project memory / aktualnego statusu etapów
+
+### Co wdrożono
+
+- Ujednolicono aktywny stan w `_project/03_CURRENT_STAGE.md`.
+- Ustawiono realny następny krok w `_project/07_NEXT_STEPS.md`.
+- Dopisano skonsolidowany status testów w `_project/14_TEST_HISTORY.md`.
+- Przepisano roadmapę produkcyjną w `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`, żeby usunąć konflikt Etapu B i nie zamykać fałszywie V1.
+- Dopisano blocker readiness w `_project/16_PRODUCTION_READINESS_CHECKLIST.md`.
+- Dodano guard dokumentacyjny `scripts/check-project-stage-status-b.cjs` i script `verify:project-stage-status-b`.
+- Przygotowano aktualizację Obsidiana: dashboard i roadmapa.
+
+### Czego nie zmieniono
+
+- Nie zmieniono runtime aplikacji.
+- Nie wdrożono płatności automatycznych.
+- Nie publikowano aplikacji klientom.
+
+### Testy / guardy
+
+- `npm run verify:project-stage-status-b`
+- `npm run check:project-memory`
+- Pełne `npm run verify` opcjonalnie flagą `-RunFullVerify`.
+
+### Test ręczny
+
+TEST RĘCZNY DO WYKONANIA: runtime V1 i audit runtime.
+
+### Ryzyka
+
+Bez tej korekty agent może uznać stary Etap 20 albo Etap 29 za aktywny/pełne zamknięcie V1.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->

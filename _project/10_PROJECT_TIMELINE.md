@@ -210,3 +210,9 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## 2026-05-16_1810 - Etap B: project memory status fix
+
+Porządkowanie pamięci projektu po etapach 22-29. Etap 29 nie oznacza zamknięcia V1. Runtime audit i pełny flow sklepu pozostają do ręcznego potwierdzenia przez Damiana.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->

@@ -1,5 +1,45 @@
 # 03_CURRENT_STAGE - aktualny etap
 
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## Aktualny realny stan - Etap B: naprawa project memory
+
+Status: NIEKOMPLETNE / DO DOMKNIĘCIA PRZED PUBLICZNYM URUCHOMIENIEM.
+Data aktualizacji: 2026-05-16_1810 Europe/Warsaw.
+
+### FAKTY Z REPO I PROJECT MEMORY
+
+Kod ma wdrożone elementy etapów 22-29, ale nie wszystkie są zamknięte produkcyjnie.
+
+Nie wolno traktować Etapu 29 jako pełnego zamknięcia V1, ponieważ:
+- runtime V1 nie jest potwierdzony ręcznie,
+- audit runtime nie jest potwierdzony ręcznie dla wszystkich operacji,
+- obecny flow płatności ręcznej jest sprzeczny z decyzją Damiana,
+- docelowe płatności automatyczne nie są wdrożone,
+- aplikacja nie jest jeszcze publiczna dla klientów.
+
+### DECYZJA DAMIANA
+
+Nie wdrażamy płatności ręcznych jako docelowego modelu. Docelowy kierunek to automatyczne płatności online: Stripe/payment provider, webhooki i statusy płatności.
+
+### NASTĘPNY REALNY ETAP
+
+1. Domknąć Etap A: korekta kierunku płatności i roadmapy.
+2. Potem: runtime audit admina i pełny flow sklepu bez publikacji klientom.
+3. Dopiero po ręcznych potwierdzeniach Damiana można wracać do pre-release checklist V1.
+
+### STATUS TESTÓW RĘCZNYCH
+
+TEST RĘCZNY DO WYKONANIA dla runtime V1, audit runtime i flow admina.
+
+### BLOKERY PRODUKCYJNE
+
+- Brak potwierdzonego runtime testu pełnej ścieżki V1.
+- Brak potwierdzonego runtime audit logu dla wszystkich ważnych operacji admina.
+- Brak automatycznych płatności.
+- Brak zgody na publiczne udostępnienie klientom.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
+
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
 ## Aktualny etap - Etap A
 
@@ -28,7 +68,7 @@ TEST RĘCZNY DO WYKONANIA.
 
 Ostatnia aktualizacja: 2026-05-15 22:20 Europe/Warsaw
 
-## Aktualny etap
+## Historyczny wpis - stary blok Etapu 20 (nieaktywny)
 
 Etap 20: Widok audit logu `/admin/audit`
 

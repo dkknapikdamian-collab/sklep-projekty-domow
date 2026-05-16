@@ -1,4 +1,4 @@
-﻿## Checki wymagane dla Etapu 20
+## Checki wymagane dla Etapu 20
 
 ```powershell
 npm run verify:admin-audit-log-v44
@@ -334,3 +334,25 @@ Rola guarda:
 Status testu ręcznego: TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
 
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## 2026-05-16_1810 - Guard Etapu B: project stage status
+
+Nazwa:
+- `verify:project-stage-status-b`
+
+Komenda:
+```powershell
+npm run verify:project-stage-status-b
+```
+
+Sprawdza:
+- `_project/03_CURRENT_STAGE.md` ma aktywny realny stan Etapu B,
+- stary Etap 20 nie jest pierwszym aktywnym statusem,
+- `_project/07_NEXT_STEPS.md` pokazuje realną kolejność: Etap A, potem runtime audit i pełny flow sklepu,
+- `_project/14_TEST_HISTORY.md` nie udaje ręcznego potwierdzenia V1,
+- `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md` nie traktuje Etapu 29 jako pełnego zamknięcia V1,
+- `_project/16_PRODUCTION_READINESS_CHECKLIST.md` ma blocker przed publicznym startem.
+
+Status:
+- TEST AUTOMATYCZNY / GUARD.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->

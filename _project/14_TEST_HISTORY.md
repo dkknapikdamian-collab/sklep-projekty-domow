@@ -1,4 +1,35 @@
-﻿# 14_TEST_HISTORY - Sklep projekty domow
+# 14_TEST_HISTORY - Sklep projekty domow
+
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## 2026-05-16_1810 - Etap B: naprawa project memory / statusu etapów
+
+### Status zbiorczy
+
+Kod ma elementy etapów 22-29, ale V1 nie jest produkcyjnie zamknięte.
+
+### Testy automatyczne / guardy
+
+- `verify:project-stage-status-b` - guard dokumentacyjny tego etapu.
+- `check:project-memory` - wymagany po aktualizacji pamięci projektu.
+- Pełne `npm run verify` - opcjonalne w tym etapie dokumentacyjnym, ale zalecane przed kolejnym commitem produkcyjnym.
+
+### Testy ręczne
+
+- Runtime V1: TEST RĘCZNY DO WYKONANIA.
+- Runtime audit admina: TEST RĘCZNY DO WYKONANIA.
+- Publiczny start klientom: BLOKADA.
+
+### Czego nie wolno uznać za potwierdzone
+
+- Nie wolno uznać Etapu 29 za pełne zamknięcie V1.
+- Nie wolno uznać guardów za ręczne potwierdzenie runtime.
+- Nie wolno uznać manual-payment flow za docelowy model płatności.
+
+### Decyzja Damiana
+
+Nie wdrażamy płatności ręcznych jako docelowego modelu. Docelowo mają być automatyczne płatności online: Stripe/payment provider, webhooki i statusy płatności.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
 
 ## Statusy testow
 

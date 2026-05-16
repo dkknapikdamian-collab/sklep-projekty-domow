@@ -1,4 +1,25 @@
-﻿# 16_PRODUCTION_READINESS_CHECKLIST - Etap 29 pre-release V1
+# 16_PRODUCTION_READINESS_CHECKLIST - Etap 29 pre-release V1
+
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## BLOKADA: aktualny realny stan po Etapie B
+
+Status: BLOKADA PRZED PUBLICZNYM URUCHOMIENIEM.
+Data aktualizacji: 2026-05-16_1810 Europe/Warsaw.
+
+Nie wolno traktować Etapu 29 jako pełnego zamknięcia V1.
+
+Blokery:
+- runtime V1 nie jest potwierdzony ręcznie,
+- audit runtime nie jest potwierdzony ręcznie dla wszystkich operacji,
+- obecny flow płatności ręcznej jest sprzeczny z decyzją Damiana,
+- docelowe płatności automatyczne nie są wdrożone,
+- aplikacja nie jest jeszcze publiczna dla klientów.
+
+Następny realny etap:
+1. Etap A: korekta kierunku płatności i roadmapy.
+2. Potem: runtime audit admina i pełny flow sklepu bez publikacji klientom.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
 
 Data: 2026-05-16
 Status dokumentu: AKTYWNY CHECKLIST / DO WYKONANIA PO ETAPACH 22-28

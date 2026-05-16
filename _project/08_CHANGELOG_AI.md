@@ -234,3 +234,11 @@ TEST RĘCZNY:
 Status testu ręcznego: TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
 
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## 2026-05-16_1810 - Etap B: naprawa project memory / statusu etapów
+
+FAKT: Ujednolicono aktywny status projektu: kod ma elementy etapów 22-29, ale V1 nie jest produkcyjnie zamknięte bez runtime testów Damiana.
+DECYZJA: płatności ręczne nie są docelowym modelem; docelowo automatyczne płatności online.
+TESTY: dodano guard `verify:project-stage-status-b`; do uruchomienia z `check:project-memory`.
+OBSIDIAN: dashboard i roadmapa wymagają tej samej korekty statusu.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->

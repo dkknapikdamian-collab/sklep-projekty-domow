@@ -1,5 +1,46 @@
 # 07_NEXT_STEPS - nastepne kroki
 
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
+## Najbliższy realny kierunek - po korekcie pamięci projektu
+
+Status: NIEKOMPLETNE / DO WYKONANIA.
+Data aktualizacji: 2026-05-16_1810 Europe/Warsaw.
+
+### Kolejność operacyjna
+
+1. Etap B: naprawa project memory / aktualnego statusu etapów.
+   - `03_CURRENT_STAGE.md` ma zaczynać się od realnego stanu, a nie od starego Etapu 20.
+   - `07_NEXT_STEPS.md` ma pokazywać realny następny krok.
+   - `14_TEST_HISTORY.md` ma odróżniać guardy od testów ręcznych.
+   - Roadmapa i Obsidian mają mieć ten sam status.
+
+2. Etap A: korekta kierunku płatności i roadmapy.
+   - płatności ręczne nie są docelowym modelem,
+   - obecny manual-payment flow jest legacy / temporary / internal only,
+   - docelowo: automatyczne płatności online, provider, webhooki, statusy płatności.
+
+3. Runtime audit admina.
+   - sprawdzić `/admin/audit` po realnych operacjach admina,
+   - potwierdzić wpisy audit logu,
+   - zapisać wynik w `_project/` i Obsidianie.
+
+4. Pełny flow sklepu bez publikacji klientom.
+   - realny projekt active,
+   - karta projektu,
+   - koszyk,
+   - checkout / zamówienie,
+   - admin zamówień,
+   - audit log.
+
+### Czego nie robić teraz
+
+- Nie traktować Etapu 29 jako zamknięcia V1.
+- Nie publikować aplikacji klientom.
+- Nie komunikować płatności ręcznych jako docelowego modelu.
+- Nie wdrażać Stripe/PayU bez osobnej decyzji Damiana i osobnego etapu.
+<!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
+
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
 ## Najbliższy kierunek - płatności
 
@@ -14,7 +55,7 @@ Decyzja: Nie wdrażamy płatności ręcznych jako docelowego modelu.
 Status testu: TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
 
-## Najblizszy rekomendowany krok
+## Starszy wpis - poprzedni rekomendowany krok
 
 Etap 22: runtime audit admina i zamkniecie audit logu.
 
@@ -27,7 +68,7 @@ Czytac i aktualizowac:
 - `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`,
 - `10_PROJEKTY/Sklep_projekty_domow/11_ROADMAPA PRODUKCYJNA I ODHACZANIE - Sklep projekty domow.md`.
 
-## Kolejnosc etapow
+## Starszy wpis - poprzednia kolejność etapów
 
 1. Etap 22 - runtime audit admina.
 2. Etap A - korekta kierunku platnosci: platnosci reczne nie sa docelowym modelem.
