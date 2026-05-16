@@ -99,3 +99,22 @@ BRAK POTWIERDZONEGO TESTU:
 
 ### TEST RĘCZNY DO WYKONANIA
 - Runtime audit w /admin/audit po realnych operacjach admina: create project, status update, media delete/type update, private file delete, order status/checklist.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Etap 22 — Runtime audit admina i zamknięcie Etapu 21
+
+FAKT:
+- Etap 22 zaostrza Etap 21: audit admina ma być potwierdzany nie tylko statycznie, ale przez realne operacje w panelu admina i wpisy w /admin/audit.
+- Rozszerzono kontrakt metadata audit logu: source, projectCode/orderId, fromStatus/toStatus albo poprzednie/nowe wartości dla operacji bez klasycznego statusu.
+
+DECYZJA DAMIANA:
+- To jest następny etap, przekonanie 10/10.
+- Manualny runtime test zostaje wymagany przed pełnym zamknięciem etapu.
+
+TEST RĘCZNY:
+- Status: TEST RĘCZNY DO WYKONANIA.
+- Kryterium: po realnych operacjach admina wpisy są widoczne w /admin/audit z poprawnym action, entity_type, entity_id i metadata.
+
+BRAKI I RYZYKA:
+- Automatyczny guard pilnuje kontraktu kodu, ale nie zastępuje kliknięcia runtime w panelu admina i sprawdzenia realnej tabeli admin_audit_log.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->

@@ -67,9 +67,9 @@ const helper = requireIncludes("lib/admin/audit-log.ts", [
   "action",
   "metadata",
   "created_at",
-  ".order(\"created_at\", { ascending: false })",
+  ".order("created_at", { ascending: false })",
   ".limit(limit)",
-  ".eq(\"action\", action)",
+  ".eq("action", action)",
   "throw new Error"
 ]);
 
@@ -89,7 +89,7 @@ const criticalActions = [
 ];
 
 for (const action of criticalActions) {
-  const filterNeedle = "\"" + action + "\"";
+  const filterNeedle = """ + action + """;
   const labelNeedle = action + ":";
   if (!helper.includes(filterNeedle)) fail("audit helper missing action filter: " + action);
   if (!helper.includes(labelNeedle)) fail("audit helper missing action label: " + action);
@@ -169,7 +169,7 @@ const projectActions = requireIncludes("app/admin/projekty/actions.ts", [
   'action: "project_update"',
   'entityType: "project"',
   "projectStatusBeforeDelete",
-  '![\"archived\", \"draft\"].includes(projectStatusBeforeDelete)',
+  '!["archived", "draft"].includes(projectStatusBeforeDelete)',
   'source: "updateProjectStatusAction"',
   'source: "archiveProjectAction"',
   'source: "deleteProjectAction"',
@@ -201,7 +201,7 @@ for (const needle of [
   if (!projectActions.includes(needle)) fail("project actions missing Etap 22 runtime audit marker: " + needle);
 }
 
-const statusDeclCount = (projectActions.match(/const projectStatusBeforeDelete = String\(project\.status \|\| ""\);/g) || []).length;
+const statusDeclCount = (projectActions.match(/const projectStatusBeforeDelete = String(project.status || "");/g) || []).length;
 if (statusDeclCount !== 1) fail("expected exactly one projectStatusBeforeDelete declaration, got " + statusDeclCount);
 
 const orderActions = requireIncludes("app/admin/zamowienia/actions.ts", [

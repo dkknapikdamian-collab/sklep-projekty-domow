@@ -59,3 +59,16 @@
 - Uzupelniono pelna pamiec projektu w repo aplikacji i Obsidianie.
 - Dodano/uzupelniono pliki `_project/`.
 - Dodano guard pamieci projektu.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Etap 22 — runtime audit admina
+
+Zmiany:
+- Dodano/zaostrzono metadata audit logu dla operacji admina: source, projectCode/orderId, previous/new status lub odpowiedniki.
+- Dodano audyt blokowanej próby trwałego usunięcia projektu jako `project_hard_delete_blocked`.
+- Rozszerzono `scripts/check-admin-audit-log-v44.cjs` o krytyczne action i kontrakt metadata.
+- Zaktualizowano pamięć projektu i pakiet Obsidiana.
+
+Status testu ręcznego:
+- TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->

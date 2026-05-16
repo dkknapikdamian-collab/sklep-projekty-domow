@@ -33,3 +33,22 @@ TEST RECZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach ad
 | Tests | memory guard required, existing project-memory guard if present, build optional if present |
 | Manual status | BRAK POTWIERDZONEGO TESTU for UI |
 | Next | verify dashboard, then continue store implementation stages |
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Etap 22 — implementation ledger
+
+Dotknięte obszary:
+- `app/admin/projekty/actions.ts`
+- `app/admin/projekty/nowy/actions.ts`
+- `app/admin/zamowienia/actions.ts`
+- `lib/admin/audit-log.ts`
+- `scripts/check-admin-audit-log-v44.cjs`
+- `_project/*`
+- Obsidian: `10_PROJEKTY/Sklep_projekty_domow/*`
+
+Powód:
+- Zamknąć lukę między statycznym istnieniem audit logu a realnym runtime śladem operacji admina.
+
+Ryzyko:
+- Test runtime zależy od lokalnego admina, Supabase i realnych danych testowych.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->

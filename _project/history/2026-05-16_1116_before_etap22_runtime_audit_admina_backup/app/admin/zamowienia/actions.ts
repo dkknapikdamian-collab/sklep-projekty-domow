@@ -6,7 +6,6 @@ import { getAdminSession } from "@/lib/auth/admin";
 import {
   ADMIN_ORDER_STATUSES,
   type AdminOrderStatus,
-  getAdminOrderById,
   updateAdminOrderFulfillmentChecklist,
   updateAdminOrderStatus
 } from "@/lib/admin/orders-admin";
@@ -39,8 +38,6 @@ export async function updateOrderStatusAction(formData: FormData) {
     redirect("/admin/zamowienia?status=error");
   }
 
-  const orderBeforeStatusUpdate = await getAdminOrderById(orderId);
-
   await updateAdminOrderStatus(orderId, status);
 
   await writeAdminAuditLog({
@@ -49,12 +46,7 @@ export async function updateOrderStatusAction(formData: FormData) {
     entityId: orderId,
     action: "order_status_update",
     metadata: {
-      source: "updateOrderStatusAction",
-      orderId,
-      fromStatus: orderBeforeStatusUpdate?.status || null,
-      toStatus: status,
-      previousStatus: orderBeforeStatusUpdate?.status || null,
-      newStatus: status
+      toStatus: status
     }
   });
 
@@ -90,9 +82,6 @@ export async function updateOrderFulfillmentChecklistAction(formData: FormData) 
     paymentInstruction
   };
 
-  const orderBeforeChecklistUpdate = await getAdminOrderById(orderId);
-  const checklistBefore = orderBeforeChecklistUpdate?.fulfillmentChecklist || null;
-
   await updateAdminOrderFulfillmentChecklist(payload);
 
   await writeAdminAuditLog({
@@ -101,21 +90,11 @@ export async function updateOrderFulfillmentChecklistAction(formData: FormData) 
     entityId: orderId,
     action: "order_fulfillment_checklist_update",
     metadata: {
-      source: "updateOrderFulfillmentChecklistAction",
-      orderId,
-      fromStatus: orderBeforeChecklistUpdate?.status || null,
-      toStatus: payload.orderClosed ? "closed" : orderBeforeChecklistUpdate?.status || null,
-      previousPaymentConfirmed: checklistBefore?.paymentConfirmed ?? null,
       paymentConfirmed: payload.paymentConfirmed,
-      previousPdfSent: checklistBefore?.pdfSent ?? null,
       pdfSent: payload.pdfSent,
-      previousZipSent: checklistBefore?.zipSent ?? null,
       zipSent: payload.zipSent,
-      previousOrderClosed: checklistBefore?.orderClosed ?? null,
       orderClosed: payload.orderClosed,
-      previousHasInternalNote: checklistBefore ? checklistBefore.internalNote.length > 0 : null,
       hasInternalNote: payload.internalNote.length > 0,
-      previousHasPaymentInstruction: checklistBefore ? checklistBefore.paymentInstruction.length > 0 : null,
       hasPaymentInstruction: payload.paymentInstruction.length > 0
     }
   });

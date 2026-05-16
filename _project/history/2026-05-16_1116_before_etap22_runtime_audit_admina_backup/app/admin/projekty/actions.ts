@@ -333,11 +333,8 @@ export async function updateProjectStatusAction(formData: FormData) {
       projectCode: projectBeforeStatusChange.code || null,
       projectName: projectBeforeStatusChange.name || null,
       projectSlug: projectBeforeStatusChange.slug || slug || null,
-      source: "updateProjectStatusAction",
       fromStatus: projectBeforeStatusChange.status || null,
-      toStatus: status,
-      previousStatus: projectBeforeStatusChange.status || null,
-      newStatus: status
+      toStatus: status
     }
   });
 
@@ -411,11 +408,8 @@ export async function archiveProjectAction(formData: FormData) {
       projectCode: project.code || null,
       projectName: project.name || null,
       projectSlug,
-      source: "archiveProjectAction",
       fromStatus: String(project.status || ""),
-      toStatus: "archived",
-      previousStatus: String(project.status || ""),
-      newStatus: "archived"
+      toStatus: "archived"
     }
   });
 
@@ -447,49 +441,11 @@ export async function deleteProjectAction(formData: FormData) {
 
   const projectStatusBeforeDelete = String(project.status || "");
   if (!["archived", "draft"].includes(projectStatusBeforeDelete)) {
-    await writeAdminAuditLog({
-      supabase,
-      admin,
-      entityType: "project",
-      entityId: projectId,
-      action: "project_hard_delete_blocked",
-      metadata: {
-        source: "deleteProjectAction",
-        reason: "status_not_allowed",
-        projectCode: project.code || null,
-        projectName: project.name || null,
-        projectSlug: project.slug || null,
-        fromStatus: projectStatusBeforeDelete,
-        toStatus: "blocked",
-        previousStatus: projectStatusBeforeDelete,
-        newStatus: "blocked"
-      }
-    });
-
     redirect("/admin/projekty?status=error&reason=Najpierw%20zarchiwizuj%20projekt%20albo%20ustaw%20draft%20przed%20trwalym%20usunieciem");
   }
 
   const expectedCode = String(project.code || "").trim().toUpperCase();
   if (!expectedCode || confirmationCode !== expectedCode) {
-    await writeAdminAuditLog({
-      supabase,
-      admin,
-      entityType: "project",
-      entityId: projectId,
-      action: "project_hard_delete_blocked",
-      metadata: {
-        source: "deleteProjectAction",
-        reason: "confirmation_code_mismatch",
-        projectCode: project.code || null,
-        projectName: project.name || null,
-        projectSlug: project.slug || null,
-        fromStatus: projectStatusBeforeDelete,
-        toStatus: "blocked",
-        previousStatus: projectStatusBeforeDelete,
-        newStatus: "blocked"
-      }
-    });
-
     throw new Error("Wpisany kod projektu nie potwierdza usuniecia.");
   }
 
@@ -500,15 +456,10 @@ export async function deleteProjectAction(formData: FormData) {
     entityId: projectId,
     action: "project_hard_delete",
     metadata: {
-      source: "deleteProjectAction",
       projectCode: project.code || null,
       projectName: project.name || null,
       projectSlug: project.slug || null,
-      statusBeforeDelete: projectStatusBeforeDelete,
-      fromStatus: projectStatusBeforeDelete,
-      toStatus: "deleted",
-      previousStatus: projectStatusBeforeDelete,
-      newStatus: "deleted"
+      statusBeforeDelete: projectStatusBeforeDelete
     }
   });
 
@@ -552,22 +503,8 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
 
   const { admin, supabase } = await requireAdminAndClient();
 
-  const { data: mediaBeforeDeleteForAudit, error: mediaBeforeDeleteForAuditError } = await supabase
-    .from("project_media")
-    .select("id, project_id, media_type, bucket, path, title")
-    .eq("id", mediaId)
-    .eq("project_id", projectId)
-    .maybeSingle();
-
-  if (mediaBeforeDeleteForAuditError) {
-    throw new Error(`Nie udalo sie pobrac media przed usunieciem: ${mediaBeforeDeleteForAuditError.message}`);
-  }
-
-  const resolvedMediaBucket = String(mediaBeforeDeleteForAudit?.bucket || bucket || "project-media");
-  const resolvedMediaPath = String(mediaBeforeDeleteForAudit?.path || path || "");
-
-  if (resolvedMediaPath) {
-    await supabase.storage.from(resolvedMediaBucket).remove([resolvedMediaPath]);
+  if (path) {
+    await supabase.storage.from(bucket).remove([path]);
   }
 
   const { error } = await supabase
@@ -585,15 +522,11 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
     entityId: mediaId,
     action: "project_media_delete",
     metadata: {
-      source: "deleteProjectMediaItemAction",
       projectId,
       projectCode,
       projectSlug,
-      previousMediaType: mediaBeforeDeleteForAudit?.media_type || null,
-      newMediaType: "deleted",
-      bucket: resolvedMediaBucket,
-      path: resolvedMediaPath,
-      title: mediaBeforeDeleteForAudit?.title || null
+      bucket,
+      path
     }
   });
 
@@ -620,7 +553,7 @@ export async function setProjectMediaTypeAction(formData: FormData) {
 
   const { data: selectedMedia, error: selectedMediaError } = await supabase
     .from("project_media")
-    .select("id, project_id, media_type, bucket, path, title")
+    .select("id, project_id")
     .eq("id", mediaId)
     .eq("project_id", projectId)
     .maybeSingle();
@@ -652,16 +585,10 @@ export async function setProjectMediaTypeAction(formData: FormData) {
     entityId: mediaId,
     action: "project_media_type_update",
     metadata: {
-      source: "setProjectMediaTypeAction",
       projectId,
       projectCode,
       projectSlug,
-      previousMediaType: selectedMedia.media_type || null,
-      newMediaType: targetType,
-      targetType,
-      bucket: selectedMedia.bucket || null,
-      path: selectedMedia.path || null,
-      title: selectedMedia.title || null
+      targetType
     }
   });
 
@@ -732,26 +659,8 @@ export async function deleteProjectPrivateFileItemAction(formData: FormData) {
 
   const { admin, supabase } = await requireAdminAndClient();
 
-  const [{ data: privateFileBeforeDeleteForAudit, error: privateFileBeforeDeleteForAuditError }, { data: privateFileProjectForAudit }] =
-    await Promise.all([
-      supabase
-        .from("project_files")
-        .select("id, project_id, file_type, bucket, path, title, version")
-        .eq("id", fileId)
-        .eq("project_id", projectId)
-        .maybeSingle(),
-      supabase.from("projects").select("id, code, slug, name").eq("id", projectId).maybeSingle()
-    ]);
-
-  if (privateFileBeforeDeleteForAuditError) {
-    throw new Error(`Nie udalo sie pobrac pliku prywatnego przed usunieciem: ${privateFileBeforeDeleteForAuditError.message}`);
-  }
-
-  const resolvedPrivateFileBucket = String(privateFileBeforeDeleteForAudit?.bucket || bucket || "project-private-files");
-  const resolvedPrivateFilePath = String(privateFileBeforeDeleteForAudit?.path || path || "");
-
-  if (resolvedPrivateFilePath) {
-    await supabase.storage.from(resolvedPrivateFileBucket).remove([resolvedPrivateFilePath]);
+  if (path) {
+    await supabase.storage.from(bucket).remove([path]);
   }
 
   const { error } = await supabase
@@ -769,18 +678,9 @@ export async function deleteProjectPrivateFileItemAction(formData: FormData) {
     entityId: fileId,
     action: "project_private_file_delete",
     metadata: {
-      source: "deleteProjectPrivateFileItemAction",
       projectId,
-      projectCode: privateFileProjectForAudit?.code || null,
-      projectSlug: privateFileProjectForAudit?.slug || null,
-      projectName: privateFileProjectForAudit?.name || null,
-      fileType: privateFileBeforeDeleteForAudit?.file_type || null,
-      fileTitle: privateFileBeforeDeleteForAudit?.title || null,
-      fileVersion: privateFileBeforeDeleteForAudit?.version || null,
-      bucket: resolvedPrivateFileBucket,
-      path: resolvedPrivateFilePath,
-      previousStatus: "available",
-      newStatus: "deleted"
+      bucket,
+      path
     }
   });
 
@@ -815,7 +715,7 @@ export async function updateProjectAction(
     if (duplicateError) throw new Error(`Nie udalo sie sprawdzic unikalnosci slug: ${duplicateError.message}`);
     if (duplicateSlug) throw new Error(`Slug jest juz uzywany przez projekt ${duplicateSlug.code || ""} ${duplicateSlug.name || ""}.`);
 
-    const { data: oldProject } = await supabase.from("projects").select("slug, code, name, status").eq("id", projectId).maybeSingle();
+    const { data: oldProject } = await supabase.from("projects").select("slug, code").eq("id", projectId).maybeSingle();
     if (!oldProject?.code) throw new Error("Nie znaleziono projektu do edycji.");
 
     const rooms = parseJsonArray<RoomInput>(formData, "roomsJson");
@@ -940,16 +840,10 @@ export async function updateProjectAction(
       entityId: projectId,
       action: "project_update",
       metadata: {
-        source: "updateProjectAction",
         projectCode: oldProject.code,
         previousSlug: oldProject.slug,
         newSlug: slug,
-        fromStatus: oldProject.status || null,
-        toStatus: status,
-        previousStatus: oldProject.status || null,
-        newStatus: status,
         status,
-        previousName: oldProject.name || null,
         name
       }
     });
@@ -1067,13 +961,9 @@ export async function createSampleProjectAction() {
     entityId: String(sampleProjectForAudit.id),
     action: "project_sample_create",
     metadata: {
-      source: "createSampleProjectAction",
       projectCode: String(nextCode).toUpperCase(),
       projectSlug: baseSlug,
-      fromStatus: null,
-      toStatus: "active",
-      previousStatus: null,
-      newStatus: "active"
+      source: "createSampleProjectAction"
     }
   });
   // ETAP21_PROJECT_SAMPLE_CREATE_AUDIT_END

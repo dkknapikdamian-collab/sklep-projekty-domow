@@ -212,3 +212,29 @@ BRAK POTWIERDZONEGO TESTU:
 
 FAKT: dodano i zweryfikowano statycznie realne markery audit logu dla brakujących mutacji admina.
 TEST RĘCZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach admina.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Etap 22 — test ręczny runtime admin audit
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+Wykonać lokalnie w panelu admina:
+1. Utworzenie projektu draft.
+2. Edycja projektu.
+3. Zmiana statusu projektu.
+4. Archiwizacja projektu.
+5. Próba trwałego usunięcia projektu, w tym blokada dla niedozwolonego statusu albo błędnego kodu.
+6. Usunięcie medium.
+7. Zmiana typu medium hero/thumbnail.
+8. Usunięcie prywatnego pliku.
+9. Zmiana statusu zamówienia.
+10. Zapis checklisty realizacji zamówienia.
+
+Po każdej operacji wejść w /admin/audit i sprawdzić:
+- wpis istnieje,
+- action jest zgodne z operacją,
+- entity_type ma sens,
+- entity_id wskazuje właściwy rekord,
+- metadata zawiera minimum source oraz projectCode albo orderId,
+- przy zmianach statusu metadata ma fromStatus/toStatus albo poprzednie/nowe wartości.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->

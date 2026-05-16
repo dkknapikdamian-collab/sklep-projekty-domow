@@ -1,4 +1,4 @@
-## Checki wymagane dla Etapu 20
+﻿## Checki wymagane dla Etapu 20
 
 ```powershell
 npm run verify:admin-audit-log-v44
@@ -134,3 +134,38 @@ BRAK POTWIERDZONEGO TESTU:
 
 FAKT: dodano i zweryfikowano statycznie realne markery audit logu dla brakujących mutacji admina.
 TEST RĘCZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach admina.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Etap 22 — guardy audit admina
+
+Guard rozszerzony:
+- `npm run verify:admin-audit-log-v44` pilnuje krytycznych akcji audit logu oraz kontraktu metadata runtime.
+
+Wymagane checki etapu:
+- `npm run verify:admin-audit-log-v44`
+- `npm run verify:admin-orders-v42`
+- `npm run typecheck`
+- `npm run build`
+- `npm run check:project-memory`
+
+Uwaga:
+- Guard statyczny nie zastępuje testu ręcznego w /admin/audit.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_CHECK_RESULTS_START -->
+## Etap 22 - automatic check results from APPLY V3
+
+Date: 2026-05-16_1137
+
+Result:
+- npm run verify:admin-audit-log-v44 - PASS
+- npm run verify:admin-orders-v42 - PASS
+- npm run typecheck - PASS
+- npm run build - PASS
+- npm run check:project-memory - PASS
+
+Note:
+- This is not manual runtime confirmation. Manual status remains: TEST RECZNY DO WYKONANIA.
+- Full close criterion: Damian must see real entries in /admin/audit after admin operations.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_CHECK_RESULTS_END -->
+

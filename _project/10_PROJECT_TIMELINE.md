@@ -72,3 +72,12 @@ Od tego momentu kazdy etap ma odhaczac: kod, guardy, test reczny, potwierdzenie 
 - Nie refaktorowac szeroko przy malych etapach.
 - Nie dopisywac propozycji AI jako decyzji.
 - Nie ruszac routingu, jesli zadanie dotyczy tylko dokumentacji/pamieci.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## 2026-05-16_1137 — Etap 22 runtime audit admina
+
+- Rozszerzono kontrakt audit logu admina.
+- Dodano statyczny guard dla metadata runtime.
+- Przygotowano ręczną checklistę testu runtime /admin/audit.
+- Etap pozostaje niezamknięty manualnie do potwierdzenia Damiana.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->

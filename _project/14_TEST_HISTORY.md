@@ -1,4 +1,4 @@
-# 14_TEST_HISTORY - Sklep projekty domow
+﻿# 14_TEST_HISTORY - Sklep projekty domow
 
 ## Statusy testow
 
@@ -32,3 +32,32 @@ TEST RECZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach ad
 | Obsidian dashboard manual review | TEST RECZNY DO WYKONANIA | Damian should open dashboard |
 | Store UI manual review | BRAK POTWIERDZONEGO TESTU | this package does not change UI |
 | User-confirmed manual test | TEST RECZNY POTWIERDZONY PRZEZ DAMIANA | only after Damian explicitly confirms |
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Etap 22 — test history
+
+Automatyczne:
+- Do uruchomienia przez APPLY: verify:admin-audit-log-v44, verify:admin-orders-v42, typecheck, build, check:project-memory.
+
+Ręczne:
+- Status: TEST RĘCZNY DO WYKONANIA.
+- Potwierdzenie Damiana: brak na moment wdrożenia paczki.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_CHECK_RESULTS_START -->
+## Etap 22 - automatic check results from APPLY V3
+
+Date: 2026-05-16_1137
+
+Result:
+- npm run verify:admin-audit-log-v44 - PASS
+- npm run verify:admin-orders-v42 - PASS
+- npm run typecheck - PASS
+- npm run build - PASS
+- npm run check:project-memory - PASS
+
+Note:
+- This is not manual runtime confirmation. Manual status remains: TEST RECZNY DO WYKONANIA.
+- Full close criterion: Damian must see real entries in /admin/audit after admin operations.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_CHECK_RESULTS_END -->
+

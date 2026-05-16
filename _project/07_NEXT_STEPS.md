@@ -54,3 +54,14 @@ Czytac i aktualizowac:
 <!-- ETAP22_29_PRODUCTION_ROADMAP_ACCEPTANCE_2026_05_16 -->
 
 Dodano aktywna roadmapa produkcyjna i ledger odhaczania. Nastepny krok to Etap 22.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Następny krok po Etapie 22
+
+Najkrótszy sensowny krok:
+- Damian wykonuje runtime test z listy w `_project/05_MANUAL_TESTS.md`.
+- Po potwierdzeniu wpisać status: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA.
+- Dopiero potem uznać Etap 21/22 za zamknięty operacyjnie.
+
+Nie zaczynać nowych dużych funkcji admina przed potwierdzeniem, że audit realnie zapisuje ślady operacji.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->

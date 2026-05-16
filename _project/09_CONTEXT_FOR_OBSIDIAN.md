@@ -47,3 +47,13 @@ Nie oznaczac etapu jako kompletnego bez statusu testu recznego i bez aktualizacj
 ## Ostatnia zmiana
 
 2026-05-16: dodano aktywna roadmapa produkcyjna i odhaczanie etapow. Zmiana dotyczy pamieci projektu i Obsidiana, bez zmian kodu aplikacji.
+
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_START -->
+## Obsidian context — Etap 22
+
+Do Obsidiana wpisano:
+- Etap 22 jako aktywny kierunek domknięcia Etapu 21.
+- Status manualny: TEST RĘCZNY DO WYKONANIA.
+- Guardy automatyczne wymagane przed zamknięciem.
+- Runtime checklistę /admin/audit.
+<!-- ETAP22_RUNTIME_AUDIT_ADMINA_END -->
