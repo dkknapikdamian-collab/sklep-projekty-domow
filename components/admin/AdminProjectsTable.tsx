@@ -88,6 +88,8 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
               const missingText = missing.join(", ") || "-";
               const badges = statusBadges(project);
               const publicHref = `/projekty/${project.slug}`;
+                            const adminPreviewHref = `/admin/projekty/${project.id}/podglad`;
+                            const isPubliclyVisible = project.status === "active";
 
               return (
                 <tr key={project.id}>
@@ -117,16 +119,20 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                       <span className="admin-project-missing">Braki: {missingText}</span>
                     )}
                   </td>
-                  <td title={publicHref}>
-                    <Link href={publicHref} target="_blank" rel="noreferrer">
-                      {publicHref}
-                    </Link>
+                  <td title={isPubliclyVisible ? publicHref : "Projekt nie jest publiczny"}>
+                    {isPubliclyVisible ? (
+                      <Link href={publicHref} target="_blank" rel="noreferrer">
+                        {publicHref}
+                      </Link>
+                    ) : (
+                      <span className="admin-project-nonpublic" data-admin-project-nonpublic="true">Niepubliczny</span>
+                    )}
                   </td>
                   <td title={formatDate(project.updatedAt)}>{formatDate(project.updatedAt)}</td>
                   <td>
                     <div className="admin-row-actions" data-admin-project-row-actions="true">
                       <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
-                      <Link href={publicHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                      <Link href={adminPreviewHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview" data-admin-public-preview-route="admin-preview">Podglad publiczny</Link>
                       <AdminProjectArchiveForm
                         projectId={project.id}
                         projectCode={project.code}
@@ -151,6 +157,8 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
           const missing = missingList(project);
           const badges = statusBadges(project);
           const publicHref = `/projekty/${project.slug}`;
+                            const adminPreviewHref = `/admin/projekty/${project.id}/podglad`;
+                            const isPubliclyVisible = project.status === "active";
           return (
             <article key={`mobile-${project.id}`} className="admin-project-mobile-card">
               <header>
@@ -182,13 +190,17 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                 </div>
               </dl>
               <p className="admin-project-mobile-link">
-                <Link href={publicHref} target="_blank" rel="noreferrer">
-                  {publicHref}
-                </Link>
+                {isPubliclyVisible ? (
+                  <Link href={publicHref} target="_blank" rel="noreferrer">
+                    {publicHref}
+                  </Link>
+                ) : (
+                  <span className="admin-project-nonpublic" data-admin-project-nonpublic="true">Niepubliczny poza katalogiem</span>
+                )}
               </p>
               <div className="admin-row-actions" data-admin-project-row-actions="true">
                 <Link href={`/admin/projekty/${project.id}/edytuj`} data-admin-action="project-edit">Edytuj</Link>
-                <Link href={publicHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview">Podglad publiczny</Link>
+                <Link href={adminPreviewHref} target="_blank" rel="noreferrer" data-admin-action="project-public-preview" data-admin-public-preview-route="admin-preview">Podglad publiczny</Link>
                 <AdminProjectArchiveForm
                   projectId={project.id}
                   projectCode={project.code}

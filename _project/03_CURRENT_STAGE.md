@@ -231,3 +231,19 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: sprawdzic hover, klik/active, pending oraz archiwizacje projektu niearchived.
 <!-- ETAP24_ADMIN_ACTION_FEEDBACK_ARCHIVE_FIX -->
+
+<!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+## Etap 25 - admin public preview bez 404
+
+FAKT:
+- Zgloszono, ze Podglad publiczny z admina prowadzi do 404 dla projektow, ktore nie sa active/publiczne.
+- Dodano chroniona trase admin preview /admin/projekty/[id]/podglad, ktora czyta projekt po ID bez filtra status=active.
+- Link akcji Podglad publiczny w adminie wskazuje na trase admin preview, a publiczny link /projekty/[slug] zostaje tylko dla projektow active.
+
+GUARDY:
+- Dodano npm run verify:admin-public-preview-v25.
+- Guard pilnuje trasy admin preview, getAdminPreviewProjectById, braku 404 dla draft/hidden/archived oraz braku linkowania akcji preview do publicznego sluga.
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
+<!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->

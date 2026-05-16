@@ -240,6 +240,39 @@ async function loadActiveFromSupabase() {
   return projects.map((project) => mapProject(project, rooms, addons, variants, media));
 }
 
+export async function getAdminPreviewProjectById(projectId: string): Promise<Project | undefined> {
+  const supabase = createSupabaseServiceRoleClient();
+  if (!supabase) return undefined;
+
+  const { data: projectRow, error: projectError } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", projectId)
+    .maybeSingle();
+
+  if (projectError) {
+    console.error("Failed to load admin preview project from Supabase", projectError);
+    return undefined;
+  }
+
+  if (!projectRow?.id) return undefined;
+
+  const projectIds = [projectRow.id];
+  const [roomsResult, addonsResult, variantsResult, mediaResult] = await Promise.all([
+    supabase.from("project_rooms").select("*").in("project_id", projectIds).order("sort_order"),
+    supabase.from("project_addons").select("*").in("project_id", projectIds).order("sort_order"),
+    supabase.from("project_variants").select("*").in("project_id", projectIds).order("sort_order"),
+    supabase.from("project_media").select("*").in("project_id", projectIds).order("sort_order")
+  ]);
+
+  const rooms = (roomsResult.data || []) as DbRoom[];
+  const addons = (addonsResult.data || []) as DbAddon[];
+  const variants = (variantsResult.data || []) as DbVariant[];
+  const media = (mediaResult.data || []) as DbMedia[];
+
+  return mapProject(projectRow as DbProject, rooms, addons, variants, media);
+}
+
 export async function getPublicProjects(): Promise<Project[]> {
   return loadActiveFromSupabase();
 }

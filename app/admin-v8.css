@@ -1879,3 +1879,72 @@
   gap: 8px;
 }
 /* STAGE24 ADMIN ACTION BUTTON FEEDBACK END */
+
+/* STAGE25 ADMIN PUBLIC PREVIEW NO 404 START */
+.admin-project-nonpublic,
+.admin-preview-nonpublic {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px dashed rgba(255, 255, 255, .18);
+  border-radius: 999px;
+  padding: 0 10px;
+  color: rgba(244, 241, 234, .62);
+  background: rgba(255, 255, 255, .018);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.admin-public-preview-ribbon {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px clamp(14px, 2vw, 28px);
+  border-bottom: 1px solid rgba(205, 164, 99, .28);
+  background: rgba(17, 22, 25, .94);
+  backdrop-filter: blur(14px);
+}
+
+.admin-public-preview-ribbon > div {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-public-preview-ribbon span {
+  color: #f0dfc5;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.admin-public-preview-ribbon strong {
+  color: #fff;
+}
+
+.admin-public-preview-ribbon small {
+  color: rgba(244, 241, 234, .68);
+}
+
+.admin-public-preview-ribbon nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 760px) {
+  .admin-public-preview-ribbon {
+    position: static;
+    display: grid;
+  }
+  .admin-public-preview-ribbon nav {
+    justify-content: flex-start;
+  }
+}
+/* STAGE25 ADMIN PUBLIC PREVIEW NO 404 END */
