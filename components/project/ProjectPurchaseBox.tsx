@@ -165,7 +165,7 @@ export function ProjectPurchaseBox({ project }: { project: Project }) {
 
       <div className="micro-trust">
         <span><Truck size={16} /> Dostawa zgodnie z zamowieniem</span>
-        <span><ShieldCheck size={16} /> Bezpieczne platnosci online</span>
+        <span><ShieldCheck size={16} /> Realizacja po potwierdzeniu zamowienia</span>
         <span><BadgeCheck size={16} /> Pliki zgodnie z wybrana wersja</span>
       </div>
     </aside>
