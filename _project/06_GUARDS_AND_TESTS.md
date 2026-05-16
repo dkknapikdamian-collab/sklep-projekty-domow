@@ -464,3 +464,43 @@ RYZYKO:
 NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
+
+
+<!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
+## 2026-05-16 - Etap 27: sanity check publikacji projektu
+
+STATUS:
+- WDROZONE W KODZIE - TEST AUTOMATYCZNY / GUARD DO URUCHOMIENIA LOKALNIE.
+- TEST RECZNY DO WYKONANIA.
+- BRAK POTWIERDZONEGO TESTU RECZNEGO na realnych danych Supabase/UI admina.
+
+FAKTY:
+- `updateProjectStatusAction` uzywa `getProjectPublicationReadiness` przy probie ustawienia statusu `active`.
+- Dodano guard scenariuszowy `npm run verify:project-publication-readiness-runtime-v27`.
+- Guard sprawdza brak hero, miniatury, rzutu, prywatnego PDF/dokumentacji, wariantu/projektu podstawowego, pomieszczen oraz kompletny projekt.
+- Naprawiono luke: pusty zestaw `rooms: []` blokuje publikacje przez `projectRooms`.
+- Paczka V2 naprawia kruchy patch V1: zamiast szukac dokladnego bloku tekstu, usuwa warunek `if (rooms.length > 0)` przez bezpieczna operacje na liniach.
+
+TESTY AUTOMATYCZNE:
+- `npm run verify:project-publication-readiness-v35`
+- `npm run verify:project-publication-readiness-runtime-v27`
+- `npm run typecheck`
+- `npm run build`
+- `npm run check:project-memory`
+
+TEST RECZNY DO WYKONANIA:
+- Projekt bez hero nie przechodzi na active.
+- Projekt bez miniatury nie przechodzi.
+- Projekt bez rzutu nie przechodzi.
+- Projekt bez prywatnego PDF/dokumentacji nie przechodzi.
+- Projekt bez pomieszczen nie przechodzi.
+- Kompletny projekt przechodzi.
+- Komunikaty brakow sa czytelne.
+
+RYZYKO:
+- Guard scenariuszowy nie zastepuje testu na realnych rekordach Supabase i klikniecia w panelu admina.
+
+NASTEPNY KROK:
+- Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
+<!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
+

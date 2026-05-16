@@ -121,9 +121,7 @@ export function getProjectPublicationReadiness(input: PublicationReadinessInput)
   if (shouldCheck(input.variants) || shouldCheck(input.baseVariantConfirmed)) {
     addCheck("salesVariant", hasSalesVariant(input), "Dodaj wariant albo potwierdź sprzedaż projektu podstawowego.");
   }
-  if (rooms.length > 0) {
     addCheck("projectRooms", countNamedRooms(rooms) > 0, "Dodaj przynajmniej jedno nazwane pomieszczenie.");
-  }
 
   const missing = checks.filter((check) => !check.ok).map((check) => check.key);
 
