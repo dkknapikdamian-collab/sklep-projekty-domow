@@ -1,124 +1,74 @@
-# 10_PROJECT_TIMELINE - Oś czasu projektu
+# 10_PROJECT_TIMELINE - Os czasu projektu
 
-## Przed aplikacją
+## Przed aplikacja
 
-### Kierunek wizualny / makiety
+Powstaly lub byly rozwazane materialy wizualne i makiety. Obowiazujacy status: moga sluzyc jako inspiracja/design lock, ale nie sa realnymi ofertami projektow.
 
-Powstały lub były rozważane materiały wizualne i makiety. Obowiązujący status: mogą służyć jako inspiracja/design lock, ale nie są realnymi ofertami projektów.
+## Decyzja: nie produkcyjny czysty HTML
 
-### Decyzja: nie produkcyjny czysty HTML
-
-Projekt ma iść w aplikację sklepową, nie w statyczny HTML.
+Projekt ma isc w aplikacje sklepowa, nie w statyczny HTML.
 
 ## Budowa aplikacji
 
-### Etapy bazowe
-
-Powstała aplikacja Next.js / React z trasami publicznymi i adminowymi.
+Powstala aplikacja Next.js / React z trasami publicznymi i adminowymi.
 
 Znane obszary:
 
-- strona główna,
+- strona glowna,
 - katalog/projekty,
 - koszyk,
-- checkout/zamówienie,
+- checkout/zamowienie,
 - panel admina,
 - logowanie/setup admina,
-- projekty: lista, nowy, edycja, podgląd.
+- projekty: lista, nowy, edycja, podglad,
+- zamowienia,
+- audit log.
 
-### Panel admina
+## 2026-05-15 - Etap 17: platnosc manualna
 
-Damian zgłaszał, że część przycisków w panelu admina nie działała albo wymagała podpięcia:
+Checkout komunikuje platnosc po kontakcie, admin zapisuje instrukcje przelewu, a roboczy e-mail zawiera dane do platnosci.
 
-- `Edytuj`,
-- `Zapisz dane`,
-- `Anuluj`,
-- zmiana statusu,
-- usunięcie.
+## 2026-05-15 - Etap 19: filtry i priorytetyzacja zamowien
 
-To stało się osobnym torem audytu i naprawy. Po każdej zmianie admina test przycisków jest obowiązkowy.
+Lista `/admin/zamowienia` dostala liczniki, filtry i oznaczenia priorytetow: kontakt, platnosc, wysylka.
 
-### Checkout V1
+## 2026-05-15 - Etap 20: widok audit logu
 
-Rozpoczęto/wykonano etap checkoutu V1. Aktualny stan wymaga potwierdzenia pełnym testem od projektu do zamówienia.
+Dodano `/admin/audit`, filtr po typie akcji i tabele sladu operacji admina.
 
-### Dodatek PDF e-mail +250 zł
+## 2026-05-16 - Etap 21: statyczne domkniecie pokrycia audit logu
 
-2026-05-13: dodano wymóg dodatku zakupowego `Projekt w formacie PDF na e-mail` za +250 zł.
+Dodano realne markery i pokrycie audit logu dla brakujacych mutacji admina. Runtime audit nadal wymaga potwierdzenia recznego.
 
-Ważna interpretacja: dodatek nie może kolidować z bazową dostawą cyfrową. Ma być dodatkową wygodną formą wysyłki/archiwizacji PDF na e-mail.
+## 2026-05-16 - Roadmapa produkcyjna i odhaczanie etapow
 
-### UI admina / czytelność tabeli
+Dodano aktywna roadmapa produkcyjna:
 
-Damian wskazał problem z rozjechaną tabelą/listą i za dużą czcionką. Preferencja: jedna czytelna linijka, bez chaosu.
+- `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`,
+- Obsidian: `11_ROADMAPA PRODUKCYJNA I ODHACZANIE - Sklep projekty domow.md`.
 
-## 2026-05-15 - Pełna pamięć projektu
+Od tego momentu kazdy etap ma odhaczac: kod, guardy, test reczny, potwierdzenie Damiana, Obsidian, `_project`, ryzyka i nastepny krok.
 
-Uzupełnienie repo i Obsidiana o pełny mózg projektu:
+## Aktualna kolejnosc
 
-- status,
-- cel,
-- zasady pracy,
-- aktualny etap,
-- decyzje,
-- testy ręczne,
-- guardy,
-- następne kroki,
-- changelog,
-- kontekst dla Obsidiana,
-- timeline,
-- potwierdzenia Damiana,
-- raporty AI.
+1. Etap 22 - runtime audit admina.
+2. Etap 23 - spojnosc komunikacji platnosci recznej.
+3. Etap 24 - pelny runtime flow V1.
+4. Etap 25 - walidacja zamowienia i cen wzgledem bazy.
+5. Etap 26 - obsluga plikow zakupowych w adminie.
+6. Etap 27 - sanity check publikacji projektu.
+7. Etap 28 - blokada sample/demo jako realnych ofert.
+8. Etap 29 - pre-release checklist V1.
 
 ## Rzeczy porzucone
 
 - Czysty HTML jako produkcyjny sklep.
 - Fikcyjne projekty jako realne oferty.
-- Konto klienta jako obowiązkowy element V1.
+- Konto klienta jako obowiazkowy element V1.
 
-## Rzeczy zamrożone / ostrożne
+## Rzeczy zamrozone / ostrozne
 
-- Nie zmieniać UI bez zakresu.
-- Nie refaktorować szeroko przy małych etapach.
-- Nie dopisywać propozycji AI jako decyzji.
-- Nie ruszać routingu, jeśli zadanie dotyczy tylko dokumentacji/pamięci.
-
-| Data | Etap | Zmiana | Ważne pliki |
-|---|---|---|---|
-| 2026-05-15 | Etap 17: płatność manualna / instrukcja przelewu | Checkout komunikuje płatność po kontakcie, admin zapisuje instrukcję przelewu, a roboczy e-mail zawiera dane do płatności. | `components/order/CheckoutForm.tsx`, `app/admin/zamowienia/[id]/page.tsx`, `lib/admin/order-email-drafts.ts`, `supabase/migrations/0018_order_manual_payment_instruction.sql` |
-| 2026-05-15 | Etap 19: filtry i priorytetyzacja zamówień | Lista `/admin/zamowienia` dostała liczniki, filtry i oznaczenia priorytetów: kontakt, płatność, wysyłka. | `app/admin/zamowienia/page.tsx`, `lib/admin/orders-admin.ts`, `app/admin-v8.css`, `scripts/check-admin-orders-v42.cjs` |
-
-| 2026-05-15 | Etap 20: widok audit logu | Dodano `/admin/audit`, filtr po typie akcji i tabelę śladu operacji admina. | `lib/admin/audit-log.ts`, `app/admin/audit/page.tsx`, `components/admin/AdminHeader.tsx`, `scripts/check-admin-audit-log-v44.cjs` |
-
-<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
-
-## 2026-05-15 22:12:34 - V6 memory/Obsidian repair
-
-After V3/V4/V5 package failures, V6 rewrites the executor with named parameters, empty-path guards and a simpler commit model.
-
-<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
-
-
-<!-- ETAP21_ADMIN_AUDIT_REAL_COVERAGE_2026_05_16 -->
-
-## 2026-05-16 - Etap 21: realne domkniecie audit logu admina
-
-FAKT:
-- Dodano realne markery i pokrycie audit logu dla brakujacych mutacji admina:
-  - project_create,
-  - project_sample_create,
-  - project_media_delete,
-  - project_media_type_update,
-  - project_private_file_delete.
-- Guard statyczny verify:admin-audit-log-v44 ma sprawdzac nie tylko widok /admin/audit, ale tez realne markery implementacji w akcjach admina.
-
-TEST RÄCZNY DO WYKONANIA:
-- Runtime audit w /admin/audit po realnych operacjach admina: utworzenie projektu, sample project, media delete/type update, private file delete.
-
-BRAK POTWIERDZONEGO TESTU:
-- Do momentu klikniecia flow lokalnie przez Damiana runtime wpisy w admin_audit_log pozostaja niepotwierdzone.
-
-## 2026-05-16 - Etap 21 real audit coverage V6
-
-FAKT: dodano i zweryfikowano statycznie realne markery audit logu dla brakujących mutacji admina.
-TEST RĘCZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach admina.
+- Nie zmieniac UI bez zakresu.
+- Nie refaktorowac szeroko przy malych etapach.
+- Nie dopisywac propozycji AI jako decyzji.
+- Nie ruszac routingu, jesli zadanie dotyczy tylko dokumentacji/pamieci.
