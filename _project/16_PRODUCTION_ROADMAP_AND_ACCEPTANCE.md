@@ -101,3 +101,36 @@ V1 można uznać za gotowe dopiero, gdy:
 
 Domknąć Etap A, potem wykonać runtime audit admina i pełny flow sklepu bez publikacji klientom.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
+
+<!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_START -->
+## 2026-05-16 - Etap 25: runtime guard walidacji cen koszyka względem bazy
+
+STATUS:
+- WDROŻONE W KODZIE - TEST AUTOMATYCZNY / GUARD DO URUCHOMIENIA LOKALNIE.
+- TEST RĘCZNY DO WYKONANIA.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO na realnych danych Supabase.
+
+FAKTY:
+- Statyczny kierunek Etapu 25 jest zachowany: `createOrder` ma używać `validateCartAgainstDb` i zapisywać dane z walidowanego koszyka.
+- Dodano guard runtime z mockiem Supabase: `npm run verify:order-price-runtime-v25`.
+- Guard sprawdza stary koszyk, zmianę ceny bazowej, nieaktywny projekt, usunięty addon, zmianę ceny addonu, usunięty płatny wariant i zmianę ceny wariantu.
+- Paczka V2 naprawia błąd parsera PowerShell z paczki V1 przez ASCII-only APPLY + Base64 UTF-8 dla bloków markdown.
+
+TESTY AUTOMATYCZNE:
+- `npm run verify:order-price-source-v50`
+- `npm run verify:order-price-runtime-v25`
+- `npm run typecheck`
+- `npm run build`
+- `npm run check:project-memory`
+
+TEST RĘCZNY DO WYKONANIA:
+- Na realnych danych Supabase sprawdzić: stary koszyk, zmieniona cena, nieaktywny projekt, usunięty addon, zmieniony wariant.
+- Oczekiwany komunikat: `Cena projektu lub dodatków zmieniła się. Odśwież koszyk.`
+- Zamówienie nie może zapisać cen z klienta po rozjeździe względem bazy.
+
+RYZYKO:
+- Mock Supabase nie potwierdza realnych rekordów w bazie. Etap pozostaje bez ręcznego potwierdzenia runtime do czasu testu Damiana.
+
+NASTĘPNY KROK:
+- Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
+<!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
