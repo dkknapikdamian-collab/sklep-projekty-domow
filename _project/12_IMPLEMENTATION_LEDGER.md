@@ -433,3 +433,32 @@ NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
 
+
+<!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
+## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
+
+STATUS:
+- NAPRAWA TECHNICZNA PO V3.
+- TEST AUTOMATYCZNY DO URUCHOMIENIA LOKALNIE.
+- TEST RECZNY DO WYKONANIA.
+
+FAKTY:
+- V3 dodal runtime guard sanity check publikacji, ale lokalny `package.json` zostal zapisany z UTF-8 BOM.
+- BOM blokowal `JSON.parse` w guardzie i `next build`.
+- V4 usuwa BOM z `package.json` i ponawia guardy/build.
+
+TESTY AUTOMATYCZNE:
+- `npm run verify:project-publication-runtime-v27`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+- `npm run check:project-memory`
+
+TEST RECZNY DO WYKONANIA:
+- Na realnych danych Supabase sprawdzic publikacje projektu bez hero, miniatury, rzutu, prywatnego PDF, wariantu/projektu podstawowego i pomieszczen.
+- Sprawdzic kompletny projekt oraz czy komunikaty brakow sa czytelne.
+
+RYZYKO:
+- V4 nie potwierdza runtime Supabase. Potwierdza tylko guard/test lokalny i build.
+<!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
+
