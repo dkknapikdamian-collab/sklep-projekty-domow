@@ -4,7 +4,23 @@
 
 Kazdy etap zapisuje: data, zakres, pliki, decyzje, testy, ryzyka, wynik i nastepny krok.
 
-<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 START -->
+## 2026-05-16 - Roadmapa produkcyjna i odhaczanie etapow
+
+| Pole | Wartosc |
+|---|---|
+| Typ | project memory / Obsidian / roadmapa produkcyjna |
+| Dlaczego | Damian wymaga odhaczania tego, co wdrozone, przetestowane guardami i potwierdzone recznie |
+| Zmieniono | `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`, `_project/15_ACTIVE_SOURCE_MAP.md`, `_project/07_NEXT_STEPS.md`, `_project/08_CHANGELOG_AI.md`, `_project/09_CONTEXT_FOR_OBSIDIAN.md`, `_project/10_PROJECT_TIMELINE.md`, Obsidian dashboard i nowa notatka roadmapy |
+| Nie zmieniono | kod aplikacji, UI, checkout, routing, baza, guardy runtime |
+| Guardy | nie uruchomiono lokalnie; zmiana przez GitHub API |
+| Test reczny | TEST RECZNY DO WYKONANIA - sprawdzic Obsidian i nowy plik roadmapy |
+| Ryzyko | brak lokalnego uruchomienia `check:project-memory` w tej sesji |
+| Nastepny krok | Etap 22 - runtime audit admina |
+
+## 2026-05-16 - Etap 21 real audit coverage V6
+
+FAKT: dodano i zweryfikowano statycznie realne markery audit logu dla brakujacych mutacji admina.
+TEST RECZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach admina.
 
 ## 2026-05-15 22:12:34 - full memory + Obsidian + repo V6
 
@@ -17,30 +33,3 @@ Kazdy etap zapisuje: data, zakres, pliki, decyzje, testy, ryzyka, wynik i nastep
 | Tests | memory guard required, existing project-memory guard if present, build optional if present |
 | Manual status | BRAK POTWIERDZONEGO TESTU for UI |
 | Next | verify dashboard, then continue store implementation stages |
-
-<!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
-
-
-<!-- ETAP21_ADMIN_AUDIT_REAL_COVERAGE_2026_05_16 -->
-
-## 2026-05-16 - Etap 21: realne domkniecie audit logu admina
-
-FAKT:
-- Dodano realne markery i pokrycie audit logu dla brakujacych mutacji admina:
-  - project_create,
-  - project_sample_create,
-  - project_media_delete,
-  - project_media_type_update,
-  - project_private_file_delete.
-- Guard statyczny verify:admin-audit-log-v44 ma sprawdzac nie tylko widok /admin/audit, ale tez realne markery implementacji w akcjach admina.
-
-TEST RÄCZNY DO WYKONANIA:
-- Runtime audit w /admin/audit po realnych operacjach admina: utworzenie projektu, sample project, media delete/type update, private file delete.
-
-BRAK POTWIERDZONEGO TESTU:
-- Do momentu klikniecia flow lokalnie przez Damiana runtime wpisy w admin_audit_log pozostaja niepotwierdzone.
-
-## 2026-05-16 - Etap 21 real audit coverage V6
-
-FAKT: dodano i zweryfikowano statycznie realne markery audit logu dla brakujących mutacji admina.
-TEST RĘCZNY DO WYKONANIA: runtime audit w /admin/audit po realnych operacjach admina.
