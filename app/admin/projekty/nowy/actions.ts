@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/admin";
 import { getProjectPublicationErrorMessage, getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
+import { writeAdminAuditLog } from "@/lib/admin/audit-log";
 
 export type CreateProjectState = {
   ok: boolean;
@@ -464,6 +465,23 @@ export async function createProjectAction(
 
     await uploadPublicMedia({ supabase, projectId, projectCode: code, formData });
     await uploadPrivateFiles({ supabase, projectId, projectCode: code, formData });
+
+    await writeAdminAuditLog({
+      supabase,
+      admin,
+      entityType: "project",
+      entityId: projectId,
+      action: "project_create",
+      metadata: {
+        projectCode: code,
+        projectName: name,
+        projectSlug: slug,
+        status,
+        roomsCount: roomRows.length,
+        variantsCount: variantRows.length,
+        addonsCount: addonRows.length
+      }
+    });
 
     revalidatePath("/");
     revalidatePath("/projekty");

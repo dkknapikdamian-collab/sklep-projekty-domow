@@ -501,7 +501,7 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
 
   if (!projectId || !mediaId) throw new Error("Brak danych media do usuniecia.");
 
-  const { supabase } = await requireAdminAndClient();
+  const { admin, supabase } = await requireAdminAndClient();
 
   if (path) {
     await supabase.storage.from(bucket).remove([path]);
@@ -514,6 +514,21 @@ export async function deleteProjectMediaItemAction(formData: FormData) {
     .eq("project_id", projectId);
 
   if (error) throw new Error(`Nie udalo sie usunac media: ${error.message}`);
+
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project_media",
+    entityId: mediaId,
+    action: "project_media_delete",
+    metadata: {
+      projectId,
+      projectCode,
+      projectSlug,
+      bucket,
+      path
+    }
+  });
 
   revalidatePath("/");
   revalidatePath("/projekty");
@@ -534,7 +549,7 @@ export async function setProjectMediaTypeAction(formData: FormData) {
   if (!projectId || !mediaId) throw new Error("Brak danych media do aktualizacji typu.");
   if (!["hero", "thumbnail"].includes(targetType)) throw new Error("Nieobslugiwany typ media.");
 
-  const { supabase } = await requireAdminAndClient();
+  const { admin, supabase } = await requireAdminAndClient();
 
   const { data: selectedMedia, error: selectedMediaError } = await supabase
     .from("project_media")
@@ -562,6 +577,20 @@ export async function setProjectMediaTypeAction(formData: FormData) {
     .eq("project_id", projectId);
 
   if (updateError) throw new Error(`Nie udalo sie ustawic typu ${targetType}: ${updateError.message}`);
+
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project_media",
+    entityId: mediaId,
+    action: "project_media_type_update",
+    metadata: {
+      projectId,
+      projectCode,
+      projectSlug,
+      targetType
+    }
+  });
 
   revalidatePath("/");
   revalidatePath("/projekty");
@@ -628,7 +657,7 @@ export async function deleteProjectPrivateFileItemAction(formData: FormData) {
 
   if (!projectId || !fileId) throw new Error("Brak danych pliku prywatnego do usuniecia.");
 
-  const { supabase } = await requireAdminAndClient();
+  const { admin, supabase } = await requireAdminAndClient();
 
   if (path) {
     await supabase.storage.from(bucket).remove([path]);
@@ -641,6 +670,19 @@ export async function deleteProjectPrivateFileItemAction(formData: FormData) {
     .eq("project_id", projectId);
 
   if (error) throw new Error(`Nie udalo sie usunac pliku prywatnego: ${error.message}`);
+
+  await writeAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project_private_file",
+    entityId: fileId,
+    action: "project_private_file_delete",
+    metadata: {
+      projectId,
+      bucket,
+      path
+    }
+  });
 
   revalidatePath("/admin/projekty");
   revalidatePath(`/admin/projekty/${projectId}/edytuj`);
