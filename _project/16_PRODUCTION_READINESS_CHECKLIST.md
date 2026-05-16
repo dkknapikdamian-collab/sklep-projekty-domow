@@ -1,4 +1,4 @@
-# 16_PRODUCTION_READINESS_CHECKLIST - Etap 29 pre-release V1
+﻿# 16_PRODUCTION_READINESS_CHECKLIST - Etap 29 pre-release V1
 
 Data: 2026-05-16
 Status dokumentu: AKTYWNY CHECKLIST / DO WYKONANIA PO ETAPACH 22-28
@@ -95,3 +95,58 @@ npm run verify:production-readiness-v52
 ```
 
 Guard jest bramką dokumentacyjno-regresyjną. Nie zastępuje ręcznego testu Damiana ani runtime testu Supabase.
+
+<!-- ETAP29_V49_AUDIT_MARKER_FIX_V2_2026_05_16 -->
+## 2026-05-16 - Etap 29 V49 audit marker fix V2
+
+FAKT:
+- 
+pm run verify przeszedl przez V52, no-demo, V51, V50 i zatrzymal sie na V49.
+- Blokada: pp/admin/audit/page.tsx missing marker: data-admin-audit-log.
+- Naprawa: dodano data-admin-audit-log="true" do glownego <main> strony /admin/audit, obok istniejacego data-admin-audit-v50="true".
+
+TESTY AUTOMATYCZNE DO WYKONANIA PRZEZ SKRYPT:
+- 
+pm run verify:v1-runtime-flow-markers-v49
+- 
+pm run verify
+- 
+pm run check:project-memory
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: runtime V1 nadal wymaga klikniecia realnego flow.
+<!-- ETAP29_V49_AUDIT_MARKER_FIX_V2_2026_05_16 -->
+
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V5_CHECKLIST_START -->
+## Etap 29 - guard blockers fix V5 local inspect
+
+Status: DO URUCHOMIENIA PRZEZ APPLY.
+
+Zakres:
+- Przed patchem raport lokalnych fragmentów plików.
+- Masowa naprawa trzech blokad guardów: V49, V41, V25.
+- Brak samodzielnego pushu AI.
+
+Kryterium:
+- focused guardy PASS,
+- npm run verify PASS,
+- check:project-memory PASS,
+- runtime V1 nadal wymaga ręcznego testu Damiana.
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V5_CHECKLIST_END -->
+
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V7_CHECKLIST_START -->
+## Etap 29 - guard blockers fix V7 no template break
+
+Status: DO URUCHOMIENIA PRZEZ APPLY.
+
+Zakres:
+- Naprawa składni patchera po V6.
+- Guard V25 akceptuje poprawne polskie teksty UI.
+- Kontynuacja masowego usuwania blokad verify.
+
+Kryterium:
+- focused guardy PASS,
+- npm run verify PASS,
+- check:project-memory PASS,
+- runtime V1 nadal wymaga ręcznego testu Damiana.
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V7_CHECKLIST_END -->

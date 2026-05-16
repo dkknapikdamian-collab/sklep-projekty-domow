@@ -194,7 +194,10 @@ requireMarkers("lib/admin/orders-admin.ts", [
 
 requireMarkers("app/admin/audit/page.tsx", [
   "getAdminAuditLogEntries",
-  "data-admin-audit-log",
+  "data-admin-audit-log"
+]);
+
+requireMarkers("lib/admin/audit-log.ts", [
   "admin_audit_log"
 ]);
 

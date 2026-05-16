@@ -12,6 +12,13 @@ function assertIncludes(source, needle, label) {
   }
 }
 
+
+function assertIncludesAny(source, needles, label) {
+  if (!needles.some((needle) => source.includes(needle))) {
+    console.error(`FAIL: missing ${label}. Expected one of: ${needles.join(" | ")}`);
+    process.exit(1);
+  }
+}
 const homepageForm = read("components/admin/AdminHomepageContentForm.tsx");
 const homepageAction = read("app/admin/strona-glowna/actions.ts");
 const siteContent = read("lib/site-content.ts");
@@ -36,8 +43,15 @@ assertIncludes(siteContent, "image_bucket, image_path, image_public_url", "site 
 assertIncludes(mediaManager, "data-admin-project-current-media", "project current media marker");
 assertIncludes(mediaManager, "admin-media-preview-grid", "project media preview grid");
 assertIncludes(mediaManager, "item.publicUrl", "project media public URL usage");
-assertIncludes(mediaManager, "Otworz plik", "project media open link");
-assertIncludes(mediaManager, "Inputy ponizej sluza tylko do wyboru nowych plikow", "file input explanation");
+assertIncludesAny(mediaManager, [
+  "Otworz plik",
+  "Otwórz plik",
+  'data-admin-media-open-link="Otworz plik"'
+], "project media open link");
+assertIncludesAny(mediaManager, [
+  "Inputy ponizej sluza tylko do wyboru nowych plikow",
+  "Inputy poniżej służą tylko do wyboru nowych plików"
+], "file input explanation");
 
 assertIncludes(globals, "./admin-media-v25.css", "V25 CSS import");
 

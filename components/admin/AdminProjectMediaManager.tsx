@@ -43,7 +43,7 @@ function MediaPreviewCard({ item, projectId, projectSlug, projectCode }: { item:
         <code>{item.path}</code>
         {item.publicUrl && <code data-admin-media-public-url="true">{item.publicUrl}</code>}
         {item.publicUrl ? (
-          <a href={item.publicUrl} target="_blank" rel="noreferrer">Otwórz plik</a>
+          <a href={item.publicUrl} target="_blank" rel="noreferrer" data-admin-media-open-link="Otworz plik">Otwórz plik</a>
         ) : (
           <p>Brak publicznego URL</p>
         )}

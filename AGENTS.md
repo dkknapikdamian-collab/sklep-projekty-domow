@@ -523,3 +523,22 @@ Active Obsidian section must not use generic root files like INDEX.md, STATUS.md
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 
+
+<!-- ZIP_PUSH_ONLY_RULE_2026_05_16 -->
+## Zasada pracy: ZIP + polecenie push, bez samodzielnego pushu AI
+
+DECYZJA DAMIANA:
+- AI nie ma samodzielnie pchac zmian do repo.
+- Domyslny tryb pracy: paczka ZIP + jedno polecenie PowerShell, ktore aplikuje zmiany, uruchamia testy/guardy, robi commit i push dopiero po stronie Damiana.
+- Wyjatek: AI moze pushowac tylko wtedy, gdy Damian jawnie zdecyduje inaczej.
+<!-- ZIP_PUSH_ONLY_RULE_2026_05_16 -->
+
+<!-- ZIP_PUSH_ONLY_RULE_2026_05_16_START -->
+## Zasada pracy ZIP + polecenie push
+
+DECYZJA DAMIANA / GLOBALNA DLA TEGO PROJEKTU:
+- AI nie pcha zmian samodzielnie do repo.
+- Domyślny tryb dostarczenia zmian: ZIP + jedno polecenie PowerShell do apply/test/commit/push.
+- Push wykonuje Damian lokalnie przez polecenie z paczki albo AI tylko po wyraźnej decyzji Damiana w danej wiadomości.
+- Każda paczka musi zawierać aktualizację repo, _project i Obsidiana.
+<!-- ZIP_PUSH_ONLY_RULE_2026_05_16_END -->

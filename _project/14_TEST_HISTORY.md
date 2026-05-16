@@ -230,3 +230,67 @@ TEST RECZNY DO WYKONANIA:
 - sample/demo nie widac w `/projekty`,
 - realne active nadal widoczne.
 <!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_TEST_HISTORY -->
+
+<!-- ETAP29_V49_AUDIT_MARKER_FIX_V2_2026_05_16 -->
+## 2026-05-16 - Etap 29 V49 audit marker fix V2
+
+FAKT:
+- 
+pm run verify przeszedl przez V52, no-demo, V51, V50 i zatrzymal sie na V49.
+- Blokada: pp/admin/audit/page.tsx missing marker: data-admin-audit-log.
+- Naprawa: dodano data-admin-audit-log="true" do glownego <main> strony /admin/audit, obok istniejacego data-admin-audit-v50="true".
+
+TESTY AUTOMATYCZNE DO WYKONANIA PRZEZ SKRYPT:
+- 
+pm run verify:v1-runtime-flow-markers-v49
+- 
+pm run verify
+- 
+pm run check:project-memory
+
+TEST RECZNY:
+- TEST RECZNY DO WYKONANIA: runtime V1 nadal wymaga klikniecia realnego flow.
+<!-- ETAP29_V49_AUDIT_MARKER_FIX_V2_2026_05_16 -->
+
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V5_START -->
+## 2026-05-16 - Etap 29 guard blockers fix V5 local inspect
+
+FAKT:
+- V4 zatrzymał się na braku oczekiwanego wzorca w AdminProjectMediaManager.
+- V5 najpierw zapisuje lokalne fragmenty plików do raportu, potem patchuje po strukturze lokalnego kodu, nie po jednym sztywnym stringu.
+
+NAPRAWA:
+- V49: UI marker zostaje w app/admin/audit/page.tsx, DB marker admin_audit_log sprawdzany w lib/admin/audit-log.ts.
+- V41: title={publicHref} dodany do linków publicznych.
+- V25: data-admin-media-open-link="Otworz plik" dodany do linku publicUrl bez zmiany widocznego tekstu Otwórz plik.
+
+TESTY:
+- Focused guardy V49/V41/V25.
+- Pełne npm run verify.
+- npm run check:project-memory.
+
+TEST RĘCZNY:
+- TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V5_END -->
+
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V7_START -->
+## 2026-05-16 - Etap 29 guard blockers fix V7 no template break
+
+FAKT:
+- V6 nie wystartował przez błąd składni w JS patcherze spowodowany markdown backtickami w template stringu.
+- V7 usuwa ten typ błędu: nie używa template stringów do długich bloków markdown.
+- V25 guard wymagał ASCII tekstu mimo poprawnego polskiego UI.
+
+NAPRAWA:
+- Guard V25 dostał assertIncludesAny.
+- UI zostaje po polsku.
+- V49/V41/V25 są sprawdzane focused guardami przed pełnym verify.
+
+TESTY:
+- Focused guardy V49/V41/V25.
+- Pełne npm run verify.
+- npm run check:project-memory.
+
+TEST RĘCZNY:
+- TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP29_GUARD_BLOCKERS_FIX_V7_END -->

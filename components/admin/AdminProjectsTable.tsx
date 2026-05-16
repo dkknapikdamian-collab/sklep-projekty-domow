@@ -121,7 +121,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
                   </td>
                   <td title={isPubliclyVisible ? publicHref : "Projekt nie jest publiczny"}>
                     {isPubliclyVisible ? (
-                      <Link href={publicHref} target="_blank" rel="noreferrer">
+                      <Link href={publicHref} target="_blank" rel="noreferrer" title={publicHref}>
                         {publicHref}
                       </Link>
                     ) : (
@@ -191,7 +191,7 @@ export function AdminProjectsTable({ projects }: { projects: AdminProjectListIte
               </dl>
               <p className="admin-project-mobile-link">
                 {isPubliclyVisible ? (
-                  <Link href={publicHref} target="_blank" rel="noreferrer">
+                  <Link href={publicHref} target="_blank" rel="noreferrer" title={publicHref}>
                     {publicHref}
                   </Link>
                 ) : (

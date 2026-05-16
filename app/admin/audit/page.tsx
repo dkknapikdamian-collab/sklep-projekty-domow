@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Activity, ArrowLeft, Filter } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import {
@@ -46,7 +46,7 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
   return (
     <>
       <AdminHeader />
-      <main className="admin-shell admin-audit-shell" data-admin-audit-v50="true">
+      <main className="admin-shell admin-audit-shell" data-admin-audit-v50="true" data-admin-audit-log="true">
         <section className="admin-page-head">
           <div>
             <span>ADMIN / AUDIT LOG</span>
@@ -137,3 +137,4 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
     </>
   );
 }
+
