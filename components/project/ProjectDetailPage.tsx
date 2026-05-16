@@ -28,6 +28,7 @@ export async function ProjectDetailPage({ project }: { project: Project }) {
 
           <div className="project-title-mobile">
             <h1>{project.name}</h1>
+            <p className="project-code">Kod projektu: <strong>{project.code}</strong></p>
           </div>
 
           <div className="top-grid">
@@ -35,6 +36,7 @@ export async function ProjectDetailPage({ project }: { project: Project }) {
               <div className="project-title">
                 <div>
                   <h1>{project.name}</h1>
+                  <p className="project-code">Kod projektu: <strong>{project.code}</strong></p>
                   <div className="badges">
                     {project.badgePrimary && <span className="badge green">{project.badgePrimary}</span>}
                     {project.badgeSecondary && <span className="badge grey">{project.badgeSecondary}</span>}
