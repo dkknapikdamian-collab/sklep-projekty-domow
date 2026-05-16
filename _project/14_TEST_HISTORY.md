@@ -7,6 +7,15 @@
 - TEST RECZNY POTWIERDZONY PRZEZ DAMIANA
 - BRAK POTWIERDZONEGO TESTU
 
+## 2026-05-16 - Etap 29 guard regression V47/V51
+
+| Test | Status | Wynik / zrodlo |
+|---|---|---|
+| `npm run verify:production-readiness-v52` | TEST AUTOMATYCZNY / GUARD | PASS wedlug logu Damiana: `OK: Etap 29 production readiness checklist is present and guarded.` |
+| `npm run verify` | BRAK POTWIERDZONEGO TESTU | FAIL na `verify:private-files-fulfillment-v51`: `scripts/check-manual-email-drafts-v47.cjs missing marker: paymentInstruction` |
+| Naprawa guarda V47 | TEST AUTOMATYCZNY / GUARD | Dodano markery `buildManualPaymentInstruction` i `paymentInstruction` do `scripts/check-manual-email-drafts-v47.cjs`, zgodnie z wymaganiem V51 |
+| Runtime V1 | TEST RECZNY DO WYKONANIA | Bez zmian, nadal wymaga klikniecia calego flow |
+
 ## 2026-05-16 - Etap 29 pre-release checklist V1 - wynik builda lokalnego
 
 | Test | Status | Wynik / zrodlo |
@@ -14,8 +23,8 @@
 | `npm run build` | TEST AUTOMATYCZNY / GUARD | PASS wedlug logu wklejonego przez Damiana: `Compiled successfully in 3.3s`, `Generating static pages (9/9)`, `Finalizing page optimization` |
 | Walidacja typow w buildzie | TEST AUTOMATYCZNY / GUARD | PASS wedlug logu: `Linting and checking validity of types` |
 | Warningi CSS autoprefixer | TEST AUTOMATYCZNY / GUARD | NIE BLOKUJA: `start` -> `flex-start` w `app/admin-v8.css`, `end` -> `flex-end` w `app/globals.css` |
-| `npm run verify:production-readiness-v52` | DO POTWIERDZENIA | Brak wklejonego wyniku w czacie |
-| `npm run verify` | DO POTWIERDZENIA | Brak wklejonego wyniku w czacie |
+| `npm run verify:production-readiness-v52` | TEST AUTOMATYCZNY / GUARD | PASS wedlug logu Damiana |
+| `npm run verify` | BRAK POTWIERDZONEGO TESTU | Pierwszy run FAIL na regresji kontraktu V51/V47, poprawka wdrozona po logu |
 | Runtime V1: realny projekt -> koszyk -> zamowienie -> admin -> audit | TEST RECZNY DO WYKONANIA | Nadal wymagany ręczny test Damiana |
 
 ## 2026-05-16 - Roadmapa produkcyjna i odhaczanie etapow
