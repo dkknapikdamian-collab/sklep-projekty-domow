@@ -1,5 +1,6 @@
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 import type { CartPayload } from "@/lib/cart/types";
+import { validateCartAgainstDb } from "@/lib/order/validate-cart-against-db";
 
 export type CreateOrderInput = {
   customerName: string;
@@ -24,7 +25,8 @@ export async function createOrder(input: CreateOrderInput) {
   if (!supabase) throw new Error("Brak SUPABASE_SERVICE_ROLE_KEY albo env Supabase.");
   if (input.cart.items.length === 0) throw new Error("Koszyk jest pusty.");
 
-  const totalGross = orderTotal(input.cart);
+  const validatedCart = await validateCartAgainstDb(supabase, input.cart);
+  const totalGross = orderTotal(validatedCart);
   const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
@@ -47,7 +49,7 @@ export async function createOrder(input: CreateOrderInput) {
     throw new Error(`Nie udalo sie zapisac zamowienia: ${orderError?.message || "brak rekordu"}`);
   }
 
-  for (const item of input.cart.items) {
+  for (const item of validatedCart.items) {
     const addonsTotal = item.selectedAddons.reduce((sum, addon) => sum + addon.priceGross, 0);
     const { data: orderItem, error: itemError } = await supabase
       .from("order_items")
