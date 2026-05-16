@@ -18,10 +18,15 @@ export type AdminAuditLogInput = {
 
 export const ADMIN_AUDIT_ACTION_FILTERS = [
   "all",
+  "project_create",
+  "project_sample_create",
   "project_status_update",
   "project_archive",
   "project_hard_delete",
   "project_update",
+  "project_media_delete",
+  "project_media_type_update",
+  "project_private_file_delete",
   "order_status_update",
   "order_fulfillment_checklist_update"
 ] as const;
@@ -30,10 +35,15 @@ export type AdminAuditActionFilter = (typeof ADMIN_AUDIT_ACTION_FILTERS)[number]
 
 export const ADMIN_AUDIT_ACTION_FILTER_LABELS: Record<AdminAuditActionFilter, string> = {
   all: "Wszystkie akcje",
+  project_create: "Utworzenie projektu",
+  project_sample_create: "Utworzenie projektu przykładowego",
   project_status_update: "Zmiana statusu projektu",
   project_archive: "Archiwizacja projektu",
   project_hard_delete: "Twarde usunięcie projektu",
   project_update: "Edycja projektu",
+  project_media_delete: "Usunięcie medium projektu",
+  project_media_type_update: "Zmiana typu medium projektu",
+  project_private_file_delete: "Usunięcie prywatnego pliku projektu",
   order_status_update: "Zmiana statusu zamówienia",
   order_fulfillment_checklist_update: "Aktualizacja realizacji zamówienia"
 };
