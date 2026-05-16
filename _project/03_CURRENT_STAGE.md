@@ -547,3 +547,107 @@ RYZYKO:
 - V4 nie potwierdza runtime Supabase. Potwierdza tylko guard/test lokalny i build.
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
 
+<!-- ETAP29_PRERELEASE_CHECKLIST_BLOCKER_2026_05_16_START -->
+## 2026-05-16 - Etap 29: pre-release checklist istnieje, ale V1 nie jest gotowe
+
+### FAKT Z CHECKLISTY / STATUSU PROJEKTU
+
+Checklist Etapu 29 istnieje i jest aktywnym dokumentem pre-release V1, ale nie jest dowodem gotowości produkcyjnej.
+
+Aktualny wniosek:
+- **CHECKLIST ISTNIEJE**.
+- **V1 NIE JEST GOTOWE**.
+- **Etap 29 jest listą blokad i warunków**, nie potwierdzeniem zamknięcia V1.
+- Nie wolno traktować Etapu 29 jako zielonego światła do publicznego uruchomienia.
+
+### Najważniejsze blokady
+
+- Env Supabase: DO POTWIERDZENIA.
+- Public storage: DO POTWIERDZENIA.
+- Private storage: DO POTWIERDZENIA.
+- Migracje: DO POTWIERDZENIA.
+- Publiczny katalog: TEST RĘCZNY DO WYKONANIA / DO POTWIERDZENIA.
+- Karta projektu: TEST RĘCZNY DO WYKONANIA / DO POTWIERDZENIA.
+- Koszyk i checkout: DO POTWIERDZENIA.
+- Admin zamówień: DO POTWIERDZENIA.
+- Admin audit: DO POTWIERDZENIA.
+- Pełny runtime test Damiana: BLOKADA.
+- Płatności: nadal rozjazd względem decyzji, bo ręczne płatności nie są docelowym modelem, a automatyczne płatności online nie są wdrożone.
+
+### Status etapu
+
+- Kod: BEZ ZMIAN W TYM ZAPISIE.
+- Guardy: istnieją częściowe guardy/checklisty, ale nie zastępują runtime testu.
+- Test automatyczny: DO POTWIERDZENIA przez `npm run verify`.
+- Test ręczny: TEST RĘCZNY DO WYKONANIA.
+- Potwierdzenie Damiana: BRAK POTWIERDZONEGO TESTU RĘCZNEGO dla pełnego V1.
+- Obsidian: ZAKTUALIZOWANY TYM WPISEM.
+- V1 publicznie: BLOKADA.
+
+### Najkrótszy test zamykający V1
+
+Realny projekt active -> publiczny katalog -> karta projektu -> koszyk -> checkout/zamówienie -> admin zamówień -> audit log -> sprawdzenie storage/private files -> wpis wyniku do `_project` i Obsidiana.
+
+Jeżeli którykolwiek punkt pęka albo jest niepotwierdzony, V1 nie jest gotowe.
+
+### Następny kierunek
+
+1. Domknąć Etap 28D w kodzie i guardach, bo SQL/RLS już zapisane, ale aplikacja nadal musi filtrować `is_demo = false`.
+2. Potem wykonać runtime testy blokad Etapu 29.
+3. Etap 29 zamykać dopiero po potwierdzeniu Damiana i po usunięciu/rozwiązaniu blokad.
+<!-- ETAP29_PRERELEASE_CHECKLIST_BLOCKER_2026_05_16_END -->
+
+
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
+## Etap 30 - decyzja o platnosciach i status manual-payment
+
+Status: WDROZONE JAKO KOREKTA ROADMAPY / PAMIECI PROJEKTU.
+Priorytet: P1 / blokada kierunku.
+Data: 2026-05-16.
+
+### DECYZJE DAMIANA
+- Nie wdrazamy platnosci recznych jako docelowego modelu.
+- Aplikacja nie jest jeszcze publiczna.
+- Docelowo platnosci maja byc automatyczne, np. Stripe albo inny provider po osobnej decyzji.
+- Obecne teksty i guardy manual-payment sa legacy/do korekty przed publikacja.
+- manual-payment sa legacy/do korekty przed publikacja.
+
+### FAKTY / KONSEKWENCJE DLA REPO
+- erify:manual-payment-v48 nie moze juz pilnowac platnosci recznych jako targetu produkcyjnego.
+- Wzmianki o recznym modelu platnosci traktujemy jako legacy / etap przejsciowy / reczny fulfillment pomocniczy, nie finalny model sklepu.
+- Przed publikacja trzeba usunac albo przepisac publiczne teksty sugerujace platnosci reczne jako docelowy model.
+- Integracja platnosci online jest DO POTWIERDZENIA i wymaga osobnej decyzji: provider, flow, sukces platnosci, webhooki, wydawanie plikow, ponowne pobranie.
+
+### TESTY / GUARDY
+- Automatyczny guard: 
+pm run verify:manual-payment-v48.
+- Test reczny: BRAK DEDYKOWANEGO TESTU RECZNEGO - zmiana dotyczy roadmapy, dokumentacji i guardu kierunku, nie UI.
+
+### NASTEPNA KOLEJNOSC
+1. Zamknac Etap 30, zeby AI nie czytalo blednej roadmapy.
+2. Wrocic do pre-release checklist i runtime/admin blockers.
+3. Osobno zdecydowac provider platnosci automatycznych przed jakimkolwiek publicznym modelem oplat.
+4. Nie rozwijac dalej platnosci recznych jako finalnej sciezki.
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_END -->
+
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_START -->
+## Etap 30 V6 repair - kanoniczna decyzja o platnosciach
+
+Status: AKTYWNE ZRODLO PRAWDY DLA PLATNOSCI PRZED PUBLIKACJA.
+Data: 2026-05-16.
+
+### DECYZJE DAMIANA - KANONICZNE
+- Nie wdrazamy platnosci recznych jako docelowego modelu.
+- Aplikacja nie jest jeszcze publiczna.
+- Docelowo platnosci maja byc automatyczne, np. Stripe albo inny provider po osobnej decyzji.
+- manual-payment sa legacy/do korekty przed publikacja.
+
+### KONSEKWENCJA
+- Nie rozwijac dalej platnosci recznych jako finalnej sciezki.
+- Manual-payment moze zostac tylko jako legacy / temporary / internal-only material do korekty przed publikacja.
+- Provider platnosci automatycznych jest DO POTWIERDZENIA osobna decyzja.
+
+### TEST / GUARD
+- npm run verify:manual-payment-v48
+- npm run verify:payment-direction-v48
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->

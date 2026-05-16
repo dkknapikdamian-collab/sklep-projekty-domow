@@ -566,3 +566,57 @@ RYZYKO:
 - V4 nie potwierdza runtime Supabase. Potwierdza tylko guard/test lokalny i build.
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
 
+
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
+## Etap 30 - decyzja o platnosciach i status manual-payment
+
+Status: WDROZONE JAKO KOREKTA ROADMAPY / PAMIECI PROJEKTU.
+Priorytet: P1 / blokada kierunku.
+Data: 2026-05-16.
+
+### DECYZJE DAMIANA
+- Nie wdrazamy platnosci recznych jako docelowego modelu.
+- Aplikacja nie jest jeszcze publiczna.
+- Docelowo platnosci maja byc automatyczne, np. Stripe albo inny provider po osobnej decyzji.
+- Obecne teksty i guardy manual-payment sa legacy/do korekty przed publikacja.
+- manual-payment sa legacy/do korekty przed publikacja.
+
+### FAKTY / KONSEKWENCJE DLA REPO
+- erify:manual-payment-v48 nie moze juz pilnowac platnosci recznych jako targetu produkcyjnego.
+- Wzmianki o recznym modelu platnosci traktujemy jako legacy / etap przejsciowy / reczny fulfillment pomocniczy, nie finalny model sklepu.
+- Przed publikacja trzeba usunac albo przepisac publiczne teksty sugerujace platnosci reczne jako docelowy model.
+- Integracja platnosci online jest DO POTWIERDZENIA i wymaga osobnej decyzji: provider, flow, sukces platnosci, webhooki, wydawanie plikow, ponowne pobranie.
+
+### TESTY / GUARDY
+- Automatyczny guard: 
+pm run verify:manual-payment-v48.
+- Test reczny: BRAK DEDYKOWANEGO TESTU RECZNEGO - zmiana dotyczy roadmapy, dokumentacji i guardu kierunku, nie UI.
+
+### NASTEPNA KOLEJNOSC
+1. Zamknac Etap 30, zeby AI nie czytalo blednej roadmapy.
+2. Wrocic do pre-release checklist i runtime/admin blockers.
+3. Osobno zdecydowac provider platnosci automatycznych przed jakimkolwiek publicznym modelem oplat.
+4. Nie rozwijac dalej platnosci recznych jako finalnej sciezki.
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_END -->
+
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_START -->
+## Etap 30 V6 repair - kanoniczna decyzja o platnosciach
+
+Status: AKTYWNE ZRODLO PRAWDY DLA PLATNOSCI PRZED PUBLIKACJA.
+Data: 2026-05-16.
+
+### DECYZJE DAMIANA - KANONICZNE
+- Nie wdrazamy platnosci recznych jako docelowego modelu.
+- Aplikacja nie jest jeszcze publiczna.
+- Docelowo platnosci maja byc automatyczne, np. Stripe albo inny provider po osobnej decyzji.
+- manual-payment sa legacy/do korekty przed publikacja.
+
+### KONSEKWENCJA
+- Nie rozwijac dalej platnosci recznych jako finalnej sciezki.
+- Manual-payment moze zostac tylko jako legacy / temporary / internal-only material do korekty przed publikacja.
+- Provider platnosci automatycznych jest DO POTWIERDZENIA osobna decyzja.
+
+### TEST / GUARD
+- npm run verify:manual-payment-v48
+- npm run verify:payment-direction-v48
+<!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
