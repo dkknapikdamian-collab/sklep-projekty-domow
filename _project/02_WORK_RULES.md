@@ -1,4 +1,4 @@
-﻿# 02_WORK_RULES - Zasady pracy AI w projekcie sklepu
+# 02_WORK_RULES - Zasady pracy AI w projekcie sklepu
 
 ## Tryb pracy
 
@@ -100,18 +100,18 @@ Interpretacja obowiązująca: dodatek jest dodatkową, wygodną formą dostarcze
 
 ## Tryb ZIP i jedno polecenie PowerShell
 
-ChatGPT / operator paczek nie pushuje sam, jeĹ›li Damian pracuje w trybie ZIP.
+ChatGPT / operator paczek nie pushuje sam, jeśli Damian pracuje w trybie ZIP.
 
-W takim trybie wynik pracy ma zawieraÄ‡:
+W takim trybie wynik pracy ma zawierać:
 
 - ZIP do pobrania,
 - jedno kompletne polecenie PowerShell,
-- wdroĹĽenie paczki,
+- wdrożenie paczki,
 - wymagane checki,
 - commit,
 - push do `origin main`.
 
-Nie rozbijaj tego na kilka komend, chyba ĹĽe Damian wyraĹşnie poprosi o osobne kroki.
+Nie rozbijaj tego na kilka komend, chyba że Damian wyraźnie poprosi o osobne kroki.
 
 
 <!-- ZIP_PUSH_ONLY_RULE_2026_05_16 -->
@@ -132,3 +132,28 @@ DECYZJA DAMIANA / GLOBALNA DLA TEGO PROJEKTU:
 - Push wykonuje Damian lokalnie przez polecenie z paczki albo AI tylko po wyraźnej decyzji Damiana w danej wiadomości.
 - Każda paczka musi zawierać aktualizację repo, _project i Obsidiana.
 <!-- ZIP_PUSH_ONLY_RULE_2026_05_16_END -->
+
+<!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_START -->
+## Zasada prewencji: paczki PowerShell i UTF-8
+
+Status: OBOWIĄZKOWE DLA KAŻDEGO AI-DEVELOPERA / OPERATORA PACZEK.
+Data: 2026-05-16.
+
+Przyczyna błędów z Etapu 31B:
+- PowerShell parsuje zapis `"$Label: $Path"` jako niepoprawną referencję zmiennej, bo dwukropek po nazwie zmiennej ma znaczenie specjalne.
+- Surowe polskie znaki w generowanych `.ps1` i blokach markdown mogą przejść przez złe kodowanie i stworzyć mojibake typu `Ă`, `Ĺ`, `Ä`.
+
+Zasada wykonawcza:
+1. APPLY `.ps1` ma być ASCII-only, jeśli jest generowany przez AI.
+2. Treści z polskimi znakami mają być zapisywane jako Base64 UTF-8 i dekodowane do plików przez `.NET UTF8Encoding(false)` albo `WriteAllBytes`.
+3. Nie wolno pisać w PowerShellu interpolacji zmiennej bezpośrednio przed dwukropkiem: `"$Label: ..."`.
+4. Zamiast tego używać `("Brak {0}: {1}" -f $Label, $Path)` albo `${Label}`.
+5. Paczka ma być składana tak, żeby treść użytkowa była payloadem danych, a skrypt był cienkim, prostym loaderem.
+6. Przed oddaniem paczki operator ma sprawdzić tekst skryptu pod kątem wzorca `$zmienna:` oraz surowych polskich znaków w `.ps1`.
+7. Ta zasada nie zastępuje testów, ale usuwa główną przyczynę powstawania błędu na etapie generowania paczki.
+
+W~iosek:
+- Guard jest tylko siatką bezpieczeństwa.
+- Realna prewencja to standard generowania paczek: ASCII-only APPLY + Base64 UTF-8 payload + brak ryzykownej interpolacji PowerShell.
+<!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_END -->
+

@@ -22,26 +22,32 @@ function read(rel) {
 function normalize(text) {
   return String(text)
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
 }
 
-const combined = files.map(read).join("\n");
+const mojibakePattern = /[ĂĹÄÃÅÂ]/;
+const combined = files.map((file) => {
+  const content = read(file);
+  if (mojibakePattern.test(content)) fail(`${file} contains mojibake characters after Etap 31B UTF-8 fix.`);
+  return content;
+}).join("
+");
 const haystack = normalize(combined);
 
 const required = [
   "data-checkout-non-public-v31",
   "data-order-without-payment-v31",
   "data-payment-later-v31",
-  "Techniczny test zamĂłwienia",
-  "zamĂłwienie bez pĹ‚atnoĹ›ci",
-  "etap techniczny przed integracjÄ…",
+  "Techniczny test zamówienia",
+  "zamówienie bez płatności",
+  "etap techniczny przed integracją",
   "niewidoczny publicznie",
-  "nie uruchamia pĹ‚atnoĹ›ci",
-  "integracji pĹ‚atnoĹ›ci online",
-  "webhookĂłw i statusĂłw pĹ‚atnoĹ›ci"
+  "nie uruchamia płatności",
+  "integracji płatności online",
+  "webhooków i statusów płatności"
 ];
 
 for (const marker of required) {
@@ -51,18 +57,18 @@ for (const marker of required) {
 }
 
 const forbidden = [
-  "rÄ™czny przelew",
+  "ręczny przelew",
   "reczny przelew",
-  "przelew rÄ™czny",
+  "przelew ręczny",
   "przelew reczny",
-  "pĹ‚atnoĹ›Ä‡ rÄ™czna",
+  "płatność ręczna",
   "platnosc reczna",
-  "rÄ™czna pĹ‚atnoĹ›Ä‡",
+  "ręczna płatność",
   "reczna platnosc",
   "dane do przelewu",
-  "pĹ‚atnoĹ›Ä‡ odbywa siÄ™ rÄ™cznie",
+  "płatność odbywa się ręcznie",
   "platnosc odbywa sie recznie",
-  "rÄ™cznym potwierdzeniu pĹ‚atnoĹ›ci",
+  "ręcznym potwierdzeniu płatności",
   "manual payment",
   "manual-payment",
   "legacy / temporary / internal only",
@@ -87,4 +93,4 @@ if (!String(pkg.scripts?.verify || "").includes("verify:payment-direction-v48"))
   fail("main verify script must include verify:payment-direction-v48");
 }
 
-console.log("OK: Etap 31 checkout is marked as non-public order test without manual-payment target flow.");
+console.log("OK: Etap 31 checkout is marked as non-public order test without manual-payment target flow and without mojibake.");

@@ -40,13 +40,13 @@ export function CheckoutForm() {
         data-checkout-non-public-success-v31="true"
       >
         <h2>{state.message}</h2>
-        <p>Numer zamĂłwienia testowego: {state.orderId}</p>
+        <p>Numer zamówienia testowego: {state.orderId}</p>
         <p>
-          ZamĂłwienie zostaĹ‚o zapisane bez uruchamiania pĹ‚atnoĹ›ci. To techniczny test
-          procesu przed integracjÄ… pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
-          Ekran nie jest przeznaczony do publicznego uĹĽycia.
+          Zamówienie zostało zapisane bez uruchamiania płatności. To techniczny test
+          procesu przed integracją płatności online, webhooków i statusów płatności.
+          Ekran nie jest przeznaczony do publicznego użycia.
         </p>
-        <Link className="empty-link" href="/projekty">WrĂłÄ‡ do projektĂłw</Link>
+        <Link className="empty-link" href="/projekty">Wróć do projektów</Link>
       </section>
     );
   }
@@ -54,10 +54,10 @@ export function CheckoutForm() {
   if (cart.items.length === 0) {
     return (
       <section className="empty-state">
-        <span>ZAMĂ“WIENIE TESTOWE</span>
+        <span>ZAMÓWIENIE TESTOWE</span>
         <h1>Nie masz pozycji w koszyku.</h1>
         <p>Najpierw wybierz projekt, wariant i dodatki na karcie projektu.</p>
-        <Link className="empty-link" href="/projekty">PrzejdĹş do projektĂłw</Link>
+        <Link className="empty-link" href="/projekty">Przejdź do projektów</Link>
       </section>
     );
   }
@@ -74,17 +74,17 @@ export function CheckoutForm() {
         <input type="hidden" name="cartJson" value={cartJson} />
 
         <div className="checkout-form-intro" data-checkout-v43-copy="true">
-          <h2>Dane do zamĂłwienia testowego</h2>
+          <h2>Dane do zamówienia testowego</h2>
           <p>
-            Ten formularz sĹ‚uĹĽy do technicznego sprawdzenia zapisu zamĂłwienia z koszyka.
-            WysĹ‚anie formularza nie uruchamia pĹ‚atnoĹ›ci ani dostarczenia plikĂłw. Publiczne
-            udostÄ™pnienie checkoutu wymaga osobnego etapu integracji pĹ‚atnoĹ›ci online,
-            webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
+            Ten formularz służy do technicznego sprawdzenia zapisu zamówienia z koszyka.
+            Wysłanie formularza nie uruchamia płatności ani dostarczenia plików. Publiczne
+            udostępnienie checkoutu wymaga osobnego etapu integracji płatności online,
+            webhooków i statusów płatności.
           </p>
         </div>
 
         <label>
-          ImiÄ™ i nazwisko *
+          Imię i nazwisko *
           <input name="customerName" required />
         </label>
 
@@ -110,27 +110,27 @@ export function CheckoutForm() {
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="termsConsent" required />
-          <span>AkceptujÄ™ zapis danych w technicznym teĹ›cie zamĂłwienia.</span>
+          <span>Akceptuję zapis danych w technicznym teście zamówienia.</span>
         </label>
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="contactConsent" required />
-          <span>Potwierdzam poprawnoĹ›Ä‡ danych i wybranych pozycji koszyka.</span>
+          <span>Potwierdzam poprawność danych i wybranych pozycji koszyka.</span>
         </label>
 
         {state.message && <p className="admin-form-error">{state.message}</p>}
 
         <button className="buy-button" type="submit" disabled={pending}>
-          <Send size={17} /> {pending ? "Zapisywanie..." : "Zapisz zamĂłwienie testowe"}
+          <Send size={17} /> {pending ? "Zapisywanie..." : "Zapisz zamówienie testowe"}
         </button>
       </form>
 
       <aside className="checkout-summary">
-        <h2>Zakres testowego zamĂłwienia</h2>
+        <h2>Zakres testowego zamówienia</h2>
         <p>
           Podsumowanie obejmuje projekt, wariant oraz dodatki wybrane w koszyku. Ten etap
-          nie obsĹ‚uguje pĹ‚atnoĹ›ci online, potwierdzenia pĹ‚atnoĹ›ci ani automatycznej wysyĹ‚ki
-          plikĂłw. Checkout ma pozostaÄ‡ niewidoczny publicznie do czasu gotowoĹ›ci sklepu.
+          nie obsługuje płatności online, potwierdzenia płatności ani automatycznej wysyłki
+          plików. Checkout ma pozostać niewidoczny publicznie do czasu gotowości sklepu.
         </p>
         {cart.items.map((item) => (
           <div className="checkout-summary-item" key={item.id}>
@@ -148,17 +148,17 @@ export function CheckoutForm() {
           data-checkout-non-public-summary-v31="true"
         >
           <p>
-            ZamĂłwienie jest zapisem technicznym bez pĹ‚atnoĹ›ci. Publiczne uĹĽycie checkoutu
-            wymaga osobnej integracji pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
+            Zamówienie jest zapisem technicznym bez płatności. Publiczne użycie checkoutu
+            wymaga osobnej integracji płatności online, webhooków i statusów płatności.
           </p>
           <p>
-            Pliki projektu nie sÄ… wydawane automatycznie w tym etapie. Dostarczanie plikĂłw
+            Pliki projektu nie są wydawane automatycznie w tym etapie. Dostarczanie plików
             pozostaje poza publicznym flow do czasu decyzji o docelowym modelu realizacji.
           </p>
           {hasPdfEmailAddon && (
             <p>
-              PDF na e-mail pozostaje dodatkiem zapisanym w zamĂłwieniu testowym. Jego
-              finalna obsĹ‚uga musi zostaÄ‡ spiÄ™ta z docelowym procesem pĹ‚atnoĹ›ci i realizacji.
+              PDF na e-mail pozostaje dodatkiem zapisanym w zamówieniu testowym. Jego
+              finalna obsługa musi zostać spięta z docelowym procesem płatności i realizacji.
             </p>
           )}
         </div>

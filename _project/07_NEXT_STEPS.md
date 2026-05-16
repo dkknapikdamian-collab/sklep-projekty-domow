@@ -528,16 +528,16 @@ Data: 2026-05-16.
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
 
 <!-- ETAP31_CHECKOUT_NONPUBLIC_PAYMENT_LATER_START -->
-## 2026-05-16 - Etap 31: checkout jako aplikacja niepubliczna, pĹ‚atnoĹ›ci pĂłĹşniej
+## 2026-05-16 - Etap 31: checkout jako aplikacja niepubliczna, płatności później
 
-STATUS: WDROĹ»ONE W PACZCE ZIP / DO APLIKACJI LOKALNIE.
+STATUS: WDROŻONE W PACZCE ZIP / DO APLIKACJI LOKALNIE.
 
 FAKTY:
-- Checkout /zamowienie ma byÄ‡ komunikowany jako techniczny test zamĂłwienia.
-- ZamĂłwienie jest bez pĹ‚atnoĹ›ci.
-- To etap przed integracjÄ… pĹ‚atnoĹ›ci online, webhookĂłw i statusĂłw pĹ‚atnoĹ›ci.
-- Checkout ma pozostaÄ‡ niewidoczny publicznie do czasu gotowoĹ›ci sklepu.
-- Nie komunikujemy klientowi rÄ™cznego przelewu jako docelowego flow.
+- Checkout /zamowienie ma być komunikowany jako techniczny test zamówienia.
+- Zamówienie jest bez płatności.
+- To etap przed integracją płatności online, webhooków i statusów płatności.
+- Checkout ma pozostać niewidoczny publicznie do czasu gotowości sklepu.
+- Nie komunikujemy klientowi ręcznego przelewu jako docelowego flow.
 
 ZMIENIONE PLIKI:
 - pp/zamowienie/page.tsx
@@ -558,11 +558,49 @@ pm run typecheck,
 pm run build, 
 pm run check:project-memory.
 
-TEST RÄCZNY:
-- TEST RÄCZNY DO WYKONANIA.
-- SprawdziÄ‡ /zamowienie: brak jÄ™zyka o rÄ™cznym przelewie, ekran opisuje techniczny test, zamĂłwienie bez pĹ‚atnoĹ›ci i etap przed integracjÄ… pĹ‚atnoĹ›ci.
+TEST RĘCZNY:
+- TEST RĘCZNY DO WYKONANIA.
+- Sprawdzić /zamowienie: brak języka o ręcznym przelewie, ekran opisuje techniczny test, zamówienie bez płatności i etap przed integracją płatności.
 
 RYZYKA:
-- Bez rÄ™cznego sprawdzenia UI nie potwierdzamy finalnego brzmienia copy w przeglÄ…darce.
-- Checkout nadal istnieje technicznie, wiÄ™c przed publicznym release trzeba kontrolowaÄ‡ ekspozycjÄ™ routingu/linkĂłw.
+- Bez ręcznego sprawdzenia UI nie potwierdzamy finalnego brzmienia copy w przeglądarce.
+- Checkout nadal istnieje technicznie, więc przed publicznym release trzeba kontrolować ekspozycję routingu/linków.
 <!-- ETAP31_CHECKOUT_NONPUBLIC_PAYMENT_LATER_END -->
+
+<!-- ETAP31B_MOJIBAKE_UTF8_FIX_START -->
+## 2026-05-16 - Etap 31B: naprawa mojibake UTF-8 po Etapie 31
+
+STATUS: DO WDROŻENIA Z PACZKI / TEST AUTOMATYCZNY I BUILD DO URUCHOMIENIA LOKALNIE.
+
+FAKTY:
+- Etap 31 wdrożył kierunek checkoutu: aplikacja niepubliczna, zamówienie bez płatności, płatności później.
+- Po wdrożeniu wykryto mojibake w checkoutcie, guardzie i wpisach `_project`.
+- Poprzednia paczka 31B V1 miała błąd parsera PowerShell przez zapis `"$Label: $Path"`.
+
+DECYZJA:
+- Najpierw naprawić kodowanie i standard paczek, potem wracać do kolejnych etapów funkcjonalnych.
+- APPLY generowany przez AI ma być ASCII-only, a treści UTF-8 mają być dekodowane z Base64.
+
+ZMIENIONE / NAPRAWIANE:
+- `app/zamowienie/page.tsx`
+- `components/order/CheckoutForm.tsx`
+- `scripts/check-manual-payment-v48.cjs`
+- `scripts/check-checkout-mojibake-v31b.cjs`
+- `package.json`
+- `_project/*` z wpisami Etapu 31 / zasadą paczek PowerShell
+- Obsidian: globalna instrukcja AI i notatki Sklep_projekty_domow
+
+TESTY AUTOMATYCZNE:
+- `node scripts/check-checkout-mojibake-v31b.cjs`
+- `npm run verify:payment-direction-v48`
+- `npm run typecheck`
+- `npm run build`
+- `npm run check:project-memory`
+
+TEST RĘCZNY:
+- TEST RĘCZNY DO WYKONANIA: otworzyć `/zamowienie` i potwierdzić brak krzaków w UI.
+
+RYZYKO:
+- Ten etap celowo nie zmienia funkcji checkoutu. Naprawia kodowanie, guard i standard paczek.
+<!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
