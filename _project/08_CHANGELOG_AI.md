@@ -233,3 +233,4 @@ TEST RĘCZNY:
 
 Status testu ręcznego: TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_END -->
+

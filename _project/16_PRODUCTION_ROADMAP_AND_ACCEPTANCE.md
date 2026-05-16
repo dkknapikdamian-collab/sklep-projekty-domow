@@ -64,3 +64,16 @@ Nie wdrażać produkcyjnych płatności bez osobnej decyzji Damiana.
 
 Status: TEST RĘCZNY DO WYKONANIA.
 
+## Etap B - przygotowanie automatycznych płatności
+
+Zakres przyszłego etapu:
+- wybrać payment provider,
+- przygotować model statusów płatności,
+- zaplanować webhooki,
+- rozdzielić status zamówienia od statusu płatności,
+- przygotować guardy pod payment flow.
+
+Nie wdrażać produkcyjnych płatności bez osobnej decyzji Damiana.
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
