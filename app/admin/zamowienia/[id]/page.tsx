@@ -4,6 +4,7 @@ import { ArrowLeft, ClipboardList } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { updateOrderFulfillmentChecklistAction, updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
 import { buildManualOrderEmailDrafts, type ManualOrderEmailDraft } from "@/lib/admin/order-email-drafts";
+import { buildAdminOrderPrivateFileFulfillmentItems } from "@/lib/admin/order-files";
 import {
   ADMIN_ORDER_STATUS_LABELS,
   ADMIN_ORDER_STATUSES,
@@ -260,6 +261,74 @@ function OrderItemsPanel({ order }: { order: AdminOrderListItem }) {
   );
 }
 
+function OrderPrivateFilesFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
+  const checklist = order.fulfillmentChecklist;
+
+  return (
+    <section className="admin-order-detail-panel" data-admin-order-private-files-fulfillment-v51="true">
+      <div>
+        <span>ADMIN / REALIZACJA PLIKÓW</span>
+        <h2>Pliki do realizacji</h2>
+        <p>
+          Panel dla admina. Nie generuje publicznych linków i nie wysyła plików automatycznie. Pokazuje, co pobrać ręcznie z Supabase Storage po potwierdzeniu płatności.
+        </p>
+      </div>
+
+      <div className="admin-order-private-files-fulfillment-list" data-admin-order-private-files-fulfillment-list="true">
+        {order.items.map((item) => {
+          const fulfillmentItems = buildAdminOrderPrivateFileFulfillmentItems(item.privateFiles, item.hasPdfEmailAddon, checklist);
+          const hasMissingRequiredFiles = fulfillmentItems.some((fileItem) => fileItem.required && fileItem.status === "missing");
+
+          return (
+            <article className="admin-order-private-files-project" key={item.id} data-admin-order-private-files-project="true">
+              <header>
+                <div>
+                  <span data-admin-private-file-project-code="true">{item.projectCode}</span>
+                  <h3>{item.projectName}</h3>
+                  <p>Wariant: {item.variantName}</p>
+                </div>
+                <strong data-admin-private-file-project-status={hasMissingRequiredFiles ? "missing" : "ready"}>
+                  {hasMissingRequiredFiles ? "Braki w plikach" : "Pliki opisane"}
+                </strong>
+              </header>
+
+              {hasMissingRequiredFiles && (
+                <p className="admin-order-private-file-warning" role="status" data-admin-private-file-missing-warning="true">
+                  Brakuje prywatnego pliku dla zamówionego aktywnego projektu. Uzupełnij pliki w edycji projektu albo zapisz ręczną decyzję w notatce admina.
+                </p>
+              )}
+
+              <ul className="admin-order-private-file-checklist" data-admin-private-file-checklist="true">
+                {fulfillmentItems.map((fileItem) => (
+                  <li key={fileItem.kind} data-admin-private-file-kind={fileItem.kind} data-admin-private-file-status={fileItem.status}>
+                    <div>
+                      <strong>{fileItem.label}</strong>
+                      <span>{fileItem.statusLabel}</span>
+                      {!fileItem.required && <small>Nie wymagany w tym zamówieniu</small>}
+                    </div>
+                    {fileItem.file ? (
+                      <div className="admin-order-private-file-source" data-admin-private-file-source="true">
+                        <small>Bucket: {fileItem.file.bucket}</small>
+                        <code>{fileItem.file.path}</code>
+                        <p>{fileItem.adminDownloadInstruction}</p>
+                      </div>
+                    ) : (
+                      <p data-admin-private-file-manual-instruction="true">{fileItem.adminDownloadInstruction}</p>
+                    )}
+                    {fileItem.warning && (
+                      <p className="admin-form-error" data-admin-private-file-warning="true">{fileItem.warning}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function OrderCustomerPanel({ order }: { order: AdminOrderListItem }) {
   return (
     <section className="admin-order-detail-panel" data-admin-order-customer-panel="true">
@@ -350,6 +419,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
           <div className="admin-order-detail-main">
             <OrderCustomerPanel order={order} />
             <OrderItemsPanel order={order} />
+            <OrderPrivateFilesFulfillmentPanel order={order} />
             <ManualEmailDraftsPanel order={order} />
           </div>
           <aside className="admin-order-detail-side">
