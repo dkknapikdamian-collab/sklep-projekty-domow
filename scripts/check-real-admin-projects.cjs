@@ -47,4 +47,15 @@ for (const needle of ["getPublicProjects", "getPublicProjectBySlug", "getRelated
   }
 }
 
+
+// STAGE53_REAL_ADMIN_PROJECTS_DEMO_SAFETY_START
+const adminActionsStage53 = fs.readFileSync(path.join(root, "app/admin/projekty/actions.ts"), "utf8");
+for (const needle of ["createSampleProjectAction", "demo-projekt-przykladowy-v28", "status: \"draft\"", "demoSampleSafety: true"]) {
+  if (!adminActionsStage53.includes(needle)) {
+    console.error("FAIL: real admin project guard missing demo safety marker: " + needle);
+    process.exit(1);
+  }
+}
+// STAGE53_REAL_ADMIN_PROJECTS_DEMO_SAFETY_END
+
 console.log("OK: real admin project creation guard passed.");

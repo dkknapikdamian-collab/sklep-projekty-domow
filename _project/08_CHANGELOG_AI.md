@@ -213,3 +213,11 @@ FAKT:
 TEST RĘCZNY:
 - TEST RĘCZNY DO WYKONANIA: sprawdzić blokadę active dla projektu z brakami oraz publikację kompletnego projektu.
 <!-- ETAP27_STAGE52_PUBLICATION_READINESS -->
+
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_CHANGELOG -->
+## 2026-05-16 - Etap 28 / STAGE53
+
+- Sample project zmieniony na draft.
+- Publiczny katalog filtruje demo/sample.
+- Dodano guard `verify:no-demo-content`.
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_CHANGELOG -->

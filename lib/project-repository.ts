@@ -203,6 +203,18 @@ function mapProject(
   };
 }
 
+// STAGE53_DEMO_SAMPLE_PUBLIC_GUARD_START
+const DEMO_SAMPLE_PUBLIC_BLOCKLIST = ["projekt-przykladowy", "sample", "demo", "narzedzie testowe", "narzędzie testowe"];
+
+function isDemoOrSampleProject(project: Project) {
+  const haystack = [project.code, project.shortCode, project.slug, project.name, project.subtitle, project.description]
+    .map((value) => String(value || "").toLowerCase())
+    .join(" ");
+
+  return DEMO_SAMPLE_PUBLIC_BLOCKLIST.some((needle) => haystack.includes(needle));
+}
+// STAGE53_DEMO_SAMPLE_PUBLIC_GUARD_END
+
 async function loadActiveFromSupabase() {
   // V27/V29: public pages read through server-only service role and still filter status=active.
   // This avoids anon/RLS drift while keeping drafts/hidden/archived out of public output.
@@ -237,7 +249,9 @@ async function loadActiveFromSupabase() {
   const variants = (variantsResult.data || []) as DbVariant[];
   const media = (mediaResult.data || []) as DbMedia[];
 
-  return projects.map((project) => mapProject(project, rooms, addons, variants, media));
+  return projects
+    .map((project) => mapProject(project, rooms, addons, variants, media))
+    .filter((project) => !isDemoOrSampleProject(project));
 }
 
 export async function getAdminPreviewProjectById(projectId: string): Promise<Project | undefined> {

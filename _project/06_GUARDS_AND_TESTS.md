@@ -307,3 +307,14 @@ Komenda:
 
 Guard sprawdza twardą bramkę active: nazwa, slug, kod, cena, metraż, pokoje, opis, hero, thumbnail, rzut, prywatna dokumentacja PDF, wariant/projekt podstawowy oraz UI box Gotowość publikacji.
 <!-- ETAP27_STAGE52_PUBLICATION_READINESS_GUARD -->
+
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_GUARD -->
+## Etap 28 / STAGE53 - demo/sample cleanup
+
+Komendy:
+- `npm run verify:no-demo-content`
+- `npm run verify:real-admin-projects`
+- `npm run verify:legacy`
+
+Guard pilnuje, ze sample nie tworzy active i nie pojawia sie w publicznym flow.
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_GUARD -->

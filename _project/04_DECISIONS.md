@@ -130,3 +130,12 @@ Nie wdrażać bez decyzji Damiana.
 ## Guard wording fix - komplet fraz V6 - 2026-05-15
 
 - DECYZJA: Katalog produkcyjny może pokazywać tylko realne projekty dodane przez admina i aktywnie opublikowane; dane fikcyjne mogą być wyłącznie demo/dev/seed.
+
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_DECISION -->
+## 2026-05-16 - Etap 28 / STAGE53: demo/sample nie jest oferta
+
+DECYZJA:
+- Sample project moze istniec tylko jako narzedzie testowe admina.
+- Sample nie moze byc domyslnie active.
+- Publiczny katalog ma blokowac demo/sample niezaleznie od statusu.
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_DECISION -->

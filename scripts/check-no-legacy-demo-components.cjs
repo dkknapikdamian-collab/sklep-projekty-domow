@@ -59,4 +59,25 @@ if (hits.length) {
   process.exit(1);
 }
 
+
+// STAGE53_NO_LEGACY_DEMO_SAMPLE_GUARD_START
+const publicRuntimeStage53 = [
+  "app/projekty/page.tsx",
+  "app/projekty/[slug]/page.tsx",
+  "components/project/ProjectCard.tsx",
+  "components/project/ProjectDetailPage.tsx"
+];
+for (const rel of publicRuntimeStage53) {
+  const full = path.join(root, rel);
+  if (!fs.existsSync(full)) continue;
+  const text = fs.readFileSync(full, "utf8");
+  for (const forbidden of ["Projekt Przykladowy V22", "projekt-przykladowy-v22", "Dom w Aurorach 14", "Dom Klejnot 29"]) {
+    if (text.includes(forbidden)) {
+      console.error("FAIL: public runtime contains legacy demo/sample content: " + rel + " -> " + forbidden);
+      process.exit(1);
+    }
+  }
+}
+// STAGE53_NO_LEGACY_DEMO_SAMPLE_GUARD_END
+
 console.log("OK: no legacy demo components or old Project fields.");

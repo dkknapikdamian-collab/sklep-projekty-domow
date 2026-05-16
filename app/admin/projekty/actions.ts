@@ -1031,7 +1031,7 @@ export async function updateProjectBasicsAction(formData: FormData) {
 export async function createSampleProjectAction() {
   const { admin, supabase } = await requireAdminAndClient();
 
-  const baseSlug = "projekt-przykladowy-v22";
+  const baseSlug = "demo-projekt-przykladowy-v28";
 
   const { data: existing } = await supabase
     .from("projects")
@@ -1048,44 +1048,44 @@ export async function createSampleProjectAction() {
   });
 
   if (codeError || !nextCode) {
-    throw new Error("Nie udalo sie wygenerowac kodu dla przykladowego projektu.");
+    throw new Error("Nie udalo sie wygenerowac kodu dla testowego projektu demo.");
   }
 
+  const sampleCode = String(nextCode).toUpperCase();
+
   const { error } = await supabase.from("projects").insert({
-    code: String(nextCode).toUpperCase(),
-    short_code: String(nextCode).toUpperCase(),
+    code: sampleCode,
+    short_code: sampleCode,
     slug: baseSlug,
-    name: "Projekt Przykladowy V22",
-    subtitle: "Nowoczesny dom parterowy z garazem",
-    description: "Przykladowy projekt do testow publicznego katalogu i karty produktu.",
-    price_gross: 3590,
-    badge_primary: "Nowosc",
-    badge_secondary: "Best Seller",
-    status: "active",
-    type: "Parterowy",
-    style: "Nowoczesny",
-    roof: "Dwuspadowy",
-    garage: "1-stanowiskowy",
-    technology: "Murowana",
-    usable_area: 118.4,
-    building_area: 156.2,
-    rooms_count: 5,
-    bathrooms_count: 2,
-    floors_count: 1,
-    building_height: 7.6,
-    min_plot_width: 21.5,
-    min_plot_length: 24.1,
-    features: ["Duze przeszklenia", "Strefa dzienna otwarta", "Gabinet na parterze"],
+    name: "NARZEDZIE TESTOWE - Projekt Przykladowy V28",
+    subtitle: "Projekt demo do testow admina - nie publikowac jako oferta",
+    description: "NARZEDZIE TESTOWE admina. Ten projekt sluzy tylko do testow panelu i nie jest realna oferta sprzedazowa.",
+    price_gross: 0,
+    badge_primary: "Demo",
+    badge_secondary: "Nie sprzedawac",
+    status: "draft",
+    type: "Demo",
+    style: "Testowy",
+    roof: "Testowy",
+    garage: "Testowy",
+    technology: "Testowa",
+    usable_area: 0,
+    building_area: 0,
+    rooms_count: 0,
+    bathrooms_count: 0,
+    floors_count: 0,
+    building_height: 0,
+    min_plot_width: 0,
+    min_plot_length: 0,
+    features: ["NARZEDZIE TESTOWE", "Demo admina", "Nie sprzedawac"],
     related_slugs: [],
     created_by: admin.userId
   });
 
   if (error) {
-    throw new Error(`Nie udalo sie utworzyc przykladowego projektu: ${error.message}`);
+    throw new Error("Nie udalo sie utworzyc testowego projektu demo: " + error.message);
   }
 
-
-  // ETAP21_PROJECT_SAMPLE_CREATE_AUDIT_START
   const { data: sampleProjectForAudit, error: sampleProjectForAuditError } = await supabase
     .from("projects")
     .select("id")
@@ -1093,10 +1093,7 @@ export async function createSampleProjectAction() {
     .maybeSingle();
 
   if (sampleProjectForAuditError || !sampleProjectForAudit?.id) {
-    throw new Error(
-      sampleProjectForAuditError?.message ||
-        "Nie udalo sie pobrac ID przykladowego projektu do admin audit log."
-    );
+    throw new Error(sampleProjectForAuditError?.message || "Nie udalo sie pobrac ID testowego projektu demo do admin audit log.");
   }
 
   await tryWriteAdminAuditLog({
@@ -1107,21 +1104,19 @@ export async function createSampleProjectAction() {
     action: "project_sample_create",
     metadata: {
       source: "createSampleProjectAction",
-      projectCode: String(nextCode).toUpperCase(),
+      demoSampleSafety: true,
+      projectCode: sampleCode,
       projectSlug: baseSlug,
       fromStatus: null,
-      toStatus: "active",
+      toStatus: "draft",
       previousStatus: null,
-      newStatus: "active"
+      newStatus: "draft",
+      note: "Projekt demo utworzony jako draft. Nie jest realna oferta i nie powinien pojawiac sie w katalogu publicznym."
     }
   });
-  // ETAP21_PROJECT_SAMPLE_CREATE_AUDIT_END
 
-  revalidatePath("/");
-  revalidatePath("/projekty");
   revalidatePath("/admin");
   revalidatePath("/admin/projekty");
 
-  redirect("/admin/projekty?sample=created");
+  redirect("/admin/projekty?sample=created_draft");
 }
-

@@ -201,3 +201,12 @@ Do sprawdzenia na Vercelu:
 - Komplet sprzedażowy przechodzi na active.
 - Katalog nadal pokazuje tylko active.
 <!-- ETAP27_STAGE52_PUBLICATION_READINESS_TEST_HISTORY -->
+
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_TEST_HISTORY -->
+## 2026-05-16 - Etap 28 / STAGE53
+
+TEST RECZNY DO WYKONANIA:
+- sample tworzy sie jako draft,
+- sample/demo nie widac w `/projekty`,
+- realne active nadal widoczne.
+<!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_TEST_HISTORY -->
