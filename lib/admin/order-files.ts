@@ -6,6 +6,19 @@ export const ADMIN_ORDER_PRIVATE_FILE_LABELS: Record<string, string> = {
   pdf_email_package: "PDF na e-mail"
 };
 
+export const ADMIN_ORDER_PRIVATE_FILE_FULFILLMENT_KINDS = ["documentation", "full_package", "pdf_email_package"] as const;
+
+export type AdminOrderPrivateFileFulfillmentKind = (typeof ADMIN_ORDER_PRIVATE_FILE_FULFILLMENT_KINDS)[number];
+
+export type AdminOrderPrivateFileFulfillmentStatus = "missing" | "available" | "manual_send" | "sent";
+
+export const ADMIN_ORDER_PRIVATE_FILE_FULFILLMENT_STATUS_LABELS: Record<AdminOrderPrivateFileFulfillmentStatus, string> = {
+  missing: "brak pliku",
+  available: "plik dostępny",
+  manual_send: "do wysłania ręcznie",
+  sent: "wysłane ręcznie"
+};
+
 export type AdminOrderPrivateFile = {
   id: string;
   projectId: string;
@@ -18,6 +31,23 @@ export type AdminOrderPrivateFile = {
   title: string;
   path: string;
   version: string;
+};
+
+export type AdminOrderPrivateFileFulfillmentChecklistSnapshot = {
+  paymentConfirmed: boolean;
+  pdfSent: boolean;
+  zipSent: boolean;
+};
+
+export type AdminOrderPrivateFileFulfillmentItem = {
+  kind: AdminOrderPrivateFileFulfillmentKind;
+  label: string;
+  required: boolean;
+  status: AdminOrderPrivateFileFulfillmentStatus;
+  statusLabel: string;
+  file: AdminOrderPrivateFile | null;
+  adminDownloadInstruction: string;
+  warning: string;
 };
 
 export type AdminOrderProjectFileRef = {
@@ -103,6 +133,58 @@ function toPrivateFile(row: PrivateFileRow, project: ProjectRow): AdminOrderPriv
     path: String(row.path || ""),
     version: String(row.version || "")
   };
+}
+
+function fileMatchesKind(file: AdminOrderPrivateFile, kind: AdminOrderPrivateFileFulfillmentKind) {
+  const fileType = normalizeKey(file.fileType);
+  const path = normalizeKey(file.path);
+
+  if (kind === "documentation") return fileType === "documentation" || fileType === "pdf";
+  if (kind === "full_package") return fileType === "full_package" || path.endsWith(".zip");
+  return fileType === "pdf_email_package" || fileType === "pdf_email";
+}
+
+function statusForFulfillmentKind(
+  kind: AdminOrderPrivateFileFulfillmentKind,
+  hasFile: boolean,
+  checklist: AdminOrderPrivateFileFulfillmentChecklistSnapshot
+): AdminOrderPrivateFileFulfillmentStatus {
+  if (!hasFile) return "missing";
+
+  const sent = kind === "full_package" ? checklist.zipSent : checklist.pdfSent;
+  if (sent) return "sent";
+  if (checklist.paymentConfirmed) return "manual_send";
+
+  return "available";
+}
+
+function instructionForFile(file: AdminOrderPrivateFile | null) {
+  if (!file) return "Dodaj prywatny plik w edycji projektu przed realizacją zamówienia.";
+  return `Pobierz ręcznie w Supabase Storage z bucketu ${file.bucket}, ścieżka: ${file.path}. Nie wysyłaj publicznego linku klientowi.`;
+}
+
+export function buildAdminOrderPrivateFileFulfillmentItems(
+  files: AdminOrderPrivateFile[],
+  hasPdfEmailAddon: boolean,
+  checklist: AdminOrderPrivateFileFulfillmentChecklistSnapshot
+): AdminOrderPrivateFileFulfillmentItem[] {
+  return ADMIN_ORDER_PRIVATE_FILE_FULFILLMENT_KINDS.map((kind) => {
+    const file = files.find((candidate) => fileMatchesKind(candidate, kind)) || null;
+    const required = kind !== "pdf_email_package" || hasPdfEmailAddon;
+    const status = required ? statusForFulfillmentKind(kind, Boolean(file), checklist) : "available";
+    const label = ADMIN_ORDER_PRIVATE_FILE_LABELS[kind];
+
+    return {
+      kind,
+      label,
+      required,
+      status,
+      statusLabel: ADMIN_ORDER_PRIVATE_FILE_FULFILLMENT_STATUS_LABELS[status],
+      file,
+      adminDownloadInstruction: instructionForFile(file),
+      warning: required && !file ? `Brakuje pliku: ${label}. Admin nie powinien zamykać realizacji bez uzupełnienia pliku albo ręcznej decyzji.` : ""
+    };
+  });
 }
 
 export async function getAdminOrderPrivateFilesByProjectKey(items: AdminOrderProjectFileRef[]): Promise<AdminOrderPrivateFileLookup> {
