@@ -1,3 +1,13 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## 2026-05-17 - Etap 35: projekt automatycznych płatności
+
+- Zaprojektowano architekturę płatności online po potwierdzonym Etapie 34C.
+- Rekomendacja: Stripe Checkout jako hosted checkout dla V1.1, z PaymentIntent pod spodem, webhookiem jako źródłem prawdy i idempotentnym fulfillmentem.
+- Zaprojektowano statusy: operacyjne zamówienia, status płatności i status dostępu do plików jako osobne warstwy.
+- Nie wdrożono płatności live.
+- Nie zmieniono runtime aplikacji.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
 ## 2026-05-17 - Etap 34C: ręczne potwierdzenie pełnego flow sklepu
 

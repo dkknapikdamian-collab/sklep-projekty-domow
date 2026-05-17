@@ -1,3 +1,17 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## Etap 35 - aktywne źródło projektu płatności
+
+Aktywny dokument projektowy:
+- `docs/payments/ETAP35_PAYMENT_ARCHITECTURE.md`
+
+Status:
+- projekt architektury,
+- nie implementacja live payment,
+- nie decyzja o publicznej publikacji.
+
+Następna implementacja 35B musi czytać ten dokument przed zmianą kodu.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 # 15_ACTIVE_SOURCE_MAP - Sklep projekty domow
 
 ## Mapa zrodel

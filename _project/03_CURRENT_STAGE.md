@@ -1,3 +1,170 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## Etap 35 - projekt automatycznych płatności
+
+Status: ZAPROJEKTOWANE / DO DECYZJI DAMIANA / BEZ WDROŻENIA LIVE PAYMENT.
+Priorytet: 6.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Rekomendowany kierunek V1.1: Stripe Checkout jako hosted checkout dla płatności jednorazowych w PLN, z BLIK/kartami/metodami aktywowanymi w Stripe Dashboard, a nie własny formularz płatniczy.
+
+### Dlaczego Stripe Checkout
+
+- Najmniejsza złożoność integracji i mniejsze ryzyko security niż własny Payment Element na start.
+- Stripe obsługuje hosted checkout i lokalne metody przez Dashboard.
+- Dla Polski istotny jest BLIK; Stripe dokumentuje BLIK jako metodę dla klientów z Polski, w PLN, z obsługą Checkout.
+- Provider alternatywny typu PayU/Przelewy24 można rozważyć później, jeśli Stripe nie da akceptowalnych stawek, metod albo doświadczenia dla polskiego klienta.
+
+### Projekt flow
+
+1. Klient składa zamówienie techniczne jak w Etapie 34.
+2. System waliduje koszyk przeciw bazie i tworzy `orders` + `order_items` + `order_item_addons`.
+3. System tworzy rekord płatności `order_payments` ze statusem `requires_payment` / `checkout_created`.
+4. Serwer tworzy Stripe Checkout Session z `client_reference_id = order.id`, metadata `orderId`, `orderNumber`, `cartHash`, `amountGross`.
+5. Klient jest przekierowany do Stripe Checkout.
+6. Po udanej płatności Stripe wysyła webhook `checkout.session.completed` albo dla opóźnionych metod `checkout.session.async_payment_succeeded`.
+7. Webhook jest jedynym źródłem prawdy dla oznaczenia płatności jako opłaconej.
+8. Strona sukcesu może przyspieszyć UX, ale nie może samodzielnie uznać płatności za zapłaconą bez weryfikacji po serwerze.
+9. Po potwierdzeniu płatności system zmienia status zamówienia na `paid` / `paid_online`, zapisuje payment event, uruchamia fulfillment plików.
+10. Fulfillment generuje czasowe signed URL albo tworzy ręczną checklistę do wysyłki, zależnie od decyzji Damiana.
+
+### Statusy zamówienia - rekomendowany model
+
+Nie mieszać statusu zamówienia i statusu płatności w jednym polu.
+
+`orders.status` - status operacyjny:
+- `new`
+- `awaiting_payment`
+- `paid`
+- `in_fulfillment`
+- `fulfilled`
+- `cancelled`
+- `payment_failed`
+- legacy: `contacted`, `paid_manual`, `sent` pozostają do migracji/kompatybilności.
+
+`order_payments.status` - status płatności:
+- `not_started`
+- `checkout_created`
+- `requires_action`
+- `processing`
+- `paid`
+- `failed`
+- `expired`
+- `refunded`
+- `disputed`
+
+`order_fulfillment.status` - status dostępu do plików:
+- `blocked_until_paid`
+- `ready`
+- `manual_review_required`
+- `links_generated`
+- `sent`
+- `expired`
+
+### Payment Session vs Payment Intent
+
+Rekomendacja: zacząć od Stripe Checkout Session, nie od ręcznego PaymentIntent UI.
+
+- Checkout Session jest prostsza, ma hosted UI, mniej własnego kodu i mniej miejsc na błąd.
+- PaymentIntent istnieje pod spodem i jego ID zapisujemy w `order_payments.payment_intent_id`.
+- Własny Payment Element/PaymentIntent UI zostawić na później, jeśli potrzebna będzie pełna kontrola UX.
+
+### Webhook
+
+Endpoint: `/api/stripe/webhook`.
+
+Obsługiwane eventy V1:
+- `checkout.session.completed`
+- `checkout.session.async_payment_succeeded`
+- `checkout.session.async_payment_failed`
+- `checkout.session.expired`
+- `payment_intent.payment_failed`
+- opcjonalnie później: `charge.refunded`, `charge.dispute.created`.
+
+Webhook musi:
+- czytać raw body,
+- weryfikować `Stripe-Signature` przez `STRIPE_WEBHOOK_SECRET`,
+- zapisywać `stripe_event_id` w tabeli `payment_events` z unikalnym indeksem,
+- ignorować duplikaty eventów,
+- działać idempotentnie,
+- nigdy nie wydawać plików, jeśli kwota/waluta/orderId nie pasują do zamówienia.
+
+### Idempotencja
+
+Wymagane dwa poziomy:
+
+1. Idempotency key przy tworzeniu Checkout Session:
+   `order:${orderId}:checkout:v1`.
+2. Dedup eventów webhooka:
+   unikalny `stripe_event_id` w `payment_events`.
+
+Fulfillment musi mieć lock logiczny:
+- jeśli `order_payments.status = paid` i `order_fulfillment.status` już `links_generated` albo `sent`, nie generować drugi raz linków bez decyzji admina.
+
+### Security
+
+- `STRIPE_SECRET_KEY` tylko po stronie server.
+- `STRIPE_WEBHOOK_SECRET` tylko env server.
+- Nie zapisywać danych kart w bazie.
+- Nie ufać kwocie z klienta ani localStorage.
+- Przed płatnością przeliczać koszyk z bazy, tak jak w Etapie 34.
+- Webhook sprawdza `orderId`, `amount_total`, `currency`, `payment_status`, `client_reference_id`.
+- Success page nie jest dowodem płatności.
+- Private files nie mogą być publiczne.
+- Signed URL powinien mieć krótki TTL, np. 15-60 minut, albo dostęp przez endpoint po tokenie zamówienia.
+
+### Co dzieje się z plikami po płatności
+
+Rekomendowany wariant V1.1:
+
+- Po `paid` system nie wysyła od razu wszystkiego automatem, jeśli nie ma pewności plików.
+- Jeśli projekt ma komplet prywatnych plików i status `auto_fulfillment_ready`, system generuje czasowe signed URLs i pokazuje je na stronie sukcesu oraz w panelu admina.
+- Jeśli są braki albo PDF e-mail wymaga ręcznej paczki, status `manual_review_required`; admin widzi checklistę.
+- Linki są krótkoterminowe; możliwość ponownego wygenerowania w adminie.
+- Wysyłka e-mail automatyczna dopiero po osobnej decyzji. Na start można mieć roboczy e-mail lub ręczny copy-paste.
+
+### Minimalne tabele do zaprojektowania w Etapie 35B
+
+- `order_payments`
+- `payment_events`
+- `order_fulfillment_access`
+- rozszerzenie `orders.status`
+- opcjonalny `order_public_token` / `download_access_token`
+
+### Decyzje do Damiana przed wdrożeniem 35B
+
+1. Czy wybieramy Stripe jako provider V1.1?
+2. Czy aktywujemy BLIK w Stripe Dashboard?
+3. Czy po płatności pliki mają być auto-linkami, czy tylko admin manual review?
+4. Jaki TTL linków: 15, 30 czy 60 minut?
+5. Czy klient dostaje e-mail automatycznie, czy tylko strona sukcesu + admin manual?
+6. Czy faktury zostają poza zakresem nadal? Rekomendacja: tak, poza zakresem.
+
+### Testy przyszłego wdrożenia
+
+- guard statyczny migracji i env,
+- test create checkout session z mockiem Stripe,
+- test webhook signature/raw body,
+- test idempotencji eventów,
+- test kwoty/waluty/orderId mismatch,
+- test sukcesu płatności,
+- test async success/fail,
+- test braku wydania plików przy `failed`/`expired`,
+- test signed URL tylko po `paid`.
+
+### Ryzyka
+
+- Stripe może nie być najlepszy kosztowo dla każdego kanału w Polsce.
+- Fulfillment plików jest bardziej ryzykowny niż sama płatność, bo błędny link może ujawnić prywatne dokumenty.
+- Płatności opóźnione wymagają statusu `processing`, nie natychmiastowego wydania plików.
+- Webhook bez idempotencji może podwójnie uruchomić fulfillment.
+
+### Następny krok
+
+Etap 35B dopiero po decyzji Damiana: wdrożenie fundamentu Stripe w trybie testowym, bez live payment, z migracją, env example, webhook route, create checkout session, success/cancel pages i guardami.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
 ## Etap 34C - ręczne potwierdzenie pełnego flow sklepu bez płatności publicznej
 

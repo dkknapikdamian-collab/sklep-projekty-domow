@@ -1,3 +1,20 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## Etap 35 - guard projektu płatności
+
+Nazwa: `verify:stage35-payment-architecture`
+
+Komenda:
+`npm run verify:stage35-payment-architecture`
+
+Plik:
+`scripts/check-stage35-payment-architecture.cjs`
+
+Cel:
+Pilnuje, że projekt automatycznych płatności został zapisany jako dokument w repo i obejmuje wymagane obszary: provider, statusy, payment session/payment intent, webhook, success/failure, idempotencja, security i fulfillment plików.
+
+Wymagany przed wdrożeniem 35B: TAK.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## Etap 32 - guard pamięci projektu
 

@@ -1,3 +1,13 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## 2026-05-17 - Etap 35: payment architecture design
+
+Po potwierdzeniu full flow Etapu 34C zaprojektowano następny blok: automatyczne płatności.
+
+Werdykt projektowy: Stripe Checkout w trybie testowym jako pierwszy provider, webhook jako źródło prawdy, osobne statusy zamówienia/płatności/fulfillmentu, pliki wydawane dopiero po `paid` i najlepiej przez czasowe signed URLs albo manual review.
+
+Status: ZAPROJEKTOWANE / DO DECYZJI DAMIANA / BEZ LIVE PAYMENT.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
 ## 2026-05-17 - Etap 34C: full flow sklepu potwierdzony ręcznie
 

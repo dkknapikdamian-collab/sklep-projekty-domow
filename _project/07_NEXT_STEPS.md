@@ -1,3 +1,32 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## Etap 35 - następny krok po projekcie płatności
+
+Status: DO DECYZJI DAMIANA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Rekomendowany następny etap
+
+Etap 35B: Stripe test-mode foundation, bez live payment.
+
+Zakres 35B:
+1. Dodać dependency `stripe`.
+2. Dodać `.env.example` dla Stripe.
+3. Dodać migrację SQL: `order_payments`, `payment_events`, `order_fulfillment_access`, rozszerzenie statusów.
+4. Dodać server action/API do tworzenia Checkout Session po walidacji koszyka z bazy.
+5. Dodać webhook `/api/stripe/webhook` z raw body i signature verification.
+6. Dodać success/cancel pages bez uznawania success page za źródło prawdy.
+7. Dodać fulfillment placeholder: blokada plików do czasu `paid`.
+8. Dodać guardy i testy idempotencji.
+
+### Warunek wejścia
+
+Damian musi potwierdzić provider i model plików po płatności.
+
+### Zakaz bez decyzji
+
+Nie wdrażać live secret, live webhook, automatycznego mailingu, faktur ani panelu klienta w 35B.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
 ## Etap 34C - następny krok po ręcznym potwierdzeniu flow
 

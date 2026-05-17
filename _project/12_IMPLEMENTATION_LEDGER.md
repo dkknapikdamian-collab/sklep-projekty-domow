@@ -1,3 +1,43 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## 2026-05-17 - Etap 35: projekt automatycznych płatności
+
+### Co wdrożono
+
+Wdrożono dokumentację projektową Etapu 35 oraz guard statyczny pilnujący, że projekt płatności został zapisany w repo.
+
+### Co nie zostało wdrożone
+
+- Brak live payment.
+- Brak Stripe secretów.
+- Brak webhooka runtime.
+- Brak automatycznej wysyłki plików.
+- Brak faktur i panelu klienta.
+
+### Pliki zmienione
+
+- `docs/payments/ETAP35_PAYMENT_ARCHITECTURE.md`
+- `scripts/check-stage35-payment-architecture.cjs`
+- `package.json`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/15_ACTIVE_SOURCE_MAP.md`
+- `_project/runs/2026-05-17_1415_etap35_payment_architecture_design.md`
+- Obsidian: `10_PROJEKTY/Sklep_projekty_domow/`
+
+### Testy / guardy
+
+- `npm run verify:stage35-payment-architecture`
+
+### Ryzyka
+
+Etap jest projektowy. Nie sprawdza realnej płatności, bo nie ma jeszcze decyzji Damiana i nie wolno uruchamiać live payment bez osobnego etapu.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
 ## 2026-05-17 - Etap 34C: zapis ręcznego potwierdzenia full flow
 

@@ -1,3 +1,24 @@
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
+## 2026-05-17 - Etap 35: payment architecture guard
+
+Status: TEST AUTOMATYCZNY / GUARD.
+
+### Guard
+
+`npm run verify:stage35-payment-architecture`
+
+### Co sprawdza
+
+- istnieje dokument `docs/payments/ETAP35_PAYMENT_ARCHITECTURE.md`,
+- dokument zawiera provider, statusy, Checkout Session, PaymentIntent, webhook, idempotencję, security i fulfillment plików,
+- package.json ma skrypt guarda,
+- główny `verify` zawiera guard Etapu 35.
+
+### Test ręczny
+
+BRAK POTWIERDZONEGO TESTU RĘCZNEGO, bo Etap 35 jest projektem architektury, nie wdrożeniem runtime płatności.
+<!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_END -->
+
 <!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
 ## 2026-05-17 - Etap 34C: test ręczny pełnego flow sklepu
 
