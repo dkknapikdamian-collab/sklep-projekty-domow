@@ -1,3 +1,11 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## 2026-05-17 - Etap 35A: Stripe provider confirmed
+
+- Zapisano decyzję Damiana: provider płatności V1.1 = Stripe.
+- Etap 35A aktualizuje dokumentację i guardy, bez zmian runtime aplikacji.
+- Następny etap: 35B Stripe test-mode foundation.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## 2026-05-17 - Etap 35: projekt automatycznych płatności
 

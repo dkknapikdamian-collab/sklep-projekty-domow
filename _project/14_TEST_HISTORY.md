@@ -1,3 +1,21 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## 2026-05-17 - Etap 35A: decyzja Stripe
+
+Status: TEST AUTOMATYCZNY / GUARD + DECYZJA DAMIANA.
+
+### Potwierdzenie Damiana
+
+Damian potwierdził wybór: Stripe.
+
+### Guard
+
+`npm run verify:stage35-stripe-provider-decision`
+
+### Test ręczny
+
+BRAK TESTU RUNTIME, bo Etap 35A nie wdraża płatności. To zapis decyzji i przygotowanie 35B.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## 2026-05-17 - Etap 35: payment architecture guard
 

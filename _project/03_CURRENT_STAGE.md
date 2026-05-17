@@ -1,3 +1,42 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## Etap 35A - decyzja providera płatności: Stripe
+
+Status: DECYZJA DAMIANA / STRIPE WYBRANY JAKO PROVIDER V1.1 / BEZ LIVE PAYMENT.
+Data: 2026-05-17 Europe/Warsaw.
+
+### DECYZJA DAMIANA
+
+Damian potwierdził: provider automatycznych płatności dla pierwszego wdrożenia V1.1 to Stripe.
+
+### Interpretacja decyzji
+
+- Wdrażamy dalej kierunek Stripe Checkout jako pierwszy payment provider.
+- Etap 35A nie uruchamia live payment.
+- Etap 35A nie dodaje sekretów Stripe.
+- Etap 35A nie wdraża webhooka runtime.
+- Etap 35A nie publikuje sklepu klientom.
+
+### Zakres następnego etapu 35B
+
+Etap 35B powinien być Stripe test-mode foundation:
+1. dependency `stripe`,
+2. env example bez sekretów live,
+3. migracja SQL dla `order_payments`, `payment_events`, `order_fulfillment_access`,
+4. create Checkout Session po walidacji koszyka z bazy,
+5. webhook `/api/stripe/webhook` z raw body i signature verification,
+6. success/cancel pages bez traktowania success page jako źródła prawdy,
+7. fulfillment lock: pliki tylko po webhook-confirmed `paid`,
+8. guardy idempotencji, kwoty/waluty/orderId i blokady plików przy failed/expired.
+
+### Warunki bezpieczeństwa
+
+- Stripe webhook jest źródłem prawdy o płatności.
+- Success page nie może sama oznaczyć zamówienia jako opłacone.
+- Pliki prywatne nie mogą być publiczne.
+- Linki do plików mają być signed/czasowe albo ręcznie zatwierdzane.
+- Live payment dopiero po osobnym potwierdzeniu.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## Etap 35 - projekt automatycznych płatności
 

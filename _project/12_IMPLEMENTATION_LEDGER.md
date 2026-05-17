@@ -1,3 +1,40 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## 2026-05-17 - Etap 35A: zapis decyzji Stripe
+
+### Co wdrożono
+
+Zapisano decyzję Damiana, że Stripe jest wybranym providerem płatności dla pierwszego wdrożenia V1.1.
+
+### Dlaczego
+
+Etap 35 miał status projektu do decyzji. Po potwierdzeniu przez Damiana decyzja nie może zostać tylko w czacie.
+
+### Pliki zmienione
+
+- `docs/payments/ETAP35_PAYMENT_ARCHITECTURE.md`
+- `scripts/check-stage35-stripe-provider-decision.cjs`
+- `package.json`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/04_DECISIONS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/15_ACTIVE_SOURCE_MAP.md`
+- `_project/runs/2026-05-17_1435_etap35a_stripe_provider_decision.md`
+- Obsidian: `10_PROJEKTY/Sklep_projekty_domow/`
+
+### Testy / guardy
+
+- `npm run verify:stage35-stripe-provider-decision`
+
+### Ryzyka
+
+Nie ma jeszcze implementacji Stripe. To decyzja architektoniczna, nie runtime płatności.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## 2026-05-17 - Etap 35: projekt automatycznych płatności
 

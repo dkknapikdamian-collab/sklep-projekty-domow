@@ -1,3 +1,18 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## Etap 35A - następny krok po decyzji Stripe
+
+Status: STRIPE WYBRANY / 35B DO WDROŻENIA OSOBNYM ETAPEM.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Następny kierunek
+
+Przygotować Etap 35B: Stripe test-mode foundation.
+
+### Zakaz bez osobnej decyzji
+
+Nie wdrażać live payment, live webhook, automatycznej wysyłki e-maili, faktur ani panelu klienta bez osobnego potwierdzenia Damiana.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## Etap 35 - następny krok po projekcie płatności
 

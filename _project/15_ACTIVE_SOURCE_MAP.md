@@ -1,3 +1,16 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## Etap 35A - source map decyzji Stripe
+
+Aktywny dokument płatności:
+- `docs/payments/ETAP35_PAYMENT_ARCHITECTURE.md`
+
+Decyzja:
+- Provider V1.1 = Stripe.
+
+Następny etap implementacyjny:
+- 35B Stripe test-mode foundation.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## Etap 35 - aktywne źródło projektu płatności
 

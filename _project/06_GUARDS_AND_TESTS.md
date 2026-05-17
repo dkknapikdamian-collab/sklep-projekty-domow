@@ -1,3 +1,19 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## Etap 35A - guard decyzji Stripe
+
+Nazwa: `verify:stage35-stripe-provider-decision`
+
+Komenda:
+`npm run verify:stage35-stripe-provider-decision`
+
+Plik:
+`scripts/check-stage35-stripe-provider-decision.cjs`
+
+Cel: pilnuje, że decyzja Damiana o Stripe jako providerze V1.1 jest zapisana w docs/payments, _project i package.json.
+
+Wymagany przed 35B: TAK.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 <!-- ETAP35_PAYMENT_ARCHITECTURE_DESIGN_2026_05_17_START -->
 ## Etap 35 - guard projektu płatności
 

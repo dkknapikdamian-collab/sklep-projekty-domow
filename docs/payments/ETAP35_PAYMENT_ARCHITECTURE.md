@@ -1,3 +1,14 @@
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+## 35A - Decyzja Damiana: Stripe jako provider V1.1
+
+Status: DECYZJA DAMIANA / STRIPE WYBRANY / BEZ LIVE PAYMENT.
+Data: 2026-05-17 Europe/Warsaw.
+
+Damian potwierdził wybór Stripe jako providera dla pierwszej implementacji automatycznych płatności.
+
+Ta decyzja zamyka punkt „Finalny provider” dla Etapu 35 na potrzeby Etapu 35B. Pozostają do potwierdzenia: BLIK w Dashboard, TTL linków do plików, auto vs manual review fulfillment, automatyczny e-mail i faktury.
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_END -->
+
 # Etap 35 - projekt automatycznych płatności
 
 Status: ZAPROJEKTOWANE / DO DECYZJI DAMIANA / BEZ LIVE PAYMENT.
