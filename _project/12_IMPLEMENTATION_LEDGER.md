@@ -1695,3 +1695,17 @@ Testy:
 
 Test reczny: TEST RECZNY DO WYKONANIA.
 <!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->
+
+<!-- ETAP39B_STRIPE_RUNTIME_LEDGER_START -->
+## Etap 39B - runtime Stripe test-mode i diagnostyka po realnym webhooku
+
+Zakres paczki:
+- instrukcja env + Stripe CLI,
+- SQL diagnostyczny dla order_payments, payment_events, order_fulfillment_access, order_download_events,
+- guard/smoke blokujÄ…cy regresjÄ™: brak fulfillmentu/downloadu bez paid,
+- raport run _project/runs/2026-05-17_39b_runtime_stripe_test_mode.md,
+- aktualizacja Obsidiana.
+
+Nie wdroĹĽono jeszcze email outbox. Etap 26D fake-provider zostaje nastÄ™pnym etapem po potwierdzeniu runtime 39B.
+<!-- ETAP39B_STRIPE_RUNTIME_LEDGER_END -->
+

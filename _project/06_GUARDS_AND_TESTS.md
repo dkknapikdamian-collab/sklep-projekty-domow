@@ -1407,3 +1407,26 @@ Testy:
 
 Test reczny: TEST RECZNY DO WYKONANIA.
 <!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->
+
+<!-- ETAP39B_STRIPE_RUNTIME_GUARD_START -->
+## Etap 39B - Stripe runtime test-mode guard
+
+Status: TEST RÄCZNY DO WYKONANIA.
+
+Dodany guard:
+- scripts/check-stage39b-stripe-no-fulfillment-without-paid.cjs
+
+Tryby:
+- bez env: smoke nie wykonuje zapytaĹ„ do Supabase i raportuje SKIP DB, ĹĽeby apply byĹ‚ bezpieczny bez sekretĂłw,
+- z env NEXT_PUBLIC_SUPABASE_URL albo SUPABASE_URL oraz SUPABASE_SERVICE_ROLE_KEY: sprawdza runtime, czy order_fulfillment_access i order_download_events nie majÄ… rekordĂłw dla zamĂłwieĹ„ bez pĹ‚atnoĹ›ci paid/succeeded/completed/complete.
+
+Komendy:
+`powershell
+cd "C:\Users\malim\Desktop\biznesy_ai\strony\strona z projektami"
+node scripts/check-stage39b-stripe-no-fulfillment-without-paid.cjs
+$env:STAGE39B_REQUIRE_DB="1"; node scripts/check-stage39b-stripe-no-fulfillment-without-paid.cjs
+`
+
+Ryzyko: bez realnego webhooka i danych runtime guard potwierdza tylko strukturÄ™ skryptu. PeĹ‚ne potwierdzenie wymaga testu Stripe CLI i SQL diagnostycznego.
+<!-- ETAP39B_STRIPE_RUNTIME_GUARD_END -->
+

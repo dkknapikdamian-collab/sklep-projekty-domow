@@ -582,3 +582,21 @@ Testy:
 
 Test reczny: TEST RECZNY DO WYKONANIA.
 <!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->
+
+<!-- ETAP39B_ROADMAP_ACCEPTANCE_START -->
+## Etap 39B - Stripe runtime test-mode
+
+Status: TEST RÄCZNY DO WYKONANIA.
+
+Cel produkcyjny:
+- potwierdziÄ‡, ĹĽe 39A dziaĹ‚a na realnym test-mode webhooku,
+- potwierdziÄ‡, ĹĽe fulfillment 26C nie odpala bez paid,
+- zebraÄ‡ dowody SQL przed wejĹ›ciem w fake email outbox 26D.
+
+Akceptacja:
+- SQL PASS dla pĹ‚atnoĹ›ci, eventĂłw, fulfillment access i download events,
+- guard DB PASS: brak fulfillmentu/downloadu bez paid,
+- brak sekretĂłw w repo,
+- wynik dopisany w _project i Obsidianie.
+<!-- ETAP39B_ROADMAP_ACCEPTANCE_END -->
+

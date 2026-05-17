@@ -1,4 +1,4 @@
-<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## 2026-05-17 - Etap 35A: decyzja Stripe
 
 Status: TEST AUTOMATYCZNY / GUARD + DECYZJA DAMIANA.
@@ -1570,3 +1570,31 @@ Testy:
 
 Test reczny: TEST RECZNY DO WYKONANIA.
 <!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->
+
+<!-- ETAP39B_STRIPE_RUNTIME_TEST_START -->
+## Etap 39B - Stripe runtime test-mode
+
+Status: TEST RÄCZNY DO WYKONANIA.
+
+Do wykonania:
+1. UstawiÄ‡ lokalne testowe env Stripe i Supabase bez commitowania .env.local.
+2. UruchomiÄ‡ stripe listen --forward-to http://localhost:3000/api/stripe/webhook albo wĹ‚aĹ›ciwy endpoint z 39A.
+3. WykonaÄ‡ testowy checkout kartÄ… testowÄ… Stripe.
+4. UruchomiÄ‡ SQL: supabase/manual/2026-05-17_stage39b_stripe_runtime_diagnostics.sql.
+5. UruchomiÄ‡ guard DB: scripts/check-stage39b-stripe-no-fulfillment-without-paid.cjs z STAGE39B_REQUIRE_DB=1.
+
+Kryterium PASS:
+- order_payments ma pĹ‚atnoĹ›Ä‡ paid/succeeded dla testowego order_id,
+- payment_events ma event webhooka dla tej pĹ‚atnoĹ›ci,
+- order_fulfillment_access powstaje dopiero po paid,
+- order_download_events nie pokazuje pobraĹ„ dla unpaid,
+- guard nie znajduje fulfillmentu ani downloadĂłw bez paid.
+
+Kryterium FAIL:
+- fulfillment powstaje bez paid,
+- webhook tworzy duplikaty bez idempotencji,
+- brak eventu webhooka mimo pĹ‚atnoĹ›ci,
+- paid istnieje, ale fulfillment nie powstaĹ‚,
+- SQL pokazuje rekordy sprzeczne z flow 26C/39A.
+<!-- ETAP39B_STRIPE_RUNTIME_TEST_END -->
+

@@ -992,3 +992,10 @@ TESTY WYMAGANE:
 TEST RECZNY:
 - BRAK POTWIERDZONEGO TESTU RECZNEGO.
 <!-- ETAP26B_V14_STAGE_MARKER_REPAIR_2026_05_17_END -->
+
+<!-- ETAP39B_TIMELINE_START -->
+## 2026-05-17 - Etap 39B przygotowany
+
+Po Etapie 39A dodano etap kontrolny runtime Stripe test-mode. Ten etap jest bramkÄ… przed 26D email outbox.
+<!-- ETAP39B_TIMELINE_END -->
+

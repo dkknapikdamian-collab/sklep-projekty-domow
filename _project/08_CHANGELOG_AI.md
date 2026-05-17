@@ -1192,3 +1192,17 @@ Testy:
 
 Test reczny: TEST RECZNY DO WYKONANIA.
 <!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->
+
+<!-- ETAP39B_CHANGELOG_START -->
+## 2026-05-17 - Etap 39B Stripe runtime test-mode package
+
+Dodano lokalnÄ… paczkÄ™ diagnostycznÄ… po 39A:
+- guard no fulfillment/download without paid,
+- SQL runtime diagnostics,
+- instrukcja Stripe CLI/test-mode,
+- raport run,
+- dopiski _project i Obsidian.
+
+Status: przygotowane do testu runtime. Nie oznaczaÄ‡ jako zamkniÄ™te bez testu Stripe CLI + SQL.
+<!-- ETAP39B_CHANGELOG_END -->
+

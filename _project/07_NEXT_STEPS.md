@@ -1355,3 +1355,20 @@ Testy:
 
 Test reczny: TEST RECZNY DO WYKONANIA.
 <!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->
+
+<!-- ETAP39B_NEXT_STEPS_START -->
+## Po Etapie 39B - kolejnoĹ›Ä‡
+
+1. WykonaÄ‡ runtime test Stripe test-mode wedĹ‚ug docs/stripe/2026-05-17_etap39b_stripe_runtime_test_mode.md.
+2. JeĹĽeli SQL/guard wykryje bĹ‚Ä…d, nie iĹ›Ä‡ w email. Najpierw naprawiÄ‡ webhook/paid/fulfillment.
+3. Dopiero po PASS 39B przejĹ›Ä‡ do Etapu 26D: email outbox no-reply fake-provider.
+
+Etap 26D zakres po 39B:
+- payment_confirmation,
+- project_files_access,
+- idempotency key: order_id + payment_id + email_type,
+- statusy: queued/sent/failed/retry_pending/skipped,
+- brak maila bez paid,
+- bez realnego providera email na pierwszym etapie.
+<!-- ETAP39B_NEXT_STEPS_END -->
+
