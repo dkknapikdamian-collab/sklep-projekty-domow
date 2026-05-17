@@ -595,8 +595,7 @@ Kolejnosc napraw:
 - Manual-payment moze zostac tylko jako legacy / material do korekty przed publikacja.
 
 Najkrotszy test:
-- 
-pm run verify:manual-payment-v48
+- npm run verify:manual-payment-v48
 "@
  = @"
 ## BLOCKER PRZED PUBLIKACJA - platnosci
@@ -1030,38 +1029,49 @@ Etap 33 runtime audit:
 ## 2026-05-17 - Korekta błędnego wpisu build retest
 
 - Status poprzedniego wpisu: BŁĘDNY / UNIEWAŻNIONY.
-- Powód: 
-pm run typecheck nie przeszedł, więc wpis BUILD POTWIERDZONY / PASS był nieprawdziwy.
-- Rzeczywisty błąd: route handler pp/zamowienie/dostep/[token]/plik/[fileId]/route.ts miał opcjonalne params?:, niezgodne z typami Next route context.
+- Powód: npm run typecheck nie przeszedł, więc wcześniejszy wpis BUILD POTWIERDZONY / PASS był nieprawdziwy.
+- Rzeczywisty błąd: route handler app/zamowienie/dostep/[token]/plik/[fileId]/route.ts miał opcjonalne params?:, niezgodne z typami Next route context.
 - Decyzja: nie traktować wcześniejszego wpisu jako potwierdzenia builda.
-- Obsidian: SKIP W TYM HOTFIXIE, bo vault ma tracked zmiany z innych okien. Nie ruszać bez osobnego porządkowania.
+- Korekta: route params naprawione w Etapie 36D, a późniejszy build został potwierdzony po pełnych testach.
 <!-- ETAP36B_BUILD_RETEST_FALSE_PASS_CORRECTION_2026_05_17_END -->
 
 <!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_START -->
 ## 2026-05-17 - Etap 36D CSS start marker build fix
 
-- Status: DO POTWIERDZENIA TESTAMI W TYM SKRYPCIE.
-- Data: 2026-05-17 14:54.
-- Przyczyna: po naprawie końcowego markera CSS został początkowy HTML marker <!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START --> w pp/globals.css.
-- Objaw: 
-ext build padał na Unexpected '!' w wygenerowanym CSS.
-- Naprawa: marker HTML zamieniony na komentarz CSS /* ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START */.
-- Obsidian: SKIP w tym hotfixie, bo vault ma tracked zmiany z innych okien.
+- Status: WDROŻONE I POTWIERDZONE TESTAMI AUTOMATYCZNYMI.
+- Przyczyna: po naprawie końcowego markera CSS został początkowy HTML marker ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START w app/globals.css.
+- Objaw: next build padał na Unexpected ! w wygenerowanym CSS.
+- Naprawa: marker HTML zamieniony na komentarz CSS.
+- Dodatkowo: naprawiono typ route handlera app/zamowienie/dostep/[token]/plik/[fileId]/route.ts, gdzie params nie mogą być opcjonalne.
+- Guard: scripts/check-stage36-post-payment-fulfillment.cjs pilnuje, że route nie wróci do params?:.
 <!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_END -->
 
 <!-- ETAP36D_CSS_START_MARKER_BUILD_PASS_2026_05_17_START -->
 ## 2026-05-17 - Etap 36D CSS start marker build PASS
 
 - Status: BUILD POTWIERDZONY.
-- Data: 2026-05-17 14:54.
 - Testy automatyczne:
-  - 
-pm run verify:stage36-post-payment-fulfillment PASS
-  - 
-pm run typecheck PASS
-  - 
-pm run build PASS
+  - npm run verify:stage36-post-payment-fulfillment PASS
+  - npm run typecheck PASS
+  - npm run build PASS
 - Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO fulfillmentu po płatności.
-- Obsidian: SKIP w tym hotfixie z powodu tracked zmian w vaultcie.
-- Następny krok: osobno uporządkować vault / dopisać Obsidian, potem Etap 37 Stripe webhook -> fulfillment.
+- Następny krok: Etap 37 Stripe webhook -> fulfillment.
 <!-- ETAP36D_CSS_START_MARKER_BUILD_PASS_2026_05_17_END -->
+
+<!-- ETAP36E_MEMORY_CLEANUP_AND_OBSIDIAN_SYNC_2026_05_17_START -->
+## 2026-05-17 - Etap 36E cleanup pamięci i synchronizacja Obsidiana
+
+- Status: WDROŻONE I POTWIERDZONE.
+- Data: 2026-05-17 15:02.
+- Cel: naprawić brudne wpisy po PowerShell escape w project memory i dopisać finalny stan Etapu 36 do Obsidiana.
+- Fakty:
+  - SQL Etapu 36 został uruchomiony w Supabase.
+  - Route params dla app/zamowienie/dostep/[token]/plik/[fileId]/route.ts zostały poprawione.
+  - HTML markery w app/globals.css zostały zamienione na poprawne komentarze CSS.
+  - npm run verify:stage36-post-payment-fulfillment przeszedł.
+  - npm run typecheck przeszedł.
+  - npm run build przeszedł.
+- Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO fulfillmentu po płatności.
+- Obsidian: dopisany selektywnie tylko do notatki Etapu 36, bez stagingu Paperclip i bez .obsidian/graph.json.
+- Następny krok: Etap 37 Stripe webhook -> ensurePostPaymentFulfillmentAccessForOrder().
+<!-- ETAP36E_MEMORY_CLEANUP_AND_OBSIDIAN_SYNC_2026_05_17_END -->

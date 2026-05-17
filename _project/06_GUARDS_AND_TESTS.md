@@ -173,10 +173,8 @@ Jeśli dotykasz funkcji, dodaj albo zaktualizuj guard. Jeśli guard jest niereal
 
 - TEST AUTOMATYCZNY / GUARD: 
 ode scripts/check-sklep-full-memory-v6.cjs <AppRepo> <ObsidianVault>.
-- Existing 
-pm run check:project-memory is executed when present.
-- Existing 
-pm run build is attempted as optional validation when present.
+- Existing npm run check:project-memory is executed when present.
+- Existing npm run build is attempted as optional validation when present.
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
 
@@ -456,8 +454,8 @@ npm run verify:admin-archive-delete-runtime-v23z
 `
 
 Co sprawdza:
-- kontrakt rchiveProjectAction,
-- weryfikacje statusu rchived po update,
+- kontrakt archiveProjectAction,
+- weryfikacje statusu archived po update,
 - audit project_archive,
 - wymaganie kodu projektu dla hard delete,
 - audit project_hard_delete_blocked,
@@ -481,20 +479,13 @@ FAKT:
 - Zakres funkcjonalny Etapu 23Z bez zmian.
 
 TESTY AUTOMATYCZNE:
-- 
-pm run verify:admin-archive-delete-runtime-v23z
-- 
-pm run verify:admin-archive-delete-runtime-v23
-- 
-pm run verify:admin-action-feedback-v24
-- 
-pm run verify:admin-audit-log-v44
-- 
-pm run check:project-memory
-- 
-pm run typecheck
-- 
-pm run build
+- npm run verify:admin-archive-delete-runtime-v23z
+- npm run verify:admin-archive-delete-runtime-v23
+- npm run verify:admin-action-feedback-v24
+- npm run verify:admin-audit-log-v44
+- npm run check:project-memory
+- npm run typecheck
+- npm run build
 
 TEST RECZNY:
 - Nadal TEST RECZNY DO WYKONANIA. V3 nie potwierdza runtime.
@@ -652,8 +643,7 @@ Data: 2026-05-16.
 - Integracja platnosci online jest DO POTWIERDZENIA i wymaga osobnej decyzji: provider, flow, sukces platnosci, webhooki, wydawanie plikow, ponowne pobranie.
 
 ### TESTY / GUARDY
-- Automatyczny guard: 
-pm run verify:manual-payment-v48.
+- Automatyczny guard: npm run verify:manual-payment-v48.
 - Test reczny: BRAK DEDYKOWANEGO TESTU RECZNEGO - zmiana dotyczy roadmapy, dokumentacji i guardu kierunku, nie UI.
 
 ### NASTEPNA KOLEJNOSC
@@ -1127,14 +1117,53 @@ DO URUCHOMIENIA LOKALNIE przez APPLY z paczki.
 - Wymagany przed pushem: TAK.
 <!-- ETAP36_POST_PAYMENT_FULFILLMENT_GUARD_2026_05_17_END -->
 
+<!-- ETAP36B_BUILD_RETEST_FALSE_PASS_CORRECTION_2026_05_17_START -->
+## 2026-05-17 - Korekta błędnego wpisu build retest
+
+- Status poprzedniego wpisu: BŁĘDNY / UNIEWAŻNIONY.
+- Powód: npm run typecheck nie przeszedł, więc wcześniejszy wpis BUILD POTWIERDZONY / PASS był nieprawdziwy.
+- Rzeczywisty błąd: route handler app/zamowienie/dostep/[token]/plik/[fileId]/route.ts miał opcjonalne params?:, niezgodne z typami Next route context.
+- Decyzja: nie traktować wcześniejszego wpisu jako potwierdzenia builda.
+- Korekta: route params naprawione w Etapie 36D, a późniejszy build został potwierdzony po pełnych testach.
+<!-- ETAP36B_BUILD_RETEST_FALSE_PASS_CORRECTION_2026_05_17_END -->
+
 <!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_START -->
 ## 2026-05-17 - Etap 36D CSS start marker build fix
 
-- Status: DO POTWIERDZENIA TESTAMI W TYM SKRYPCIE.
-- Data: 2026-05-17 14:54.
-- Przyczyna: po naprawie końcowego markera CSS został początkowy HTML marker <!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START --> w pp/globals.css.
-- Objaw: 
-ext build padał na Unexpected '!' w wygenerowanym CSS.
-- Naprawa: marker HTML zamieniony na komentarz CSS /* ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START */.
-- Obsidian: SKIP w tym hotfixie, bo vault ma tracked zmiany z innych okien.
+- Status: WDROŻONE I POTWIERDZONE TESTAMI AUTOMATYCZNYMI.
+- Przyczyna: po naprawie końcowego markera CSS został początkowy HTML marker ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START w app/globals.css.
+- Objaw: next build padał na Unexpected ! w wygenerowanym CSS.
+- Naprawa: marker HTML zamieniony na komentarz CSS.
+- Dodatkowo: naprawiono typ route handlera app/zamowienie/dostep/[token]/plik/[fileId]/route.ts, gdzie params nie mogą być opcjonalne.
+- Guard: scripts/check-stage36-post-payment-fulfillment.cjs pilnuje, że route nie wróci do params?:.
 <!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_END -->
+
+<!-- ETAP36D_CSS_START_MARKER_BUILD_PASS_2026_05_17_START -->
+## 2026-05-17 - Etap 36D CSS start marker build PASS
+
+- Status: BUILD POTWIERDZONY.
+- Testy automatyczne:
+  - npm run verify:stage36-post-payment-fulfillment PASS
+  - npm run typecheck PASS
+  - npm run build PASS
+- Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO fulfillmentu po płatności.
+- Następny krok: Etap 37 Stripe webhook -> fulfillment.
+<!-- ETAP36D_CSS_START_MARKER_BUILD_PASS_2026_05_17_END -->
+
+<!-- ETAP36E_MEMORY_CLEANUP_AND_OBSIDIAN_SYNC_2026_05_17_START -->
+## 2026-05-17 - Etap 36E cleanup pamięci i synchronizacja Obsidiana
+
+- Status: WDROŻONE I POTWIERDZONE.
+- Data: 2026-05-17 15:02.
+- Cel: naprawić brudne wpisy po PowerShell escape w project memory i dopisać finalny stan Etapu 36 do Obsidiana.
+- Fakty:
+  - SQL Etapu 36 został uruchomiony w Supabase.
+  - Route params dla app/zamowienie/dostep/[token]/plik/[fileId]/route.ts zostały poprawione.
+  - HTML markery w app/globals.css zostały zamienione na poprawne komentarze CSS.
+  - npm run verify:stage36-post-payment-fulfillment przeszedł.
+  - npm run typecheck przeszedł.
+  - npm run build przeszedł.
+- Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO fulfillmentu po płatności.
+- Obsidian: dopisany selektywnie tylko do notatki Etapu 36, bez stagingu Paperclip i bez .obsidian/graph.json.
+- Następny krok: Etap 37 Stripe webhook -> ensurePostPaymentFulfillmentAccessForOrder().
+<!-- ETAP36E_MEMORY_CLEANUP_AND_OBSIDIAN_SYNC_2026_05_17_END -->
