@@ -1,4 +1,4 @@
-﻿import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getProjectPublicationReadiness } from "@/lib/admin/project-publication-readiness";
 
 export type AdminProjectListItem = {
@@ -83,6 +83,9 @@ export type AdminProjectFileItem = {
   title: string;
   path: string;
   version: string;
+  active: boolean;
+  autoSendAfterPayment: boolean;
+  requiredForPublication: boolean;
 };
 
 export type AdminProjectMetrics = {
@@ -198,7 +201,7 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
     supabase.from("project_variants").select("name, price_gross, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_addons").select("code, name, description, price_gross, delivery_action, sort_order").eq("project_id", id).order("sort_order"),
     supabase.from("project_media").select("id, bucket, media_type, title, path, public_url, sort_order").eq("project_id", id).order("sort_order"),
-    supabase.from("project_files").select("id, bucket, file_type, title, path, version, created_at").eq("project_id", id).order("created_at", { ascending: false })
+    supabase.from("project_files").select("id, bucket, file_type, title, path, version, active, auto_send_after_payment, required_for_publication, created_at").eq("project_id", id).order("created_at", { ascending: false })
   ]);
 
   return {
@@ -280,7 +283,10 @@ export async function getAdminProjectById(id: string): Promise<AdminProjectEditI
       fileType: String(item.file_type || ""),
       title: String(item.title || ""),
       path: String(item.path || ""),
-      version: String(item.version || "")
+      version: String(item.version || ""),
+      active: item.active !== false,
+      autoSendAfterPayment: item.auto_send_after_payment === true,
+      requiredForPublication: item.required_for_publication === true
     }))
   };
 }

@@ -101,3 +101,18 @@ SQL bez ledgeru nie zamyka etapu.
 - Test runtime: BRAK POTWIERDZONEGO TESTU RUNTIME fulfillmentu po płatności.
 - Następny krok: naprawić build przez błędny HTML komentarz w app/globals.css, potem spiąć Stripe webhook z fulfillmentem.
 <!-- SQL_LEDGER_ETAP36_CONFIRMED_2026_05_17_END -->
+
+
+<!-- SQL_LEDGER_ETAP26A_CONFIRMED_2026_05_17_START -->
+## 2026-05-17 - Etap 26A project_files model SQL uruchomiony
+
+- SQL_LEDGER_ID: `2026-05-17_etap26a_project_files_model`
+- Plik repo: `supabase/manual/2026-05-17_etap26a_project_files_model.sql`
+- Typ: MIGRATION
+- Status: URUCHOMIONE / POTWIERDZONE PRZEZ DAMIANA.
+- Wynik Supabase: Success. No rows returned.
+- Cel: rozszerzenie `project_files` o pola `active`, `auto_send_after_payment`, `required_for_publication`, `sort_order`, `metadata`, `updated_at`.
+- Test runtime: BRAK POTWIERDZONEGO TESTU RUNTIME.
+<!-- SQL_LEDGER_ETAP26A_CONFIRMED_2026_05_17_END -->
+
+

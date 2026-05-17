@@ -1405,3 +1405,87 @@ Etap 33 runtime audit:
 - Obsidian: dopisany selektywnie tylko do notatki Etapu 36, bez stagingu Paperclip i bez .obsidian/graph.json.
 - Następny krok: Etap 37 Stripe webhook -> ensurePostPaymentFulfillmentAccessForOrder().
 <!-- ETAP36E_MEMORY_CLEANUP_AND_OBSIDIAN_SYNC_2026_05_17_END -->
+
+<!-- ETAP26A_V2_REPAIR_LEDGER_2026_05_17_START -->
+## 2026-05-17 - Etap 26A V2 repair
+
+- Co wdrozono: repair czesciowego Etapu 26A V1, model `project_files`, guard, SQL confirmed ledger, tsconfig exclude dla backupow.
+- Testy: APPLY V2 uruchamia focused guardy i typecheck.
+- Test reczny: TEST RĘCZNY DO WYKONANIA.
+- Delivery: ZIP, bez pushu AI.
+<!-- ETAP26A_V2_REPAIR_LEDGER_2026_05_17_END -->
+
+<!-- ETAP26A_V3_GUARD_REPAIR_AND_ETAP37_NOTE_2026_05_17_START -->
+## Etap 26A V3 - repair guarda po falszywym alarmie public media
+
+Status: REPAIR / DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+V2 naprawil wiekszosc Etapu 26A, ale guard `verify:project-files-model-v26a` byl zbyt szeroki: skanowal `app/admin/projekty/actions.ts` pod `getPublicUrl`, chociaz `getPublicUrl` nalezy do uploadu publicznych mediow, nie prywatnych plikow `project_files`.
+
+V3 zaweza zakaz public URL do prywatnego modelu project files, readiness, fulfillment i dokumentacji. Publiczne media moga nadal uzywac `getPublicUrl`.
+
+Testy: `verify:project-files-model-v26a`, `verify:private-files-fulfillment-v51`, `verify:project-publication-readiness-v35`, `typecheck`, `build`.
+
+
+## Etap 37 - dynamiczne kategorie projektow
+
+Status: DO WDROZENIA PO DOMKNIECIU 26A.
+Data: 2026-05-17.
+
+Damian zglosil, ze homepage pokazuje statyczne `Kategorie projektow`, widoczny jest blad `\2014`, a kategorie powinny byc dynamiczne: wybierane w adminie, mozliwe do dodania jako wlasne, klikalne i widoczne tylko wtedy, gdy maja aktywne projekty.
+
+Nastepny etap do zapisania/wdrozenia:
+- model kategorii w bazie,
+- select kategorii przy dodawaniu/edycji projektu,
+- mozliwosc dodania kategorii wlasnej,
+- homepage pokazuje tylko kategorie z realnymi aktywnymi projektami,
+- kafelki prowadza do katalogu z filtrem,
+- usuniecie `\2014` przed naglowkiem.
+
+Status testu: TEST RECZNY DO WYKONANIA.
+<!-- ETAP26A_V3_GUARD_REPAIR_AND_ETAP37_NOTE_2026_05_17_END -->
+
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_START -->
+## Etap 26A V5 - guard path repair
+
+Status: NAPRAWA PACZKI / TESTY DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+FAKTY:
+- V4 nie podmieniło guarda przez błąd ścieżki `payload/payload/files`.
+- Guard 26A ma dotyczyć prywatnego modelu `project_files`, nie publicznych mediów projektu.
+- SQL Etapu 26A jest już potwierdzony przez Damiana: `Success. No rows returned`.
+
+ZMIANA:
+- V5 podmienia `scripts/check-project-files-model-v26a.cjs`.
+- Public URL markers są zakazane tylko w prywatnych źródłach Etapu 26A.
+
+TESTY:
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+
+TEST RĘCZNY:
+- BRAK POTWIERDZONEGO TESTU RUNTIME.
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_END -->
+
+<!-- ETAP26A_V8_ACTIONS_FILEDEFAULTS_LEDGER_2026_05_17_START -->
+## Etap 26A V8 - actions fileDefaults mass check
+
+Data: 2026-05-17.
+
+Co naprawiono:
+- `fileDefaults` w `app/admin/projekty/actions.ts` definiowane przed insert do `project_files`.
+- Import modelu plików projektu sprawdzony i poprawiany.
+- Naprawa `getProjectPublicationErrorMessage()` po rozbitym stringu.
+- Dodany preflight typowych błędów paczek.
+
+Ryzyko:
+- Etap nadal wymaga przejścia typecheck/build lokalnie i review diff przed push.
+
+Status testu ręcznego:
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+<!-- ETAP26A_V8_ACTIONS_FILEDEFAULTS_LEDGER_2026_05_17_END -->

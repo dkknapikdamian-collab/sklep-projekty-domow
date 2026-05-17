@@ -10,6 +10,8 @@ import {
 } from "@/lib/admin/project-publication-readiness";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 import { writeAdminAuditLog } from "@/lib/admin/audit-log";
+import { PROJECT_FILE_STORAGE_BUCKET, getProjectFileDefaults } from "@/lib/admin/project-files-model";
+
 
 export type UpdateProjectState = {
   ok: boolean;
@@ -134,7 +136,7 @@ async function getProjectPublicationContext(
     supabase.from("project_media").select("media_type").eq("project_id", projectId),
     supabase.from("project_rooms").select("name").eq("project_id", projectId),
     supabase.from("project_variants").select("name, active").eq("project_id", projectId),
-    supabase.from("project_files").select("file_type, path").eq("project_id", projectId)
+    supabase.from("project_files").select("file_type, path, active, required_for_publication").eq("project_id", projectId)
   ]);
 
   if (mediaError) throw new Error(`Nie udalo sie sprawdzic mediow projektu: ${mediaError.message}`);
@@ -249,7 +251,8 @@ async function uploadPrivateFiles(params: {
     if (!isRealFile(file)) continue;
 
     const path = `${projectCode}/${item.fileName}`;
-    const { error } = await supabase.storage.from("project-private-files").upload(path, file, {
+    const fileDefaults = getProjectFileDefaults(item.fileType);
+    const { error } = await supabase.storage.from(PROJECT_FILE_STORAGE_BUCKET).upload(path, file, {
       upsert: true,
       contentType: file.type || "application/octet-stream"
     });
@@ -259,11 +262,20 @@ async function uploadPrivateFiles(params: {
     await supabase.from("project_files").delete().eq("project_id", projectId).eq("file_type", item.fileType);
     await supabase.from("project_files").insert({
       project_id: projectId,
-      bucket: "project-private-files",
+      bucket: PROJECT_FILE_STORAGE_BUCKET,
       path,
       file_type: item.fileType,
       title: item.title,
-      version: "v1"
+      version: "v1",
+      active: true,
+      auto_send_after_payment: fileDefaults.autoSendAfterPayment,
+      required_for_publication: fileDefaults.requiredForPublication,
+      sort_order: fileDefaults.sortOrder,
+      metadata: {
+        stage: "ETAP26A_PROJECT_FILES_MODEL",
+        storage: "supabase",
+        bucket: PROJECT_FILE_STORAGE_BUCKET
+      }
     });
   }
 }

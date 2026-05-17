@@ -1,4 +1,4 @@
-<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## Etap 35A - guard decyzji Stripe
 
 Nazwa: `verify:stage35-stripe-provider-decision`
@@ -1167,3 +1167,51 @@ DO URUCHOMIENIA LOKALNIE przez APPLY z paczki.
 - Obsidian: dopisany selektywnie tylko do notatki Etapu 36, bez stagingu Paperclip i bez .obsidian/graph.json.
 - Następny krok: Etap 37 Stripe webhook -> ensurePostPaymentFulfillmentAccessForOrder().
 <!-- ETAP36E_MEMORY_CLEANUP_AND_OBSIDIAN_SYNC_2026_05_17_END -->
+
+<!-- ETAP26A_V2_REPAIR_GUARD_2026_05_17_START -->
+## Etap 26A V2 repair - guard modelu plikow projektu
+
+- Komenda: `npm run verify:project-files-model-v26a`.
+- Sprawdza: Supabase-only model, flagi `project_files`, brak Google Drive/public URL, integracje admina/readiness/order fulfillment, SQL i `tsconfig.exclude`.
+- Status: TEST AUTOMATYCZNY / GUARD DO URUCHOMIENIA LOKALNIE.
+<!-- ETAP26A_V2_REPAIR_GUARD_2026_05_17_END -->
+
+<!-- ETAP26A_V3_GUARD_REPAIR_2026_05_17_START -->
+## Etap 26A V3 - repair guarda po falszywym alarmie public media
+
+Status: REPAIR / DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+V2 naprawil wiekszosc Etapu 26A, ale guard `verify:project-files-model-v26a` byl zbyt szeroki: skanowal `app/admin/projekty/actions.ts` pod `getPublicUrl`, chociaz `getPublicUrl` nalezy do uploadu publicznych mediow, nie prywatnych plikow `project_files`.
+
+V3 zaweza zakaz public URL do prywatnego modelu project files, readiness, fulfillment i dokumentacji. Publiczne media moga nadal uzywac `getPublicUrl`.
+
+Testy: `verify:project-files-model-v26a`, `verify:private-files-fulfillment-v51`, `verify:project-publication-readiness-v35`, `typecheck`, `build`.
+<!-- ETAP26A_V3_GUARD_REPAIR_2026_05_17_END -->
+
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_START -->
+## Etap 26A V5 - guard path repair
+
+Status: NAPRAWA PACZKI / TESTY DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+FAKTY:
+- V4 nie podmieniło guarda przez błąd ścieżki `payload/payload/files`.
+- Guard 26A ma dotyczyć prywatnego modelu `project_files`, nie publicznych mediów projektu.
+- SQL Etapu 26A jest już potwierdzony przez Damiana: `Success. No rows returned`.
+
+ZMIANA:
+- V5 podmienia `scripts/check-project-files-model-v26a.cjs`.
+- Public URL markers są zakazane tylko w prywatnych źródłach Etapu 26A.
+
+TESTY:
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+
+TEST RĘCZNY:
+- BRAK POTWIERDZONEGO TESTU RUNTIME.
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_END -->
+

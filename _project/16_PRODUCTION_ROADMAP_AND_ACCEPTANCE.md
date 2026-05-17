@@ -1,4 +1,4 @@
-# 16_PRODUCTION_ROADMAP_AND_ACCEPTANCE - Sklep projekty domow
+﻿# 16_PRODUCTION_ROADMAP_AND_ACCEPTANCE - Sklep projekty domow
 
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## Etap 32 - kanoniczny status produkcyjny V1
@@ -318,3 +318,56 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
+
+<!-- ETAP26A_V2_REPAIR_ROADMAP_2026_05_17_START -->
+## Etap 26A V2 repair - Supabase project_files model
+
+Status: V2 REPAIR W PACZCE / SQL URUCHOMIONE / TEST RĘCZNY DO WYKONANIA.
+
+Warunek zamkniecia: APPLY V2 przechodzi guardy, SQL juz potwierdzony, Damian potwierdza runtime test publikacji i fulfillmentu.
+
+Nastepny etap: Etap 26B admin UX plikow prywatnych.
+<!-- ETAP26A_V2_REPAIR_ROADMAP_2026_05_17_END -->
+
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_START -->
+## Etap 26A V5 - guard path repair
+
+Status: NAPRAWA PACZKI / TESTY DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+FAKTY:
+- V4 nie podmieniło guarda przez błąd ścieżki `payload/payload/files`.
+- Guard 26A ma dotyczyć prywatnego modelu `project_files`, nie publicznych mediów projektu.
+- SQL Etapu 26A jest już potwierdzony przez Damiana: `Success. No rows returned`.
+
+ZMIANA:
+- V5 podmienia `scripts/check-project-files-model-v26a.cjs`.
+- Public URL markers są zakazane tylko w prywatnych źródłach Etapu 26A.
+
+TESTY:
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+
+TEST RĘCZNY:
+- BRAK POTWIERDZONEGO TESTU RUNTIME.
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_END -->
+
+<!-- ETAP38_SELECT_CONTRAST_FILTER_OPTIONS_2026_05_17_START -->
+## Etap 38 - kontrast selectów i komplet wartości filtrów
+
+Status: DO WDROŻENIA PO ETAPIE 26A / TEST RĘCZNY DO WYKONANIA.
+
+Problem zgłoszony przez Damiana:
+- rozwijane listy mają zły kontrast,
+- część opcji jest niewidoczna albo trudna do odczytu,
+- listy są niekompletne, np. liczba pokoi powinna mieć 1, 2, 3, 4, 5+.
+
+Kryterium zamknięcia:
+- publiczny katalog i admin mają czytelne dropdowny,
+- wszystkie opcje są widoczne w ciemnym UI,
+- opcje filtrów pochodzą z jednego źródła prawdy,
+- guard i test ręczny są zapisane.
+<!-- ETAP38_SELECT_CONTRAST_FILTER_OPTIONS_2026_05_17_END -->

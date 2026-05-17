@@ -138,6 +138,9 @@ export function AdminProjectMediaManager({
                 <span data-admin-private-file-type="true">Typ realizacji: {item.fileType}</span>
                 <small data-admin-private-file-bucket="true">Bucket: {item.bucket || "project-private-files"}</small>
                 {item.version && <small>Wersja: {item.version}</small>}
+                <small data-admin-private-file-active="true">Aktywny: {item.active ? "tak" : "nie"}</small>
+                <small data-admin-private-file-required-for-publication="true">Wymagany do publikacji: {item.requiredForPublication ? "tak" : "nie"}</small>
+                <small data-admin-private-file-auto-send="true">Auto po płatności: {item.autoSendAfterPayment ? "tak" : "nie"}</small>
                 <small data-admin-private-file-manual-fulfillment="true">Widoczne w panelu zamówień jako plik do ręcznej wysyłki.</small>
                 <code>{item.path}</code>
                 <button

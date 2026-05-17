@@ -1,4 +1,4 @@
-<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## 2026-05-17 - Etap 35A: Stripe provider confirmed
 
 - Zapisano decyzję Damiana: provider płatności V1.1 = Stripe.
@@ -817,3 +817,39 @@ Nie uruchomiono live payment ani realnej wysyłki e-maili. E-mail jest przygotow
 - Ryzyko: brak zmiany UI; hotfix dotyczy skladni CSS i dokumentacji.
 - Nastepny krok: po przejsciu builda wrocic do Etapu 37, czyli Stripe webhook -> fulfillment.
 <!-- ETAP36B_BUILD_HOTFIX_2026_05_17_END -->
+
+<!-- ETAP26A_V2_REPAIR_TIMELINE_2026_05_17_START -->
+## Etap 26A V2 repair - Supabase project_files model
+
+- Naprawiono czesciowy apply V1.
+- SQL Etapu 26A oznaczono jako uruchomiony i potwierdzony przez Damiana.
+- Uporzadkowano model `project_files` dla Supabase Storage.
+- Dodano `_backup_local` do `tsconfig.exclude`.
+<!-- ETAP26A_V2_REPAIR_TIMELINE_2026_05_17_END -->
+
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_START -->
+## Etap 26A V5 - guard path repair
+
+Status: NAPRAWA PACZKI / TESTY DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+FAKTY:
+- V4 nie podmieniło guarda przez błąd ścieżki `payload/payload/files`.
+- Guard 26A ma dotyczyć prywatnego modelu `project_files`, nie publicznych mediów projektu.
+- SQL Etapu 26A jest już potwierdzony przez Damiana: `Success. No rows returned`.
+
+ZMIANA:
+- V5 podmienia `scripts/check-project-files-model-v26a.cjs`.
+- Public URL markers są zakazane tylko w prywatnych źródłach Etapu 26A.
+
+TESTY:
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+
+TEST RĘCZNY:
+- BRAK POTWIERDZONEGO TESTU RUNTIME.
+<!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_END -->
+
