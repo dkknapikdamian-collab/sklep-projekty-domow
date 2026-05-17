@@ -1410,3 +1410,41 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
+
+<!-- ETAP36_POST_PAYMENT_FULFILLMENT_2026_05_17_START -->
+## Etap 36 - fulfillment po płatności
+
+Status: WDROŻONE W PACZCE / BEZ LIVE PAYMENT / TEST RĘCZNY DO WYKONANIA.
+Priorytet: 7.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Cel
+
+Dodać bezpieczny fundament wydawania prywatnych plików po płatności: tokenowany panel pobrań, signed URLs generowane server-side, e-mail payload po płatności, brak publicznego wycieku plików i logi zdarzeń pobrań/linków.
+
+### Co wdrożono
+
+- lib/fulfillment/post-payment-fulfillment.ts - server helper po płatności.
+- /zamowienie/dostep/[token] - panel pobrań klienta bez konta.
+- /zamowienie/dostep/[token]/plik/[fileId] - endpoint generujący signed URL po sprawdzeniu tokenu i paid.
+- supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql - tabele płatności, dostępu i logów.
+- docs/payments/ETAP36_POST_PAYMENT_FULFILLMENT.md - dokumentacja kontraktu.
+- scripts/check-stage36-post-payment-fulfillment.cjs - guard regresji.
+
+### Zasady bezpieczeństwa
+
+- Success page nie jest źródłem prawdy.
+- Dostęp do plików wymaga order_payments.status = paid.
+- Publiczna strona panelu nie tworzy storage linków bezpośrednio.
+- Signed URL jest tworzony dopiero w endpointzie pliku i ma TTL 30 minut.
+- Token panelu jest hashowany w bazie.
+- Brak realnego wysyłania e-maili bez decyzji o providerze.
+
+### Test ręczny
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+### Następny krok
+
+Etap 37: spiąć Stripe webhook z ensurePostPaymentFulfillmentAccessForOrder() albo dodać admin action do ręcznego wygenerowania tokenu testowego po potwierdzonej płatności.
+<!-- ETAP36_POST_PAYMENT_FULFILLMENT_2026_05_17_END -->

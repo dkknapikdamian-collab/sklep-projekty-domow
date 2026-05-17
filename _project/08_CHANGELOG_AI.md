@@ -941,3 +941,11 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
+
+<!-- ETAP36_CHANGELOG_2026_05_17_START -->
+## 2026-05-17 - Etap 36 post-payment fulfillment
+
+Dodano fundament bezpiecznego wydawania plików po płatności: helper, panel tokenowany, endpoint pliku z signed URL, SQL tabel płatności/dostępu/logów, dokumentację i guard.
+
+Nie uruchomiono live payment ani realnej wysyłki e-maili. E-mail jest przygotowany jako payload/draft ready_to_send.
+<!-- ETAP36_CHANGELOG_2026_05_17_END -->

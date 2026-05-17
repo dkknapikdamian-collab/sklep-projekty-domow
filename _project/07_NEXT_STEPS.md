@@ -1001,3 +1001,12 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
+
+<!-- ETAP36_NEXT_STEP_2026_05_17_START -->
+## Następny krok po Etapie 36
+
+1. Uruchomić SQL supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql w Supabase.
+2. Wykonać test z rekordem order_payments.status = paid.
+3. Spiąć Stripe webhook z ensurePostPaymentFulfillmentAccessForOrder().
+4. Zdecydować, czy e-mail po płatności będzie automatyczny i przez jakiego providera.
+<!-- ETAP36_NEXT_STEP_2026_05_17_END -->

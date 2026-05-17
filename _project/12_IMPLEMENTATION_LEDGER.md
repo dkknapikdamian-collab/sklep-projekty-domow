@@ -1335,3 +1335,22 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
+
+<!-- ETAP36_IMPLEMENTATION_LEDGER_2026_05_17_START -->
+## 2026-05-17 - Etap 36 fulfillment po płatności
+
+- Status: WDROŻONE W PACZCE / TEST RĘCZNY DO WYKONANIA.
+- Cel: bezpieczny dostęp do prywatnych plików po płatności.
+- Pliki zmienione/dodane:
+  - lib/fulfillment/post-payment-fulfillment.ts
+  - app/zamowienie/dostep/[token]/page.tsx
+  - app/zamowienie/dostep/[token]/plik/[fileId]/route.ts
+  - supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql
+  - docs/payments/ETAP36_POST_PAYMENT_FULFILLMENT.md
+  - scripts/check-stage36-post-payment-fulfillment.cjs
+- Czego nie zmieniano: istniejący ręczny admin fulfillment V51 nadal nie generuje signed/public linków.
+- Ryzyka: brak webhooka Stripe i brak realnego e-mail providera.
+- Testy: guard/typecheck/build do uruchomienia w APPLY.
+- Potwierdzenie Damiana: brak dla runtime Etapu 36.
+- Następny krok: webhook -> fulfillment helper albo admin action tokenu.
+<!-- ETAP36_IMPLEMENTATION_LEDGER_2026_05_17_END -->

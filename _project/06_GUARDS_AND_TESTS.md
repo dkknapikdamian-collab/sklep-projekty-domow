@@ -1116,3 +1116,13 @@ Przed pushem i po każdej zmianie w katalogu, karcie projektu, koszyku, checkout
 
 DO URUCHOMIENIA LOKALNIE przez APPLY z paczki.
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
+<!-- ETAP36_POST_PAYMENT_FULFILLMENT_GUARD_2026_05_17_START -->
+## Etap 36 - guard fulfillmentu po płatności
+
+- Guard: npm run verify:stage36-post-payment-fulfillment
+- Plik: scripts/check-stage36-post-payment-fulfillment.cjs
+- Sprawdza: helper fulfillmentu, panel tokenowany, endpoint signed URL, SQL, dokumentację, raport run, brak public URL i brak realnego send-email bez providera.
+- Status ostatni: DO URUCHOMIENIA W APPLY.
+- Wymagany przed pushem: TAK.
+<!-- ETAP36_POST_PAYMENT_FULFILLMENT_GUARD_2026_05_17_END -->

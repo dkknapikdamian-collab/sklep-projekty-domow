@@ -70,3 +70,15 @@ SQL bez ledgeru nie zamyka etapu.
 - Public safety: projekt ma status `draft`, nie `active`.
 <!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_CONFIRMED_2026_05_17_END -->
 
+
+<!-- SQL_LEDGER_ETAP36_POST_PAYMENT_FULFILLMENT_2026_05_17_START -->
+## 2026-05-17 - Etap 36 post-payment fulfillment
+
+- SQL_LEDGER_ID: 2026-05-17_etap36_post_payment_fulfillment
+- Plik: supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql
+- Typ: MIGRATION
+- Status: DO_URUCHOMIENIA.
+- Cel: tabele order_payments, payment_events, order_fulfillment_access, order_download_events dla bezpiecznego fulfillmentu po płatności.
+- Bezpieczeństwo: RLS enabled, brak publicznych polityk; dostęp przez server-side service role.
+- Ryzyko: wymaga sprawdzenia na aktualnym schemacie Supabase przed uznaniem runtime za potwierdzony.
+<!-- SQL_LEDGER_ETAP36_POST_PAYMENT_FULFILLMENT_2026_05_17_END -->

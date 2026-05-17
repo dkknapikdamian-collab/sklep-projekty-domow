@@ -1222,3 +1222,14 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
+
+<!-- ETAP36_TEST_HISTORY_2026_05_17_START -->
+## 2026-05-17 - Etap 36 fulfillment po płatności
+
+- TEST AUTOMATYCZNY / GUARD: npm run verify:stage36-post-payment-fulfillment - DO URUCHOMIENIA W APPLY.
+- TEST AUTOMATYCZNY / GUARD: npm run verify:private-files-fulfillment-v51 - regresja ręcznego fulfillmentu bez publicznych linków.
+- TEST AUTOMATYCZNY: npm run typecheck - DO URUCHOMIENIA W APPLY.
+- TEST AUTOMATYCZNY: npm run build - DO URUCHOMIENIA W APPLY.
+- TEST RĘCZNY DO WYKONANIA: tokenowany panel + kliknięcie pliku + wpis order_download_events po SQL i testowej płatności paid.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: Etap 36 nie ma jeszcze runtime potwierdzenia Damiana.
+<!-- ETAP36_TEST_HISTORY_2026_05_17_END -->
