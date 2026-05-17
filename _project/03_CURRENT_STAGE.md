@@ -1637,3 +1637,30 @@ TESTY WYMAGANE:
 TEST RECZNY:
 - BRAK POTWIERDZONEGO TESTU RECZNEGO.
 <!-- ETAP26B_V14_STAGE_MARKER_REPAIR_2026_05_17_END -->
+
+<!-- ETAP26C_POST_PAYMENT_PROJECT_FILES_2026_05_17_START -->
+## Etap 26C - post-payment project files fulfillment
+
+Status: ZIP/APPLY / TESTY AUTOMATYCZNE W PACZCE / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17.
+
+Zakres:
+- fulfillment po `paid` używa aktywnych plików z `project_files`,
+- `floor_plans` jest uwzględniany w panelu pobrań,
+- `pdf_email_package` jest wymagany tylko przy dodatku PDF na e-mail,
+- linki są signed URL z krótkim TTL, nie publiczne URL,
+- logi trafiają do `order_download_events`,
+- realny e-mail zostaje na Etap 26D.
+
+Testy automatyczne:
+- `npm run verify:post-payment-project-files-v26c`
+- `npm run verify:stage36-post-payment-fulfillment`
+- `npm run verify:project-private-files-ux-v26b`
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run typecheck`
+- `npm run build`
+
+Test ręczny: TEST RĘCZNY DO WYKONANIA.
+Następny krok: Etap 26D - realna wysyłka e-mail po decyzji o providerze.
+<!-- ETAP26C_POST_PAYMENT_PROJECT_FILES_2026_05_17_END -->

@@ -7,6 +7,18 @@ export const POST_PAYMENT_ACCESS_TOKEN_BYTES = 32;
 export const POST_PAYMENT_ACCESS_PANEL_TTL_DAYS = 7;
 export const POST_PAYMENT_FILE_LINK_TTL_SECONDS = 30 * 60;
 
+export const POST_PAYMENT_PROJECT_FILES_CONTRACT = {
+  stage: "ETAP26C_POST_PAYMENT_PROJECT_FILES",
+  storageProvider: "supabase_storage",
+  requiresPaidPayment: true,
+  usesActiveProjectFilesOnly: true,
+  respectsPdfEmailAddon: true,
+  includesFloorPlans: true,
+  signedUrlsOnly: true,
+  logsDownloadEvents: true,
+  emailProviderPending: true
+} as const;
+
 export const POST_PAYMENT_FULFILLMENT_STATUSES = [
   "blocked_until_paid",
   "manual_review_required",
@@ -294,7 +306,7 @@ export async function ensurePostPaymentFulfillmentAccessForOrder(input: {
       metadata: {
         reason: "missing_required_private_files",
         missingRequiredCount: fileState?.missingRequiredCount || 0,
-        stage: "ETAP36_POST_PAYMENT_FULFILLMENT"
+        ...POST_PAYMENT_PROJECT_FILES_CONTRACT
       },
       updated_at: new Date().toISOString()
     }, { onConflict: "order_id,payment_id" });
@@ -323,7 +335,7 @@ export async function ensurePostPaymentFulfillmentAccessForOrder(input: {
     email_status: "ready_to_send",
     delivery_email: order.customerEmail || null,
     metadata: {
-      stage: "ETAP36_POST_PAYMENT_FULFILLMENT",
+      ...POST_PAYMENT_PROJECT_FILES_CONTRACT,
       fileCount: fileState.files.length,
       emailSubject: emailDraft.subject,
       successPageIsNotSourceOfTruth: true,
@@ -343,7 +355,7 @@ export async function ensurePostPaymentFulfillmentAccessForOrder(input: {
     accessId: null,
     file: null,
     eventType: "access_token_generated",
-    metadata: { fileCount: fileState.files.length, emailStatus: "ready_to_send" }
+    metadata: { ...POST_PAYMENT_PROJECT_FILES_CONTRACT, fileCount: fileState.files.length, emailStatus: "ready_to_send" }
   });
 
   return { ok: true, reason: "access_ready", status: "links_generated", token, accessUrl, emailDraft };
@@ -380,7 +392,7 @@ export async function getPostPaymentFulfillmentAccessView(token: string, options
       accessId: access.id,
       file: null,
       eventType: "access_panel_view",
-      metadata: { stage: "ETAP36_POST_PAYMENT_FULFILLMENT" }
+      metadata: { ...POST_PAYMENT_PROJECT_FILES_CONTRACT }
     });
   }
 
@@ -440,7 +452,7 @@ export async function createSignedFileRedirectForAccess(input: {
       accessId: access.id,
       file,
       eventType: "signed_file_url_failed",
-      metadata: { reason: error?.message || "no_signed_url" }
+      metadata: { ...POST_PAYMENT_PROJECT_FILES_CONTRACT, reason: error?.message || "no_signed_url" }
     });
 
     return { ok: false, reason: error?.message || "signed_url_failed", redirectUrl: "" };
@@ -452,7 +464,7 @@ export async function createSignedFileRedirectForAccess(input: {
     accessId: access.id,
     file,
     eventType: "signed_file_url_issued",
-    metadata: { ttlSeconds: POST_PAYMENT_FILE_LINK_TTL_SECONDS }
+    metadata: { ...POST_PAYMENT_PROJECT_FILES_CONTRACT, ttlSeconds: POST_PAYMENT_FILE_LINK_TTL_SECONDS }
   });
 
   return { ok: true, reason: "redirect_ready", redirectUrl: data.signedUrl };
