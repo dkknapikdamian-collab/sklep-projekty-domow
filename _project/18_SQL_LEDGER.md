@@ -99,5 +99,5 @@ SQL bez ledgeru nie zamyka etapu.
   - order_download_events
 - Bezpieczeństwo: RLS enabled, brak publicznych polityk; dostęp server-side przez service role.
 - Test runtime: BRAK POTWIERDZONEGO TESTU RUNTIME fulfillmentu po płatności.
-- Następny krok: naprawić build przez błędny HTML komentarz w pp/globals.css, potem spiąć Stripe webhook z fulfillmentem.
+- Następny krok: naprawić build przez błędny HTML komentarz w app/globals.css, potem spiąć Stripe webhook z fulfillmentem.
 <!-- SQL_LEDGER_ETAP36_CONFIRMED_2026_05_17_END -->
