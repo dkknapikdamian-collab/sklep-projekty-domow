@@ -1,77 +1,47 @@
-# Etap 33 - runtime test admina i audit
+# Etap 33 - runtime checklist admin audit
 
-Status: TEST RĘCZNY DO WYKONANIA.
-Priorytet: 4.
-Data przygotowania: 2026-05-17 Europe/Warsaw.
+Status: TEST RĘCZNY CZĘŚCIOWO POTWIERDZONY PRZEZ DAMIANA / ETAP NIEZAMKNIĘTY.
 
-## Cel
+## Kryterium
 
-Potwierdzić, że realne operacje admina tworzą realne wpisy w Supabase w tabeli `public.admin_audit_log`, a `/admin/audit` pokazuje te wpisy.
+Wpisy audit muszą realnie być w Supabase w `public.admin_audit_log`.
 
-## Warunek startu
+## Wynik SQL Damiana
 
-- Pracuj na projekcie testowym przeznaczonym do usunięcia.
-- Nie używaj realnego projektu sprzedażowego do hard delete.
-- Przed destrukcyjnym testem sprawdź kod projektu i nazwę.
+### PASS
 
-## Co kliknąć
+- dodanie projektu - `project_create`
+- publikacja projektu - `project_status_update`
+- archiwizacja projektu - `project_archive`
+- usunięcie projektu - `project_hard_delete`
 
-1. dodanie projektu.
-   - Oczekiwany audit action: `project_create`.
-2. publikacja.
-   - Oczekiwany audit action: `project_status_update` z metadata zawierającym `active` albo odpowiednik publikacji.
-3. archiwizacja.
-   - Oczekiwany audit action: `project_archive`.
-4. usunięcie.
-   - Oczekiwany audit action: `project_hard_delete`.
-   - Uwaga: tylko na projekcie testowym.
-5. media.
-   - Oczekiwany audit action: `project_media_delete` albo `project_media_type_update`.
-6. pliki prywatne.
-   - Oczekiwany audit action: `project_private_file_delete`.
-7. zamówienia.
-   - Oczekiwany audit action: `order_status_update`.
-8. checklisty.
-   - Oczekiwany audit action: `order_fulfillment_checklist_update`.
-9. `/admin/audit`.
-   - Oczekiwane: wpisy są widoczne w UI i zgadzają się z Supabase `admin_audit_log`.
+### FAIL / DO WYKONANIA
 
-## Jak sprawdzić Supabase
+- media projektu - `project_media_delete` albo `project_media_type_update`
+- pliki prywatne - `project_private_file_delete`
+- zamówienia - `order_status_update`
+- checklisty zamówień - `order_fulfillment_checklist_update`
 
-### Opcja A - Node runtime proof
+## Następne kliknięcia
 
-Skrypt V2 wczytuje `.env.local` automatycznie, jeśli ma `NEXT_PUBLIC_SUPABASE_URL` i `SUPABASE_SERVICE_ROLE_KEY` albo równoważny service key.
+1. Media projektu:
+   - zmień typ mediów albo usuń media testowe.
 
-```powershell
-cd "C:\Users\malim\Desktop\biznesy_ai\strony\strona z projektami"
-$env:ADMIN_AUDIT_RUNTIME_SINCE_HOURS="24"
-npm run audit:admin-runtime-v54
-```
+2. Pliki prywatne:
+   - usuń prywatny plik testowy z projektu.
 
-Wynik wymagany: wszystkie grupy `PASS`.
+3. Zamówienia:
+   - zmień status zamówienia w adminie.
 
-### Opcja B - SQL Editor
+4. Checklisty zamówień:
+   - zmień checklistę realizacji zamówienia.
 
-Skopiuj SQL do schowka:
+## SQL proof
 
-```powershell
-cd "C:\Users\malim\Desktop\biznesy_ai\strony\strona z projektami"
-Get-Content ".\supabase\manual\2026-05-17_etap33_admin_audit_runtime_verification.sql" -Raw | Set-Clipboard
-```
+Uruchom w Supabase SQL Editor:
 
-Wklej w Supabase SQL Editor i uruchom.
+`supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`
 
-Wynik wymagany: wszystkie grupy `PASS`.
+## Status końcowy
 
-## Status zamknięcia
-
-Etap 33 można oznaczyć jako zamknięty dopiero gdy:
-
-- wpisy są realnie w Supabase,
-- `/admin/audit` pokazuje wpisy,
-- wynik Node/SQL ma wszystkie wymagane grupy `PASS`,
-- Damian potwierdzi test ręczny.
-
-## Aktualny status testu
-
-BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+Etap 33 można zamknąć dopiero przy 8 PASS / 0 FAIL.

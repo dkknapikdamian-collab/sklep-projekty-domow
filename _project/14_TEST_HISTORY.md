@@ -838,3 +838,175 @@ Kliknąć dodanie projektu, publikację, archiwizację, usunięcie projektu test
 V2 naprawia paczkę, ale nie potwierdza runtime. Runtime potwierdza dopiero `PASS` w Node/SQL proof.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TEST_HISTORY_2026_05_17_END -->
 
+<!-- ETAP33_V4_APPLY_SQL_FIX_2026_05_17_START -->
+## Etap 33 V4 - apply fix i SQL proof bez audit_window
+
+Status: HOTFIX PACZKI I SQL PROOF / TEST RECZNY DO WYKONANIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### FAKTY
+
+- V3 nie wykonało apply przez SyntaxError w `payload/apply.cjs`.
+- Powód: markdown z backtickami był osadzony w JS template stringu.
+- Przez to lokalny SQL nie został podmieniony i Supabase dalej pokazywał stary błąd `from audit_window`.
+- V4 usuwa CTE `audit_window` całkowicie z SQL proof.
+- V4 trzyma bloki markdown w osobnych plikach payload/blocks, nie w JS stringu.
+
+### SQL LEDGER
+
+- Plik SQL: `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+- Typ: READ_ONLY_VERIFICATION.
+- Ledger repo: `_project/18_SQL_LEDGER.md`.
+- Ledger Obsidian: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
+
+### TESTY
+
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:admin-audit-runtime-v53`.
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:admin-audit-log-v44`.
+- TEST AUTOMATYCZNY / GUARD: `npm run check:project-memory`.
+- TEST RĘCZNY DO WYKONANIA: SQL proof w Supabase SQL Editor.
+
+### NASTĘPNY KROK
+
+Skopiować poprawiony SQL po V4 i uruchomić w Supabase SQL Editor. Etap 33 nadal wymaga PASS dla realnych wpisów audit.
+<!-- ETAP33_V4_APPLY_SQL_FIX_2026_05_17_END -->
+
+<!-- ETAP33_V5_FALSE_POSITIVE_SQL_GUARD_FIX_2026_05_17_START -->
+## Etap 33 V5 - false-positive guard fix dla SQL proof
+
+Status: HOTFIX PACZKI I GUARDA / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### FAKTY
+
+- V4 zapisało poprawiony SQL, ale przerwało apply przez zbyt szeroki test tekstowy.
+- Test wykrył starą nazwę okna CTE w komentarzu, nie w realnym `from`/`join`/`with`.
+- V5 usuwa tę frazę z komentarza SQL i sprawdza tylko realne referencje SQL.
+- SQL pozostaje READ_ONLY_VERIFICATION i czyta `public.admin_audit_log`.
+
+### SQL LEDGER
+
+- Plik SQL: `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+- Typ: READ_ONLY_VERIFICATION.
+- Ledger repo: `_project/18_SQL_LEDGER.md`.
+- Ledger Obsidian: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
+
+### TESTY
+
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:admin-audit-runtime-v53`.
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:admin-audit-log-v44`.
+- TEST AUTOMATYCZNY / GUARD: `npm run check:project-memory`.
+- TEST RĘCZNY DO WYKONANIA: SQL proof w Supabase SQL Editor.
+
+### NASTĘPNY KROK
+
+Skopiować SQL po V5 i uruchomić w Supabase SQL Editor. Etap 33 wymaga PASS dla realnych wpisów audit.
+<!-- ETAP33_V5_FALSE_POSITIVE_SQL_GUARD_FIX_2026_05_17_END -->
+
+<!-- ETAP33_V6_PARTIAL_RUNTIME_STATUS_2026_05_17_START -->
+## Etap 33 V6 - częściowy runtime audit admina
+
+Status: CZĘŚCIOWO POTWIERDZONE PRZEZ DAMIANA / ETAP NIEZAMKNIĘTY.
+Data: 2026-05-17 Europe/Warsaw.
+
+### FAKTY Z TESTU DAMIANA
+
+PASS w Supabase `public.admin_audit_log`:
+- dodanie projektu - `project_create`
+- publikacja projektu - `project_status_update`
+- archiwizacja projektu - `project_archive`
+- usunięcie projektu - `project_hard_delete`
+
+FAIL w Supabase:
+- media projektu - `project_media_delete` / `project_media_type_update`
+- pliki prywatne - `project_private_file_delete`
+- zamówienia - `order_status_update`
+- checklisty zamówień - `order_fulfillment_checklist_update`
+
+### STATUS TESTÓW
+
+- TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA - CZĘŚCIOWO: 4 grupy PASS.
+- TEST RĘCZNY DO WYKONANIA: 4 grupy FAIL.
+- BRAK POTWIERDZONEGO TESTU PEŁNEGO: Etap 33 nie jest zamknięty.
+
+### SQL LEDGER
+
+- Plik SQL: `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+- Typ: READ_ONLY_VERIFICATION.
+- Status: URUCHOMIONE CZĘŚCIOWO / 4 PASS / 4 FAIL.
+- Ledger repo: `_project/18_SQL_LEDGER.md`.
+- Ledger Obsidian: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
+
+### NASTĘPNY KROK
+
+Kliknąć brakujące operacje:
+1. media projektu,
+2. pliki prywatne,
+3. zmiana statusu zamówienia,
+4. checklisty zamówień.
+
+Potem ponowić SQL proof. Dopiero 8 PASS zamyka Etap 33.
+<!-- ETAP33_V6_PARTIAL_RUNTIME_STATUS_2026_05_17_END -->
+
+<!-- ETAP33_V7_PARTIAL_RUNTIME_AUDIT_2026_05_17_START -->
+## Etap 33 V7 - częściowy runtime audit admina
+
+Status: CZĘŚCIOWO POTWIERDZONE PRZEZ DAMIANA / ETAP NIEZAMKNIĘTY.
+Data: 2026-05-17 Europe/Warsaw.
+
+### PASS
+
+- dodanie projektu - `project_create`
+- publikacja projektu - `project_status_update`
+- archiwizacja projektu - `project_archive`
+- usunięcie projektu - `project_hard_delete`
+
+### FAIL / DO WYKONANIA
+
+- media projektu - `project_media_delete` / `project_media_type_update`
+- pliki prywatne - `project_private_file_delete`
+- zamówienia - `order_status_update`
+- checklisty zamówień - `order_fulfillment_checklist_update`
+
+### TESTY
+
+- TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA - CZĘŚCIOWO: 4 PASS.
+- TEST RĘCZNY DO WYKONANIA: 4 FAIL.
+- BRAK POTWIERDZONEGO TESTU PEŁNEGO: Etap 33 nie jest zamknięty.
+
+### NASTĘPNY KROK
+
+Kliknąć brakujące operacje i ponowić SQL proof. Etap 33 zamyka dopiero 8 PASS / 0 FAIL.
+<!-- ETAP33_V7_PARTIAL_RUNTIME_AUDIT_2026_05_17_END -->
+
+<!-- ETAP33_V8_PARTIAL_RUNTIME_AUDIT_2026_05_17_START -->
+## Etap 33 V8 - częściowy runtime audit admina
+
+Status: CZĘŚCIOWO POTWIERDZONE PRZEZ DAMIANA / ETAP NIEZAMKNIĘTY.
+Data: 2026-05-17 Europe/Warsaw.
+
+### PASS
+
+- dodanie projektu - `project_create`
+- publikacja projektu - `project_status_update`
+- archiwizacja projektu - `project_archive`
+- usunięcie projektu - `project_hard_delete`
+
+### FAIL / DO WYKONANIA
+
+- media projektu - `project_media_delete` / `project_media_type_update`
+- pliki prywatne - `project_private_file_delete`
+- zamówienia - `order_status_update`
+- checklisty zamówień - `order_fulfillment_checklist_update`
+
+### TESTY
+
+- TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA - CZĘŚCIOWO: 4 PASS.
+- TEST RĘCZNY DO WYKONANIA: 4 FAIL.
+- BRAK POTWIERDZONEGO TESTU PEŁNEGO: Etap 33 nie jest zamknięty.
+
+### NASTĘPNY KROK
+
+Kliknąć brakujące operacje i ponowić SQL proof. Etap 33 zamyka dopiero 8 PASS / 0 FAIL.
+<!-- ETAP33_V8_PARTIAL_RUNTIME_AUDIT_2026_05_17_END -->
+

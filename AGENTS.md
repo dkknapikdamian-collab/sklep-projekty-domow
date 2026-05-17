@@ -560,15 +560,21 @@ DECYZJA PROCESOWA:
 <!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_END -->
 
 <!-- SQL_LEDGER_RULE_2026_05_17_START -->
-## Zasada SQL ledger dla projektu Sklep
+## Zasada SQL ledger dla sklepu
 
-DECYZJA PROCESOWA DAMIANA:
-- Każdy SQL użyty przy projekcie musi zostać zapisany w repo i Obsidianie.
-- SQL zmieniający schemat/dane trafia do `supabase/migrations/` albo jawnie do `supabase/manual/` z opisem ryzyka.
-- SQL tylko do sprawdzeń trafia do `supabase/manual/` jako `READ_ONLY_VERIFICATION`.
-- Każdy SQL musi mieć wpis w `_project/18_SQL_LEDGER.md`.
-- Każdy SQL musi mieć wpis w Obsidianie: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
-- Raport run musi wskazać: nazwę SQL, typ, czy mutuje dane/schemat, gdzie został uruchomiony, wynik i ryzyko.
-- SQL bez ledgeru nie zamyka etapu.
+Każdy SQL użyty przy projekcie musi być zapisany i opisany.
+
+Wymagane miejsca:
+- plik SQL w `supabase/manual/` albo `supabase/migrations/`,
+- repo ledger: `_project/18_SQL_LEDGER.md`,
+- Obsidian ledger: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
+
+Każdy SQL musi mieć typ: MIGRATION / READ_ONLY_VERIFICATION / REPAIR / DIAGNOSTIC.
+Każdy SQL musi mieć status: DO_URUCHOMIENIA / URUCHOMIONE / NIE_URUCHAMIAC / ZASTAPIONE.
+SQL bez ledgeru nie zamyka etapu.
 <!-- SQL_LEDGER_RULE_2026_05_17_END -->
+
+
+
+
 

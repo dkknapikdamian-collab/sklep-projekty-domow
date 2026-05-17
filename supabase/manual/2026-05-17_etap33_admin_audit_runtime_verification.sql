@@ -6,17 +6,9 @@
 -- Run location: Supabase SQL Editor.
 -- Safe: SELECT only, no schema/data mutation.
 -- Expected result: all required groups have result = PASS.
+-- V8: jedna tabela werdyktu plus szczegoly.
 
-with audit_window as (
-  select
-    created_at,
-    action,
-    entity_type,
-    entity_id,
-    metadata
-  from public.admin_audit_log
-  where created_at >= now() - interval '24 hours'
-), required_groups as (
+with required_groups as (
   select * from (values
     ('dodanie projektu', array['project_create']::text[]),
     ('publikacja projektu', array['project_status_update']::text[]),
@@ -34,7 +26,9 @@ with audit_window as (
     count(a.*) as entries,
     max(a.created_at) as last_seen
   from required_groups r
-  left join audit_window a on a.action = any(r.actions)
+  left join public.admin_audit_log a
+    on a.created_at >= now() - interval '24 hours'
+    and a.action = any(r.actions)
     and (
       r.group_name <> 'publikacja projektu'
       or lower(coalesce(a.metadata::text, '')) like '%active%'
@@ -49,15 +43,17 @@ select
   last_seen,
   actions
 from matched
-order by group_name;
+order by
+  case when entries > 0 then 1 else 0 end,
+  group_name;
 
--- Szczegoly wpisow z okna testowego:
 select
   created_at,
   action,
   entity_type,
   entity_id,
   metadata
-from audit_window
+from public.admin_audit_log
+where created_at >= now() - interval '24 hours'
 order by created_at desc
 limit 100;
