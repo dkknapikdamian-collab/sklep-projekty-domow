@@ -647,3 +647,4 @@ albo Supabase SQL Editor z plikiem:
 
 Wynik wymagany: wszystkie grupy `PASS`.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_MANUAL_2026_05_17_END -->
+

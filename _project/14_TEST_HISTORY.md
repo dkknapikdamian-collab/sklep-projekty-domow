@@ -837,3 +837,4 @@ Kliknąć dodanie projektu, publikację, archiwizację, usunięcie projektu test
 
 V2 naprawia paczkę, ale nie potwierdza runtime. Runtime potwierdza dopiero `PASS` w Node/SQL proof.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TEST_HISTORY_2026_05_17_END -->
+

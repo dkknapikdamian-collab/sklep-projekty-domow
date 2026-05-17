@@ -606,3 +606,4 @@ Naprawiono paczkę Etapu 33:
 
 Status runtime: TEST RĘCZNY DO WYKONANIA.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_CHANGELOG_2026_05_17_END -->
+

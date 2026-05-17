@@ -806,3 +806,4 @@ BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
 
 Wynik Node proof albo SQL proof musi pokazać `PASS` dla wszystkich grup: dodanie, publikacja, archiwizacja, usunięcie, media, pliki prywatne, zamówienia i checklisty.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_2026_05_17_END -->
+

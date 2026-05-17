@@ -453,3 +453,4 @@ Przygotowano pakiet testowy, który zamienia Etap 33 z listy kliknięć w mierza
 
 Po nieudanym apply V1 przygotowano V2: fix guarda checklisty, `.env.local` loader dla runtime proof i stały SQL ledger. Etap nadal wymaga realnego proofu Supabase po kliknięciach admina.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TIMELINE_2026_05_17_END -->
+

@@ -619,3 +619,4 @@ RYZYKA:
 5. Jeśli któraś grupa ma `FAIL`, naprawić konkretną ścieżkę audit logu.
 6. Po `PASS` dla wszystkich grup dopisać potwierdzenie Damiana.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_NEXT_2026_05_17_END -->
+

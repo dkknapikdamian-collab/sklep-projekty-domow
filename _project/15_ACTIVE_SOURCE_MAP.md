@@ -113,3 +113,4 @@ Obsidian jest dashboardem statusu, nie źródłem kodu.
 - SQL ledger Obsidian: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
 - Raport run V2: `_project/runs/2026-05-17_0930_etap33_v2_sql_ledger_env_fix.md`.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_SOURCE_MAP_2026_05_17_END -->
+

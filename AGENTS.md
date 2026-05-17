@@ -571,3 +571,4 @@ DECYZJA PROCESOWA DAMIANA:
 - Raport run musi wskazać: nazwę SQL, typ, czy mutuje dane/schemat, gdzie został uruchomiony, wynik i ryzyko.
 - SQL bez ledgeru nie zamyka etapu.
 <!-- SQL_LEDGER_RULE_2026_05_17_END -->
+
