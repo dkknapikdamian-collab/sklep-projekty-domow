@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useEffect, useMemo, useState } from "react";
-import { Send } from "lucide-react";
+import { CreditCard, Send } from "lucide-react";
 import { submitOrderAction, type CheckoutState } from "@/app/zamowienie/actions";
 import type { CartPayload } from "@/lib/cart/types";
 import { cartTotal, clearCart, readCart } from "@/lib/cart/storage";
@@ -28,25 +28,36 @@ export function CheckoutForm() {
 
   useEffect(() => {
     if (!state.ok) return;
+    if (state.checkoutUrl) {
+      clearCart();
+      setCart({ items: [] });
+      window.location.assign(state.checkoutUrl);
+      return;
+    }
     clearCart();
     setCart({ items: [] });
-  }, [state.ok]);
+  }, [state.ok, state.checkoutUrl]);
 
   if (state.ok) {
     return (
       <section
         className="checkout-success"
         data-order-success-v38="true"
-        data-checkout-non-public-success-v31="true"
+        data-checkout-stripe-v39a="true"
+        data-payment-online-foundation-v39a="true"
       >
         <h2>{state.message}</h2>
-        <p>Numer zamówienia testowego: {state.orderId}</p>
-        <p>
-          Zamówienie zostało zapisane bez uruchamiania płatności. To techniczny test
-          procesu przed integracją płatności online, webhooków i statusów płatności.
-          Ekran nie jest przeznaczony do publicznego użycia.
-        </p>
-        <Link className="empty-link" href="/projekty">Wróć do projektów</Link>
+        <p>Numer zamówienia: {state.orderId}</p>
+        {state.checkoutUrl ? (
+          <p>Jeżeli przekierowanie nie nastąpi automatycznie, użyj bezpiecznego linku do płatności.</p>
+        ) : (
+          <p>
+            Zamówienie zostało zapisane bez uruchomienia płatności, bo Stripe nie jest jeszcze skonfigurowany
+            w zmiennych środowiskowych. Pliki nie zostaną wydane bez webhook-confirmed statusu paid.
+          </p>
+        )}
+        {state.checkoutUrl && <a className="empty-link" href={state.checkoutUrl}>Przejdź do płatności</a>}
+        {!state.checkoutUrl && <Link className="empty-link" href="/projekty">Wróć do projektów</Link>}
       </section>
     );
   }
@@ -54,7 +65,7 @@ export function CheckoutForm() {
   if (cart.items.length === 0) {
     return (
       <section className="empty-state">
-        <span>ZAMÓWIENIE TESTOWE</span>
+        <span>KOSZYK</span>
         <h1>Nie masz pozycji w koszyku.</h1>
         <p>Najpierw wybierz projekt, wariant i dodatki na karcie projektu.</p>
         <Link className="empty-link" href="/projekty">Przejdź do projektów</Link>
@@ -66,20 +77,18 @@ export function CheckoutForm() {
     <section
       className="checkout-layout"
       data-checkout-form-v38="true"
-      data-checkout-non-public-v31="true"
-      data-order-without-payment-v31="true"
-      data-payment-later-v31="true"
+      data-checkout-stripe-v39a="true"
+      data-payment-online-foundation-v39a="true"
     >
       <form action={formAction} className="checkout-form">
         <input type="hidden" name="cartJson" value={cartJson} />
 
         <div className="checkout-form-intro" data-checkout-v43-copy="true">
-          <h2>Dane do zamówienia testowego</h2>
+          <h2>Dane do zamówienia i płatności</h2>
           <p>
-            Ten formularz służy do technicznego sprawdzenia zapisu zamówienia z koszyka.
-            Wysłanie formularza nie uruchamia płatności ani dostarczenia plików. Publiczne
-            udostępnienie checkoutu wymaga osobnego etapu integracji płatności online,
-            webhooków i statusów płatności.
+            Po zapisaniu zamówienia aplikacja utworzy sesję płatności online. Pliki projektu są wydawane
+            dopiero po webhooku płatności i statusie paid. To etap testowy realnych płatności, nie wysyłamy
+            jeszcze produkcyjnych maili.
           </p>
         </div>
 
@@ -110,7 +119,7 @@ export function CheckoutForm() {
 
         <label className="checkout-checkbox">
           <input type="checkbox" name="termsConsent" required />
-          <span>Akceptuję zapis danych w technicznym teście zamówienia.</span>
+          <span>Akceptuję zapis danych zamówienia oraz przekierowanie do płatności online.</span>
         </label>
 
         <label className="checkout-checkbox">
@@ -121,16 +130,15 @@ export function CheckoutForm() {
         {state.message && <p className="admin-form-error">{state.message}</p>}
 
         <button className="buy-button" type="submit" disabled={pending}>
-          <Send size={17} /> {pending ? "Zapisywanie..." : "Zapisz zamówienie testowe"}
+          <CreditCard size={17} /> {pending ? "Tworzenie płatności..." : "Przejdź do płatności"}
         </button>
       </form>
 
       <aside className="checkout-summary">
-        <h2>Zakres testowego zamówienia</h2>
+        <h2>Podsumowanie zamówienia</h2>
         <p>
-          Podsumowanie obejmuje projekt, wariant oraz dodatki wybrane w koszyku. Ten etap
-          nie obsługuje płatności online, potwierdzenia płatności ani automatycznej wysyłki
-          plików. Checkout ma pozostać niewidoczny publicznie do czasu gotowości sklepu.
+          Po płatności webhook zapisuje status paid. Dopiero wtedy aplikacja tworzy dostęp do aktywnych
+          plików projektu i krótkoterminowych signed URL.
         </p>
         {cart.items.map((item) => (
           <div className="checkout-summary-item" key={item.id}>
@@ -145,20 +153,18 @@ export function CheckoutForm() {
         <div
           className="checkout-summary-note"
           data-checkout-v43-delivery-note="true"
-          data-checkout-non-public-summary-v31="true"
+          data-checkout-stripe-summary-v39a="true"
         >
           <p>
-            Zamówienie jest zapisem technicznym bez płatności. Publiczne użycie checkoutu
-            wymaga osobnej integracji płatności online, webhooków i statusów płatności.
+            Płatność online jest źródłem prawdy dopiero po webhooku. Strona sukcesu nie wydaje plików sama.
           </p>
           <p>
-            Pliki projektu nie są wydawane automatycznie w tym etapie. Dostarczanie plików
-            pozostaje poza publicznym flow do czasu decyzji o docelowym modelu realizacji.
+            Rzuty pomieszczeń i inne bazowe aktywne pliki projektu będą dostępne po statusie paid.
           </p>
           {hasPdfEmailAddon && (
             <p>
-              PDF na e-mail pozostaje dodatkiem zapisanym w zamówieniu testowym. Jego
-              finalna obsługa musi zostać spięta z docelowym procesem płatności i realizacji.
+              PDF na e-mail jest dodatkiem. System udostępni go tylko po opłaceniu zamówienia i tylko gdy
+              dodatek znajduje się w zamówieniu.
             </p>
           )}
         </div>

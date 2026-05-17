@@ -9,16 +9,14 @@ export default function CheckoutPage() {
         <section
           className="catalog-header"
           data-checkout-v43-page-copy="true"
-          data-checkout-non-public-v31="true"
-          data-order-without-payment-v31="true"
-          data-payment-later-v31="true"
+          data-checkout-stripe-v39a="true"
+          data-payment-online-foundation-v39a="true"
         >
-          <span>ZAMÓWIENIE TESTOWE</span>
-          <h1>Techniczny test zamówienia</h1>
+          <span>PŁATNOŚĆ ONLINE</span>
+          <h1>Zamówienie i płatność</h1>
           <p>
-            Ten ekran zapisuje zamówienie bez płatności. To etap techniczny przed integracją
-            płatności online, webhooków i statusów płatności. Checkout pozostaje niewidoczny
-            publicznie do czasu gotowości sklepu.
+            Ten etap tworzy fundament realnych płatności online. Status paid pochodzi z webhooka,
+            a pliki projektu są udostępniane dopiero po potwierdzeniu płatności po stronie serwera.
           </p>
         </section>
         <CheckoutForm />

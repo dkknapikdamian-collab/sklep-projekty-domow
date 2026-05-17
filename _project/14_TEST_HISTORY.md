@@ -1544,3 +1544,29 @@ Testy automatyczne:
 Test ręczny: TEST RĘCZNY DO WYKONANIA.
 Następny krok: Etap 26D - realna wysyłka e-mail po decyzji o providerze.
 <!-- ETAP26C_POST_PAYMENT_PROJECT_FILES_2026_05_17_END -->
+
+<!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_START -->
+## Etap 39A - Stripe real payments foundation
+
+Status: WDROZONE LOKALNIE W ZIP / TESTY AUTOMATYCZNE W PACZCE / TEST RECZNY DO WYKONANIA.
+Data: 2026-05-17.
+
+Zakres:
+- Stripe Checkout Session po zapisaniu zamowienia.
+- Webhook `/api/payments/stripe/webhook` jako jedyne zrodlo prawdy dla `paid`.
+- `order_payments` i `payment_events`.
+- Success page nie wydaje plikow.
+- Fulfillment access z Etapu 26C dopiero po `paid`.
+- Realne maile no-reply zostaja na Etap 26D.
+
+Testy:
+- `npm run verify:stripe-real-payments-v39a`
+- `npm run verify:post-payment-project-files-v26c`
+- `npm run verify:stage36-post-payment-fulfillment`
+- `npm run verify:project-private-files-ux-v26b`
+- `npm run verify:project-files-model-v26a`
+- `npm run typecheck`
+- `npm run build`
+
+Test reczny: TEST RECZNY DO WYKONANIA.
+<!-- ETAP39A_STRIPE_REAL_PAYMENTS_2026_05_17_END -->

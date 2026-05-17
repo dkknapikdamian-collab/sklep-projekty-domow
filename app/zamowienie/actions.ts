@@ -1,12 +1,15 @@
 "use server";
 
 import { createOrder } from "@/lib/order/create-order";
+import { createStripeCheckoutForOrder } from "@/lib/payments/stripe-payments";
 import type { CartPayload } from "@/lib/cart/types";
 
 export type CheckoutState = {
   ok: boolean;
   message: string;
   orderId?: string;
+  checkoutUrl?: string;
+  paymentStatus?: string;
 };
 
 function str(formData: FormData, key: string) {
@@ -52,10 +55,30 @@ export async function submitOrderAction(_prevState: CheckoutState, formData: For
       cart
     });
 
+    const stripeCheckout = await createStripeCheckoutForOrder({
+      orderId: order.orderId,
+      amountGross: order.totalGross,
+      customerEmail,
+      customerName,
+      currency: process.env.STRIPE_PAYMENT_CURRENCY || "pln",
+      siteUrl: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || ""
+    });
+
+    if (stripeCheckout.ok && stripeCheckout.checkoutUrl) {
+      return {
+        ok: true,
+        message: "Zamówienie zostało zapisane. Przekierowujemy do bezpiecznej płatności online.",
+        orderId: order.orderId,
+        checkoutUrl: stripeCheckout.checkoutUrl,
+        paymentStatus: "stripe_checkout_created"
+      };
+    }
+
     return {
       ok: true,
-      message: "Zamówienie projektu zostało przyjęte. Po wysłaniu potwierdzimy dostępność, płatność i sposób realizacji.",
-      orderId: order.orderId
+      message: `Zamówienie zostało zapisane, ale płatności online nie są jeszcze skonfigurowane: ${stripeCheckout.reason}. Nie wysyłamy plików bez statusu paid.`,
+      orderId: order.orderId,
+      paymentStatus: stripeCheckout.reason === "STRIPE_PROVIDER_NOT_CONFIGURED" ? "stripe_provider_not_configured" : "stripe_checkout_not_created"
     };
   } catch (error) {
     return {
