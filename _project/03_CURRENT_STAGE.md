@@ -1,5 +1,140 @@
 # 03_CURRENT_STAGE - aktualny etap
 
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - uporządkowanie pamięci projektu i statusu V1
+
+Status: WDROŻONE W PAMIĘCI PROJEKTU / V1 NADAL NIEZAMKNIĘTE.
+Priorytet: 3.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### FAKTY Z REPO / PAMIĘCI PROJEKTU
+
+- W repo są elementy techniczne z Etapów 22-29: audit admina, poprawki admina, preview, walidacje, prywatne pliki, blokady demo/sample i pre-release checklist.
+- Te elementy nie oznaczają gotowości V1 do publicznego uruchomienia.
+- Etap 29 pozostaje checklistą blokad i warunków, nie certyfikatem gotowości produkcyjnej.
+- Ten Etap 32 nie zmienia UI, checkoutu, płatności ani logiki aplikacji. Porządkuje źródła prawdy: `_project` i Obsidian.
+
+### DECYZJE DAMIANA / KIERUNEK
+
+- Nie traktować ręcznych płatności jako docelowego modelu sprzedaży.
+- Aplikacja pozostaje niepubliczna do czasu domknięcia płatności, runtime testów i finalnego flow klienta.
+- Produkcyjne płatności online wymagają osobnego etapu i decyzji o providerze, webhookach, statusach płatności i wydawaniu plików.
+
+### BLOKERY V1
+
+1. Płatności: brak wdrożonego docelowego flow płatności online; manual-payment może być tylko technicznym/tymczasowym flow przed publikacją.
+2. Runtime testy: brak potwierdzenia pełnej ścieżki realny projekt -> koszyk -> checkout/zamówienie -> admin -> audit.
+3. Potwierdzenie Damiana: brak ręcznego potwierdzenia, że V1 działa end-to-end na realnych danych.
+4. Finalny flow klienta: do decyzji pozostają strona sukcesu, status płatności, webhook, wydawanie prywatnych plików, e-mail i ponowne pobranie.
+
+### TESTY
+
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:project-memory-stage32`.
+- TEST AUTOMATYCZNY / GUARD: `npm run check:project-memory`.
+- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć Obsidian dashboard i potwierdzić, że status V1 oraz blokery są czytelne.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: Etap 32 nie potwierdza działania runtime aplikacji.
+
+### NASTĘPNY KROK
+
+Najpierw doprecyzować finalny flow klienta i płatności, potem wykonać runtime test admin/audit oraz pełny flow V1 bez publikacji klientom.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - uporządkowanie pamięci projektu i statusu V1
+
+Status: WDROŻONE W PAMIĘCI PROJEKTU / V1 NADAL NIEZAMKNIĘTE.
+Priorytet: 3.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### FAKTY Z REPO / PAMIĘCI PROJEKTU
+
+- W repo są elementy techniczne z Etapów 22-29: audit admina, poprawki admina, preview, walidacje, prywatne pliki, blokady demo/sample i pre-release checklist.
+- Te elementy nie oznaczają gotowości V1 do publicznego uruchomienia.
+- Etap 29 pozostaje checklistą blokad i warunków, nie certyfikatem gotowości produkcyjnej.
+- Ten Etap 32 nie zmienia UI, checkoutu, płatności ani logiki aplikacji. Porządkuje źródła prawdy: `_project` i Obsidian.
+
+### DECYZJE DAMIANA / KIERUNEK
+
+- Nie traktować ręcznych płatności jako docelowego modelu sprzedaży.
+- Aplikacja pozostaje niepubliczna do czasu domknięcia płatności, runtime testów i finalnego flow klienta.
+- Produkcyjne płatności online wymagają osobnego etapu i decyzji o providerze, webhookach, statusach płatności i wydawaniu plików.
+
+### BLOKERY V1
+
+1. Płatności: brak wdrożonego docelowego flow płatności online; manual-payment może być tylko technicznym/tymczasowym flow przed publikacją.
+2. Runtime testy: brak potwierdzenia pełnej ścieżki realny projekt -> koszyk -> checkout/zamówienie -> admin -> audit.
+3. Potwierdzenie Damiana: brak ręcznego potwierdzenia, że V1 działa end-to-end na realnych danych.
+4. Finalny flow klienta: do decyzji pozostają strona sukcesu, status płatności, webhook, wydawanie prywatnych plików, e-mail i ponowne pobranie.
+
+### TESTY
+
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:project-memory-stage32`.
+- TEST AUTOMATYCZNY / GUARD: `npm run check:project-memory`.
+- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć Obsidian dashboard i potwierdzić, że status V1 oraz blokery są czytelne.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: Etap 32 nie potwierdza działania runtime aplikacji.
+
+### NASTĘPNY KROK
+
+Najpierw doprecyzować finalny flow klienta i płatności, potem wykonać runtime test admin/audit oraz pełny flow V1 bez publikacji klientom.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - uporządkowanie pamięci projektu i statusu V1
+
+Status: WDROŻONE W PAMIĘCI PROJEKTU / V1 NADAL NIEZAMKNIĘTE.
+Priorytet: 3.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### FAKTY Z REPO / PAMIĘCI PROJEKTU
+
+- W repo są elementy techniczne z Etapów 22-29: audit admina, poprawki admina, preview, walidacje, prywatne pliki, blokady demo/sample i pre-release checklist.
+- Te elementy nie oznaczają gotowości V1 do publicznego uruchomienia.
+- Etap 29 pozostaje checklistą blokad i warunków, nie certyfikatem gotowości produkcyjnej.
+- Ten Etap 32 nie zmienia UI, checkoutu, płatności ani logiki aplikacji. Porządkuje źródła prawdy: `_project` i Obsidian.
+
+### DECYZJE DAMIANA / KIERUNEK
+
+- Nie traktować ręcznych płatności jako docelowego modelu sprzedaży.
+- Aplikacja pozostaje niepubliczna do czasu domknięcia płatności, runtime testów i finalnego flow klienta.
+- Produkcyjne płatności online wymagają osobnego etapu i decyzji o providerze, webhookach, statusach płatności i wydawaniu plików.
+
+### BLOKERY V1
+
+1. Płatności: brak wdrożonego docelowego flow płatności online; manual-payment może być tylko technicznym/tymczasowym flow przed publikacją.
+2. Runtime testy: brak potwierdzenia pełnej ścieżki realny projekt -> koszyk -> checkout/zamówienie -> admin -> audit.
+3. Potwierdzenie Damiana: brak ręcznego potwierdzenia, że V1 działa end-to-end na realnych danych.
+4. Finalny flow klienta: do decyzji pozostają strona sukcesu, status płatności, webhook, wydawanie prywatnych plików, e-mail i ponowne pobranie.
+
+### TESTY
+
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:project-memory-stage32`.
+- TEST AUTOMATYCZNY / GUARD: `npm run check:project-memory`.
+- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć Obsidian dashboard i potwierdzić, że status V1 oraz blokery są czytelne.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: Etap 32 nie potwierdza działania runtime aplikacji.
+
+### NASTĘPNY KROK
+
+Najpierw doprecyzować finalny flow klienta i płatności, potem wykonać runtime test admin/audit oraz pełny flow V1 bez publikacji klientom.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
 ## Aktualny realny stan - Etap B: naprawa project memory
 
@@ -38,7 +173,6 @@ TEST RĘCZNY DO WYKONANIA dla runtime V1, audit runtime i flow admina.
 - Brak automatycznych płatności.
 - Brak zgody na publiczne udostępnienie klientom.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
-
 
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
 ## Aktualny etap - Etap A
@@ -127,7 +261,6 @@ Current stage: full project memory + Obsidian dashboard + implementation/test hi
 This stage does not change storefront logic, admin UI, checkout or routing.
 
 <!-- SKLEP_FULL_MEMORY_OBSIDIAN_REPO_V6_2026_05_15 END -->
-
 
 <!-- ETAP21_ADMIN_AUDIT_REAL_COVERAGE_2026_05_16 -->
 
@@ -244,7 +377,6 @@ FAKT:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
 <!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
-
 
 <!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
 ## Etap 23 V8 - archiwizacja runtime projektu
@@ -446,7 +578,6 @@ NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu
 
@@ -485,7 +616,6 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
 
@@ -517,7 +647,6 @@ RYZYKO:
 NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
-
 
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
 ## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
@@ -597,7 +726,6 @@ Jeżeli którykolwiek punkt pęka albo jest niepotwierdzony, V1 nie jest gotowe.
 3. Etap 29 zamykać dopiero po potwierdzeniu Damiana i po usunięciu/rozwiązaniu blokad.
 <!-- ETAP29_PRERELEASE_CHECKLIST_BLOCKER_2026_05_16_END -->
 
-
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
 ## Etap 30 - decyzja o platnosciach i status manual-payment
 
@@ -651,7 +779,6 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
-
 
 \n
 \n

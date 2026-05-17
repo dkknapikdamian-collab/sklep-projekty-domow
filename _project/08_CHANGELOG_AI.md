@@ -1,5 +1,41 @@
 # 08_CHANGELOG_AI - Changelog AI
 
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+- Dodano kanoniczny status V1 w `_project`.
+- Wpisano jednoznacznie: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+- Wpisano największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+- Dodano guard `verify:project-memory-stage32`.
+- Dodano raport run Etapu 32.
+- Przygotowano aktualizację Obsidiana: dashboard, roadmapa i osobna notatka etapu.
+- Nie zmieniano kodu aplikacji, UI, checkoutu ani płatności.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+- Dodano kanoniczny status V1 w `_project`.
+- Wpisano jednoznacznie: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+- Wpisano największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+- Dodano guard `verify:project-memory-stage32`.
+- Dodano raport run Etapu 32.
+- Przygotowano aktualizację Obsidiana: dashboard, roadmapa i osobna notatka etapu.
+- Nie zmieniano kodu aplikacji, UI, checkoutu ani płatności.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+- Dodano kanoniczny status V1 w `_project`.
+- Wpisano jednoznacznie: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+- Wpisano największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+- Dodano guard `verify:project-memory-stage32`.
+- Dodano raport run Etapu 32.
+- Przygotowano aktualizację Obsidiana: dashboard, roadmapa i osobna notatka etapu.
+- Nie zmieniano kodu aplikacji, UI, checkoutu ani płatności.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 ## 2026-05-16 - Roadmapa produkcyjna i odhaczanie etapow
 
 - Dodano `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md` jako aktywny techniczny plik startowy dla AI.
@@ -132,7 +168,6 @@ FAKT:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
 <!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
-
 
 <!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
 ## Etap 23 V8 - archiwizacja runtime projektu
@@ -323,7 +358,6 @@ NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu
 
@@ -362,7 +396,6 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
 
@@ -395,7 +428,6 @@ NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
 
-
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
 ## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
 
@@ -423,7 +455,6 @@ TEST RECZNY DO WYKONANIA:
 RYZYKO:
 - V4 nie potwierdza runtime Supabase. Potwierdza tylko guard/test lokalny i build.
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
-
 
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
 ## Etap 30 - decyzja o platnosciach i status manual-payment
@@ -478,7 +509,6 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
-
 
 \n
 \n

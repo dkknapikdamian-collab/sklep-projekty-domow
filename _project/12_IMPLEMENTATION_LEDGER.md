@@ -1,5 +1,167 @@
 # 12_IMPLEMENTATION_LEDGER - Sklep projekty domow
 
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+### Co wdrożono
+
+Uporządkowano pamięć projektu i wpisano kanoniczny status V1: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+### Dlaczego
+
+W repo i Obsidianie były już wpisy blokujące V1, ale dashboard i kolejność etapów nadal mogły sugerować, że starsze etapy są głównym aktywnym kierunkiem albo że checklisty są bliżej zamknięcia niż w rzeczywistości.
+
+### Zmienione pliki
+
+- `_project/03_CURRENT_STAGE.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/runs/2026-05-17_0800_etap32_project_memory_ordering.md`
+- `scripts/check-project-memory-stage32.cjs`
+- `package.json`
+- Obsidian dashboard i roadmapa projektu
+
+### Czego nie zmieniano
+
+- Kod aplikacji.
+- UI.
+- Checkout.
+- Płatności.
+- Storage prywatnych plików.
+- Logika admina.
+
+### Ryzyka
+
+- Guard dokumentacyjny nie zastępuje testu runtime.
+- V1 nadal nie ma potwierdzonego finalnego flow klienta.
+
+### Testy / guardy
+
+- `npm run verify:project-memory-stage32`
+- `npm run check:project-memory`
+
+### Status testu ręcznego
+
+- TEST RĘCZNY DO WYKONANIA: przegląd dashboardu Obsidiana.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: runtime V1 i finalny flow klienta.
+
+### Następny krok
+
+Doprecyzować finalny flow klienta i płatności, potem zamknąć runtime audit oraz pełny test V1 bez publikacji klientom.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+### Co wdrożono
+
+Uporządkowano pamięć projektu i wpisano kanoniczny status V1: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+### Dlaczego
+
+W repo i Obsidianie były już wpisy blokujące V1, ale dashboard i kolejność etapów nadal mogły sugerować, że starsze etapy są głównym aktywnym kierunkiem albo że checklisty są bliżej zamknięcia niż w rzeczywistości.
+
+### Zmienione pliki
+
+- `_project/03_CURRENT_STAGE.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/runs/2026-05-17_0800_etap32_project_memory_ordering.md`
+- `scripts/check-project-memory-stage32.cjs`
+- `package.json`
+- Obsidian dashboard i roadmapa projektu
+
+### Czego nie zmieniano
+
+- Kod aplikacji.
+- UI.
+- Checkout.
+- Płatności.
+- Storage prywatnych plików.
+- Logika admina.
+
+### Ryzyka
+
+- Guard dokumentacyjny nie zastępuje testu runtime.
+- V1 nadal nie ma potwierdzonego finalnego flow klienta.
+
+### Testy / guardy
+
+- `npm run verify:project-memory-stage32`
+- `npm run check:project-memory`
+
+### Status testu ręcznego
+
+- TEST RĘCZNY DO WYKONANIA: przegląd dashboardu Obsidiana.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: runtime V1 i finalny flow klienta.
+
+### Następny krok
+
+Doprecyzować finalny flow klienta i płatności, potem zamknąć runtime audit oraz pełny test V1 bez publikacji klientom.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+### Co wdrożono
+
+Uporządkowano pamięć projektu i wpisano kanoniczny status V1: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+### Dlaczego
+
+W repo i Obsidianie były już wpisy blokujące V1, ale dashboard i kolejność etapów nadal mogły sugerować, że starsze etapy są głównym aktywnym kierunkiem albo że checklisty są bliżej zamknięcia niż w rzeczywistości.
+
+### Zmienione pliki
+
+- `_project/03_CURRENT_STAGE.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/16_PRODUCTION_ROADMAP_AND_ACCEPTANCE.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/runs/2026-05-17_0800_etap32_project_memory_ordering.md`
+- `scripts/check-project-memory-stage32.cjs`
+- `package.json`
+- Obsidian dashboard i roadmapa projektu
+
+### Czego nie zmieniano
+
+- Kod aplikacji.
+- UI.
+- Checkout.
+- Płatności.
+- Storage prywatnych plików.
+- Logika admina.
+
+### Ryzyka
+
+- Guard dokumentacyjny nie zastępuje testu runtime.
+- V1 nadal nie ma potwierdzonego finalnego flow klienta.
+
+### Testy / guardy
+
+- `npm run verify:project-memory-stage32`
+- `npm run check:project-memory`
+
+### Status testu ręcznego
+
+- TEST RĘCZNY DO WYKONANIA: przegląd dashboardu Obsidiana.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: runtime V1 i finalny flow klienta.
+
+### Następny krok
+
+Doprecyzować finalny flow klienta i płatności, potem zamknąć runtime audit oraz pełny test V1 bez publikacji klientom.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 ## Ledger
 
 Kazdy etap zapisuje: data, zakres, pliki, decyzje, testy, ryzyka, wynik i nastepny krok.
@@ -112,7 +274,6 @@ FAKT:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
 <!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
-
 
 <!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
 ## Etap 23 V8 - archiwizacja runtime projektu
@@ -361,7 +522,6 @@ NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu
 
@@ -400,7 +560,6 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
 
@@ -432,7 +591,6 @@ RYZYKO:
 NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
-
 
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
 ## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
@@ -512,7 +670,6 @@ Jeżeli którykolwiek punkt pęka albo jest niepotwierdzony, V1 nie jest gotowe.
 3. Etap 29 zamykać dopiero po potwierdzeniu Damiana i po usunięciu/rozwiązaniu blokad.
 <!-- ETAP29_PRERELEASE_CHECKLIST_BLOCKER_2026_05_16_END -->
 
-
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
 ## Etap 30 - decyzja o platnosciach i status manual-payment
 
@@ -566,7 +723,6 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
-
 
 \n
 \n

@@ -1,5 +1,83 @@
 # 14_TEST_HISTORY - Sklep projekty domow
 
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+### Zakres testu
+
+Etap 32 jest etapem dokumentacyjnym/pamięciowym. Nie zmienia runtime aplikacji.
+
+### Testy automatyczne / guardy
+
+| Test | Status | Wynik / oczekiwane kryterium |
+|---|---|---|
+| `npm run verify:project-memory-stage32` | TEST AUTOMATYCZNY / GUARD | Pilnuje, że `_project` jasno zapisuje: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte. |
+| `npm run check:project-memory` | TEST AUTOMATYCZNY / GUARD | Ogólny guard kompletności pamięci projektu. |
+
+### Testy ręczne
+
+- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć dashboard Obsidiana i potwierdzić, że blokery są czytelne.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia runtime V1.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia finalnego flow klienta.
+
+### Wniosek
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+### Zakres testu
+
+Etap 32 jest etapem dokumentacyjnym/pamięciowym. Nie zmienia runtime aplikacji.
+
+### Testy automatyczne / guardy
+
+| Test | Status | Wynik / oczekiwane kryterium |
+|---|---|---|
+| `npm run verify:project-memory-stage32` | TEST AUTOMATYCZNY / GUARD | Pilnuje, że `_project` jasno zapisuje: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte. |
+| `npm run check:project-memory` | TEST AUTOMATYCZNY / GUARD | Ogólny guard kompletności pamięci projektu. |
+
+### Testy ręczne
+
+- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć dashboard Obsidiana i potwierdzić, że blokery są czytelne.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia runtime V1.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia finalnego flow klienta.
+
+### Wniosek
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+
+### Zakres testu
+
+Etap 32 jest etapem dokumentacyjnym/pamięciowym. Nie zmienia runtime aplikacji.
+
+### Testy automatyczne / guardy
+
+| Test | Status | Wynik / oczekiwane kryterium |
+|---|---|---|
+| `npm run verify:project-memory-stage32` | TEST AUTOMATYCZNY / GUARD | Pilnuje, że `_project` jasno zapisuje: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte. |
+| `npm run check:project-memory` | TEST AUTOMATYCZNY / GUARD | Ogólny guard kompletności pamięci projektu. |
+
+### Testy ręczne
+
+- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć dashboard Obsidiana i potwierdzić, że blokery są czytelne.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia runtime V1.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia finalnego flow klienta.
+
+### Wniosek
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
 ## 2026-05-16_1810 - Etap B: naprawa project memory / statusu etapów
 
@@ -29,7 +107,6 @@ Kod ma elementy etapów 22-29, ale V1 nie jest produkcyjnie zamknięte.
 
 Nie wdrażamy płatności ręcznych jako docelowego modelu. Docelowo mają być automatyczne płatności online: Stripe/payment provider, webhooki i statusy płatności.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
-
 
 ## Statusy testow
 
@@ -199,7 +276,6 @@ FAKT:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
 <!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
-
 
 <!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
 ## Etap 23 V8 - archiwizacja runtime projektu
@@ -485,7 +561,6 @@ NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu
 
@@ -524,7 +599,6 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
 
@@ -556,7 +630,6 @@ RYZYKO:
 NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
-
 
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
 ## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
@@ -636,7 +709,6 @@ Jeżeli którykolwiek punkt pęka albo jest niepotwierdzony, V1 nie jest gotowe.
 3. Etap 29 zamykać dopiero po potwierdzeniu Damiana i po usunięciu/rozwiązaniu blokad.
 <!-- ETAP29_PRERELEASE_CHECKLIST_BLOCKER_2026_05_16_END -->
 
-
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
 ## Etap 30 - decyzja o platnosciach i status manual-payment
 
@@ -690,7 +762,6 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
-
 
 \n
 \n

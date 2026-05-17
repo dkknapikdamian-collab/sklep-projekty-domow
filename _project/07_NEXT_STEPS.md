@@ -1,5 +1,107 @@
 # 07_NEXT_STEPS - nastepne kroki
 
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - następny realny kierunek po uporządkowaniu pamięci
+
+Status: V1 NIEZAMKNIĘTE / BLOKADA PUBLICZNEGO STARTU.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Teza operacyjna
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### Kolejność dalszej pracy
+
+1. Nie zaczynać publicznego uruchomienia V1.
+2. Ustalić finalny flow klienta: checkout, płatność, strona sukcesu, webhook, status płatności, wydawanie prywatnych plików, e-mail, ponowne pobranie.
+3. Ustalić provider płatności i granice Etapu płatności: Stripe / inny provider, statusy, webhooki, guardy.
+4. Wykonać runtime audit admina: realne operacje admina i wpisy w `/admin/audit`.
+5. Wykonać pełny runtime test sklepu bez publikacji klientom.
+6. Dopiero potem wrócić do pre-release checklist V1.
+
+### Czego nie robić teraz
+
+- Nie komunikować płatności ręcznych jako finalnego flow.
+- Nie traktować checklisty Etapu 29 jako zamknięcia V1.
+- Nie robić refaktoru ani nowych funkcji przy okazji tego etapu.
+- Nie publikować sklepu klientom bez płatności, runtime testów i potwierdzenia Damiana.
+
+### Status testów
+
+- TEST RĘCZNY DO WYKONANIA: przegląd dashboardu Obsidiana po Etapie 32.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: runtime V1, płatności i finalny flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - następny realny kierunek po uporządkowaniu pamięci
+
+Status: V1 NIEZAMKNIĘTE / BLOKADA PUBLICZNEGO STARTU.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Teza operacyjna
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### Kolejność dalszej pracy
+
+1. Nie zaczynać publicznego uruchomienia V1.
+2. Ustalić finalny flow klienta: checkout, płatność, strona sukcesu, webhook, status płatności, wydawanie prywatnych plików, e-mail, ponowne pobranie.
+3. Ustalić provider płatności i granice Etapu płatności: Stripe / inny provider, statusy, webhooki, guardy.
+4. Wykonać runtime audit admina: realne operacje admina i wpisy w `/admin/audit`.
+5. Wykonać pełny runtime test sklepu bez publikacji klientom.
+6. Dopiero potem wrócić do pre-release checklist V1.
+
+### Czego nie robić teraz
+
+- Nie komunikować płatności ręcznych jako finalnego flow.
+- Nie traktować checklisty Etapu 29 jako zamknięcia V1.
+- Nie robić refaktoru ani nowych funkcji przy okazji tego etapu.
+- Nie publikować sklepu klientom bez płatności, runtime testów i potwierdzenia Damiana.
+
+### Status testów
+
+- TEST RĘCZNY DO WYKONANIA: przegląd dashboardu Obsidiana po Etapie 32.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: runtime V1, płatności i finalny flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - następny realny kierunek po uporządkowaniu pamięci
+
+Status: V1 NIEZAMKNIĘTE / BLOKADA PUBLICZNEGO STARTU.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Teza operacyjna
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### Kolejność dalszej pracy
+
+1. Nie zaczynać publicznego uruchomienia V1.
+2. Ustalić finalny flow klienta: checkout, płatność, strona sukcesu, webhook, status płatności, wydawanie prywatnych plików, e-mail, ponowne pobranie.
+3. Ustalić provider płatności i granice Etapu płatności: Stripe / inny provider, statusy, webhooki, guardy.
+4. Wykonać runtime audit admina: realne operacje admina i wpisy w `/admin/audit`.
+5. Wykonać pełny runtime test sklepu bez publikacji klientom.
+6. Dopiero potem wrócić do pre-release checklist V1.
+
+### Czego nie robić teraz
+
+- Nie komunikować płatności ręcznych jako finalnego flow.
+- Nie traktować checklisty Etapu 29 jako zamknięcia V1.
+- Nie robić refaktoru ani nowych funkcji przy okazji tego etapu.
+- Nie publikować sklepu klientom bez płatności, runtime testów i potwierdzenia Damiana.
+
+### Status testów
+
+- TEST RĘCZNY DO WYKONANIA: przegląd dashboardu Obsidiana po Etapie 32.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: runtime V1, płatności i finalny flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->
 ## Najbliższy realny kierunek - po korekcie pamięci projektu
 
@@ -39,7 +141,6 @@ Data aktualizacji: 2026-05-16_1810 Europe/Warsaw.
 - Nie komunikować płatności ręcznych jako docelowego modelu.
 - Nie wdrażać Stripe/PayU bez osobnej decyzji Damiana i osobnego etapu.
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_END -->
-
 
 <!-- ETAP_A_PAYMENT_DIRECTION_FIX_START -->
 ## Najbliższy kierunek - płatności
@@ -181,7 +282,6 @@ TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: Damian ma kliknac Archiwizuj oraz Usun trwale po wpisaniu kodu projektu i sprawdzic /admin/audit.
 <!-- ETAP23_ADMIN_DELETE_ARCHIVE_FIX_V7 -->
 
-
 <!-- ETAP23_ARCHIVE_RUNTIME_FIX_V8 -->
 ## Etap 23 V8 - archiwizacja runtime projektu
 
@@ -277,7 +377,6 @@ Najkrotszy sensowny krok:
 Nie zaczynac kolejnej naprawy Etapu 23 bez wskazania konkretnego punktu FAIL.
 <!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
 
-
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_START -->
 ## 2026-05-16 - Etap 25: runtime guard walidacji cen koszyka względem bazy
 
@@ -310,7 +409,6 @@ RYZYKO:
 NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
-
 
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu
@@ -350,7 +448,6 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
 
@@ -382,7 +479,6 @@ RYZYKO:
 NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
-
 
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
 ## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
@@ -462,7 +558,6 @@ Jeżeli którykolwiek punkt pęka albo jest niepotwierdzony, V1 nie jest gotowe.
 3. Etap 29 zamykać dopiero po potwierdzeniu Damiana i po usunięciu/rozwiązaniu blokad.
 <!-- ETAP29_PRERELEASE_CHECKLIST_BLOCKER_2026_05_16_END -->
 
-
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
 ## P0 teraz - Etap 30: roadmapa platnosci
 
@@ -526,7 +621,6 @@ Data: 2026-05-16.
 - npm run verify:manual-payment-v48
 - npm run verify:payment-direction-v48
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_V6_REPAIR_END -->
-
 
 \n
 \n

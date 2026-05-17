@@ -1,5 +1,101 @@
 # 16_PRODUCTION_ROADMAP_AND_ACCEPTANCE - Sklep projekty domow
 
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - kanoniczny status produkcyjny V1
+
+Status: V1 NIEZAMKNIĘTE / BLOKADA PUBLICZNEGO URUCHOMIENIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Kanoniczny wpis statusu
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### Tabela blokad
+
+| Obszar | Status | Warunek zdjęcia blokady |
+|---|---|---|
+| Płatności | BLOKER / DO POTWIERDZENIA | Decyzja o providerze, wdrożone statusy płatności, webhook, sukces płatności i guardy. |
+| Runtime testy | TEST RĘCZNY DO WYKONANIA | Pełna ścieżka V1 sprawdzona na realnych danych. |
+| Potwierdzenie Damiana | BRAK POTWIERDZONEGO TESTU RĘCZNEGO | Jawny wpis: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA. |
+| Finalny flow klienta | DO POTWIERDZENIA | Ustalony i wdrożony checkout, success page, e-mail, prywatne pliki i ponowne pobranie. |
+| Publiczny start | BLOKER | Brak powyższych blokad. |
+
+### Najkrótszy test praktyczny przed release
+
+Realny projekt active -> karta projektu -> koszyk -> checkout/zamówienie -> płatność/status płatności -> admin zamówień -> audit log -> wydanie prywatnych plików -> zapis wyniku w `_project` i Obsidianie.
+
+### Status testów
+
+- TEST RĘCZNY DO WYKONANIA.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO dla runtime V1 i finalnego flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - kanoniczny status produkcyjny V1
+
+Status: V1 NIEZAMKNIĘTE / BLOKADA PUBLICZNEGO URUCHOMIENIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Kanoniczny wpis statusu
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### Tabela blokad
+
+| Obszar | Status | Warunek zdjęcia blokady |
+|---|---|---|
+| Płatności | BLOKER / DO POTWIERDZENIA | Decyzja o providerze, wdrożone statusy płatności, webhook, sukces płatności i guardy. |
+| Runtime testy | TEST RĘCZNY DO WYKONANIA | Pełna ścieżka V1 sprawdzona na realnych danych. |
+| Potwierdzenie Damiana | BRAK POTWIERDZONEGO TESTU RĘCZNEGO | Jawny wpis: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA. |
+| Finalny flow klienta | DO POTWIERDZENIA | Ustalony i wdrożony checkout, success page, e-mail, prywatne pliki i ponowne pobranie. |
+| Publiczny start | BLOKER | Brak powyższych blokad. |
+
+### Najkrótszy test praktyczny przed release
+
+Realny projekt active -> karta projektu -> koszyk -> checkout/zamówienie -> płatność/status płatności -> admin zamówień -> audit log -> wydanie prywatnych plików -> zapis wyniku w `_project` i Obsidianie.
+
+### Status testów
+
+- TEST RĘCZNY DO WYKONANIA.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO dla runtime V1 i finalnego flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - kanoniczny status produkcyjny V1
+
+Status: V1 NIEZAMKNIĘTE / BLOKADA PUBLICZNEGO URUCHOMIENIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Kanoniczny wpis statusu
+
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+
+### Tabela blokad
+
+| Obszar | Status | Warunek zdjęcia blokady |
+|---|---|---|
+| Płatności | BLOKER / DO POTWIERDZENIA | Decyzja o providerze, wdrożone statusy płatności, webhook, sukces płatności i guardy. |
+| Runtime testy | TEST RĘCZNY DO WYKONANIA | Pełna ścieżka V1 sprawdzona na realnych danych. |
+| Potwierdzenie Damiana | BRAK POTWIERDZONEGO TESTU RĘCZNEGO | Jawny wpis: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA. |
+| Finalny flow klienta | DO POTWIERDZENIA | Ustalony i wdrożony checkout, success page, e-mail, prywatne pliki i ponowne pobranie. |
+| Publiczny start | BLOKER | Brak powyższych blokad. |
+
+### Najkrótszy test praktyczny przed release
+
+Realny projekt active -> karta projektu -> koszyk -> checkout/zamówienie -> płatność/status płatności -> admin zamówień -> audit log -> wydanie prywatnych plików -> zapis wyniku w `_project` i Obsidianie.
+
+### Status testów
+
+- TEST RĘCZNY DO WYKONANIA.
+- BRAK POTWIERDZONEGO TESTU RĘCZNEGO dla runtime V1 i finalnego flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 Status: AKTYWNY / PO KOREKCIE ETAPU B.
 Ostatnia aktualizacja: 2026-05-16_1810 Europe/Warsaw.
 
@@ -135,7 +231,6 @@ NASTĘPNY KROK:
 - Po pushu wykonać ręczny runtime test Supabase i dopisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP25_ORDER_PRICE_RUNTIME_TEST_V1_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu
 
@@ -174,7 +269,6 @@ NASTEPNY KROK:
 - Po pushu wykonac reczny runtime test Etapu 27 na realnym projekcie.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V2_END -->
 
-
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_START -->
 ## 2026-05-16 - Etap 27: sanity check publikacji projektu V3
 
@@ -207,7 +301,6 @@ NASTEPNY KROK:
 - Po pushu wykonac test reczny Etapu 27 i dopisac wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
 <!-- ETAP27_PUBLICATION_READINESS_RUNTIME_TEST_V3_END -->
 
-
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_START -->
 ## 2026-05-16 - Etap 27 V4: repair BOM po runtime guardzie publikacji
 
@@ -235,7 +328,6 @@ TEST RECZNY DO WYKONANIA:
 RYZYKO:
 - V4 nie potwierdza runtime Supabase. Potwierdza tylko guard/test lokalny i build.
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
-
 
 <!-- ETAP30_ROADMAP_PLATNOSCI_LEGACY_START -->
 ## Etap 30 - decyzja o platnosciach i status manual-payment
