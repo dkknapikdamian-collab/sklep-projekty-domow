@@ -1,81 +1,55 @@
 # 14_TEST_HISTORY - Sklep projekty domow
 
+<!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_START -->
+## 2026-05-17 - Etap 32 V5: cleanup duplikatów pamięci projektu
+
+Status: CLEANUP DOKUMENTACYJNY / BEZ ZMIAN W LOGICE APLIKACJI.
+
+### FAKT
+
+Po nieudanych paczkach V1/V2 i skutecznym V3 blok Etapu 32 został zapisany wielokrotnie w części plików `_project` i Obsidiana. Guardy przechodziły, ale pamięć projektu była zaśmiecona potrójnym wpisem.
+
+### Zmiana
+
+V5 usuwa duplikaty i zostawia jeden kanoniczny blok Etapu 32 w każdym pliku docelowym.
+
+### Guardy
+
+- `npm run verify:project-memory-stage32-dedupe`
+- `npm run verify:project-memory-stage32`
+- `npm run check:project-memory`
+
+### Ryzyko
+
+Brak zmian w kodzie runtime. Ryzyko dotyczy tylko dokumentacji i pamięci projektu.
+<!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_END -->
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
-## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
+## 2026-05-17 - Etap 32: pamięć projektu i status V1
 
-### Zakres testu
+### Status zbiorczy
 
-Etap 32 jest etapem dokumentacyjnym/pamięciowym. Nie zmienia runtime aplikacji.
+Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+
+Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
 
 ### Testy automatyczne / guardy
 
-| Test | Status | Wynik / oczekiwane kryterium |
-|---|---|---|
-| `npm run verify:project-memory-stage32` | TEST AUTOMATYCZNY / GUARD | Pilnuje, że `_project` jasno zapisuje: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte. |
-| `npm run check:project-memory` | TEST AUTOMATYCZNY / GUARD | Ogólny guard kompletności pamięci projektu. |
+- `npm run verify:project-memory-stage32` - TEST AUTOMATYCZNY / GUARD.
+- `npm run verify:project-memory-stage32-dedupe` - TEST AUTOMATYCZNY / GUARD dla braku duplikatów bloku Etapu 32.
+- `npm run check:project-memory` - TEST AUTOMATYCZNY / GUARD.
 
 ### Testy ręczne
 
-- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć dashboard Obsidiana i potwierdzić, że blokery są czytelne.
-- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia runtime V1.
-- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia finalnego flow klienta.
+- Dashboard Obsidiana po Etapie 32: TEST RĘCZNY DO WYKONANIA.
+- Runtime V1: BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+- Płatności/finalny flow klienta: BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
 
-### Wniosek
+### Czego nie potwierdzono
 
-Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
-Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
-
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
-## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
-
-### Zakres testu
-
-Etap 32 jest etapem dokumentacyjnym/pamięciowym. Nie zmienia runtime aplikacji.
-
-### Testy automatyczne / guardy
-
-| Test | Status | Wynik / oczekiwane kryterium |
-|---|---|---|
-| `npm run verify:project-memory-stage32` | TEST AUTOMATYCZNY / GUARD | Pilnuje, że `_project` jasno zapisuje: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte. |
-| `npm run check:project-memory` | TEST AUTOMATYCZNY / GUARD | Ogólny guard kompletności pamięci projektu. |
-
-### Testy ręczne
-
-- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć dashboard Obsidiana i potwierdzić, że blokery są czytelne.
-- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia runtime V1.
-- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia finalnego flow klienta.
-
-### Wniosek
-
-Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
-Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
-
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
-## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
-
-### Zakres testu
-
-Etap 32 jest etapem dokumentacyjnym/pamięciowym. Nie zmienia runtime aplikacji.
-
-### Testy automatyczne / guardy
-
-| Test | Status | Wynik / oczekiwane kryterium |
-|---|---|---|
-| `npm run verify:project-memory-stage32` | TEST AUTOMATYCZNY / GUARD | Pilnuje, że `_project` jasno zapisuje: Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte. |
-| `npm run check:project-memory` | TEST AUTOMATYCZNY / GUARD | Ogólny guard kompletności pamięci projektu. |
-
-### Testy ręczne
-
-- TEST RĘCZNY DO WYKONANIA: Damian ma otworzyć dashboard Obsidiana i potwierdzić, że blokery są czytelne.
-- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia runtime V1.
-- BRAK POTWIERDZONEGO TESTU RĘCZNEGO: nie ma potwierdzenia finalnego flow klienta.
-
-### Wniosek
-
-Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
-Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+- Ten etap nie potwierdza działania runtime aplikacji.
+- Ten etap nie wdraża płatności.
+- Ten etap nie zamyka V1.
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
 
 <!-- ETAP_B_PROJECT_MEMORY_STATUS_FIX_START -->

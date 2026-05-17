@@ -1,3 +1,39 @@
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
+## Etap 32 - guard pamięci projektu
+
+### Guard
+
+- Nazwa: `verify:project-memory-stage32`
+- Komenda: `npm run verify:project-memory-stage32`
+- Plik: `scripts/check-project-memory-stage32.cjs`
+
+### Guard porządkowy po V5
+
+- Nazwa: `verify:project-memory-stage32-dedupe`
+- Komenda: `npm run verify:project-memory-stage32-dedupe`
+- Plik: `scripts/check-project-memory-stage32-dedupe.cjs`
+
+### Co sprawdza
+
+Guard pilnuje, że kanoniczne pliki `_project` zawierają jasny status:
+
+- Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
+- Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
+- Status ręczny: TEST RĘCZNY DO WYKONANIA / BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+
+Guard porządkowy pilnuje, żeby blok Etapu 32 nie był zdublowany po kolejnych paczkach.
+
+### Kiedy uruchamiać
+
+- Po każdej zmianie pamięci projektu dotyczącej statusu V1.
+- Przed pushem etapu dokumentacyjnego.
+- Jako część `npm run verify`.
+
+### Ograniczenie
+
+To są guardy dokumentacyjne. Nie potwierdzają runtime aplikacji, płatności ani finalnego flow klienta.
+<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
+
 ## Checki wymagane dla Etapu 20
 
 ```powershell
@@ -23,89 +59,8 @@ npm run check:project-memory
 
 # 06_GUARDS_AND_TESTS - Guardy i testy automatyczne
 
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
-## Etap 32 - guard pamięci projektu
 
-### Guard
 
-- Nazwa: `verify:project-memory-stage32`
-- Komenda: `npm run verify:project-memory-stage32`
-- Plik: `scripts/check-project-memory-stage32.cjs`
-
-### Co sprawdza
-
-Guard pilnuje, że kanoniczne pliki `_project` zawierają jasny status:
-
-- Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
-- Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
-- Status ręczny: TEST RĘCZNY DO WYKONANIA / BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
-
-### Kiedy uruchamiać
-
-- Po każdej zmianie pamięci projektu dotyczącej statusu V1.
-- Przed pushem etapu dokumentacyjnego.
-- Jako część `npm run verify`.
-
-### Ograniczenie
-
-To jest guard dokumentacyjny. Nie potwierdza runtime aplikacji, płatności ani finalnego flow klienta.
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
-
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
-## Etap 32 - guard pamięci projektu
-
-### Guard
-
-- Nazwa: `verify:project-memory-stage32`
-- Komenda: `npm run verify:project-memory-stage32`
-- Plik: `scripts/check-project-memory-stage32.cjs`
-
-### Co sprawdza
-
-Guard pilnuje, że kanoniczne pliki `_project` zawierają jasny status:
-
-- Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
-- Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
-- Status ręczny: TEST RĘCZNY DO WYKONANIA / BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
-
-### Kiedy uruchamiać
-
-- Po każdej zmianie pamięci projektu dotyczącej statusu V1.
-- Przed pushem etapu dokumentacyjnego.
-- Jako część `npm run verify`.
-
-### Ograniczenie
-
-To jest guard dokumentacyjny. Nie potwierdza runtime aplikacji, płatności ani finalnego flow klienta.
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
-
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
-## Etap 32 - guard pamięci projektu
-
-### Guard
-
-- Nazwa: `verify:project-memory-stage32`
-- Komenda: `npm run verify:project-memory-stage32`
-- Plik: `scripts/check-project-memory-stage32.cjs`
-
-### Co sprawdza
-
-Guard pilnuje, że kanoniczne pliki `_project` zawierają jasny status:
-
-- Kod ma elementy Etapów 22-29, ale V1 nie jest zamknięte.
-- Największe blokady: płatności, runtime testy, potwierdzenie Damiana, finalny flow klienta.
-- Status ręczny: TEST RĘCZNY DO WYKONANIA / BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
-
-### Kiedy uruchamiać
-
-- Po każdej zmianie pamięci projektu dotyczącej statusu V1.
-- Przed pushem etapu dokumentacyjnego.
-- Jako część `npm run verify`.
-
-### Ograniczenie
-
-To jest guard dokumentacyjny. Nie potwierdza runtime aplikacji, płatności ani finalnego flow klienta.
-<!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_END -->
 
 ## Checki wymagane dla Etapu 19
 

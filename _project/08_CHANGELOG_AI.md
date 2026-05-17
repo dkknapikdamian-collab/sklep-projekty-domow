@@ -1,5 +1,29 @@
 # 08_CHANGELOG_AI - Changelog AI
 
+<!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_START -->
+## 2026-05-17 - Etap 32 V5: cleanup duplikatów pamięci projektu
+
+Status: CLEANUP DOKUMENTACYJNY / BEZ ZMIAN W LOGICE APLIKACJI.
+
+### FAKT
+
+Po nieudanych paczkach V1/V2 i skutecznym V3 blok Etapu 32 został zapisany wielokrotnie w części plików `_project` i Obsidiana. Guardy przechodziły, ale pamięć projektu była zaśmiecona potrójnym wpisem.
+
+### Zmiana
+
+V5 usuwa duplikaty i zostawia jeden kanoniczny blok Etapu 32 w każdym pliku docelowym.
+
+### Guardy
+
+- `npm run verify:project-memory-stage32-dedupe`
+- `npm run verify:project-memory-stage32`
+- `npm run check:project-memory`
+
+### Ryzyko
+
+Brak zmian w kodzie runtime. Ryzyko dotyczy tylko dokumentacji i pamięci projektu.
+<!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_END -->
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## 2026-05-17 - Etap 32: uporządkowanie pamięci projektu
 
