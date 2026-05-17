@@ -1,3 +1,14 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## 2026-05-17 - Etap 34C: full flow sklepu potwierdzony ręcznie
+
+Damian potwierdził runtime flow sklepu bez płatności publicznej:
+admin dodaje realny projekt -> active w katalogu -> karta -> koszyk -> zamówienie techniczne -> admin widzi zamówienie -> walidacja cen -> audit.
+
+Status: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA.
+
+Nie jest to zgoda na publikację klientom ani wdrożenie płatności online.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 10_PROJECT_TIMELINE - Os czasu projektu
 
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->

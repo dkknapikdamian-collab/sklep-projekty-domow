@@ -1,3 +1,12 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## 2026-05-17 - Etap 34C: ręczne potwierdzenie pełnego flow sklepu
+
+- Zapisano potwierdzenie Damiana, że pełny flow Etapu 34 działa runtime.
+- Potwierdzono: realny projekt dodany przez admina, katalog active, karta projektu, koszyk, zamówienie techniczne, widok zamówienia w adminie, walidacja cen i audit.
+- Nie zmieniano kodu aplikacji.
+- Nie dodano płatności publicznych, webhooków ani automatycznej wysyłki plików.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 08_CHANGELOG_AI - Changelog AI
 
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->

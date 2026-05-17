@@ -1,3 +1,28 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## 2026-05-17 - Etap 34C: test ręczny pełnego flow sklepu
+
+Status: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA.
+
+### Zakres potwierdzony
+
+- admin dodaje kompletny realny projekt,
+- projekt active pojawia się w katalogu,
+- karta projektu działa,
+- koszyk działa,
+- zamówienie techniczne powstaje,
+- admin widzi zamówienie,
+- walidacja cen działa,
+- audit działa.
+
+### Wynik
+
+PASS runtime na realnym flow V1 bez płatności publicznej.
+
+### Ograniczenie
+
+Nie jest to test płatności online, webhooków, automatycznej wysyłki plików, panelu klienta ani faktur.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 14_TEST_HISTORY - Sklep projekty domow
 
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->

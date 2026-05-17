@@ -1,3 +1,36 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## Etap 34C - ręczne potwierdzenie pełnego flow sklepu bez płatności publicznej
+
+Status: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA / FLOW TECHNICZNY DZIAŁA / NIE OZNACZA PUBLIKACJI KLIENTOM.
+Data: 2026-05-17 Europe/Warsaw.
+
+### POTWIERDZENIE DAMIANA
+
+Damian potwierdził ręcznie, że działa pełna ścieżka Etapu 34:
+
+1. Admin dodaje kompletny realny projekt.
+2. Projekt ze statusem `active` pojawia się w katalogu.
+3. Karta projektu działa.
+4. Koszyk działa.
+5. Zamówienie techniczne powstaje.
+6. Admin widzi zamówienie.
+7. Walidacja cen działa.
+8. Audit działa.
+
+### INTERPRETACJA
+
+To potwierdza techniczny flow sklepu bez płatności publicznej. Nie oznacza publicznego uruchomienia sklepu, produkcyjnych płatności online, webhooków, automatycznej wysyłki plików, panelu klienta ani faktur.
+
+### TESTY
+
+- TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA: pełny runtime flow Etapu 34.
+- TEST AUTOMATYCZNY / GUARD: `npm run verify:stage34-full-flow-no-public-payment` pozostaje guardem statycznego kontraktu.
+
+### NASTĘPNY KROK
+
+Utrzymać Etap 34 jako potwierdzony techniczny flow. Następny kierunek do decyzji: Etap 35 płatności online / strona sukcesu / webhook / statusy płatności / wydawanie plików, ale nie wdrażać tego bez osobnej decyzji Damiana.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 03_CURRENT_STAGE - aktualny etap
 
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->

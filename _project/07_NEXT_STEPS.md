@@ -1,3 +1,30 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## Etap 34C - następny krok po ręcznym potwierdzeniu flow
+
+Status: ETAP 34 FLOW POTWIERDZONY RĘCZNIE.
+Data: 2026-05-17 Europe/Warsaw.
+
+### FAKT
+
+Damian potwierdził pełny runtime flow sklepu bez płatności publicznej: admin dodał realny projekt, projekt active pojawił się w katalogu, karta projektu działała, koszyk działał, zamówienie techniczne powstało, admin widział zamówienie, walidacja cen działała i audit działał.
+
+### NASTĘPNY REALNY KROK
+
+Nie publikować jeszcze klientom. Kolejny etap powinien dotyczyć decyzji o docelowym flow płatności i realizacji:
+
+1. provider płatności,
+2. strona sukcesu po płatności,
+3. webhook i statusy płatności,
+4. kiedy i jak wydawać pliki prywatne,
+5. czy linki są signed/czasowe,
+6. czy system wysyła e-mail automatycznie, czy dalej manualnie,
+7. jak działa ponowne pobranie.
+
+### ZAKAZ BEZ DECYZJI
+
+Nie wdrażać publicznych płatności, automatycznej wysyłki plików, panelu klienta ani faktur bez osobnej decyzji Damiana.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 07_NEXT_STEPS - nastepne kroki
 
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->

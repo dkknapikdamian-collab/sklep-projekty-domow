@@ -1,3 +1,22 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## 2026-05-17 - Etap 34C: pełny flow sklepu bez płatności publicznej
+
+Status: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA.
+
+Damian potwierdził ręcznie:
+
+- admin dodaje kompletny realny projekt - działa,
+- projekt active pojawia się w katalogu - działa,
+- karta projektu działa - działa,
+- koszyk działa - działa,
+- zamówienie techniczne powstaje - działa,
+- admin widzi zamówienie - działa,
+- walidacja cen działa - działa,
+- audit działa - działa.
+
+Interpretacja: techniczny flow sklepu bez płatności publicznej jest runtime-potwierdzony. To nie oznacza publicznej gotowości sklepu ani wdrożonych płatności online.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 11_USER_CONFIRMED_TESTS - Potwierdzenia Damiana
 
 ## Zasada

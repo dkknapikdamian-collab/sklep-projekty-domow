@@ -1,3 +1,40 @@
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_START -->
+## 2026-05-17 - Etap 34C: zapis ręcznego potwierdzenia full flow
+
+### Co wdrożono
+
+Zapisano w pamięci projektu ręczne potwierdzenie Damiana dla pełnego flow Etapu 34.
+
+### Dlaczego
+
+Wynik testu ręcznego nie może zostać tylko w czacie. Musi trafić do `_project` i Obsidiana.
+
+### Pliki zmienione
+
+- `_project/03_CURRENT_STAGE.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/11_USER_CONFIRMED_TESTS.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/runs/2026-05-17_1335_etap34c_manual_confirmation_full_flow.md`
+- Obsidian: sekcja `10_PROJEKTY/Sklep_projekty_domow/`
+
+### Testy / guardy
+
+- TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA: full flow Etapu 34.
+- Guard statyczny pozostaje: `npm run verify:stage34-full-flow-no-public-payment`.
+
+### Ryzyka
+
+- Nadal brak płatności publicznych i automatycznej realizacji plików. To świadomy zakres, nie regresja.
+
+### Następny krok
+
+Decyzja o Etapie 35: płatności online, webhooki, statusy płatności i wydawanie plików.
+<!-- ETAP34C_MANUAL_CONFIRMATION_FULL_FLOW_2026_05_17_END -->
+
 # 12_IMPLEMENTATION_LEDGER - Sklep projekty domow
 
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
