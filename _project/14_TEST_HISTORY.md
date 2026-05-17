@@ -1233,3 +1233,22 @@ Etap 33 runtime audit:
 - TEST RĘCZNY DO WYKONANIA: tokenowany panel + kliknięcie pliku + wpis order_download_events po SQL i testowej płatności paid.
 - BRAK POTWIERDZONEGO TESTU RĘCZNEGO: Etap 36 nie ma jeszcze runtime potwierdzenia Damiana.
 <!-- ETAP36_TEST_HISTORY_2026_05_17_END -->
+
+<!-- SQL_LEDGER_ETAP36_CONFIRMED_2026_05_17_START -->
+## 2026-05-17 - Etap 36 SQL uruchomiony w Supabase
+
+- SQL_LEDGER_ID: 2026-05-17_etap36_post_payment_fulfillment
+- Plik: supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql
+- Typ: MIGRATION
+- Status: URUCHOMIONE / POTWIERDZONE PRZEZ DAMIANA.
+- Wynik Supabase: Success. No rows returned.
+- Data potwierdzenia: 2026-05-17 12:34.
+- Utworzone / potwierdzone tabele:
+  - order_payments
+  - payment_events
+  - order_fulfillment_access
+  - order_download_events
+- Bezpieczeństwo: RLS enabled, brak publicznych polityk; dostęp server-side przez service role.
+- Test runtime: BRAK POTWIERDZONEGO TESTU RUNTIME fulfillmentu po płatności.
+- Następny krok: naprawić build przez błędny HTML komentarz w pp/globals.css, potem spiąć Stripe webhook z fulfillmentem.
+<!-- SQL_LEDGER_ETAP36_CONFIRMED_2026_05_17_END -->

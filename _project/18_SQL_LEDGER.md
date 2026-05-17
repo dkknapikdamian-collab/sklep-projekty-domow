@@ -82,3 +82,22 @@ SQL bez ledgeru nie zamyka etapu.
 - Bezpieczeństwo: RLS enabled, brak publicznych polityk; dostęp przez server-side service role.
 - Ryzyko: wymaga sprawdzenia na aktualnym schemacie Supabase przed uznaniem runtime za potwierdzony.
 <!-- SQL_LEDGER_ETAP36_POST_PAYMENT_FULFILLMENT_2026_05_17_END -->
+
+<!-- SQL_LEDGER_ETAP36_CONFIRMED_2026_05_17_START -->
+## 2026-05-17 - Etap 36 SQL uruchomiony w Supabase
+
+- SQL_LEDGER_ID: 2026-05-17_etap36_post_payment_fulfillment
+- Plik: supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql
+- Typ: MIGRATION
+- Status: URUCHOMIONE / POTWIERDZONE PRZEZ DAMIANA.
+- Wynik Supabase: Success. No rows returned.
+- Data potwierdzenia: 2026-05-17 12:34.
+- Utworzone / potwierdzone tabele:
+  - order_payments
+  - payment_events
+  - order_fulfillment_access
+  - order_download_events
+- Bezpieczeństwo: RLS enabled, brak publicznych polityk; dostęp server-side przez service role.
+- Test runtime: BRAK POTWIERDZONEGO TESTU RUNTIME fulfillmentu po płatności.
+- Następny krok: naprawić build przez błędny HTML komentarz w pp/globals.css, potem spiąć Stripe webhook z fulfillmentem.
+<!-- SQL_LEDGER_ETAP36_CONFIRMED_2026_05_17_END -->
