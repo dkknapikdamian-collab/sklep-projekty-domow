@@ -734,3 +734,75 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_2026_05_17_START -->
+## Etap 33 - runtime test admina i audit
+
+Status: PRZYGOTOWANE DO WDROŻENIA / TEST RĘCZNY DO WYKONANIA.
+Priorytet: 4.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Audit admina nie może być uznany za domknięty po samym guardzie statycznym. Kryterium Etapu 33 to realne wpisy w Supabase `public.admin_audit_log` po realnych operacjach admina.
+
+### Zakres kliknięć
+
+- dodanie projektu,
+- publikacja,
+- archiwizacja,
+- usunięcie projektu testowego,
+- media,
+- pliki prywatne,
+- zamówienia,
+- checklisty,
+- `/admin/audit`.
+
+### Guardy i proof
+
+- `npm run verify:admin-audit-runtime-v53` - guard pakietu Etap 33.
+- `npm run audit:admin-runtime-v54` - realny proof Supabase po kliknięciach.
+- SQL proof: `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+
+### Status testu
+
+TEST RĘCZNY DO WYKONANIA.
+BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+
+### Warunek zamknięcia
+
+Etap 33 można zamknąć dopiero po wyniku `PASS` dla wszystkich grup runtime i po potwierdzeniu Damiana.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_2026_05_17_START -->
+## Etap 33 V2 - runtime test admina, audit i SQL ledger
+
+Status: PACZKA NAPRAWCZA DO WDROŻENIA / TEST RĘCZNY DO WYKONANIA.
+Priorytet: 4.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Etap 33 nie jest jeszcze zamknięty. V2 naprawia paczkę testową i dodaje stały SQL ledger, ale runtime trzeba nadal potwierdzić wpisami w Supabase.
+
+### Co naprawia V2
+
+- Guard checklisty jest case-insensitive i nie wywala się na `Dodanie projektu` vs `dodanie projektu`.
+- `audit:admin-runtime-v54` wczytuje `.env.local`, więc powinien widzieć `NEXT_PUBLIC_SUPABASE_URL` i service key, jeśli są zapisane lokalnie.
+- Dodano `_project/18_SQL_LEDGER.md` i Obsidian `12_SQL_LEDGER - Sklep projekty domow.md`.
+
+### SQL
+
+SQL Etapu 33 nie jest migracją. To read-only proof:
+
+`supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`
+
+### Status testu
+
+TEST RĘCZNY DO WYKONANIA.
+BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+
+### Warunek zamknięcia
+
+Wynik Node proof albo SQL proof musi pokazać `PASS` dla wszystkich grup: dodanie, publikacja, archiwizacja, usunięcie, media, pliki prywatne, zamówienia i checklisty.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_2026_05_17_END -->

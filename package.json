@@ -72,7 +72,8 @@
     "verify:payment-direction-v48": "node scripts/check-manual-payment-v48.cjs",
     "verify:checkout-mojibake-v31b": "node scripts/check-checkout-mojibake-v31b.cjs",
     "verify:project-memory-stage32": "node scripts/check-project-memory-stage32.cjs",
-    "verify:project-memory-stage32-dedupe": "node scripts/check-project-memory-stage32-dedupe.cjs"
+    "verify:project-memory-stage32-dedupe": "node scripts/check-project-memory-stage32-dedupe.cjs",
+    "audit:admin-runtime-v54": "node scripts/check-admin-audit-runtime-v54.cjs"
   },
   "dependencies": {
     "next": "^15.0.0",

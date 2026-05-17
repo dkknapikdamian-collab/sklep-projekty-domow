@@ -578,3 +578,31 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_CHANGELOG_2026_05_17_START -->
+## 2026-05-17 - Etap 33 runtime test admina i audit
+
+Dodano runtime proof dla audit logu admina:
+
+- uzupełniono brakujący guard `scripts/check-admin-audit-runtime-v53.cjs`,
+- dodano `scripts/check-admin-audit-runtime-v54.cjs` do realnego sprawdzenia Supabase po kliknięciach,
+- dodano SQL proof w `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`,
+- dodano checklistę `_project/17_ETAP33_ADMIN_AUDIT_RUNTIME_CHECKLIST.md`,
+- zaktualizowano `_project` i Obsidiana.
+
+Status runtime: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_CHANGELOG_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_CHANGELOG_2026_05_17_START -->
+## 2026-05-17 - Etap 33 V2 SQL ledger i env fix
+
+Naprawiono paczkę Etapu 33:
+
+- guard checklisty przestał być wrażliwy na wielkość liter,
+- runtime proof `audit:admin-runtime-v54` wczytuje `.env.local`,
+- dodano stały SQL ledger w repo i Obsidianie,
+- zapisano SQL proof Etapu 33 jako `READ_ONLY_VERIFICATION`,
+- dopisano regułę SQL do `AGENTS.md`.
+
+Status runtime: TEST RĘCZNY DO WYKONANIA.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_CHANGELOG_2026_05_17_END -->

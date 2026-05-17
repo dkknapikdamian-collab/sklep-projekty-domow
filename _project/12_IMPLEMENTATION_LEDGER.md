@@ -792,3 +792,79 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_LEDGER_2026_05_17_START -->
+## 2026-05-17 - Etap 33 runtime test admina i audit
+
+### Co wdrożono
+
+Pakiet runtime testu admin/audit:
+- guard `verify:admin-audit-runtime-v53`,
+- realny proof `audit:admin-runtime-v54`,
+- SQL proof Supabase,
+- checklista kliknięć,
+- raport run,
+- aktualizacje `_project` i Obsidiana.
+
+### Dlaczego
+
+Etap 33 wymaga dowodu, że wpisy audit realnie są w Supabase, nie tylko że kod zawiera `writeAdminAuditLog`.
+
+### Testy/guardy
+
+- `npm run verify:admin-audit-log-v44`
+- `npm run verify:admin-audit-runtime-v53`
+- `npm run check:project-memory`
+- `npm run typecheck`
+- `npm run build`
+
+### Test ręczny
+
+TEST RĘCZNY DO WYKONANIA.
+
+### Ryzyka
+
+- Brak danych testowych dla mediów/prywatnych plików da `FAIL` mimo poprawnego kodu.
+- Hard delete musi być testowany tylko na projekcie testowym.
+
+### Następny krok
+
+Kliknąć checklistę i uruchomić `npm run audit:admin-runtime-v54` albo SQL proof.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_LEDGER_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_LEDGER_2026_05_17_START -->
+## 2026-05-17 - Etap 33 V2 SQL ledger i env fix
+
+### Co wdrożono
+
+- Naprawiono guard `verify:admin-audit-runtime-v53`.
+- Naprawiono `audit:admin-runtime-v54`, żeby wczytywał `.env.local`.
+- Dodano `_project/18_SQL_LEDGER.md`.
+- Dodano Obsidian SQL ledger.
+- Dodano regułę SQL do `AGENTS.md`.
+
+### Dlaczego
+
+V1 zatrzymał się przez kruchy marker checklisty, a runtime proof nie widział zmiennych Supabase.
+
+### Testy/guardy
+
+- `npm run verify:admin-audit-log-v44`
+- `npm run verify:admin-audit-runtime-v53`
+- `npm run check:project-memory`
+- `npm run typecheck`
+- `npm run build`
+
+### Test ręczny
+
+TEST RĘCZNY DO WYKONANIA.
+
+### Ryzyka
+
+- Node proof wymaga service role key. Bez niego trzeba użyć Supabase SQL Editor.
+- Hard delete tylko na projekcie testowym.
+
+### Następny krok
+
+Kliknąć checklistę i uruchomić Node proof albo SQL proof.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_LEDGER_2026_05_17_END -->

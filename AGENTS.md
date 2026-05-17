@@ -558,3 +558,16 @@ DECYZJA PROCESOWA:
 - Preferowany układ paczki: APPLY.ps1 + payload/apply.cjs + payload/files/*.
 - Guardy są drugą linią obrony. Pierwszą linią jest prosty format paczki, który nie produkuje mojibake i błędów parsera.
 <!-- POWERSHELL_PACKAGE_ENCODING_PREVENTION_V1_END -->
+
+<!-- SQL_LEDGER_RULE_2026_05_17_START -->
+## Zasada SQL ledger dla projektu Sklep
+
+DECYZJA PROCESOWA DAMIANA:
+- Każdy SQL użyty przy projekcie musi zostać zapisany w repo i Obsidianie.
+- SQL zmieniający schemat/dane trafia do `supabase/migrations/` albo jawnie do `supabase/manual/` z opisem ryzyka.
+- SQL tylko do sprawdzeń trafia do `supabase/manual/` jako `READ_ONLY_VERIFICATION`.
+- Każdy SQL musi mieć wpis w `_project/18_SQL_LEDGER.md`.
+- Każdy SQL musi mieć wpis w Obsidianie: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
+- Raport run musi wskazać: nazwę SQL, typ, czy mutuje dane/schemat, gdzie został uruchomiony, wynik i ryzyko.
+- SQL bez ledgeru nie zamyka etapu.
+<!-- SQL_LEDGER_RULE_2026_05_17_END -->

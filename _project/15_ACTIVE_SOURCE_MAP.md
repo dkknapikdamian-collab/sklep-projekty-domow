@@ -1,4 +1,4 @@
-﻿# 15_ACTIVE_SOURCE_MAP - Sklep projekty domow
+# 15_ACTIVE_SOURCE_MAP - Sklep projekty domow
 
 ## Mapa zrodel
 
@@ -86,3 +86,30 @@ Obsidian:
 - 10_PROJEKTY/Sklep_projekty_domow/2026-05-16 - Etap 23Z archiwizacja i hard delete runtime.md
 <!-- ETAP23Z_ARCHIVE_DELETE_RUNTIME_ACCEPTANCE_2026_05_16 -->
 
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_SOURCE_MAP_2026_05_17_START -->
+## Etap 33 - aktywne źródła dla runtime admin/audit
+
+Aktywne źródła prawdy:
+
+- Kod/statyczny kontrakt audit: `scripts/check-admin-audit-log-v44.cjs`.
+- Guard pakietu Etap 33: `scripts/check-admin-audit-runtime-v53.cjs`.
+- Runtime proof Supabase: `scripts/check-admin-audit-runtime-v54.cjs`.
+- SQL proof: `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+- Manualna checklista: `_project/17_ETAP33_ADMIN_AUDIT_RUNTIME_CHECKLIST.md`.
+- Raport run: `_project/runs/2026-05-17_0900_etap33_runtime_test_admin_audit.md`.
+
+Obsidian jest dashboardem statusu, nie źródłem kodu.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_SOURCE_MAP_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_SOURCE_MAP_2026_05_17_START -->
+## Etap 33 V2 - aktywne źródła
+
+- Statyczny audit guard: `scripts/check-admin-audit-log-v44.cjs`.
+- Guard Etapu 33 V2: `scripts/check-admin-audit-runtime-v53.cjs`.
+- Node runtime proof: `scripts/check-admin-audit-runtime-v54.cjs`.
+- SQL proof: `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+- Checklista: `_project/17_ETAP33_ADMIN_AUDIT_RUNTIME_CHECKLIST.md`.
+- SQL ledger repo: `_project/18_SQL_LEDGER.md`.
+- SQL ledger Obsidian: `10_PROJEKTY/Sklep_projekty_domow/12_SQL_LEDGER - Sklep projekty domow.md`.
+- Raport run V2: `_project/runs/2026-05-17_0930_etap33_v2_sql_ledger_env_fix.md`.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_SOURCE_MAP_2026_05_17_END -->

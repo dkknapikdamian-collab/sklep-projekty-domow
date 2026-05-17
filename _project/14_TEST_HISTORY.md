@@ -781,3 +781,59 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_TEST_HISTORY_2026_05_17_START -->
+## 2026-05-17 - Etap 33 runtime test admina i audit
+
+### TEST AUTOMATYCZNY / GUARD
+
+Do uruchomienia przez apply:
+
+```powershell
+npm run verify:admin-audit-log-v44
+npm run verify:admin-audit-runtime-v53
+npm run check:project-memory
+npm run typecheck
+npm run build
+```
+
+### TEST RĘCZNY DO WYKONANIA
+
+Kliknąć dodanie projektu, publikację, archiwizację, usunięcie projektu testowego, media, pliki prywatne, zamówienia, checklisty i `/admin/audit`.
+
+### BRAK POTWIERDZONEGO TESTU RĘCZNEGO
+
+Etap 33 nie jest zamknięty do czasu potwierdzenia runtime w Supabase.
+
+### Proof wymagany po kliknięciach
+
+```powershell
+npm run audit:admin-runtime-v54
+```
+
+albo SQL proof z `supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_TEST_HISTORY_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TEST_HISTORY_2026_05_17_START -->
+## 2026-05-17 - Etap 33 V2 SQL ledger i env fix
+
+### TEST AUTOMATYCZNY / GUARD
+
+Do uruchomienia przez apply:
+
+```powershell
+npm run verify:admin-audit-log-v44
+npm run verify:admin-audit-runtime-v53
+npm run check:project-memory
+npm run typecheck
+npm run build
+```
+
+### TEST RĘCZNY DO WYKONANIA
+
+Kliknąć dodanie projektu, publikację, archiwizację, usunięcie projektu testowego, media, pliki prywatne, zamówienia, checklisty i `/admin/audit`.
+
+### BRAK POTWIERDZONEGO TESTU RĘCZNEGO
+
+V2 naprawia paczkę, ale nie potwierdza runtime. Runtime potwierdza dopiero `PASS` w Node/SQL proof.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TEST_HISTORY_2026_05_17_END -->

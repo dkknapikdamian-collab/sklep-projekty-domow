@@ -595,3 +595,55 @@ RYZYKO:
 - V4 nie potwierdza runtime Supabase. Potwierdza tylko guard/test lokalny i build.
 <!-- ETAP27_BOM_REPAIR_V4_2026_05_16_END -->
 
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_MANUAL_TEST_2026_05_17_START -->
+## Etap 33 - test ręczny runtime admin/audit
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+Kliknąć w adminie: dodanie projektu, publikacja, archiwizacja, usunięcie projektu testowego, media, pliki prywatne, zamówienia, checklisty oraz `/admin/audit`.
+
+Kryterium: wpisy muszą realnie istnieć w Supabase `public.admin_audit_log`.
+
+Dowód po kliknięciach:
+
+```powershell
+npm run audit:admin-runtime-v54
+```
+
+albo SQL:
+
+```text
+supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql
+```
+
+Wynik wymagany: wszystkie grupy `PASS`.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_MANUAL_TEST_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_MANUAL_2026_05_17_START -->
+## Etap 33 V2 - test ręczny admin/audit
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+Kliknąć w adminie:
+- dodanie projektu,
+- publikacja,
+- archiwizacja,
+- usunięcie projektu testowego,
+- media,
+- pliki prywatne,
+- zamówienia,
+- checklisty,
+- `/admin/audit`.
+
+Proof:
+
+```powershell
+npm run audit:admin-runtime-v54
+```
+
+albo Supabase SQL Editor z plikiem:
+
+`supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`
+
+Wynik wymagany: wszystkie grupy `PASS`.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_MANUAL_2026_05_17_END -->

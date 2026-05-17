@@ -696,3 +696,61 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_GUARDS_2026_05_17_START -->
+## Etap 33 - guardy i runtime proof admin/audit
+
+### `verify:admin-audit-runtime-v53`
+
+Komenda:
+
+```powershell
+npm run verify:admin-audit-runtime-v53
+```
+
+Rola: statyczny guard paczki Etapu 33. Sprawdza, czy istnieje runtime proof, SQL proof, checklista, raport run i wpisy w package.json.
+
+### `audit:admin-runtime-v54`
+
+Komenda po kliknięciach:
+
+```powershell
+npm run audit:admin-runtime-v54
+```
+
+Rola: realny proof Supabase. Odpytuje `public.admin_audit_log` i wymaga wpisów dla dodania projektu, publikacji, archiwizacji, usunięcia, mediów, plików prywatnych, zamówień i checklist.
+
+Nie jest częścią głównego `npm run verify`, bo wymaga sekretów Supabase i danych runtime.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_GUARDS_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_GUARDS_2026_05_17_START -->
+## Etap 33 V2 - guardy i runtime proof
+
+### `verify:admin-audit-runtime-v53`
+
+Komenda:
+
+```powershell
+npm run verify:admin-audit-runtime-v53
+```
+
+Rola: guard statyczny paczki Etapu 33 V2. Sprawdza checklistę, runtime proof, SQL proof, SQL ledger, regułę w AGENTS.md i raport run.
+
+### `audit:admin-runtime-v54`
+
+Komenda po kliknięciach:
+
+```powershell
+npm run audit:admin-runtime-v54
+```
+
+Rola: realny proof Supabase. Wczytuje `.env.local`, odpytuje `public.admin_audit_log` i wymaga wpisów dla krytycznych operacji admina.
+
+### SQL proof
+
+Plik:
+
+`supabase/manual/2026-05-17_etap33_admin_audit_runtime_verification.sql`
+
+Typ: `READ_ONLY_VERIFICATION`.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_GUARDS_2026_05_17_END -->

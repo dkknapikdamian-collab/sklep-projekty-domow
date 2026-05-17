@@ -441,3 +441,15 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_TIMELINE_2026_05_17_START -->
+## 2026-05-17 - Etap 33 runtime test admina i audit
+
+Przygotowano pakiet testowy, który zamienia Etap 33 z listy kliknięć w mierzalny proof Supabase. Warunek zamknięcia: wszystkie grupy audit logu mają `PASS` po realnych operacjach admina.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_TIMELINE_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TIMELINE_2026_05_17_START -->
+## 2026-05-17 - Etap 33 V2
+
+Po nieudanym apply V1 przygotowano V2: fix guarda checklisty, `.env.local` loader dla runtime proof i stały SQL ledger. Etap nadal wymaga realnego proofu Supabase po kliknięciach admina.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_TIMELINE_2026_05_17_END -->

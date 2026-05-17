@@ -598,3 +598,24 @@ TEST RĘCZNY:
 RYZYKA:
 - Historyczne raporty mogą jeszcze zawierać stare wpisy, ale nie blokują aktywnego checkoutu.
 <!-- ETAP31B_MOJIBAKE_UTF8_FIX_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_NEXT_2026_05_17_START -->
+## Następny krok - Etap 33
+
+1. Wdrożyć paczkę Etap 33.
+2. Wykonać kliknięcia admina na projekcie testowym.
+3. Uruchomić `npm run audit:admin-runtime-v54` albo SQL proof w Supabase.
+4. Jeśli wszystkie grupy mają `PASS`, dopisać potwierdzenie testu ręcznego Damiana w `_project/11_USER_CONFIRMED_TESTS.md` i Obsidianie.
+5. Jeśli coś ma `FAIL`, naprawić tylko brakującą ścieżkę audit logu, nie przebudowywać całego admina.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_NEXT_2026_05_17_END -->
+
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_NEXT_2026_05_17_START -->
+## Następny krok - Etap 33 V2
+
+1. Uruchomić paczkę V2.
+2. Kliknąć checklistę admina na danych testowych.
+3. Uruchomić `npm run audit:admin-runtime-v54`.
+4. Jeśli Node proof nadal nie widzi Supabase albo service key, skopiować SQL i uruchomić go w Supabase SQL Editor.
+5. Jeśli któraś grupa ma `FAIL`, naprawić konkretną ścieżkę audit logu.
+6. Po `PASS` dla wszystkich grup dopisać potwierdzenie Damiana.
+<!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_NEXT_2026_05_17_END -->
