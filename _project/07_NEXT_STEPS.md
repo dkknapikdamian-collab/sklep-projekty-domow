@@ -1,4 +1,4 @@
-<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## Etap 35A - następny krok po decyzji Stripe
 
 Status: STRIPE WYBRANY / 35B DO WDROŻENIA OSOBNYM ETAPEM.
@@ -1311,3 +1311,23 @@ Testy automatyczne:
 Test ręczny: TEST RĘCZNY DO WYKONANIA.
 Następny krok: Etap 26D - realna wysyłka e-mail po decyzji o providerze.
 <!-- ETAP26C_POST_PAYMENT_PROJECT_FILES_2026_05_17_END -->
+
+
+<!-- ETAP26D_NOREPLY_EMAIL_PAYMENTS_DECISION_2026_05_17_START -->
+## Etap 26D / 39A - no-reply email i realne platnosci online
+
+Status: ZAPISANE DO WDROZENIA / PRIORYTET P0-P1 / TEST RECZNY DO WYKONANIA.
+
+Kolejnosc:
+1. Etap 39A - realne platnosci online: provider, checkout, webhook, status `paid`, idempotencja.
+2. Etap 26D - email outbox no-reply: payment confirmation + project files access, fake provider, potem real provider po env/DNS.
+
+Zasady:
+- email tylko z adresu kontrolowanego przez Damiana / marke sklepu,
+- no-reply bez obslugi odpowiedzi,
+- PDF na e-mail tylko przy wykupionym dodatku,
+- bez dodatku PDF klient dostaje tylko bazowe aktywne pliki projektu, w szczegolnosci rzuty pomieszczen,
+- nie wysylac publicznych linkow do storage.
+<!-- ETAP26D_NOREPLY_EMAIL_PAYMENTS_DECISION_2026_05_17_END -->
+
+

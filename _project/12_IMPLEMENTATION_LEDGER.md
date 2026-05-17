@@ -1,4 +1,4 @@
-<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## 2026-05-17 - Etap 35A: zapis decyzji Stripe
 
 ### Co wdrożono
@@ -1656,3 +1656,18 @@ Testy automatyczne:
 Test ręczny: TEST RĘCZNY DO WYKONANIA.
 Następny krok: Etap 26D - realna wysyłka e-mail po decyzji o providerze.
 <!-- ETAP26C_POST_PAYMENT_PROJECT_FILES_2026_05_17_END -->
+
+
+<!-- ETAP26D_NOREPLY_EMAIL_PAYMENTS_DECISION_2026_05_17_START -->
+## 2026-05-17 - Etap 26D / 39A no-reply email i platnosci online
+
+Typ: DECYZJA / PLAN WDROZENIA.
+Kod: BEZ ZMIAN W TEJ PACZCE.
+Status: DO WDROZENIA.
+
+Decyzja: po platnosci dwa maile no-reply: potwierdzenie platnosci i dostep do plikow. Realne platnosci online maja priorytet. PDF na e-mail tylko przy dodatku, bez dodatku tylko bazowe aktywne pliki projektu.
+
+Nastepny kodowy etap: 39A real payments albo 26D email outbox fake-provider, zależnie od decyzji Damiana.
+<!-- ETAP26D_NOREPLY_EMAIL_PAYMENTS_DECISION_2026_05_17_END -->
+
+
