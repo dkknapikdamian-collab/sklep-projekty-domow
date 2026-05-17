@@ -1025,3 +1025,18 @@ Etap 33 runtime audit:
 - Ryzyko: brak zmiany UI; hotfix dotyczy skladni CSS i dokumentacji.
 - Nastepny krok: po przejsciu builda wrocic do Etapu 37, czyli Stripe webhook -> fulfillment.
 <!-- ETAP36B_BUILD_HOTFIX_2026_05_17_END -->
+
+<!-- ETAP36B_BUILD_RETEST_CONFIRMED_2026_05_17_START -->
+## 2026-05-17 - Etap 36B build retest potwierdzony
+
+- Status: BUILD POTWIERDZONY PO HOTFIXIE.
+- Data: 2026-05-17 12:46.
+- Testy automatyczne:
+  - npm run verify:stage36-post-payment-fulfillment
+  - npm run typecheck
+  - npm run build
+- Wynik: PASS.
+- Zakres: potwierdzenie, że Etap 36 + SQL ledger + poprawka komentarza CSS nie blokują builda.
+- Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO fulfillmentu po płatności.
+- Następny krok: Etap 37, czyli Stripe webhook -> ensurePostPaymentFulfillmentAccessForOrder().
+<!-- ETAP36B_BUILD_RETEST_CONFIRMED_2026_05_17_END -->
