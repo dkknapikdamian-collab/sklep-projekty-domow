@@ -106,7 +106,7 @@ export default async function EditAdminProjectPage({ params, searchParams }: Edi
   return (
     <>
       <AdminHeader />
-      <main className="admin-shell">
+      <main className="admin-shell admin-project-edit-shell" data-admin-project-edit-shell-v34="true">
         <section className="admin-page-head">
           <div>
             <span>ADMIN / EDYCJA PROJEKTU</span>

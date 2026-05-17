@@ -114,3 +114,38 @@ Obsidian jest dashboardem statusu, nie źródłem kodu.
 - Raport run V2: `_project/runs/2026-05-17_0930_etap33_v2_sql_ledger_env_fix.md`.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_SOURCE_MAP_2026_05_17_END -->
 
+<!-- ETAP34_ADMIN_UX_SCROLL_WIDTH_SEED_2026_05_17_START -->
+## Etap 34 V3 - admin UX: scroll, szerokość i projekt testowy
+
+Status: WDROŻONE W KODZIE / TEST RĘCZNY DO WYKONANIA / V3 GUARD MARKER FIX.
+Data: 2026-05-17 Europe/Warsaw.
+
+### FAKTY
+
+- Dodano `AdminScrollStabilizer`, który zapisuje pozycję scrolla przed akcjami admina i przywraca ją po odświeżeniu widoku.
+- Dodano responsywną szerokość panelu admina: więcej przestrzeni na dużym ekranie, ale z limitem czytelności.
+- Ekran edycji projektu dostał klasę `admin-project-edit-shell`.
+- Dodano SQL seed projektu testowego `DP-TEST-034` z ładnymi zdjęciami i statusem `draft`.
+- Dodano guard `verify:admin-ux-stability-v34`; V3 poprawia marker `NIE URUCHAMIAC` dla SQL seed.
+
+### TESTY RĘCZNE
+
+- TEST RĘCZNY DO WYKONANIA:
+  - scroll po akcji media,
+  - scroll po usunięciu pliku prywatnego,
+  - scroll po zmianie statusu zamówienia,
+  - scroll po zmianie checklisty,
+  - szerokość panelu na różnych ekranach,
+  - SQL seed projektu testowego.
+
+### ETAP 33
+
+Etap 33 nadal nie jest zamknięty. Brakujące testy audit runtime zostają zapisane jako do wykonania później:
+- media,
+- pliki prywatne,
+- zamówienia,
+- checklisty.
+<!-- ETAP34_ADMIN_UX_SCROLL_WIDTH_SEED_2026_05_17_END -->
+
+
+

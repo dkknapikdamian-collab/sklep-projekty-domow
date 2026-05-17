@@ -13,6 +13,7 @@
 @import "./footer-end-v6.css";
 @import "./admin-media-v25.css";
 @import "./admin-debug-v26.css";
+@import "./admin-ux-stability-v34.css";
 :root {
   --bg: #0f1417;
   --bg-soft: #151b1f;

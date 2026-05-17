@@ -1,0 +1,122 @@
+/* ETAP34 ADMIN UX STABILITY: responsive full-width admin + scroll restore */
+
+:root {
+  --admin-readable-max: 1580px;
+  --admin-readable-gutter: clamp(14px, 3vw, 42px);
+  --admin-edit-sidebar: clamp(270px, 20vw, 340px);
+}
+
+.admin-header-v24-top,
+.admin-header-v24-nav {
+  width: min(var(--admin-readable-max), calc(100% - (var(--admin-readable-gutter) * 2)));
+}
+
+.admin-shell {
+  width: min(var(--admin-readable-max), calc(100vw - (var(--admin-readable-gutter) * 2)));
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.admin-shell.admin-project-edit-shell,
+.admin-shell.admin-orders-shell,
+.admin-shell.admin-order-detail-shell {
+  width: min(var(--admin-readable-max), calc(100vw - (var(--admin-readable-gutter) * 2)));
+  max-width: none;
+}
+
+.admin-project-edit-shell .admin-page-head {
+  align-items: center;
+  padding-top: clamp(18px, 2.2vw, 30px);
+}
+
+.admin-project-edit-shell .admin-page-head h1 {
+  font-size: clamp(42px, 4.6vw, 64px);
+}
+
+.admin-project-edit-shell .admin-page-head p {
+  max-width: 980px;
+}
+
+.admin-project-edit-shell .admin-form-layout {
+  grid-template-columns: minmax(0, 1fr) var(--admin-edit-sidebar);
+  gap: clamp(18px, 2vw, 30px);
+}
+
+.admin-project-edit-shell .admin-form-section,
+.admin-project-edit-shell .admin-media-current-panel,
+.admin-project-edit-shell .admin-danger-zone {
+  scroll-margin-top: 138px;
+}
+
+.admin-project-edit-shell .form-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-project-edit-shell .media-upload-grid {
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+}
+
+.admin-project-edit-shell .admin-media-preview-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.admin-project-edit-shell .admin-media-preview-card,
+.admin-project-edit-shell .admin-private-file-list li {
+  min-width: 0;
+}
+
+.admin-project-edit-shell code,
+.admin-project-edit-shell .admin-media-preview-body code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+html[data-admin-action-pending="true"] .admin-shell {
+  cursor: progress;
+}
+
+html[data-admin-action-pending="true"] .admin-project-edit-shell .admin-form-section {
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+@media (min-width: 1660px) {
+  .admin-shell.admin-project-edit-shell {
+    --admin-readable-max: 1640px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .admin-project-edit-shell .admin-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-project-edit-shell .admin-form-sidebar {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-project-edit-shell .form-grid.four,
+  .admin-project-edit-shell .form-grid.three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --admin-readable-gutter: 12px;
+  }
+
+  .admin-project-edit-shell .form-grid.two,
+  .admin-project-edit-shell .form-grid.three,
+  .admin-project-edit-shell .form-grid.four,
+  .admin-project-edit-shell .media-upload-grid,
+  .admin-project-edit-shell .admin-form-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-project-edit-shell .admin-page-head h1 {
+    font-size: clamp(34px, 12vw, 46px);
+  }
+}

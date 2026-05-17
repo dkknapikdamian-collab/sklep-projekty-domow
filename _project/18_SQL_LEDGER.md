@@ -32,7 +32,18 @@ SQL bez ledgeru nie zamyka etapu.
 - Status etapu: NIEZAMKNIĘTY.
 <!-- SQL_LEDGER_ETAP33_RUNTIME_AUDIT_2026_05_17_END -->
 
+<!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_2026_05_17_START -->
+## 2026-05-17 - Etap 34 test project seed
 
+- SQL_LEDGER_ID: `2026-05-17_etap34_seed_admin_test_project`
+- Plik: `supabase/manual/2026-05-17_etap34_seed_admin_test_project.sql`
+- Typ: TEST_DATA_SEED
+- Bezpieczeństwo: mutuje wyłącznie dane testowe.
+- Status: DO_URUCHOMIENIA PRZEZ DAMIANA.
+- Cel: odtworzyć projekt testowy `DP-TEST-034` z ładnymi zdjęciami do testów admina.
+- Public safety: projekt ma status `draft`, nie `active`.
+- Ryzyko: nie uruchamiać na publicznej produkcji bez decyzji Damiana.
+<!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_2026_05_17_END -->
 
 
 

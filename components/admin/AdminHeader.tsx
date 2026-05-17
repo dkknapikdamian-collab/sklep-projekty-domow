@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Bug, ClipboardList, History, Home, LayoutDashboard, ListChecks, MonitorCog, PlusCircle, ShieldCheck } from "lucide-react";
 import { AdminUiDebugReporter } from "@/components/admin/AdminUiDebugReporter";
+import { AdminScrollStabilizer } from "@/components/admin/AdminScrollStabilizer";
 
 export function AdminHeader() {
   return (
@@ -35,6 +36,7 @@ export function AdminHeader() {
         <Link href="/projekty" className="admin-header-v24-public-preview"><Home size={17} /> Publiczny katalog</Link>
       </nav>
       <AdminUiDebugReporter />
+      <AdminScrollStabilizer />
     </header>
   );
 }
