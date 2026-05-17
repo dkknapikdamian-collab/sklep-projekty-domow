@@ -886,3 +886,33 @@ Błąd `syntax error at or near "Etap"` oznacza, że do Supabase SQL Editor traf
 - Jeśli szerokość OK, dopisać ręczne potwierdzenie.
 <!-- ETAP34_V5_ADMIN_WIDTH_CONFIRMATIONS_2026_05_17_END -->
 
+<!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_START -->
+## Etap 34 V6 - szerokość panelu admina potwierdzona
+
+Status: TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Potwierdzenie Damiana
+
+Damian potwierdził po V5: `poprawione działa :)`.
+
+### Zakres potwierdzenia
+
+- Szerokość panelu admina po hard lock V5: POTWIERDZONE.
+- Projekt testowy `DP-TEST-034`: istnieje jako `draft`, potwierdzony wcześniej.
+- Scroll i reszta Etapu 34: wstępnie OK według Damiana.
+
+### Status
+
+Etap 34 można traktować jako potwierdzony w zakresie zgłoszonej poprawki szerokości panelu.
+
+### Nadal otwarte
+
+Etap 33 runtime audit:
+- media,
+- pliki prywatne,
+- zamówienia,
+- checklisty,
+- wymagane 8 PASS / 0 FAIL.
+<!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
+
