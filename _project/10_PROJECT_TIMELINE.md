@@ -15,6 +15,7 @@ NASTĘPNY KROK:
 - Wykonać manualny test Etapu 34 albo zebrać regresje do Etapu 34B.
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
 
+
 ## Przed aplikacja
 
 Powstaly lub byly rozwazane materialy wizualne i makiety. Obowiazujacy status: moga sluzyc jako inspiracja/design lock, ale nie sa realnymi ofertami projektow.

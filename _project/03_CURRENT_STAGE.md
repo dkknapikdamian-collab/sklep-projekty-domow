@@ -68,6 +68,7 @@ Etap porządkuje V1 jako sklep niepubliczny przed płatnościami online. Następ
 Wykonać ręczny runtime test Etapu 34 i zapisać wynik jako potwierdzenie Damiana albo listę regresji.
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
 
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## Etap 32 - uporządkowanie pamięci projektu i statusu V1
 

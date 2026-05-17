@@ -14,6 +14,7 @@ Data: 2026-05-17 Europe/Warsaw.
 4. Dopiero po tym wracać do decyzji o płatnościach online i publicznym checkout.
 <!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
 
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## Etap 32 - następny realny kierunek po uporządkowaniu pamięci
 
