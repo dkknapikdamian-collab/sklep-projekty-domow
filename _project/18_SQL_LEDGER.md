@@ -58,3 +58,15 @@ SQL bez ledgeru nie zamyka etapu.
 - Ryzyko: nie uruchamiać na publicznej produkcji bez decyzji Damiana.
 <!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_JSONB_FIX_2026_05_17_END -->
 
+<!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_CONFIRMED_2026_05_17_START -->
+## 2026-05-17 - Etap 34 test project seed confirmed
+
+- SQL_LEDGER_ID: `2026-05-17_etap34_seed_admin_test_project`
+- Plik: `supabase/manual/2026-05-17_etap34_seed_admin_test_project.sql`
+- Typ: TEST_DATA_SEED
+- Status: URUCHOMIONE / POTWIERDZONE PRZEZ DAMIANA.
+- Wynik: `DP-TEST-034`, `Dom Aurora Test`, `draft`.
+- Uwaga: późniejszy błąd `syntax error at or near "Etap"` był spowodowany wklejeniem tekstu nie-SQL do Supabase SQL Editor.
+- Public safety: projekt ma status `draft`, nie `active`.
+<!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_CONFIRMED_2026_05_17_END -->
+

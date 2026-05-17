@@ -219,3 +219,34 @@ Etap 33 nadal nie jest zamknięty. Brakujące testy audit runtime pozostają do 
 - checklisty.
 <!-- ETAP34_V4_SEED_JSONB_FIX_2026_05_17_END -->
 
+<!-- ETAP34_V5_ADMIN_WIDTH_CONFIRMATIONS_2026_05_17_START -->
+## Etap 34 V5 - potwierdzenia testów i hard lock szerokości admina
+
+Status: HOTFIX SZEROKOŚCI / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA - CZĘŚCIOWO
+
+- SQL seed projektu testowego potwierdzony:
+  - `DP-TEST-034`
+  - `Dom Aurora Test`
+  - `status: draft`
+- Damian napisał: `reszta jest ok`.
+
+### FAIL / DO PONOWNEGO TESTU
+
+- Szerokość panelu admina nadal jest za wąska: `dalej wąski tunel`.
+- V5 dodaje mocniejszy CSS hard lock dla edycji projektu.
+
+### WYJAŚNIENIE SQL EDITOR
+
+Błąd `syntax error at or near "Etap"` oznacza, że do Supabase SQL Editor trafił tekst zaczynający się od `Etap 34:`, a nie SQL. To nie jest błąd seed SQL ani schematu.
+
+### TESTY DO WYKONANIA PO V5
+
+- Otworzyć `DP-TEST-034 -> Edytuj`.
+- Sprawdzić szerokość panelu na dużym ekranie.
+- Sprawdzić scroll po akcji w dole formularza.
+- Jeśli szerokość OK, dopisać ręczne potwierdzenie.
+<!-- ETAP34_V5_ADMIN_WIDTH_CONFIRMATIONS_2026_05_17_END -->
+

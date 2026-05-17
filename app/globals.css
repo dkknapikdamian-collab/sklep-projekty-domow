@@ -1584,3 +1584,76 @@ button, input, select, textarea { font: inherit; }
     max-width: 360px;
   }
 }
+
+<!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START -->
+/* ETAP34 V5: hard lock for admin edit width. This block is intentionally at the end of globals.css. */
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] {
+  width: min(1720px, calc(100vw - (clamp(16px, 2.2vw, 44px) * 2))) !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-page-head,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-form-success,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-form-error,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-publication-readiness-box,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-form-layout,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-danger-zone {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-form-layout {
+  display: grid !important;
+  grid-template-columns: minmax(760px, 1fr) clamp(290px, 18vw, 360px) !important;
+  gap: clamp(22px, 2.2vw, 38px) !important;
+}
+
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .admin-project-form,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .admin-form-section,
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .admin-media-current-panel {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .media-upload-grid {
+  grid-template-columns: repeat(4, minmax(190px, 1fr)) !important;
+}
+
+@media (max-width: 1180px) {
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] > .admin-form-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.three,
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.four,
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .media-upload-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] {
+    width: min(100%, calc(100vw - 24px)) !important;
+  }
+
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.two,
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.three,
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .form-grid.four,
+  body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] .media-upload-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+<!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_END -->
+
