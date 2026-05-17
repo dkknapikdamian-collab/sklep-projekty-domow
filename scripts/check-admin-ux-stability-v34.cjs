@@ -55,7 +55,7 @@ requireFile("app/admin/projekty/[id]/edytuj/page.tsx", [
   "data-admin-project-edit-shell-v34"
 ]);
 
-requireFile("supabase/manual/2026-05-17_etap34_seed_admin_test_project.sql", [
+const seed = requireFile("supabase/manual/2026-05-17_etap34_seed_admin_test_project.sql", [
   "DP-TEST-034",
   "admin-test-house-aurora-v34",
   "status",
@@ -65,8 +65,18 @@ requireFile("supabase/manual/2026-05-17_etap34_seed_admin_test_project.sql", [
   "project_files",
   "TEST_DATA_SEED",
   "DO_URUCHOMIENIA",
-  "NIE URUCHAMIAC"
+  "NIE URUCHAMIAC",
+  "::jsonb",
+  "V4 fix"
 ]);
+
+if (/features\s*=\s*array\[/i.test(seed) || /array\[[^\]]*audit runtime/i.test(seed)) {
+  fail("seed SQL still uses text[] array syntax for projects.features.");
+}
+
+if (/related_slugs\s*,[\s\S]*array\[\]::text\[\]/i.test(seed) || /related_slugs\s*=\s*array\[\]::text\[\]/i.test(seed)) {
+  fail("seed SQL still uses text[] array syntax for projects.related_slugs.");
+}
 
 requireFile("_project/19_ETAP34_ADMIN_UX_MANUAL_TESTS.md", [
   "TEST RĘCZNY DO WYKONANIA",
@@ -79,9 +89,11 @@ requireFile("_project/19_ETAP34_ADMIN_UX_MANUAL_TESTS.md", [
   "projekt testowy"
 ]);
 
-requireFile("_project/runs/2026-05-17_1230_etap34_admin_ux_scroll_width_seed.md", [
-  "Etap 34",
-  "FAKTY Z KODU",
+requireFile("_project/runs/2026-05-17_1335_etap34_v4_seed_jsonb_fix.md", [
+  "Etap 34 V4",
+  "jsonb",
+  "features",
+  "related_slugs",
   "TESTY RĘCZNE",
   "Obsidian",
   "DO POTWIERDZENIA"
@@ -95,4 +107,4 @@ if (!String(pkg.scripts.verify || "").includes("verify:admin-ux-stability-v34"))
   fail("main verify does not include verify:admin-ux-stability-v34.");
 }
 
-console.log("OK: Etap 34 V3 admin UX stability + test project seed guard passed.");
+console.log("OK: Etap 34 V4 admin UX stability + JSONB seed guard passed.");

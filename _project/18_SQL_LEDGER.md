@@ -45,5 +45,16 @@ SQL bez ledgeru nie zamyka etapu.
 - Ryzyko: nie uruchamiać na publicznej produkcji bez decyzji Damiana.
 <!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_2026_05_17_END -->
 
+<!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_JSONB_FIX_2026_05_17_START -->
+## 2026-05-17 - Etap 34 V4 test project seed JSONB fix
 
+- SQL_LEDGER_ID: `2026-05-17_etap34_seed_admin_test_project`
+- Plik: `supabase/manual/2026-05-17_etap34_seed_admin_test_project.sql`
+- Typ: TEST_DATA_SEED
+- Status: DO_URUCHOMIENIA PRZEZ DAMIANA.
+- Poprawka V4: `features` i `related_slugs` zapisane jako JSONB, nie `text[]`.
+- Cel: odtworzyć projekt testowy `DP-TEST-034` z ładnymi zdjęciami do testów admina.
+- Public safety: projekt ma status `draft`, nie `active`.
+- Ryzyko: nie uruchamiać na publicznej produkcji bez decyzji Damiana.
+<!-- SQL_LEDGER_ETAP34_TEST_PROJECT_SEED_JSONB_FIX_2026_05_17_END -->
 

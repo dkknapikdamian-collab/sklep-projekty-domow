@@ -7,6 +7,7 @@
 -- Safe: MUTATES TEST DATA ONLY. NIE URUCHAMIAC na produkcji publicznej bez decyzji Damiana.
 -- Status po paczce: DO_URUCHOMIENIA przez Damiana.
 -- Public safety: projekt ma status draft, nie active.
+-- V4 fix: kolumny projects.features i projects.related_slugs są jsonb, więc seed używa JSONB, nie text[].
 
 do $$
 declare
@@ -72,8 +73,8 @@ begin
       'dwuspadowy',
       'bez garażu',
       'murowana',
-      array['projekt testowy','duże przeszklenia','nowoczesna stodoła','audit runtime']::text[],
-      array[]::text[],
+      '["projekt testowy","duże przeszklenia","nowoczesna stodoła","audit runtime"]'::jsonb,
+      '[]'::jsonb,
       'TEST ADMIN',
       'NIE PUBLIKOWAĆ',
       now(),
@@ -101,7 +102,8 @@ begin
       roof = 'dwuspadowy',
       garage = 'bez garażu',
       technology = 'murowana',
-      features = array['projekt testowy','duże przeszklenia','nowoczesna stodoła','audit runtime']::text[],
+      features = '["projekt testowy","duże przeszklenia","nowoczesna stodoła","audit runtime"]'::jsonb,
+      related_slugs = '[]'::jsonb,
       badge_primary = 'TEST ADMIN',
       badge_secondary = 'NIE PUBLIKOWAĆ',
       updated_at = now()

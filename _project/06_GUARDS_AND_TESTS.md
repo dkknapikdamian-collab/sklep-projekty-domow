@@ -960,5 +960,33 @@ Etap 33 nadal nie jest zamknięty. Brakujące testy audit runtime zostają zapis
 - checklisty.
 <!-- ETAP34_ADMIN_UX_SCROLL_WIDTH_SEED_2026_05_17_END -->
 
+<!-- ETAP34_V4_SEED_JSONB_FIX_2026_05_17_START -->
+## Etap 34 V4 - poprawka SQL seed JSONB
 
+Status: HOTFIX SQL SEED / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### FAKTY
+
+- SQL seed V3 nie przeszedł w Supabase.
+- Błąd: `projects.features` jest `jsonb`, a seed podawał `text[]`.
+- V4 zmienia `features` i `related_slugs` na JSONB.
+- Projekt testowy nadal ma status `draft`, nie `active`.
+
+### TESTY RĘCZNE
+
+- TEST RĘCZNY DO WYKONANIA:
+  - uruchomić SQL seed V4 w Supabase SQL Editor,
+  - potwierdzić `DP-TEST-034` w adminie,
+  - potwierdzić status `draft`,
+  - potwierdzić media i pliki prywatne testowe.
+
+### ETAP 33
+
+Etap 33 nadal nie jest zamknięty. Brakujące testy audit runtime pozostają do wykonania później:
+- media,
+- pliki prywatne,
+- zamówienia,
+- checklisty.
+<!-- ETAP34_V4_SEED_JSONB_FIX_2026_05_17_END -->
 
