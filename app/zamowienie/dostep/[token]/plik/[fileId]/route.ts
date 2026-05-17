@@ -4,11 +4,11 @@ import { createSignedFileRedirectForAccess } from "@/lib/fulfillment/post-paymen
 export const dynamic = "force-dynamic";
 
 type DownloadRouteContext = {
-  params?: Promise<{ token: string; fileId: string }>;
+  params: Promise<{ token: string; fileId: string }>;
 };
 
 export async function GET(_request: Request, context: DownloadRouteContext) {
-  const params = context.params ? await context.params : { token: "", fileId: "" };
+  const params = await context.params;
   const token = String(params.token || "").trim();
   const fileId = String(params.fileId || "").trim();
 

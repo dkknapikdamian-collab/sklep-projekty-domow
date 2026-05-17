@@ -1026,17 +1026,42 @@ Etap 33 runtime audit:
 - Nastepny krok: po przejsciu builda wrocic do Etapu 37, czyli Stripe webhook -> fulfillment.
 <!-- ETAP36B_BUILD_HOTFIX_2026_05_17_END -->
 
-<!-- ETAP36B_BUILD_RETEST_CONFIRMED_2026_05_17_START -->
-## 2026-05-17 - Etap 36B build retest potwierdzony
+<!-- ETAP36B_BUILD_RETEST_FALSE_PASS_CORRECTION_2026_05_17_START -->
+## 2026-05-17 - Korekta błędnego wpisu build retest
 
-- Status: BUILD POTWIERDZONY PO HOTFIXIE.
-- Data: 2026-05-17 12:46.
+- Status poprzedniego wpisu: BŁĘDNY / UNIEWAŻNIONY.
+- Powód: 
+pm run typecheck nie przeszedł, więc wpis BUILD POTWIERDZONY / PASS był nieprawdziwy.
+- Rzeczywisty błąd: route handler pp/zamowienie/dostep/[token]/plik/[fileId]/route.ts miał opcjonalne params?:, niezgodne z typami Next route context.
+- Decyzja: nie traktować wcześniejszego wpisu jako potwierdzenia builda.
+- Obsidian: SKIP W TYM HOTFIXIE, bo vault ma tracked zmiany z innych okien. Nie ruszać bez osobnego porządkowania.
+<!-- ETAP36B_BUILD_RETEST_FALSE_PASS_CORRECTION_2026_05_17_END -->
+
+<!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_START -->
+## 2026-05-17 - Etap 36D CSS start marker build fix
+
+- Status: DO POTWIERDZENIA TESTAMI W TYM SKRYPCIE.
+- Data: 2026-05-17 14:54.
+- Przyczyna: po naprawie końcowego markera CSS został początkowy HTML marker <!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START --> w pp/globals.css.
+- Objaw: 
+ext build padał na Unexpected '!' w wygenerowanym CSS.
+- Naprawa: marker HTML zamieniony na komentarz CSS /* ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START */.
+- Obsidian: SKIP w tym hotfixie, bo vault ma tracked zmiany z innych okien.
+<!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_END -->
+
+<!-- ETAP36D_CSS_START_MARKER_BUILD_PASS_2026_05_17_START -->
+## 2026-05-17 - Etap 36D CSS start marker build PASS
+
+- Status: BUILD POTWIERDZONY.
+- Data: 2026-05-17 14:54.
 - Testy automatyczne:
-  - npm run verify:stage36-post-payment-fulfillment
-  - npm run typecheck
-  - npm run build
-- Wynik: PASS.
-- Zakres: potwierdzenie, że Etap 36 + SQL ledger + poprawka komentarza CSS nie blokują builda.
+  - 
+pm run verify:stage36-post-payment-fulfillment PASS
+  - 
+pm run typecheck PASS
+  - 
+pm run build PASS
 - Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO fulfillmentu po płatności.
-- Następny krok: Etap 37, czyli Stripe webhook -> ensurePostPaymentFulfillmentAccessForOrder().
-<!-- ETAP36B_BUILD_RETEST_CONFIRMED_2026_05_17_END -->
+- Obsidian: SKIP w tym hotfixie z powodu tracked zmian w vaultcie.
+- Następny krok: osobno uporządkować vault / dopisać Obsidian, potem Etap 37 Stripe webhook -> fulfillment.
+<!-- ETAP36D_CSS_START_MARKER_BUILD_PASS_2026_05_17_END -->

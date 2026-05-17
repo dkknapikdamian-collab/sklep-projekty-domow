@@ -51,10 +51,17 @@ const accessPage = requireMarkers("app/zamowienie/dostep/[token]/page.tsx", [
 ]);
 
 const fileRoute = requireMarkers("app/zamowienie/dostep/[token]/plik/[fileId]/route.ts", [
+  "type DownloadRouteContext",
+  "params: Promise<{ token: string; fileId: string }>",
+  "const params = await context.params",
   "createSignedFileRedirectForAccess",
   "NextResponse.redirect",
   "access_denied"
 ]);
+
+if (fileRoute.includes("params?:")) {
+  fail("Etap 36 route handler params must not be optional in Next generated route context.");
+}
 
 const sql = requireMarkers("supabase/manual/2026-05-17_etap36_post_payment_fulfillment.sql", [
   "SQL_LEDGER_ID: 2026-05-17_etap36_post_payment_fulfillment",

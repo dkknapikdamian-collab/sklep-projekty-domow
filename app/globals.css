@@ -1585,7 +1585,7 @@ button, input, select, textarea { font: inherit; }
   }
 }
 
-<!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START -->
+/* ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START */
 /* ETAP34 V5: hard lock for admin edit width. This block is intentionally at the end of globals.css. */
 body .admin-shell.admin-project-edit-shell[data-admin-project-edit-shell-v34="true"] {
   width: min(1720px, calc(100vw - (clamp(16px, 2.2vw, 44px) * 2))) !important;

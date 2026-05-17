@@ -1126,3 +1126,15 @@ DO URUCHOMIENIA LOKALNIE przez APPLY z paczki.
 - Status ostatni: DO URUCHOMIENIA W APPLY.
 - Wymagany przed pushem: TAK.
 <!-- ETAP36_POST_PAYMENT_FULFILLMENT_GUARD_2026_05_17_END -->
+
+<!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_START -->
+## 2026-05-17 - Etap 36D CSS start marker build fix
+
+- Status: DO POTWIERDZENIA TESTAMI W TYM SKRYPCIE.
+- Data: 2026-05-17 14:54.
+- Przyczyna: po naprawie końcowego markera CSS został początkowy HTML marker <!-- ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START --> w pp/globals.css.
+- Objaw: 
+ext build padał na Unexpected '!' w wygenerowanym CSS.
+- Naprawa: marker HTML zamieniony na komentarz CSS /* ETAP34_V5_ADMIN_WIDTH_HARD_LOCK_2026_05_17_START */.
+- Obsidian: SKIP w tym hotfixie, bo vault ma tracked zmiany z innych okien.
+<!-- ETAP36D_CSS_START_MARKER_BUILD_FIX_2026_05_17_END -->
