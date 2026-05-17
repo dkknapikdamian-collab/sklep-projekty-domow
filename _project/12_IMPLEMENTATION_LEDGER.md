@@ -1,5 +1,61 @@
 # 12_IMPLEMENTATION_LEDGER - Sklep projekty domow
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## 2026-05-17 - Etap 34: pełny flow sklepu bez płatności publicznej
+
+### Co wdrożono
+
+- Dodano guard pełnego flow sklepu bez płatności publicznej.
+- Zaktualizowano pamięć projektu i Obsidiana.
+- Spięto w jednym kontrakcie: katalog, karta projektu, koszyk, checkout techniczny, zapis zamówienia, admin orders, walidacja cen i audit.
+
+### Dlaczego
+
+Etap 32 wskazał brak potwierdzonego runtime testu pełnej ścieżki V1. Etap 34 ma zamknąć statyczny kontrakt i dać Damianowi krótką checklistę testu ręcznego.
+
+### Zmienione pliki
+
+- `package.json`
+- `scripts/check-stage34-full-flow-no-public-payment.cjs`
+- `_project/03_CURRENT_STAGE.md`
+- `_project/05_MANUAL_TESTS.md`
+- `_project/06_GUARDS_AND_TESTS.md`
+- `_project/07_NEXT_STEPS.md`
+- `_project/08_CHANGELOG_AI.md`
+- `_project/09_CONTEXT_FOR_OBSIDIAN.md`
+- `_project/10_PROJECT_TIMELINE.md`
+- `_project/12_IMPLEMENTATION_LEDGER.md`
+- `_project/14_TEST_HISTORY.md`
+- `_project/15_ACTIVE_SOURCE_MAP.md`
+- `_project/runs/2026-05-17_etap34_full_flow_no_public_payment.md`
+
+### Czego nie zmieniano
+
+- Nie dodano płatności online.
+- Nie dodano automatycznej wysyłki plików.
+- Nie zmieniono routingu publicznego.
+- Nie zmieniono modeli SQL.
+
+### Testy / guardy
+
+- `npm run verify:stage34-full-flow-no-public-payment` - DO URUCHOMIENIA LOKALNIE.
+- Istniejące guardy pokrewne uruchamia APPLY: V49 runtime markers, V50 price source, V25 price runtime, V44 audit, V42 orders, V38 cart/order, typecheck.
+
+### Test ręczny
+
+BRAK POTWIERDZONEGO TESTU RĘCZNEGO do czasu wykonania przez Damiana.
+
+### Ryzyka
+
+- Guard statyczny nie potwierdza realnego zapisu w Supabase.
+- Realny flow wymaga kompletnego aktywnego projektu w bazie.
+- Zmiana ceny w bazie po dodaniu do koszyka musi być sprawdzona jako negatywny test runtime.
+
+### Następny krok
+
+Wykonać test ręczny Etapu 34 i wpisać wynik do `_project/11_USER_CONFIRMED_TESTS.md` oraz Obsidiana.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
 <!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_START -->
 ## 2026-05-17 - Etap 32 V5: cleanup duplikatów pamięci projektu
 
@@ -1164,4 +1220,3 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
-

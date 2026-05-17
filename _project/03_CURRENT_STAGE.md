@@ -1,5 +1,73 @@
 # 03_CURRENT_STAGE - aktualny etap
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## Etap 34 - pełny flow sklepu bez płatności publicznej
+
+Status: WDROŻONE W PACZCE / TEST RĘCZNY DO WYKONANIA.
+Priorytet: 5.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Główna teza
+
+Domykamy kontrolny, niepubliczny flow V1:
+admin dodaje kompletny realny projekt -> projekt active pojawia się w katalogu -> karta projektu działa -> koszyk działa -> zamówienie techniczne powstaje -> admin widzi zamówienie -> walidacja cen działa -> audit działa.
+
+To nadal NIE oznacza publikacji klientom.
+
+### FAKTY Z KODU / PLIKÓW
+
+- Publiczny katalog czyta projekty przez `getPublicProjects()`.
+- `lib/project-repository.ts` filtruje projekty po `status = active` i blokuje demo/sample w publicznym katalogu.
+- Karta projektu używa `ProjectPurchaseBox` i zapisuje pozycję do lokalnego koszyka.
+- Koszyk prowadzi do `/zamowienie`.
+- Checkout jest oznaczony jako niepubliczny i bez płatności publicznej.
+- `createOrder()` zapisuje `orders`, `order_items` i `order_item_addons`.
+- `validateCartAgainstDb()` sprawdza status active oraz zgodność cen projektu, wariantu i dodatków z bazą przed zapisem zamówienia.
+- Admin widzi zamówienia na `/admin/zamowienia` i szczegóły na `/admin/zamowienia/[id]`.
+- Audit admina obejmuje dodawanie/edycję/status projektu oraz status/checklistę zamówienia.
+
+### DECYZJE DAMIANA
+
+- Flow ma być sprawdzony bez publicznych płatności.
+- To nie jest zgoda na publikację klientom.
+- Paczka ma zawierać repo, _project i Obsidiana.
+
+### TESTY AUTOMATYCZNE / GUARDY
+
+- Dodano guard: `npm run verify:stage34-full-flow-no-public-payment`.
+- Guard sprawdza statycznie pełny kontrakt flow: katalog, karta, koszyk, checkout techniczny, zapis zamówienia, admin orders, walidacja cen, audit admina i brak publicznego CTA płatności w checkout.
+
+### TEST RĘCZNY
+
+Status: TEST RĘCZNY DO WYKONANIA.
+
+Minimalny test Damiana:
+1. W adminie dodaj realny, kompletny projekt z kodem, ceną, statusem active, mediami, wariantem i dodatkiem.
+2. Wejdź w `/projekty` i potwierdź, że projekt active pojawia się w katalogu.
+3. Otwórz kartę projektu i dodaj projekt do koszyka.
+4. Wejdź w koszyk, sprawdź sumę i przejdź do `/zamowienie`.
+5. Wyślij zamówienie techniczne.
+6. Wejdź w `/admin/zamowienia` i potwierdź, że zamówienie jest widoczne.
+7. Otwórz szczegóły zamówienia, zmień status lub checklistę realizacji.
+8. Wejdź w `/admin/audit` i potwierdź wpisy audit dla projektu oraz zamówienia.
+9. Negatywny test ceny: zmień cenę projektu/dodatku po dodaniu do koszyka i potwierdź, że checkout blokuje zapis komunikatem o zmianie ceny.
+
+### BRAKI I RYZYKA
+
+- Guard statyczny nie zastępuje runtime testu w przeglądarce.
+- Bez realnego projektu w Supabase etap nie potwierdza end-to-end runtime.
+- Brak płatności publicznych jest celowy.
+- Brak automatycznej wysyłki plików jest celowy.
+
+### WPŁYW NA KIERUNEK ROZWOJU
+
+Etap porządkuje V1 jako sklep niepubliczny przed płatnościami online. Następny poważny blok to decyzja i wdrożenie docelowego payment provider/webhook/statusy/realizacja plików.
+
+### NASTĘPNY KROK
+
+Wykonać ręczny runtime test Etapu 34 i zapisać wynik jako potwierdzenie Damiana albo listę regresji.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## Etap 32 - uporządkowanie pamięci projektu i statusu V1
 
@@ -1102,4 +1170,3 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
-

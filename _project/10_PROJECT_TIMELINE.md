@@ -1,5 +1,20 @@
 # 10_PROJECT_TIMELINE - Os czasu projektu
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## 2026-05-17 - Etap 34: pełny flow sklepu bez płatności publicznej
+
+FAKT:
+- Przygotowano etap kontrolny dla pełnej ścieżki V1 bez płatności publicznych.
+- Dodano statyczny guard kontraktu flow.
+- Test runtime pozostaje do wykonania przez Damiana na realnym projekcie.
+
+DECYZJA:
+- Nie publikować klientom po tym etapie bez potwierdzonego runtime testu i decyzji o płatnościach.
+
+NASTĘPNY KROK:
+- Wykonać manualny test Etapu 34 albo zebrać regresje do Etapu 34B.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
 ## Przed aplikacja
 
 Powstaly lub byly rozwazane materialy wizualne i makiety. Obowiazujacy status: moga sluzyc jako inspiracja/design lock, ale nie sa realnymi ofertami projektow.
@@ -749,4 +764,3 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
-

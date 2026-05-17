@@ -1051,3 +1051,35 @@ Etap 33 runtime audit:
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## Etap 34 - guard pełnego flow bez płatności publicznej
+
+Status: TEST AUTOMATYCZNY / GUARD.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Guard
+
+- Nazwa: `verify:stage34-full-flow-no-public-payment`
+- Komenda: `npm run verify:stage34-full-flow-no-public-payment`
+- Plik: `scripts/check-stage34-full-flow-no-public-payment.cjs`
+
+### Co sprawdza
+
+- Katalog publiczny czyta tylko aktywne projekty i blokuje demo/sample.
+- Karta projektu używa aktywnego purchase boxa.
+- Koszyk zapisuje/edytuje pozycje i prowadzi do zamówienia.
+- Checkout jest techniczny, niepubliczny i bez płatności.
+- Zamówienie zapisuje rekordy `orders`, `order_items`, `order_item_addons`.
+- Walidacja cen porównuje projekt, wariant i dodatki z bazą.
+- Admin widzi listę i szczegóły zamówień.
+- Audit admina obejmuje projekt i zamówienie.
+- Checkout nie pokazuje publicznego CTA płatności.
+
+### Kiedy uruchamiać
+
+Przed pushem i po każdej zmianie w katalogu, karcie projektu, koszyku, checkout, zamówieniach, walidacji cen albo audycie.
+
+### Ostatni wynik
+
+DO URUCHOMIENIA LOKALNIE przez APPLY z paczki.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->

@@ -1,5 +1,29 @@
 # 14_TEST_HISTORY - Sklep projekty domow
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## 2026-05-17 - Etap 34: testy pełnego flow bez płatności publicznej
+
+### TEST AUTOMATYCZNY / GUARD
+
+- `npm run verify:stage34-full-flow-no-public-payment`
+- Status: DO URUCHOMIENIA LOKALNIE przez APPLY z paczki.
+- Zakres: statyczny kontrakt katalog -> karta -> koszyk -> checkout techniczny -> zamówienie -> admin orders -> walidacja cen -> audit.
+
+### TEST RĘCZNY DO WYKONANIA
+
+- Realny projekt active w katalogu.
+- Karta działa.
+- Koszyk działa.
+- Zamówienie techniczne powstaje.
+- Admin widzi zamówienie.
+- Walidacja cen blokuje nieaktualny koszyk.
+- Audit pokazuje wpisy po operacjach admina.
+
+### BRAK POTWIERDZONEGO TESTU RĘCZNEGO
+
+Nie ma jeszcze potwierdzenia Damiana dla runtime Etapu 34.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
 <!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_START -->
 ## 2026-05-17 - Etap 32 V5: cleanup duplikatów pamięci projektu
 
@@ -1133,4 +1157,3 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
-

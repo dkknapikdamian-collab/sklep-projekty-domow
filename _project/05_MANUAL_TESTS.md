@@ -648,3 +648,31 @@ albo Supabase SQL Editor z plikiem:
 Wynik wymagany: wszystkie grupy `PASS`.
 <!-- ETAP33_ADMIN_AUDIT_RUNTIME_V2_MANUAL_2026_05_17_END -->
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## Etap 34 - ręczny test pełnego flow bez płatności publicznej
+
+Status: TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+### Scenariusz
+
+Admin dodaje kompletny realny projekt -> projekt active pojawia się w katalogu -> karta projektu działa -> koszyk działa -> zamówienie techniczne powstaje -> admin widzi zamówienie -> walidacja cen działa -> audit działa.
+
+### Checklista
+
+- [ ] Admin dodaje realny projekt z kodem, nazwą, slugiem, ceną, parametrami, mediami publicznymi i statusem active.
+- [ ] Projekt active pojawia się w `/projekty`.
+- [ ] Karta `/projekty/[slug]` pokazuje kod, cenę, media, warianty i dodatki.
+- [ ] Kliknięcie CTA dodaje projekt do koszyka i przechodzi do `/koszyk`.
+- [ ] Koszyk pokazuje projekt, wariant, dodatki i sumę.
+- [ ] `/zamowienie` zapisuje zamówienie techniczne bez płatności publicznej.
+- [ ] `/admin/zamowienia` pokazuje nowe zamówienie.
+- [ ] `/admin/zamowienia/[id]` pokazuje klienta, pozycje, dodatki, pliki prywatne i checklistę.
+- [ ] Zmiana statusu/checklisty zamówienia tworzy wpis audit.
+- [ ] Dodanie/edycja/status projektu tworzy wpis audit.
+- [ ] Negatywny test ceny blokuje zapis zamówienia po zmianie ceny w bazie względem koszyka.
+
+### Status potwierdzenia
+
+BRAK POTWIERDZONEGO TESTU RĘCZNEGO do czasu wykonania przez Damiana.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->

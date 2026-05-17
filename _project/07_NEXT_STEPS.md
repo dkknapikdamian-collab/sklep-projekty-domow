@@ -1,5 +1,19 @@
 # 07_NEXT_STEPS - nastepne kroki
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## Etap 34 - następny krok po wdrożeniu paczki
+
+Status: DO WYKONANIA.
+Data: 2026-05-17 Europe/Warsaw.
+
+1. Uruchomić paczkę Etapu 34.
+2. Wykonać pełny test ręczny na realnym projekcie w Supabase.
+3. Zapisać wynik:
+   - TEST RĘCZNY POTWIERDZONY PRZEZ DAMIANA, albo
+   - lista regresji do Etapu 34B.
+4. Dopiero po tym wracać do decyzji o płatnościach online i publicznym checkout.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
 ## Etap 32 - następny realny kierunek po uporządkowaniu pamięci
 
@@ -915,4 +929,3 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
-

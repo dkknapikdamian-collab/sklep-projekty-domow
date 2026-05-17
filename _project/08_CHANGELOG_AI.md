@@ -1,5 +1,16 @@
 # 08_CHANGELOG_AI - Changelog AI
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## 2026-05-17 - Etap 34: pełny flow sklepu bez płatności publicznej
+
+- Dodano guard `verify:stage34-full-flow-no-public-payment`.
+- Guard spina statycznie pełny flow: realny aktywny projekt, katalog, karta, koszyk, checkout techniczny, zamówienie, admin orders, walidacja cen i audit.
+- Zaktualizowano project memory dla testów ręcznych, guardów, timeline, ledger, active source map i kontekst Obsidiana.
+- Dodano raport run Etapu 34.
+- Nie dodano płatności publicznych.
+- Nie dodano automatycznej wysyłki plików.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
+
 <!-- ETAP32_DEDUPE_CLEANUP_V5_2026_05_17_START -->
 ## 2026-05-17 - Etap 32 V5: cleanup duplikatów pamięci projektu
 
@@ -902,4 +913,3 @@ Etap 33 runtime audit:
 - checklisty,
 - wymagane 8 PASS / 0 FAIL.
 <!-- ETAP34_V6_ADMIN_WIDTH_CONFIRMED_2026_05_17_END -->
-

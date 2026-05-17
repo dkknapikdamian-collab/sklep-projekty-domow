@@ -147,5 +147,49 @@ Etap 33 nadal nie jest zamknięty. Brakujące testy audit runtime zostają zapis
 - checklisty.
 <!-- ETAP34_ADMIN_UX_SCROLL_WIDTH_SEED_2026_05_17_END -->
 
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## Etap 34 - aktywna mapa flow sklepu bez płatności publicznej
 
+Status: aktywna mapa techniczna dla testu V1.
+Data: 2026-05-17 Europe/Warsaw.
 
+### Publiczny katalog i karta
+
+- `app/projekty/page.tsx`
+- `app/projekty/[slug]/page.tsx`
+- `lib/project-repository.ts`
+- `components/project/ProjectCard.tsx`
+- `components/project/ProjectDetailPage.tsx`
+- `components/project/ProjectPurchaseBox.tsx`
+
+### Koszyk i checkout techniczny
+
+- `app/koszyk/page.tsx`
+- `components/cart/CartClient.tsx`
+- `lib/cart/storage.ts`
+- `lib/cart/types.ts`
+- `app/zamowienie/page.tsx`
+- `components/order/CheckoutForm.tsx`
+- `app/zamowienie/actions.ts`
+
+### Zamówienie, ceny i admin
+
+- `lib/order/create-order.ts`
+- `lib/order/validate-cart-against-db.ts`
+- `app/admin/zamowienia/page.tsx`
+- `app/admin/zamowienia/[id]/page.tsx`
+- `app/admin/zamowienia/actions.ts`
+- `lib/admin/orders-admin.ts`
+
+### Audit
+
+- `lib/admin/audit-log.ts`
+- `app/admin/audit/page.tsx`
+- `app/admin/projekty/nowy/actions.ts`
+- `app/admin/projekty/actions.ts`
+- `app/admin/zamowienia/actions.ts`
+
+### Guard Etapu 34
+
+- `scripts/check-stage34-full-flow-no-public-payment.cjs`
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->

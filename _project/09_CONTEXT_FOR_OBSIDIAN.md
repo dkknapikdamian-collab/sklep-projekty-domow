@@ -186,3 +186,17 @@ GUARDY:
 TEST RECZNY:
 - TEST RECZNY DO WYKONANIA: kliknac Podglad publiczny dla projektu draft/hidden/archived i potwierdzic, ze nie ma 404.
 <!-- ETAP25_ADMIN_PUBLIC_PREVIEW_404_FIX -->
+
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_START -->
+## Etap 34 - kontekst dla Obsidiana
+
+Status: aktualizacja do dashboardu projektu.
+Data: 2026-05-17 Europe/Warsaw.
+
+Do Obsidiana dopisano:
+- Etap 34 jako kontrolny pełny flow sklepu bez płatności publicznej.
+- Status: wdrożone w paczce, test ręczny do wykonania.
+- Guard: `verify:stage34-full-flow-no-public-payment`.
+- Ryzyko: brak potwierdzonego runtime testu na realnym projekcie.
+- Decyzja: etap nie oznacza publikacji klientom.
+<!-- ETAP34_FULL_FLOW_NO_PUBLIC_PAYMENT_2026_05_17_END -->
