@@ -81,7 +81,8 @@
     "verify:stage35-payment-architecture": "node scripts/check-stage35-payment-architecture.cjs",
     "verify:stage35-stripe-provider-decision": "node scripts/check-stage35-stripe-provider-decision.cjs",
     "verify:stage36-post-payment-fulfillment": "node scripts/check-stage36-post-payment-fulfillment.cjs",
-    "verify:project-files-model-v26a": "node scripts/check-project-files-model-v26a.cjs"
+    "verify:project-files-model-v26a": "node scripts/check-project-files-model-v26a.cjs",
+    "verify:project-private-files-ux-v26b": "node scripts/check-project-private-files-ux-v26b.cjs"
   },
   "dependencies": {
     "next": "^15.0.0",

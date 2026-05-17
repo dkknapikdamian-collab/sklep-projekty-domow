@@ -1,11 +1,17 @@
 "use client";
 
-import { deleteProjectMediaItemBoundAction, deleteProjectPrivateFileItemBoundAction, setProjectMediaTypeBoundAction } from "@/app/admin/projekty/actions";
+import {
+  deleteProjectMediaItemBoundAction,
+  deleteProjectPrivateFileItemBoundAction,
+  setProjectMediaTypeBoundAction,
+  setProjectPrivateFileActiveBoundAction
+} from "@/app/admin/projekty/actions";
 import { AdminFileUploadBox } from "./AdminFileUploadBox";
 import type { AdminProjectFileItem, AdminProjectMediaItem } from "@/lib/admin/projects-admin";
 
 const PRIVATE_FILE_LABELS: Record<string, string> = {
   documentation: "Dokumentacja PDF",
+  floor_plans: "Rzuty pomieszczeń PDF",
   full_package: "Pełna paczka ZIP",
   pdf_email_package: "PDF na e-mail"
 };
@@ -145,6 +151,15 @@ export function AdminProjectMediaManager({
                 <code>{item.path}</code>
                 <button
                   type="submit"
+                  formAction={setProjectPrivateFileActiveBoundAction.bind(null, projectId, item.id, !item.active)}
+                  formNoValidate
+                  className="admin-secondary-button"
+                  data-admin-set-private-file-active="true"
+                >
+                  {item.active ? "Dezaktywuj plik" : "Aktywuj plik"}
+                </button>
+                <button
+                  type="submit"
                   formAction={deleteProjectPrivateFileItemBoundAction.bind(null, projectId, item.id, item.path, item.bucket || "project-private-files")}
                   formNoValidate
                   className="admin-secondary-button"
@@ -160,6 +175,7 @@ export function AdminProjectMediaManager({
 
       <div className="media-upload-grid private">
         <AdminFileUploadBox name="documentationFile" title="Dokumentacja PDF" hint="documentation-v1.pdf" accept=".pdf" />
+        <AdminFileUploadBox name="floorPlansPrivateFile" title="Rzuty pomieszczeń PDF" hint="floor-plans-v1.pdf" accept=".pdf" />
         <AdminFileUploadBox name="fullPackageFile" title="Pełna paczka ZIP" hint="full-package-v1.zip" accept=".zip" />
         <AdminFileUploadBox name="pdfEmailPackageFile" title="PDF na e-mail" hint="pdf-email-package-v1.pdf" accept=".pdf" />
       </div>

@@ -242,6 +242,7 @@ async function uploadPrivateFiles(params: {
 
   const files: Array<{ formKey: string; fileName: string; fileType: string; title: string }> = [
     { formKey: "documentationFile", fileName: "documentation-v1.pdf", fileType: "documentation", title: "Dokumentacja PDF" },
+    { formKey: "floorPlansPrivateFile", fileName: "floor-plans-v1.pdf", fileType: "floor_plans", title: "Rzuty pomieszczeń PDF" },
     { formKey: "fullPackageFile", fileName: "full-package-v1.zip", fileType: "full_package", title: "Pelna paczka ZIP" },
     { formKey: "pdfEmailPackageFile", fileName: "pdf-email-package-v1.pdf", fileType: "pdf_email_package", title: "Pakiet PDF na e-mail" }
   ];
@@ -273,8 +274,10 @@ async function uploadPrivateFiles(params: {
       sort_order: fileDefaults.sortOrder,
       metadata: {
         stage: "ETAP26A_PROJECT_FILES_MODEL",
+        stage26b: "ETAP26B_PRIVATE_FILES_UX",
         storage: "supabase",
-        bucket: PROJECT_FILE_STORAGE_BUCKET
+        bucket: PROJECT_FILE_STORAGE_BUCKET,
+        formKey: item.formKey
       }
     });
   }
@@ -757,6 +760,83 @@ export async function deleteProjectMediaItemBoundAction(
   formData.set("path", path);
   formData.set("bucket", bucket);
   return deleteProjectMediaItemAction(formData);
+}
+
+export async function setProjectPrivateFileActiveAction(formData: FormData) {
+  const projectId = str(formData, "projectId");
+  const fileId = str(formData, "fileId");
+  const nextActive = str(formData, "nextActive") === "true";
+
+  if (!projectId || !fileId) throw new Error("Brak danych pliku prywatnego do zmiany aktywności.");
+
+  const { admin, supabase } = await requireAdminAndClient();
+
+  const [{ data: privateFileBeforeStatusChange, error: privateFileBeforeStatusChangeError }, { data: privateFileProjectForAudit }] =
+    await Promise.all([
+      supabase
+        .from("project_files")
+        .select("id, project_id, file_type, bucket, path, title, version, active")
+        .eq("id", fileId)
+        .eq("project_id", projectId)
+        .maybeSingle(),
+      supabase.from("projects").select("id, code, slug, name").eq("id", projectId).maybeSingle()
+    ]);
+
+  if (privateFileBeforeStatusChangeError) {
+    throw new Error(`Nie udalo sie pobrac pliku prywatnego przed zmiana statusu: ${privateFileBeforeStatusChangeError.message}`);
+  }
+
+  if (!privateFileBeforeStatusChange?.id) {
+    throw new Error("Nie znaleziono pliku prywatnego do zmiany aktywności.");
+  }
+
+  const { error } = await supabase
+    .from("project_files")
+    .update({ active: nextActive, updated_at: new Date().toISOString() })
+    .eq("id", fileId)
+    .eq("project_id", projectId);
+
+  if (error) throw new Error(`Nie udalo sie zmienic aktywności pliku prywatnego: ${error.message}`);
+
+  await tryWriteAdminAuditLog({
+    supabase,
+    admin,
+    entityType: "project_private_file",
+    entityId: fileId,
+    action: "project_private_file_status_update",
+    metadata: {
+      source: "setProjectPrivateFileActiveAction",
+      projectId,
+      projectCode: privateFileProjectForAudit?.code || null,
+      projectSlug: privateFileProjectForAudit?.slug || null,
+      projectName: privateFileProjectForAudit?.name || null,
+      fileType: privateFileBeforeStatusChange.file_type || null,
+      fileTitle: privateFileBeforeStatusChange.title || null,
+      fileVersion: privateFileBeforeStatusChange.version || null,
+      bucket: privateFileBeforeStatusChange.bucket || null,
+      path: privateFileBeforeStatusChange.path || null,
+      previousActive: privateFileBeforeStatusChange.active !== false,
+      nextActive,
+      previousStatus: privateFileBeforeStatusChange.active === false ? "inactive" : "active",
+      newStatus: nextActive ? "active" : "inactive"
+    }
+  });
+
+  revalidatePath("/admin/projekty");
+  revalidatePath(`/admin/projekty/${projectId}/edytuj`);
+  redirect(`/admin/projekty/${projectId}/edytuj?saved=1&private_file_active=${nextActive ? "1" : "0"}`);
+}
+
+export async function setProjectPrivateFileActiveBoundAction(
+  projectId: string,
+  fileId: string,
+  nextActive: boolean
+) {
+  const formData = new FormData();
+  formData.set("projectId", projectId);
+  formData.set("fileId", fileId);
+  formData.set("nextActive", nextActive ? "true" : "false");
+  return setProjectPrivateFileActiveAction(formData);
 }
 
 export async function deleteProjectPrivateFileItemBoundAction(

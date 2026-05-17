@@ -1215,3 +1215,142 @@ TEST RĘCZNY:
 - BRAK POTWIERDZONEGO TESTU RUNTIME.
 <!-- ETAP26A_V5_GUARD_PATH_REPAIR_2026_05_17_END -->
 
+<!-- ETAP26B_PRIVATE_FILES_UX_2026_05_17_START -->
+## Etap 26B - prywatne pliki projektu admin UX
+
+Status: DO REVIEW PO APPLY / TEST RĘCZNY DO WYKONANIA.
+
+Zakres:
+- prywatny upload `floorPlansPrivateFile`,
+- `project_files.file_type = floor_plans`,
+- aktywuj/dezaktywuj plik prywatny bez kasowania storage,
+- audit log `project_private_file_status_update`,
+- guard `verify:project-private-files-ux-v26b`.
+
+Następny etap:
+- Etap 26C - dobór aktywnych plików po `paid`, kontrolowany dostęp/signed URL i log wydania.
+<!-- ETAP26B_PRIVATE_FILES_UX_2026_05_17_END -->
+
+<!-- ETAP26B_V6_PRIVATE_FILES_UX_2026_05_17_START -->
+## Etap 26B V6 - private files UX idempotent repair
+
+Status: WDROZENIE LOKALNE / TESTY AUTOMATYCZNE W PACZCE / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17.
+
+Zakres:
+- Dodano prywatny upload `floorPlansPrivateFile` jako `floor_plans`.
+- Panel prywatnych plikow pokazuje aktywnosc, required, auto-send, bucket, path i wersje.
+- Dodano aktywuj/dezaktywuj plik prywatny bez usuwania storage.
+- Audit: `project_private_file_status_update`.
+- `order-files.ts` zna `floor_plans` w fulfillment checklist.
+- Dodano guard `npm run verify:project-private-files-ux-v26b`.
+
+Testy automatyczne:
+- `npm run verify:project-private-files-ux-v26b`
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+
+Test reczny: TEST RĘCZNY DO WYKONANIA.
+Nastepny krok po potwierdzeniu: Etap 26C - fulfillment po `paid` na aktywnych plikach.
+<!-- ETAP26B_V6_PRIVATE_FILES_UX_2026_05_17_END -->
+
+<!-- ETAP26B_V7_ORDER_FILES_FLOOR_PLANS_LABEL_REPAIR_2026_05_17_START -->
+## Etap 26B V7 - order-files floor_plans label repair
+
+Status: REPAIR / DO REVIEW / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-17.
+
+Naprawiono brak `floor_plans` w checklistach plików zamówienia.
+
+Zakres:
+- `ADMIN_ORDER_PRIVATE_FILE_FULFILLMENT_KINDS` zawiera `floor_plans`,
+- `ADMIN_ORDER_PRIVATE_FILE_LABELS` zawiera `Rzuty pomieszczeń PDF`,
+- `fileMatchesKind()` rozpoznaje `floor_plans`,
+- guard `verify:project-private-files-ux-v26b` sprawdza admin UX, akcję aktywacji/dezaktywacji, audit i order-files.
+
+Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+<!-- ETAP26B_V7_ORDER_FILES_FLOOR_PLANS_LABEL_REPAIR_2026_05_17_END -->
+
+<!-- ETAP26B_V10_PRIVATE_FILES_UX_FINAL_REPAIR_START -->
+## Etap 26B V10 - prywatne pliki projektu admin UX
+
+Status: WDROZONE LOKALNIE PRZEZ ZIP / TESTY AUTOMATYCZNE DO URUCHOMIENIA / TEST RECZNY DO WYKONANIA.
+
+Zakres:
+- prywatny upload `floorPlansPrivateFile` jako `floor_plans`,
+- aktywuj/dezaktywuj prywatny plik bez kasowania storage,
+- audit `project_private_file_status_update`,
+- `floor_plans` w checklistach zamowien,
+- guard `verify:project-private-files-ux-v26b`.
+
+Test reczny: BRAK POTWIERDZONEGO TESTU RECZNEGO.
+<!-- ETAP26B_V10_PRIVATE_FILES_UX_FINAL_REPAIR_END -->
+
+
+<!-- ETAP26B_V11_CLEAN_REAPPLY_2026_05_17_START -->
+## Etap 26B V11 - private files UX clean reapply
+
+Status: WDROŻONE LOKALNIE W PACZCE / TESTY AUTOMATYCZNE DO URUCHOMIENIA / TEST RĘCZNY DO WYKONANIA.
+
+Zakres:
+- czyste odtworzenie plików po częściowych próbach V3-V10,
+- prywatny upload `floor_plans`,
+- aktywacja/dezaktywacja prywatnych plików,
+- audit `project_private_file_status_update`,
+- `floor_plans` w checklistach plików zamówienia,
+- guard `verify:project-private-files-ux-v26b`.
+
+Test ręczny: BRAK POTWIERDZONEGO TESTU RĘCZNEGO.
+<!-- ETAP26B_V11_CLEAN_REAPPLY_2026_05_17_END -->
+
+<!-- ETAP26B_V13_PRIVATE_FILES_UX_CLEAN_APPLY_START -->
+## Etap 26B V13 - prywatne pliki projektu admin UX
+
+Status: WDROŻONE W PACZCE / TESTY AUTOMATYCZNE DO URUCHOMIENIA LOKALNIE / TEST RĘCZNY DO WYKONANIA.
+
+Zakres:
+- prywatny upload `floorPlansPrivateFile`,
+- `file_type = floor_plans`,
+- widok `Rzuty pomieszczeń PDF` w panelu edycji projektu,
+- przyciski `Aktywuj plik` i `Dezaktywuj plik`,
+- audit `project_private_file_status_update`,
+- `floor_plans` w checklistach plików zamówienia,
+- guard `verify:project-private-files-ux-v26b`.
+
+Testy automatyczne:
+- `npm run verify:project-private-files-ux-v26b`
+- `npm run verify:project-files-model-v26a`
+- `npm run verify:private-files-fulfillment-v51`
+- `npm run verify:project-publication-readiness-v35`
+- `npm run typecheck`
+- `npm run build`
+
+Test ręczny:
+- TEST RĘCZNY DO WYKONANIA: dodać PDF rzutów, zapisać projekt, aktywować/dezaktywować plik, sprawdzić `/admin/audit`.
+<!-- ETAP26B_V13_PRIVATE_FILES_UX_CLEAN_APPLY_END -->
+
+<!-- ETAP26B_V14_STAGE_MARKER_REPAIR_2026_05_17_START -->
+## Etap 26B V14 - stage marker repair po V13
+
+Status: NAPRAWA TECHNICZNA / TESTY DO URUCHOMIENIA LOKALNIE.
+Data: 2026-05-17.
+
+FAKTY:
+- V13 zastosowal payload i guard 26B przeszedl.
+- Guard 26A zatrzymal etap, bo w actions.ts brakowalo markera metadata: stage: "ETAP26A_PROJECT_FILES_MODEL".
+- V14 naprawia tylko marker zgodnosci z Etapem 26A i zostawia logike 26B.
+
+TESTY WYMAGANE:
+- npm run verify:project-private-files-ux-v26b
+- npm run verify:project-files-model-v26a
+- npm run verify:private-files-fulfillment-v51
+- npm run verify:project-publication-readiness-v35
+- npm run typecheck
+- npm run build
+
+TEST RECZNY:
+- BRAK POTWIERDZONEGO TESTU RECZNEGO.
+<!-- ETAP26B_V14_STAGE_MARKER_REPAIR_2026_05_17_END -->
