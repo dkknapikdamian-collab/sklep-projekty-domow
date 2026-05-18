@@ -1,4 +1,4 @@
-﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## 2026-05-17 - Etap 35A: Stripe provider confirmed
 
 - Zapisano decyzję Damiana: provider płatności V1.1 = Stripe.
@@ -1056,3 +1056,20 @@ pm run verify:stripe-checkout-params-v40c
 Status: WDROĹ»ONE LOKALNIE / DO PUSHA. Poprzedni 40C nie zmieniĹ‚ aktywnego pliku lib/payments/stripe-payments.ts; V2 usuwa automatic_payment_methods z aktywnego ĹşrĂłdĹ‚a i dodaje guard V2.
 <!-- ETAP40C_V2_ACTUAL_SOURCE_REPAIR_END -->
 
+<!-- ETAP40D_PACKAGE_JSON_BOM_FIX_START -->
+## Etap 40D - package.json BOM / Cloudflare build fix
+
+Status: DO WDROĹ»ENIA / BUILD BLOCKER FIX.
+
+Fakty:
+- `git grep` nie znalazĹ‚ `automatic_payment_methods` w aktywnym source,
+- lokalny `npm run cf:build` padĹ‚ na parsowaniu `package.json` przez BOM / FEFF,
+- publiczny Cloudflare Worker mĂłgĹ‚ dalej dziaĹ‚aÄ‡ na starszym deploymentcie.
+
+Zmiana:
+- `package.json` zapisany jako UTF-8 bez BOM,
+- dodany guard `verify:package-json-no-bom-v40d`,
+- przed dalszym checkoutem wymagany zielony `npm run cf:build` i nowy deployment Cloudflare.
+
+Test rÄ™czny: DO WYKONANIA po deployu.
+<!-- ETAP40D_PACKAGE_JSON_BOM_FIX_END -->
