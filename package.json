@@ -91,7 +91,8 @@
                     "cf:typegen":  "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
                     "verify:cloudflare-deploy-v40a":  "node scripts/check-cloudflare-deploy-v40a.cjs",
                     "verify:cloudflare-env-persistence-v40b":  "node scripts/check-cloudflare-env-persistence-v40b.cjs",
-                    "verify:stripe-checkout-params-v40c":  "node scripts/check-stripe-checkout-params-v40c.cjs"
+                    "verify:stripe-checkout-params-v40c":  "node scripts/check-stripe-checkout-params-v40c.cjs",
+                    "verify:stripe-checkout-params-v40c-v2":  "node scripts/check-stripe-checkout-params-v40c-v2.cjs"
                 },
     "dependencies":  {
                          "@opennextjs/cloudflare":  "^1.19.10",
@@ -110,3 +111,4 @@
                             "wrangler":  "^4.92.0"
                         }
 }
+

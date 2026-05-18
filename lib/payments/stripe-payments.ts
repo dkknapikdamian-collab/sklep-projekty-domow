@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "crypto";
+﻿import { createHmac, timingSafeEqual } from "crypto";
 import { ensurePostPaymentFulfillmentAccessForOrder } from "@/lib/fulfillment/post-payment-fulfillment";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
@@ -126,7 +126,6 @@ export async function createStripeCheckoutForOrder(input: StripeCheckoutInput): 
   params.set("customer_email", input.customerEmail);
   params.set("success_url", `${siteUrl}/zamowienie/status?session_id={CHECKOUT_SESSION_ID}`);
   params.set("cancel_url", `${siteUrl}/koszyk?payment=cancelled`);
-  params.set("automatic_payment_methods[enabled]", "true");
   params.set("line_items[0][price_data][currency]", currency);
   params.set("line_items[0][price_data][unit_amount]", String(amount));
   params.set("line_items[0][price_data][product_data][name]", `Zamówienie projektu #${input.orderId.slice(0, 8)}`);
@@ -365,3 +364,4 @@ export async function handleStripeWebhook(input: {
 
   return { ok: result.ok, reason: result.reason, eventType, orderId: result.orderId, paymentId: result.paymentId };
 }
+

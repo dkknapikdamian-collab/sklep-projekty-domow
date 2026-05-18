@@ -650,3 +650,10 @@ pm run verify:stripe-checkout-params-v40c
 - TEST RÄCZNY DO WYKONANIA: checkout Stripe sandbox na Cloudflare i DB guard 39B.
 <!-- ETAP40C_STRIPE_CHECKOUT_PARAMS_FIX_END -->
 
+
+
+<!-- ETAP40C_V2_ACTUAL_SOURCE_REPAIR_START -->
+## Etap 40C V2 - Stripe Checkout actual source repair
+Status: WDROĹ»ONE LOKALNIE / DO PUSHA. Poprzedni 40C nie zmieniĹ‚ aktywnego pliku lib/payments/stripe-payments.ts; V2 usuwa automatic_payment_methods z aktywnego ĹşrĂłdĹ‚a i dodaje guard V2.
+<!-- ETAP40C_V2_ACTUAL_SOURCE_REPAIR_END -->
+
