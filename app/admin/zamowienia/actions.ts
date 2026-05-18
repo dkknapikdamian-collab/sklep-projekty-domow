@@ -11,6 +11,7 @@ import {
   updateAdminOrderStatus
 } from "@/lib/admin/orders-admin";
 import { writeAdminAuditLog } from "@/lib/admin/audit-log";
+import { retryPostPaymentFulfillmentForOrder } from "@/lib/admin/order-fulfillment-readiness";
 
 function str(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
@@ -125,4 +126,41 @@ export async function updateOrderFulfillmentChecklistAction(formData: FormData) 
 
   const redirectPath = safeOrderRedirectPath(orderId, returnTo);
   redirect(`${redirectPath}${redirectPath.includes("?") ? "&" : "?"}fulfillment=updated`);
+}
+
+export async function retryOrderPostPaymentFulfillmentAction(formData: FormData) {
+  // data-stage41b-retry-action
+  const admin = await getAdminSession();
+  if (!admin.ok) {
+    redirect(`/admin/login?reason=${admin.reason}`);
+  }
+
+  const orderId = str(formData, "orderId");
+  const returnTo = str(formData, "returnTo");
+
+  if (!orderId) {
+    redirect("/admin/zamowienia?status=error");
+  }
+
+  const result = await retryPostPaymentFulfillmentForOrder(orderId);
+
+  await writeAdminAuditLog({
+    admin,
+    entityType: "order",
+    entityId: orderId,
+    action: "order_post_payment_fulfillment_retry",
+    metadata: {
+      source: "retryOrderPostPaymentFulfillmentAction",
+      stage: "ETAP41B_FULFILLMENT_READINESS_RETRY",
+      orderId,
+      result
+    }
+  });
+
+  revalidatePath("/admin/zamowienia");
+  revalidatePath(`/admin/zamowienia/${orderId}`);
+
+  const redirectPath = safeOrderRedirectPath(orderId, returnTo);
+  const status = result.ok ? "ready" : "blocked";
+  redirect(`${redirectPath}${redirectPath.includes("?") ? "&" : "?"}fulfillmentRetry=${status}`);
 }

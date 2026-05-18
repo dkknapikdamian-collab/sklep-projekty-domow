@@ -1,10 +1,15 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ClipboardList } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { updateOrderFulfillmentChecklistAction, updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
+import { retryOrderPostPaymentFulfillmentAction, updateOrderFulfillmentChecklistAction, updateOrderStatusAction } from "@/app/admin/zamowienia/actions";
 import { buildManualOrderEmailDrafts, type ManualOrderEmailDraft } from "@/lib/admin/order-email-drafts";
 import { buildAdminOrderPrivateFileFulfillmentItems } from "@/lib/admin/order-files";
+import {
+  getAdminOrderFulfillmentReadiness,
+  getAdminOrderPostPaymentRuntime,
+  type AdminOrderPostPaymentRuntime
+} from "@/lib/admin/order-fulfillment-readiness";
 import {
   ADMIN_ORDER_STATUS_LABELS,
   ADMIN_ORDER_STATUSES,
@@ -29,7 +34,7 @@ function formatDate(value: string) {
   if (!value) return "-";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
-  return date.toLocaleString("pl-PL");
+  return date.toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
 }
 
 function OrderStatusForm({ order }: { order: AdminOrderListItem }) {
@@ -172,6 +177,123 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
           Zapisz realizację
         </button>
       </form>
+    </section>
+  );
+}
+
+
+function OrderPostPaymentAutomationPanel({
+  order,
+  runtime
+}: {
+  order: AdminOrderListItem;
+  runtime: AdminOrderPostPaymentRuntime;
+}) {
+  const readiness = getAdminOrderFulfillmentReadiness(order);
+
+  return (
+    <section className="admin-order-detail-panel" data-admin-order-post-payment-readiness-v41b="true">
+      <div>
+        <span>ADMIN / AUTOMATYCZNY DOSTĘP PO PŁATNOŚCI</span>
+        <h2>Gotowość plików i retry dostępu</h2>
+        <p>
+          Ten panel pokazuje, czy webhook po płatności może przygotować dostęp do plików i zakolejkować e-mail
+          <code>project_files_access</code>. Daty w adminie są pokazywane w czasie Europe/Warsaw, a baza zostaje w UTC.
+        </p>
+      </div>
+
+      <div className="admin-order-fulfillment-grid" data-admin-fulfillment-runtime-summary="true">
+        <article data-admin-post-payment-readiness={readiness.ready ? "ready" : "manual_review_required"}>
+          <span>Status gotowości</span>
+          <strong>{readiness.ready ? "Gotowe do automatycznego wydania" : "Manual review required"}</strong>
+          <p>
+            {readiness.ready
+              ? "Wymagane typy plików są przypięte do projektu. Można ponowić przygotowanie dostępu, jeśli poprzedni outbox był skipped."
+              : "Brakuje wymaganych plików: " + (readiness.missingRequiredKinds.join(", ") || "nieznane") + "."}
+          </p>
+          <small>Braki: {readiness.missingRequiredCount}</small>
+        </article>
+
+        <article data-admin-post-payment-runtime="true">
+          <span>Runtime po płatności</span>
+          <strong>{runtime.fulfillmentAccessStatus || "brak access row"}</strong>
+          <p>
+            E-mail access: {runtime.fulfillmentEmailStatus || "brak"}. Powód: {runtime.fulfillmentReason || "-"}.
+          </p>
+          <small>Aktualizacja: {formatDate(runtime.fulfillmentUpdatedAt)}</small>
+        </article>
+
+        <article data-admin-post-payment-paid="true">
+          <span>Płatność paid</span>
+          <strong>{runtime.hasPaidPayment ? "Potwierdzona" : "Brak paid"}</strong>
+          <p>{runtime.hasPaidPayment ? "Payment ID: " + runtime.paidPaymentId : "Retry nie utworzy dostępu bez płatności paid."}</p>
+          <small>{runtime.paidAt ? "Paid at: " + formatDate(runtime.paidAt) : "-"}</small>
+        </article>
+      </div>
+
+      <div className="admin-order-private-files-fulfillment-list" data-admin-fulfillment-missing-files-v41b="true">
+        {readiness.projects.map((project) => (
+          <article className="admin-order-private-files-project" key={project.itemId} data-admin-fulfillment-project-ready={project.ready ? "true" : "false"}>
+            <header>
+              <div>
+                <span>{project.projectCode}</span>
+                <h3>{project.projectName}</h3>
+                <p>PDF na e-mail: {project.hasPdfEmailAddon ? "zamówiony" : "nie dotyczy"}</p>
+              </div>
+              <strong>{project.ready ? "Komplet" : "Braki"}</strong>
+            </header>
+            <ul className="admin-order-private-file-checklist">
+              {project.files.map((file) => (
+                <li key={file.kind} data-admin-fulfillment-kind-v41b={file.kind} data-admin-fulfillment-status-v41b={file.status}>
+                  <div>
+                    <strong>{file.label}</strong>
+                    <span>{file.required ? "Wymagany" : "Niewymagany"} / {file.statusLabel}</span>
+                    <small>auto_send_after_payment: {file.fileId ? (file.autoSendAfterPayment ? "true" : "false") : "brak pliku"}</small>
+                  </div>
+                  {file.fileId ? (
+                    <div className="admin-order-private-file-source">
+                      <small>{file.fileType} / active: {file.active ? "true" : "false"}</small>
+                      <code>{file.filePath}</code>
+                    </div>
+                  ) : (
+                    <p className="admin-form-error">Brak pliku typu: {file.kind}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <form action={retryOrderPostPaymentFulfillmentAction} className="admin-order-fulfillment-form" data-admin-order-fulfillment-retry-form-v41b="true">
+        <input type="hidden" name="orderId" value={order.id} />
+        <input type="hidden" name="returnTo" value={"/admin/zamowienia/" + order.id} />
+        <button type="submit" className="admin-primary-button" disabled={!runtime.hasPaidPayment} data-admin-order-fulfillment-retry-button-v41b="true">
+          Ponów przygotowanie dostępu i e-maila
+        </button>
+        <small>
+          Retry działa tylko po statusie paid. Jeśli pliki są kompletne, system odtworzy dostęp i ponownie zapisze outbox fake-provider.
+        </small>
+      </form>
+
+      {runtime.latestEmails.length > 0 && (
+        <div className="admin-order-private-files-fulfillment-list" data-admin-email-outbox-latest-v41b="true">
+          {runtime.latestEmails.map((email) => (
+            <article className="admin-order-private-files-project" key={email.idempotencyKey || email.emailType + "-" + email.createdAt}>
+              <header>
+                <div>
+                  <span>{email.emailType}</span>
+                  <h3>{email.subject}</h3>
+                  <p>{email.recipientEmail}</p>
+                </div>
+                <strong>{email.status}</strong>
+              </header>
+              <small>Provider: {email.provider || "-"}</small>
+              <small>Queued: {formatDate(email.queuedAt)} / Sent: {formatDate(email.sentAt)}</small>
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -366,8 +488,11 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
   const updatedId = firstParam(resolvedSearchParams.updated);
   const status = firstParam(resolvedSearchParams.status);
   const fulfillment = firstParam(resolvedSearchParams.fulfillment);
+  const fulfillmentRetry = firstParam(resolvedSearchParams.fulfillmentRetry);
 
   if (!order) notFound();
+
+  const postPaymentRuntime = await getAdminOrderPostPaymentRuntime(order.id);
 
   return (
     <>
@@ -393,6 +518,18 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
         {fulfillment === "updated" && (
           <section className="admin-form-success" role="status" data-admin-order-fulfillment-saved="true">
             Realizacja zamówienia została zapisana.
+          </section>
+        )}
+
+        {fulfillmentRetry === "ready" && (
+          <section className="admin-form-success" role="status" data-admin-order-fulfillment-retry-success-v41b="true">
+            Ponowiono przygotowanie dostępu do plików. Sprawdź status email outbox i panel dostępu.
+          </section>
+        )}
+
+        {fulfillmentRetry === "blocked" && (
+          <section className="admin-form-error" role="status" data-admin-order-fulfillment-retry-blocked-v41b="true">
+            Nie udało się przygotować automatycznego dostępu. Sprawdź brakujące pliki i status płatności paid.
           </section>
         )}
 
@@ -426,6 +563,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
             <OrderCustomerPanel order={order} />
             <OrderItemsPanel order={order} />
             <OrderPrivateFilesFulfillmentPanel order={order} />
+            <OrderPostPaymentAutomationPanel order={order} runtime={postPaymentRuntime} />
             <ManualEmailDraftsPanel order={order} />
           </div>
           <aside className="admin-order-detail-side">
