@@ -1718,3 +1718,26 @@ Decyzja Damiana: finalny hosting Cloudflare; nie wpisywać sekretów dwa razy w 
 Zakres: konfiguracja OpenNext/Cloudflare, guard 40A, instrukcja preview/build/deploy, bez sekretów w repo.
 Blokada: nie przechodzić do email outbox 26D przed potwierdzonym checkout + webhook + fulfillment po paid na Cloudflare.
 <!-- ETAP40A_CLOUDFLARE_OPENNEXT_END -->
+
+<!-- ETAP40B_FIX_CLOUDFLARE_KEEP_VARS_START -->
+## Etap 40B-FIX - Cloudflare keep_vars env persistence
+
+Status: WDROĹ»ONE LOKALNIE / DO REVIEW.
+
+Cel: zabezpieczyÄ‡ dashboard runtime variables Cloudflare przed nadpisaniem przez deploy Wrangler.
+
+Zmiana:
+- wrangler.jsonc: keep_vars=true,
+- guard: scripts/check-cloudflare-env-persistence-v40b.cjs,
+- npm script: erify:cloudflare-env-persistence-v40b.
+
+PowĂłd: Cloudflare/Wrangler traktuje wrangler.jsonc jako ĹşrĂłdĹ‚o prawdy i bez keep_vars=true dashboard variables mogÄ… znikaÄ‡ po deployu.
+
+Test:
+- 
+pm run verify:cloudflare-env-persistence-v40b
+
+Manual:
+- TEST RÄCZNY DO WYKONANIA: po redeploy sprawdziÄ‡ stronÄ™ gĹ‚ĂłwnÄ… i /admin/login.
+<!-- ETAP40B_FIX_CLOUDFLARE_KEEP_VARS_END -->
+
