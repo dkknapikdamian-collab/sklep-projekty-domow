@@ -1031,3 +1031,21 @@ Manual:
 - TEST RÄCZNY DO WYKONANIA: po redeploy sprawdziÄ‡ stronÄ™ gĹ‚ĂłwnÄ… i /admin/login.
 <!-- ETAP40B_FIX_CLOUDFLARE_KEEP_VARS_END -->
 
+<!-- ETAP40C_STRIPE_CHECKOUT_PARAMS_FIX_START -->
+## Etap 40C - Stripe Checkout params fix
+
+Status: WDROĹ»ONE LOKALNIE / DO PUSH I TESTU RUNTIME.
+
+Problem: Stripe Checkout na Cloudflare zwrĂłciĹ‚ Received unknown parameter: automatic_payment_methods.
+
+Zmiana:
+- usuniÄ™to utomatic_payment_methods z tworzenia Stripe Checkout Session,
+- dodano guard erify:stripe-checkout-params-v40c,
+- nie zmieniono webhooka, fulfillmentu ani live payments.
+
+Testy:
+- 
+pm run verify:stripe-checkout-params-v40c
+- TEST RÄCZNY DO WYKONANIA: checkout Stripe sandbox na Cloudflare i DB guard 39B.
+<!-- ETAP40C_STRIPE_CHECKOUT_PARAMS_FIX_END -->
+
