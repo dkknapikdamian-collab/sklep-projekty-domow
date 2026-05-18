@@ -1883,3 +1883,40 @@ Sekrety tylko w Cloudflare, bez commitowania do repo.
 
 Etap 42B - realna integracja Resend z email_outbox.
 <!-- ETAP42A_RESEND_PROVIDER_DECISION_END -->
+
+<!-- ETAP42B_RESEND_RUNTIME_INTEGRATION_START -->
+## Etap 42B - Resend runtime integration
+
+Status: WDROŻONE W KODZIE / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-18.
+
+### Decyzja / FAKT
+
+Po Etapie 42A providerem e-maili transakcyjnych jest Resend. Etap 42B dodaje runtime adapter i wysyłkę przez email_outbox.
+
+### Zakres
+
+- Dodano lib/email/transactional-email-provider.ts.
+- email_outbox wybiera resend tylko przy pełnej konfiguracji env.
+- Brak konfiguracji = bezpieczny fallback fake_noop.
+- Wysyłamy payment_confirmation i project_files_access.
+- Pliki projektu, rzuty i ZIP-y nie są załącznikami.
+- E-mail zawiera link do panelu pobrania.
+- Wysyłka dostępu wymaga order_payments.status = paid.
+- Resend provider message id trafia do metadata email_outbox.
+
+### Testy
+
+- npm run verify:resend-runtime-v42b
+- npm run verify:email-outbox-v41a
+- npm run verify:fulfillment-readiness-v41b
+- npm run typecheck
+
+### Test ręczny
+
+TEST RĘCZNY DO WYKONANIA po ustawieniu Resend i Cloudflare env.
+
+### Następny krok
+
+Ustawić domenę w Resend, dodać env w Cloudflare i zrobić sandbox payment -> e-mail sent -> link do panelu pobrania.
+<!-- ETAP42B_RESEND_RUNTIME_INTEGRATION_END -->

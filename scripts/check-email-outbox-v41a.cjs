@@ -41,10 +41,12 @@ const emailSource = requireMarker('lib/email/email-outbox.ts', 'EMAIL_OUTBOX_FAK
   if (!emailSource.includes(marker)) fail(`lib/email/email-outbox.ts missing marker: ${marker}`);
 });
 
-if (/resend|postmark|sendgrid|smtp|nodemailer|mailgun/i.test(emailSource)) {
-  fail('lib/email/email-outbox.ts contains real email provider marker');
+if (/postmark|sendgrid|smtp|nodemailer|mailgun/i.test(emailSource)) {
+  fail('lib/email/email-outbox.ts contains unsupported real email provider marker');
+} else if (/resend/i.test(emailSource) && !emailSource.includes('ETAP42B_RESEND_RUNTIME_INTEGRATION')) {
+  fail('lib/email/email-outbox.ts contains Resend marker without Stage42B contract');
 } else {
-  pass('email outbox source has no real provider markers');
+  pass('email outbox source has only approved provider markers');
 }
 
 const stripeSource = requireMarker('lib/payments/stripe-payments.ts', 'queuePostPaymentEmailOutboxForPaidOrder');

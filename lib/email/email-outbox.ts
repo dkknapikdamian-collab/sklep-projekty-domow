@@ -1,5 +1,10 @@
 import type { PostPaymentFulfillmentEmailDraft } from "@/lib/fulfillment/post-payment-fulfillment";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
+import {
+  RESEND_RUNTIME_EMAIL_PROVIDER_CONTRACT,
+  getConfiguredTransactionalEmailProvider,
+  sendTransactionalEmailViaConfiguredProvider
+} from "@/lib/email/transactional-email-provider";
 
 export const EMAIL_OUTBOX_FAKE_PROVIDER_CONTRACT = {
   stage: "ETAP41A_EMAIL_OUTBOX_FAKE_PROVIDER",
@@ -10,6 +15,24 @@ export const EMAIL_OUTBOX_FAKE_PROVIDER_CONTRACT = {
   emailTypes: ["payment_confirmation", "project_files_access"],
   statuses: ["queued", "sent", "failed", "retry_pending", "skipped"]
 } as const;
+
+export const EMAIL_OUTBOX_RESEND_PROVIDER_CONTRACT = {
+  stage: "ETAP42B_RESEND_RUNTIME_INTEGRATION",
+  provider: "resend",
+  sendsRealEmail: true,
+  noAttachments: true,
+  deliveryModel: "secure_download_panel_link_no_attachments",
+  paidRequired: true,
+  statusFlow: ["queued", "sent", "failed", "retry_pending"]
+} as const;
+
+export type DispatchTransactionalEmailOutboxResult = {
+  ok: boolean;
+  reason: string;
+  sentCount: number;
+  failedCount: number;
+  skippedCount: number;
+};
 
 export const EMAIL_OUTBOX_TYPES = ["payment_confirmation", "project_files_access"] as const;
 export type EmailOutboxType = (typeof EMAIL_OUTBOX_TYPES)[number];
@@ -136,13 +159,15 @@ async function upsertOutboxEmail(input: {
 
   const idempotencyKey = `${input.order.id}:${input.payment.id}:${input.emailType}`;
   const now = new Date().toISOString();
+  const provider = getConfiguredTransactionalEmailProvider();
+  const usesResend = provider === "resend";
 
   const { error } = await supabase.from("email_outbox").upsert({
     order_id: input.order.id,
     payment_id: input.payment.id,
     email_type: input.emailType,
     status: input.status,
-    provider: EMAIL_OUTBOX_FAKE_PROVIDER_CONTRACT.provider,
+    provider,
     recipient_email: recipientEmail,
     recipient_name: normalize(input.order.customer_name) || null,
     subject: input.subject,
@@ -151,8 +176,11 @@ async function upsertOutboxEmail(input: {
     idempotency_key: idempotencyKey,
     metadata: {
       ...EMAIL_OUTBOX_FAKE_PROVIDER_CONTRACT,
+      ...(usesResend ? EMAIL_OUTBOX_RESEND_PROVIDER_CONTRACT : {}),
       ...input.metadata,
-      noRealEmailSend: true
+      provider,
+      noRealEmailSend: !usesResend,
+      deliveryModel: "secure_download_panel_link_no_attachments"
     },
     queued_at: input.status === "queued" ? now : null,
     sent_at: null,
@@ -237,5 +265,185 @@ export async function queuePostPaymentEmailOutboxForPaidOrder(
     if (filesResult.ok) skippedCount += 1;
   }
 
-  return { ok: queuedCount > 0 || skippedCount > 0, reason: "email_outbox_fake_provider_recorded", queuedCount, skippedCount };
+  const dispatch = queuedCount > 0
+    ? await dispatchQueuedTransactionalEmailOutboxForOrder({ orderId })
+    : { ok: true, reason: "no_queued_email_outbox_rows", sentCount: 0, failedCount: 0, skippedCount: 0 };
+
+  const failedSend = dispatch.failedCount > 0;
+  const dispatched = dispatch.sentCount > 0;
+  return {
+    ok: (queuedCount > 0 || skippedCount > 0) && !failedSend,
+    reason: failedSend ? "email_outbox_resend_dispatch_failed:" + dispatch.reason : dispatched ? "email_outbox_resend_dispatched" : "email_outbox_recorded",
+    queuedCount,
+    skippedCount
+  };
+}
+
+
+type EmailOutboxDispatchRow = {
+  id: string;
+  order_id: string;
+  payment_id: string | null;
+  email_type: EmailOutboxType;
+  status: EmailOutboxStatus;
+  provider: string;
+  recipient_email: string;
+  subject: string;
+  body_text: string;
+  body_html: string | null;
+  idempotency_key: string;
+  metadata: Record<string, unknown> | null;
+  attempt_count: number | null;
+};
+
+async function loadQueuedResendOutboxRows(orderId: string): Promise<EmailOutboxDispatchRow[]> {
+  const supabase = createSupabaseServiceRoleClient();
+  if (!supabase || !orderId) return [];
+
+  const { data, error } = await supabase
+    .from("email_outbox")
+    .select("id, order_id, payment_id, email_type, status, provider, recipient_email, subject, body_text, body_html, idempotency_key, metadata, attempt_count")
+    .eq("order_id", orderId)
+    .eq("provider", "resend")
+    .in("status", ["queued", "retry_pending"])
+    .order("created_at", { ascending: true })
+    .limit(10);
+
+  if (error || !data) return [];
+  return data as EmailOutboxDispatchRow[];
+}
+
+async function emailOutboxRowHasPaidPayment(row: EmailOutboxDispatchRow) {
+  const supabase = createSupabaseServiceRoleClient();
+  if (!supabase || !row.order_id || !row.payment_id) return false;
+
+  const { data, error } = await supabase
+    .from("order_payments")
+    .select("id")
+    .eq("id", row.payment_id)
+    .eq("order_id", row.order_id)
+    .eq("status", "paid")
+    .maybeSingle();
+
+  return !error && Boolean(data?.id);
+}
+
+async function updateOutboxRowAsSent(row: EmailOutboxDispatchRow, providerMessageId: string) {
+  const supabase = createSupabaseServiceRoleClient();
+  if (!supabase) return;
+  const now = new Date().toISOString();
+
+  await supabase.from("email_outbox").update({
+    status: "sent",
+    provider: "resend",
+    sent_at: now,
+    failed_at: null,
+    retry_after: null,
+    last_error: null,
+    attempt_count: Number(row.attempt_count || 0) + 1,
+    metadata: {
+      ...(row.metadata || {}),
+      ...EMAIL_OUTBOX_RESEND_PROVIDER_CONTRACT,
+      ...RESEND_RUNTIME_EMAIL_PROVIDER_CONTRACT,
+      resendEmailId: providerMessageId,
+      providerMessageId,
+      noAttachments: true,
+      deliveryModel: "secure_download_panel_link_no_attachments",
+      sentAt: now
+    },
+    updated_at: now
+  }).eq("id", row.id);
+}
+
+async function updateOutboxRowAsFailed(row: EmailOutboxDispatchRow, errorMessage: string) {
+  const supabase = createSupabaseServiceRoleClient();
+  if (!supabase) return;
+  const now = new Date().toISOString();
+  const retryAfter = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+  await supabase.from("email_outbox").update({
+    status: "failed",
+    provider: "resend",
+    failed_at: now,
+    retry_after: retryAfter,
+    last_error: errorMessage.slice(0, 1000),
+    attempt_count: Number(row.attempt_count || 0) + 1,
+    metadata: {
+      ...(row.metadata || {}),
+      ...EMAIL_OUTBOX_RESEND_PROVIDER_CONTRACT,
+      resendLastError: errorMessage.slice(0, 1000),
+      noAttachments: true,
+      deliveryModel: "secure_download_panel_link_no_attachments"
+    },
+    updated_at: now
+  }).eq("id", row.id);
+}
+
+async function updateOutboxRowAsSkipped(row: EmailOutboxDispatchRow, reason: string) {
+  const supabase = createSupabaseServiceRoleClient();
+  if (!supabase) return;
+  const now = new Date().toISOString();
+
+  await supabase.from("email_outbox").update({
+    status: "skipped",
+    last_error: reason,
+    metadata: {
+      ...(row.metadata || {}),
+      skippedBy: "ETAP42B_RESEND_RUNTIME_INTEGRATION",
+      skipReason: reason,
+      noAttachments: true,
+      deliveryModel: "secure_download_panel_link_no_attachments"
+    },
+    updated_at: now
+  }).eq("id", row.id);
+}
+
+export async function dispatchQueuedTransactionalEmailOutboxForOrder(input: { orderId: string }): Promise<DispatchTransactionalEmailOutboxResult> {
+  const orderId = normalize(input.orderId);
+  if (!orderId) return { ok: false, reason: "missing_order_id", sentCount: 0, failedCount: 0, skippedCount: 0 };
+
+  if (getConfiguredTransactionalEmailProvider() !== "resend") {
+    return { ok: true, reason: "resend_provider_not_configured_fake_noop_kept", sentCount: 0, failedCount: 0, skippedCount: 0 };
+  }
+
+  const rows = await loadQueuedResendOutboxRows(orderId);
+  let sentCount = 0;
+  let failedCount = 0;
+  let skippedCount = 0;
+
+  for (const row of rows) {
+    const hasPaidPayment = await emailOutboxRowHasPaidPayment(row);
+    if (!hasPaidPayment) {
+      await updateOutboxRowAsSkipped(row, "payment_not_paid_no_resend_send");
+      skippedCount += 1;
+      continue;
+    }
+
+    const result = await sendTransactionalEmailViaConfiguredProvider({
+      to: row.recipient_email,
+      subject: row.subject,
+      text: row.body_text,
+      html: row.body_html || undefined,
+      idempotencyKey: row.idempotency_key,
+      emailType: row.email_type,
+      orderId: row.order_id,
+      paymentId: row.payment_id || ""
+    });
+
+    if (result.ok) {
+      await updateOutboxRowAsSent(row, result.providerMessageId);
+      sentCount += 1;
+    } else {
+      await updateOutboxRowAsFailed(row, result.error || result.reason);
+      failedCount += 1;
+    }
+  }
+
+  return {
+    ok: failedCount === 0,
+    reason: failedCount > 0 ? "resend_dispatch_failed" : sentCount > 0 ? "resend_dispatch_sent" : "no_resend_rows_to_dispatch",
+    sentCount,
+    failedCount,
+    skippedCount
+  };
 }
