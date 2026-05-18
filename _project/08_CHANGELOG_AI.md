@@ -1,4 +1,4 @@
-<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
+﻿<!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## 2026-05-17 - Etap 35A: Stripe provider confirmed
 
 - Zapisano decyzję Damiana: provider płatności V1.1 = Stripe.
@@ -1280,3 +1280,19 @@ Zmiana:
 
 Test rÄ™czny: DO WYKONANIA po deployu.
 <!-- ETAP40D_PACKAGE_JSON_BOM_FIX_END -->
+
+<!-- ETAP40E_V3_ADMIN_PAYMENT_STATUS_REFERENCE_START -->
+## Etap 40E V3 - admin status pĹ‚atnoĹ›ci i reference
+
+Status: WDROĹ»ONE LOKALNIE DO REVIEW.
+
+Zakres:
+- lista zamĂłwieĹ„ pokazuje status pĹ‚atnoĹ›ci i ID przelewu `ZAM-{SHORT_ID}`,
+- szczegĂłĹ‚y zamĂłwienia pokazujÄ… status pĹ‚atnoĹ›ci, provider, kwotÄ™, UUID, Stripe session i Stripe payment intent,
+- Stripe webhook pozostaje ĹşrĂłdĹ‚em prawdy dla BLIK/karta/P24/Stripe Checkout,
+- zwykĹ‚y przelew poza Stripe jest fallbackiem i wymaga rÄ™cznego potwierdzenia admina,
+- email outbox jest konieczny przed produkcjÄ….
+
+Test rÄ™czny: DO WYKONANIA po deployu Cloudflare.
+<!-- ETAP40E_V3_ADMIN_PAYMENT_STATUS_REFERENCE_END -->
+
