@@ -600,3 +600,12 @@ Akceptacja:
 - wynik dopisany w _project i Obsidianie.
 <!-- ETAP39B_ROADMAP_ACCEPTANCE_END -->
 
+
+<!-- ETAP40A_CLOUDFLARE_OPENNEXT_START -->
+## Etap 40A - Cloudflare/OpenNext deploy foundation
+
+Status: WDROŻONE LOKALNIE / DO BUILD I DEPLOY TESTU.
+Decyzja Damiana: finalny hosting Cloudflare; nie wpisywać sekretów dwa razy w Vercel i Cloudflare.
+Zakres: konfiguracja OpenNext/Cloudflare, guard 40A, instrukcja preview/build/deploy, bez sekretów w repo.
+Blokada: nie przechodzić do email outbox 26D przed potwierdzonym checkout + webhook + fulfillment po paid na Cloudflare.
+<!-- ETAP40A_CLOUDFLARE_OPENNEXT_END -->

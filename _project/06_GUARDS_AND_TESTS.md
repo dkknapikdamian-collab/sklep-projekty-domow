@@ -1430,3 +1430,12 @@ $env:STAGE39B_REQUIRE_DB="1"; node scripts/check-stage39b-stripe-no-fulfillment-
 Ryzyko: bez realnego webhooka i danych runtime guard potwierdza tylko strukturÄ™ skryptu. PeĹ‚ne potwierdzenie wymaga testu Stripe CLI i SQL diagnostycznego.
 <!-- ETAP39B_STRIPE_RUNTIME_GUARD_END -->
 
+
+<!-- ETAP40A_CLOUDFLARE_OPENNEXT_START -->
+## Etap 40A - Cloudflare/OpenNext deploy foundation
+
+Status: WDROŻONE LOKALNIE / DO BUILD I DEPLOY TESTU.
+Decyzja Damiana: finalny hosting Cloudflare; nie wpisywać sekretów dwa razy w Vercel i Cloudflare.
+Zakres: konfiguracja OpenNext/Cloudflare, guard 40A, instrukcja preview/build/deploy, bez sekretów w repo.
+Blokada: nie przechodzić do email outbox 26D przed potwierdzonym checkout + webhook + fulfillment po paid na Cloudflare.
+<!-- ETAP40A_CLOUDFLARE_OPENNEXT_END -->

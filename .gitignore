@@ -19,3 +19,8 @@ tsconfig.tsbuildinfo
 .vercel
 .vercel
 .vercel
+.open-next/
+.wrangler/
+.dev.vars
+.dev.vars.*
+cloudflare-env.d.ts
