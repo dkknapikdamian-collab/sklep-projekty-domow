@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ClipboardList, ExternalLink, Filter, ListFilter } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import {
@@ -258,6 +258,11 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
                       <small>{flags.orderClosed ? "Zamknięte" : "Otwarte"}</small>
                     </div>
 
+                    <div className="admin-order-priority-row" data-admin-order-payment-row="true">
+                      <small>{flags.paymentConfirmed || order.status === "paid_manual" ? "Płatność potwierdzona" : "Płatność niepotwierdzona"}</small>
+                      <small>ID przelewu: ZAM-{order.shortId.toUpperCase()}</small>
+                    </div>
+
                     <dl className="admin-order-meta">
                       <div><dt>Klient</dt><dd>{order.customerName}</dd></div>
                       <div><dt>E-mail</dt><dd><a href={`mailto:${order.customerEmail}`}>{order.customerEmail}</a></dd></div>
@@ -286,3 +291,4 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
     </>
   );
 }
+

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ClipboardList } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
@@ -409,6 +409,12 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
             <small>{order.id}</small>
           </div>
           <strong className="admin-order-total">{money(order.totalGross)}</strong>
+          <div className="admin-order-priority-row" data-admin-order-payment-panel-v40e="true">
+            <small>{order.fulfillmentChecklist.paymentConfirmed || order.status === "paid_manual" ? "Płatność potwierdzona" : "Płatność niepotwierdzona"}</small>
+            <small>ID przelewu ręcznego: ZAM-{order.shortId.toUpperCase()}</small>
+            <small>Pełne ID zamówienia: {order.id}</small>
+          </div>
+
           <OrderStatusForm order={order} />
           <Link href="/admin/zamowienia" className="admin-secondary-button">
             <ClipboardList size={16} /> Wróć do listy
@@ -430,3 +436,4 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
     </>
   );
 }
+
