@@ -87,36 +87,20 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
   return (
     <section className="admin-order-fulfillment" data-admin-order-fulfillment-v43="true" data-admin-order-fulfillment-persistent-v45="true">
       <div>
-        <h2>Realizacja ręczna</h2>
-        <p>
-          Ta strona nie generuje linków czasowych i nie wysyła maili automatycznie. Zapisuje tylko stan ręcznej realizacji zamówienia.
-        </p>
-        {checklist.updatedAt && <small>Ostatnia aktualizacja checklisty: {formatDate(checklist.updatedAt)}</small>}
-        <div className="admin-order-manual-payment-note" data-admin-order-manual-payment-note="true">
-          <strong>Płatność ręczna</strong>
-          <p>Status `Opłacone ręcznie` oznacza, że admin potwierdził płatność poza systemem Stripe/PayU.</p>
-        </div>
+        <h2>Realizacja</h2>
+        {checklist.updatedAt && <small>Aktualizacja: {formatDate(checklist.updatedAt)}</small>}
       </div>
 
       <div className="admin-order-fulfillment-grid">
         <article data-admin-order-pdf-email-addon={hasPdfEmailAddon ? "true" : "false"}>
-          <span>Dodatek PDF na e-mail</span>
-          <strong>{hasPdfEmailAddon ? "Tak, zamówiony" : "Nie dotyczy"}</strong>
-          <p>
-            {hasPdfEmailAddon
-              ? hasPdfEmailFile
-                ? "Wyślij klientowi prywatny plik typu PDF na e-mail."
-                : "Dodatek jest w zamówieniu, ale nie znaleziono przypiętego pliku pdf_email_package przy projekcie."
-              : "Nie wysyłaj dodatkowego PDF-a na e-mail, jeśli nie ustalisz tego ręcznie z klientem."}
-          </p>
+          <span>PDF na e-mail</span>
+          <strong>{hasPdfEmailAddon ? "Zamówiony" : "Nie dotyczy"}</strong>
+          <p>{hasPdfEmailAddon ? (hasPdfEmailFile ? "Plik gotowy." : "Brak pliku PDF e-mail przy projekcie.") : "Bez dodatku."}</p>
         </article>
 
         <article data-admin-order-send-instructions="true">
-          <span>Co wysłać klientowi</span>
-          <strong>{privateFiles.length > 0 ? `${privateFiles.length} plików prywatnych do sprawdzenia` : "Brak plików prywatnych"}</strong>
-          <p>
-            Najpierw potwierdź płatność. Następnie wyślij prywatne pliki przypięte do projektów w zamówieniu: dokumentację PDF, paczkę ZIP oraz PDF na e-mail, jeśli dodatek został zamówiony.
-          </p>
+          <span>Pliki</span>
+          <strong>{privateFiles.length > 0 ? `${privateFiles.length} plików` : "Brak plików"}</strong>
           <small>PDF: {hasDocumentationFile ? "jest" : "brak"} / ZIP: {hasZipFile ? "jest" : "brak"}</small>
         </article>
       </div>
@@ -135,19 +119,19 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
           <li data-admin-fulfillment-pdf-sent="true">
             <label>
               <input type="checkbox" name="pdfSent" defaultChecked={checklist.pdfSent} />
-              <span>PDF wysłany, jeśli dotyczy</span>
+              <span>PDF wysłany</span>
             </label>
           </li>
           <li data-admin-fulfillment-zip-sent="true">
             <label>
               <input type="checkbox" name="zipSent" defaultChecked={checklist.zipSent} />
-              <span>ZIP wysłany, jeśli dotyczy</span>
+              <span>ZIP wysłany</span>
             </label>
           </li>
           <li data-admin-fulfillment-order-closed="true">
             <label>
               <input type="checkbox" name="orderClosed" defaultChecked={checklist.orderClosed} />
-              <span>Zamówienie zamknięte statusem `Wysłane` albo `Anulowane`</span>
+              <span>Zamówienie zamknięte</span>
             </label>
           </li>
         </ul>
@@ -156,11 +140,10 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
           Instrukcja przelewu
           <textarea
             name="paymentInstruction"
-            rows={5}
+            rows={4}
             defaultValue={checklist.paymentInstruction}
-            placeholder="Odbiorca, numer konta, tytuł przelewu, kwota i dodatkowe uwagi dla klienta..."
+            placeholder="Odbiorca, numer konta, tytuł przelewu, kwota..."
           />
-          <small>Dane do przelewu są używane w roboczym e-mailu potwierdzenia zamówienia. System niczego sam nie wysyła.</small>
         </label>
 
         <label className="admin-order-internal-note" data-admin-order-internal-note="true">
@@ -169,7 +152,7 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
             name="internalNote"
             rows={4}
             defaultValue={checklist.internalNote}
-            placeholder="Np. klient prosi o telefon przed wysyłką, płatność potwierdzona ręcznie, wysłano paczkę ZIP..."
+            placeholder="Krótka notatka do zamówienia..."
           />
         </label>
 
@@ -181,7 +164,6 @@ function OrderFulfillmentPanel({ order }: { order: AdminOrderListItem }) {
   );
 }
 
-
 function OrderPostPaymentAutomationPanel({
   order,
   runtime
@@ -190,44 +172,40 @@ function OrderPostPaymentAutomationPanel({
   runtime: AdminOrderPostPaymentRuntime;
 }) {
   const readiness = getAdminOrderFulfillmentReadiness(order);
+  const emailTypeLabel = (type: string) => {
+    if (type === "project_files_access") return "Dostęp do plików";
+    if (type === "payment_confirmation") return "Potwierdzenie płatności";
+    return type || "Wiadomość";
+  };
 
   return (
     <section className="admin-order-detail-panel" data-admin-order-post-payment-readiness-v41b="true">
       <div>
-        <span>ADMIN / AUTOMATYCZNY DOSTĘP PO PŁATNOŚCI</span>
-        <h2>Gotowość plików i retry dostępu</h2>
-        <p>
-          Ten panel pokazuje, czy webhook po płatności może przygotować dostęp do plików i zakolejkować e-mail
-          <code>project_files_access</code>. Daty w adminie są pokazywane w czasie Europe/Warsaw, a baza zostaje w UTC.
-        </p>
+        <span>ADMIN / DOSTĘP PO PŁATNOŚCI</span>
+        <h2>Dostęp po płatności</h2>
+        <p>Szybki podgląd płatności, dostępu do plików i wiadomości dla klienta.</p>
       </div>
 
       <div className="admin-order-fulfillment-grid" data-admin-fulfillment-runtime-summary="true">
         <article data-admin-post-payment-readiness={readiness.ready ? "ready" : "manual_review_required"}>
-          <span>Status gotowości</span>
-          <strong>{readiness.ready ? "Gotowe do automatycznego wydania" : "Manual review required"}</strong>
-          <p>
-            {readiness.ready
-              ? "Wymagane typy plików są przypięte do projektu. Można ponowić przygotowanie dostępu, jeśli poprzedni outbox był skipped."
-              : "Brakuje wymaganych plików: " + (readiness.missingRequiredKinds.join(", ") || "nieznane") + "."}
-          </p>
+          <span>Gotowość</span>
+          <strong>{readiness.ready ? "Gotowe" : "Wymaga uzupełnienia"}</strong>
+          <p>{readiness.ready ? "Wszystkie wymagane pliki są gotowe." : "Brakuje: " + (readiness.missingRequiredKinds.join(", ") || "nieznane") + "."}</p>
           <small>Braki: {readiness.missingRequiredCount}</small>
         </article>
 
         <article data-admin-post-payment-runtime="true">
-          <span>Runtime po płatności</span>
-          <strong>{runtime.fulfillmentAccessStatus || "brak access row"}</strong>
-          <p>
-            E-mail access: {runtime.fulfillmentEmailStatus || "brak"}. Powód: {runtime.fulfillmentReason || "-"}.
-          </p>
+          <span>Dostęp</span>
+          <strong>{runtime.fulfillmentAccessStatus || "brak"}</strong>
+          <p>E-mail: {runtime.fulfillmentEmailStatus || "brak"}</p>
           <small>Aktualizacja: {formatDate(runtime.fulfillmentUpdatedAt)}</small>
         </article>
 
         <article data-admin-post-payment-paid="true">
-          <span>Płatność paid</span>
-          <strong>{runtime.hasPaidPayment ? "Potwierdzona" : "Brak paid"}</strong>
-          <p>{runtime.hasPaidPayment ? "Payment ID: " + runtime.paidPaymentId : "Retry nie utworzy dostępu bez płatności paid."}</p>
-          <small>{runtime.paidAt ? "Paid at: " + formatDate(runtime.paidAt) : "-"}</small>
+          <span>Płatność</span>
+          <strong>{runtime.hasPaidPayment ? "Potwierdzona" : "Brak"}</strong>
+          <p>{runtime.hasPaidPayment ? "ID płatności: " + runtime.paidPaymentId : "Brak potwierdzonej płatności."}</p>
+          <small>{runtime.paidAt ? "Opłacono: " + formatDate(runtime.paidAt) : "-"}</small>
         </article>
       </div>
 
@@ -247,16 +225,15 @@ function OrderPostPaymentAutomationPanel({
                 <li key={file.kind} data-admin-fulfillment-kind-v41b={file.kind} data-admin-fulfillment-status-v41b={file.status}>
                   <div>
                     <strong>{file.label}</strong>
-                    <span>{file.required ? "Wymagany" : "Niewymagany"} / {file.statusLabel}</span>
-                    <small>auto_send_after_payment: {file.fileId ? (file.autoSendAfterPayment ? "true" : "false") : "brak pliku"}</small>
+                    <span>{file.required ? "Wymagany" : "Opcjonalny"} · {file.statusLabel}</span>
                   </div>
                   {file.fileId ? (
                     <div className="admin-order-private-file-source">
-                      <small>{file.fileType} / active: {file.active ? "true" : "false"}</small>
+                      <small>{file.fileType}</small>
                       <code>{file.filePath}</code>
                     </div>
                   ) : (
-                    <p className="admin-form-error">Brak pliku typu: {file.kind}</p>
+                    <p className="admin-form-error">Brak pliku: {file.label}</p>
                   )}
                 </li>
               ))}
@@ -269,11 +246,8 @@ function OrderPostPaymentAutomationPanel({
         <input type="hidden" name="orderId" value={order.id} />
         <input type="hidden" name="returnTo" value={"/admin/zamowienia/" + order.id} />
         <button type="submit" className="admin-primary-button" disabled={!runtime.hasPaidPayment} data-admin-order-fulfillment-retry-button-v41b="true">
-          Ponów przygotowanie dostępu i e-maila
+          Ponów automatyczne wydanie
         </button>
-        <small>
-          Retry działa tylko po statusie paid. Jeśli pliki są kompletne, system odtworzy dostęp i ponownie zapisze outbox fake-provider.
-        </small>
       </form>
 
       {runtime.latestEmails.length > 0 && (
@@ -282,14 +256,13 @@ function OrderPostPaymentAutomationPanel({
             <article className="admin-order-private-files-project" key={email.idempotencyKey || email.emailType + "-" + email.createdAt}>
               <header>
                 <div>
-                  <span>{email.emailType}</span>
+                  <span>{emailTypeLabel(email.emailType)}</span>
                   <h3>{email.subject}</h3>
                   <p>{email.recipientEmail}</p>
                 </div>
                 <strong>{email.status}</strong>
               </header>
-              <small>Provider: {email.provider || "-"}</small>
-              <small>Queued: {formatDate(email.queuedAt)} / Sent: {formatDate(email.sentAt)}</small>
+              <small>Dodano: {formatDate(email.queuedAt || email.createdAt)} / Wysłano: {formatDate(email.sentAt)}</small>
             </article>
           ))}
         </div>
@@ -315,7 +288,7 @@ function ManualEmailDraftCard({ draft }: { draft: ManualOrderEmailDraft }) {
       </label>
 
       <label>
-        Treść do ręcznego skopiowania
+        Treść wiadomości
         <textarea
           readOnly
           rows={12}
@@ -333,9 +306,9 @@ function ManualEmailDraftsPanel({ order }: { order: AdminOrderListItem }) {
   return (
     <section className="admin-order-detail-panel admin-manual-email-drafts" data-admin-manual-email-drafts-v47="true">
       <div>
-        <h2>Robocze e-maile do klienta</h2>
+        <h2>Wiadomości do klienta</h2>
         <p>
-          System niczego nie wysyła. Skopiuj temat i treść do swojej skrzynki, sprawdź dane i wyślij ręcznie.
+          Szablony wiadomości dla klienta.
         </p>
       </div>
 
@@ -389,11 +362,9 @@ function OrderPrivateFilesFulfillmentPanel({ order }: { order: AdminOrderListIte
   return (
     <section className="admin-order-detail-panel" data-admin-order-private-files-fulfillment-v51="true">
       <div>
-        <span>ADMIN / REALIZACJA PLIKÓW</span>
-        <h2>Pliki do realizacji</h2>
-        <p>
-          Panel dla admina. Nie generuje publicznych linków i nie wysyła plików automatycznie. Pokazuje, co pobrać ręcznie z Supabase Storage po potwierdzeniu płatności.
-        </p>
+        <span>ADMIN / PLIKI KLIENTA</span>
+        <h2>Pliki klienta</h2>
+        <p>Pliki przypięte do zamówienia.</p>
       </div>
 
       <div className="admin-order-private-files-fulfillment-list" data-admin-order-private-files-fulfillment-list="true">
@@ -410,13 +381,13 @@ function OrderPrivateFilesFulfillmentPanel({ order }: { order: AdminOrderListIte
                   <p>Wariant: {item.variantName}</p>
                 </div>
                 <strong data-admin-private-file-project-status={hasMissingRequiredFiles ? "missing" : "ready"}>
-                  {hasMissingRequiredFiles ? "Braki w plikach" : "Pliki opisane"}
+                  {hasMissingRequiredFiles ? "Braki" : "Komplet"}
                 </strong>
               </header>
 
               {hasMissingRequiredFiles && (
                 <p className="admin-order-private-file-warning" role="status" data-admin-private-file-missing-warning="true">
-                  Brakuje prywatnego pliku dla zamówionego aktywnego projektu. Uzupełnij pliki w edycji projektu albo zapisz ręczną decyzję w notatce admina.
+                  Uzupełnij brakujące pliki projektu.
                 </p>
               )}
 
@@ -426,16 +397,15 @@ function OrderPrivateFilesFulfillmentPanel({ order }: { order: AdminOrderListIte
                     <div>
                       <strong>{fileItem.label}</strong>
                       <span>{fileItem.statusLabel}</span>
-                      {!fileItem.required && <small>Nie wymagany w tym zamówieniu</small>}
+                      {!fileItem.required && <small>Opcjonalny</small>}
                     </div>
                     {fileItem.file ? (
                       <div className="admin-order-private-file-source" data-admin-private-file-source="true">
-                        <small>Bucket: {fileItem.file.bucket}</small>
+                        <small>Storage: {fileItem.file.bucket}</small>
                         <code>{fileItem.file.path}</code>
-                        <p>{fileItem.adminDownloadInstruction}</p>
                       </div>
                     ) : (
-                      <p data-admin-private-file-manual-instruction="true">{fileItem.adminDownloadInstruction}</p>
+                      <p data-admin-private-file-manual-instruction="true">Brak pliku: {fileItem.label}</p>
                     )}
                     {fileItem.warning && (
                       <p className="admin-form-error" data-admin-private-file-warning="true">{fileItem.warning}</p>
@@ -502,7 +472,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
           <div>
             <span>ADMIN / ZAMÓWIENIA / SZCZEGÓŁY</span>
             <h1>Zamówienie #{order.shortId}</h1>
-            <p>Dedykowana strona operacyjna do ręcznej obsługi zamówienia: klient, pozycje, pliki prywatne, PDF na e-mail, checklisty i status.</p>
+            <p>Obsługa zamówienia: klient, pozycje, płatność, pliki i historia działań.</p>
           </div>
           <Link href="/admin/zamowienia" className="admin-secondary-button">
             <ArrowLeft size={18} /> Lista zamówień
@@ -523,13 +493,13 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
 
         {fulfillmentRetry === "ready" && (
           <section className="admin-form-success" role="status" data-admin-order-fulfillment-retry-success-v41b="true">
-            Ponowiono przygotowanie dostępu do plików. Sprawdź status email outbox i panel dostępu.
+            Automatyczne wydanie ponowione.
           </section>
         )}
 
         {fulfillmentRetry === "blocked" && (
           <section className="admin-form-error" role="status" data-admin-order-fulfillment-retry-blocked-v41b="true">
-            Nie udało się przygotować automatycznego dostępu. Sprawdź brakujące pliki i status płatności paid.
+            Nie udało się ponowić wydania. Sprawdź płatność i wymagane pliki.
           </section>
         )}
 

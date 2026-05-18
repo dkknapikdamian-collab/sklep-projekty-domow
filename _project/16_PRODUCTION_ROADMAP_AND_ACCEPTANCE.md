@@ -1,3 +1,28 @@
+<!-- ETAP41C_V3_ADMIN_COPY_SIMPLIFY_START -->
+## Etap 41C V3 - admin order copy simplify
+
+Status: WDROŻONE W KODZIE / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-18.
+
+### Cel
+
+Szczegóły zamówienia w adminie mają być produkcyjne i czytelne w 5 sekund. Usunięto testowo-techniczne copy z paneli realizacji, dostępu po płatności, plików i wiadomości.
+
+### Guardy
+
+- npm run verify:admin-order-copy-v41c
+- npm run verify:fulfillment-readiness-v41b
+- npm run typecheck
+
+### Test ręczny
+
+TEST RĘCZNY DO WYKONANIA: wejść w /admin/zamowienia/[id] i potwierdzić, że status zamówienia jest intuicyjny bez czytania ściany tekstu.
+
+### Następny krok
+
+Po potwierdzeniu UI: Etap 41D realny provider e-mail albo dalsze scalenie paneli zamówienia.
+<!-- ETAP41C_V3_ADMIN_COPY_SIMPLIFY_END -->
+
 # 16_PRODUCTION_ROADMAP_AND_ACCEPTANCE - Sklep projekty domow
 
 <!-- ETAP32_PROJECT_MEMORY_ORDERING_2026_05_17_START -->
