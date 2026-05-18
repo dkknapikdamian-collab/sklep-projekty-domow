@@ -1,5 +1,6 @@
 ﻿import { createHmac, timingSafeEqual } from "crypto";
 import { ensurePostPaymentFulfillmentAccessForOrder } from "@/lib/fulfillment/post-payment-fulfillment";
+import { queuePostPaymentEmailOutboxForPaidOrder } from "@/lib/email/email-outbox";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service-role";
 
 export const STRIPE_REAL_PAYMENTS_CONTRACT = {
@@ -313,7 +314,14 @@ async function recordStripePaymentFromSession(session: Record<string, unknown>, 
 
   if (status === "paid") {
     await markOrderPaymentConfirmed(orderId);
-    await ensurePostPaymentFulfillmentAccessForOrder({ orderId });
+    const fulfillment = await ensurePostPaymentFulfillmentAccessForOrder({ orderId });
+    await queuePostPaymentEmailOutboxForPaidOrder({
+      orderId,
+      paymentId: normalize(data.id),
+      fulfillmentEmailDraft: fulfillment.emailDraft,
+      fulfillmentAccessReady: fulfillment.ok,
+      fulfillmentReason: fulfillment.reason
+    });
   }
 
   return { ok: true, reason: `stripe_payment_${status}`, orderId, paymentId: normalize(data.id) };
@@ -364,4 +372,5 @@ export async function handleStripeWebhook(input: {
 
   return { ok: result.ok, reason: result.reason, eventType, orderId: result.orderId, paymentId: result.paymentId };
 }
+
 

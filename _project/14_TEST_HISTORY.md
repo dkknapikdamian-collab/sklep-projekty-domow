@@ -1688,3 +1688,31 @@ Zakres:
 Test rÄ™czny: DO WYKONANIA po deployu Cloudflare.
 <!-- ETAP40E_V3_ADMIN_PAYMENT_STATUS_REFERENCE_END -->
 
+<!-- ETAP41A_EMAIL_OUTBOX_FAKE_PROVIDER_START -->
+## Etap 41A / 26D - email outbox fake-provider
+
+Status: WDROŻONE LOKALNIE / TEST AUTOMATYCZNY GUARD / SQL URUCHOMIONE PRZEZ DAMIANA / TEST RĘCZNY DO WYKONANIA.
+Data: 2026-05-18.
+
+Zakres:
+- `email_outbox` jako kolejka maili transakcyjnych,
+- typy: `payment_confirmation` i `project_files_access`,
+- statusy: `queued`, `sent`, `failed`, `retry_pending`, `skipped`,
+- idempotencja: `order_id + payment_id + email_type`,
+- provider: `fake_noop`, bez realnej wysyłki,
+- Stripe webhook po `paid` kolejkuje outbox,
+- brak `paid` = brak maila.
+
+SQL:
+- Damian uruchomił `supabase/manual/2026-05-18_etap41a_email_outbox_fake_provider.sql` ręcznie w Supabase.
+
+Testy:
+- `npm run verify:email-outbox-v41a`
+- `npm run verify:stripe-checkout-params-v40c`
+- `npm run verify:stripe-checkout-params-v40c-v2`
+- `npm run typecheck`
+
+Test ręczny:
+- DO WYKONANIA po deployu Cloudflare: Stripe sandbox checkout -> webhook paid -> `email_outbox` ma rekordy `payment_confirmation` i `project_files_access` albo `skipped`.
+<!-- ETAP41A_EMAIL_OUTBOX_FAKE_PROVIDER_END -->
+
