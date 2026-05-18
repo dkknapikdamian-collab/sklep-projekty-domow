@@ -97,7 +97,8 @@
     "verify:admin-payment-status-v40e": "node scripts/check-admin-payment-status-v40e.cjs",
     "verify:email-outbox-v41a": "node scripts/check-email-outbox-v41a.cjs",
     "verify:fulfillment-readiness-v41b": "node scripts/check-fulfillment-readiness-v41b.cjs",
-    "verify:admin-order-copy-v41c": "node scripts/check-admin-order-copy-v41c.cjs"
+    "verify:admin-order-copy-v41c": "node scripts/check-admin-order-copy-v41c.cjs",
+    "verify:resend-provider-decision-v42a": "node scripts/check-resend-provider-decision-v42a.cjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.10",

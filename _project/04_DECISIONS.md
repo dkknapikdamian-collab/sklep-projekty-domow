@@ -149,3 +149,35 @@ DECYZJA:
 - Sample nie moze byc domyslnie active.
 - Publiczny katalog ma blokowac demo/sample niezaleznie od statusu.
 <!-- ETAP28_STAGE53_DEMO_SAMPLE_CLEANUP_DECISION -->
+
+<!-- ETAP42A_RESEND_PROVIDER_DECISION_START -->
+## Etap 42A - decyzja Resend i model dostępu przez link
+
+Status: DECYZJA ZAPISANA / DO WDROŻENIA W ETAPIE 42B.
+Data: 2026-05-18.
+
+### Decyzje Damiana
+
+- Resend jest wybranym providerem e-mail V1.1.
+- Automatyczne e-maile mają iść po webhook-confirmed paid.
+- Pliki projektu, rzuty i paczki ZIP nie idą jako załączniki.
+- E-mail zawiera potwierdzenie i bezpieczny link do panelu pobrania.
+- Ręczne szablony w adminie zostają jako fallback, nie główny flow.
+
+### Sekrety / konfiguracja
+
+- EMAIL_PROVIDER=resend
+- RESEND_API_KEY
+- EMAIL_FROM
+- EMAIL_REPLY_TO
+
+Sekrety tylko w Cloudflare, bez commitowania do repo.
+
+### Guard
+
+- npm run verify:resend-provider-decision-v42a
+
+### Następny krok
+
+Etap 42B - realna integracja Resend z email_outbox.
+<!-- ETAP42A_RESEND_PROVIDER_DECISION_END -->
