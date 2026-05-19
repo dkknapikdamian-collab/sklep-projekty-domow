@@ -1,3 +1,40 @@
+<!-- ETAP42D_V4_GUARD_FIX_AND_ROADMAP_START -->
+## Etap 42D V4 - guard fix + kierunki wdroĹĽenia produkcyjnego
+
+Status: DO WDROĹ»ENIA / TEST AUTOMATYCZNY DO URUCHOMIENIA.
+Data: 2026-05-19.
+
+### Cel
+
+NaprawiÄ‡ lukÄ™ po Etapie 42D: guard wykryĹ‚, ĹĽe fallback rÄ™cznego kopiowania nie byĹ‚ faktycznie zwiniÄ™ty, mimo ĹĽe etap zostaĹ‚ wypchniÄ™ty. V4 omija wczeĹ›niejsze bĹ‚Ä™dy JS patcherĂłw i robi poprawkÄ™ czystym PowerShellem.
+
+### Zmiana
+
+- ManualEmailDraftsPanel jest zwiniÄ™ty przez details/summary.
+- Marker: data-admin-manual-email-fallback-collapsed-v42d.
+- Dodano dokument: docs/product/2026-05-19_project_store_next_implementation_directions.md.
+- NajbliĹĽszy rekomendowany etap: 43A legal/checkout consent foundation.
+
+### Guardy
+
+- 
+pm run verify:email-outbox-admin-visibility-v42d
+- 
+pm run verify:email-production-prep-v42c
+- 
+pm run verify:resend-runtime-v42b
+- 
+pm run typecheck
+
+### Test rÄ™czny
+
+TEST RÄCZNY DO WYKONANIA: wejĹ›Ä‡ w /admin/zamowienia/[id] i sprawdziÄ‡, ĹĽe awaryjne wiadomoĹ›ci sÄ… zwiniÄ™te, a nie pokazujÄ… Ĺ›ciany tekstu.
+
+### NastÄ™pne kierunki
+
+P0 przed publicznym startem: 43A legal/checkout consent, 43B zakres dokumentacji/licencja, 43C katalog filtry/sort/search, 43D SEO/schema, 43E domena+Resend live, 43F download/access hardening.
+<!-- ETAP42D_V4_GUARD_FIX_AND_ROADMAP_END -->
+
 <!-- ETAP35A_STRIPE_PROVIDER_DECISION_2026_05_17_START -->
 ## 2026-05-17 - Etap 35A: Stripe jako provider płatności V1.1
 

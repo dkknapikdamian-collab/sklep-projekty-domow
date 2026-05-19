@@ -372,18 +372,18 @@ function ManualEmailDraftsPanel({ order }: { order: AdminOrderListItem }) {
 
   return (
     <section className="admin-order-detail-panel admin-manual-email-drafts" data-admin-manual-email-drafts-v47="true">
-      <div>
-        <h2>Awaryjne wiadomości do skopiowania</h2>
+      <details className="admin-manual-email-fallback" data-admin-manual-email-fallback-collapsed-v42d="true">
+        <summary>Awaryjnie: skopiuj wiadomoĹ›Ä‡ rÄ™cznie</summary>
         <p>
-          Szablony wiadomości dla klienta.
+          UĹĽyj tylko wtedy, gdy automatyczny e-mail nie zostaĹ‚ wysĹ‚any albo klient potrzebuje rÄ™cznej pomocy.
         </p>
-      </div>
 
-      <div className="admin-manual-email-drafts-grid">
-        {drafts.map((draft) => (
-          <ManualEmailDraftCard key={draft.key} draft={draft} />
-        ))}
-      </div>
+        <div className="admin-manual-email-drafts-grid">
+          {drafts.map((draft) => (
+            <ManualEmailDraftCard key={draft.key} draft={draft} />
+          ))}
+        </div>
+      </details>
     </section>
   );
 }
