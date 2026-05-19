@@ -99,7 +99,8 @@
     "verify:fulfillment-readiness-v41b": "node scripts/check-fulfillment-readiness-v41b.cjs",
     "verify:admin-order-copy-v41c": "node scripts/check-admin-order-copy-v41c.cjs",
     "verify:resend-provider-decision-v42a": "node scripts/check-resend-provider-decision-v42a.cjs",
-    "verify:resend-runtime-v42b": "node scripts/check-resend-runtime-v42b.cjs"
+    "verify:resend-runtime-v42b": "node scripts/check-resend-runtime-v42b.cjs",
+    "verify:email-production-prep-v42c": "node scripts/check-email-production-prep-v42c.cjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.10",

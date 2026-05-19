@@ -138,7 +138,7 @@ function buildPaymentConfirmationDraft(input: {
 
   return {
     subject: `Potwierdzenie płatności ${orderRef}`,
-    body: `${name},\n\nPotwierdzamy płatność za zamówienie ${orderRef}.\n\nKwota: ${amount}\nStatus: opłacone\n\nDostęp do plików zostanie wysłany osobną wiadomością, jeśli pliki są gotowe do automatycznego wydania.\n\nTo jest zapis email outbox fake-provider. Realna wysyłka e-mail zostanie podłączona w kolejnym etapie.`
+    body: `${name},\n\nPotwierdzamy płatność za zamówienie ${orderRef}.\n\nKwota: ${amount}\nStatus: opłacone\n\nDostęp do plików zostanie wysłany osobną wiadomością z bezpiecznym linkiem do panelu pobrania.\n\nW razie pytań odpisz na tę wiadomość.`
   };
 }
 
