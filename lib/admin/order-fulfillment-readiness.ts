@@ -64,6 +64,13 @@ export type AdminOrderPostPaymentRuntimeEmail = {
   idempotencyKey: string;
   queuedAt: string;
   sentAt: string;
+  failedAt: string;
+  retryAfter: string;
+  lastError: string;
+  attemptCount: number;
+  providerMessageId: string;
+  resendEmailId: string;
+  accessUrl: string;
   createdAt: string;
 };
 
@@ -123,6 +130,11 @@ type EmailRuntimeRow = {
   idempotency_key?: string | null;
   queued_at?: string | null;
   sent_at?: string | null;
+  failed_at?: string | null;
+  retry_after?: string | null;
+  last_error?: string | null;
+  attempt_count?: number | string | null;
+  metadata?: Record<string, unknown> | null;
   created_at?: string | null;
 };
 
@@ -237,24 +249,34 @@ async function getLatestOutboxEmails(orderId: string): Promise<AdminOrderPostPay
 
   const { data, error } = await supabase
     .from("email_outbox")
-    .select("email_type, status, provider, recipient_email, subject, idempotency_key, queued_at, sent_at, created_at")
+    .select("email_type, status, provider, recipient_email, subject, idempotency_key, queued_at, sent_at, failed_at, retry_after, last_error, attempt_count, metadata, created_at")
     .eq("order_id", orderId)
     .order("created_at", { ascending: false })
     .limit(8);
 
   if (error || !data) return [];
 
-  return (data as EmailRuntimeRow[]).map((row) => ({
-    emailType: normalize(row.email_type),
-    status: normalize(row.status),
-    provider: normalize(row.provider),
-    recipientEmail: normalize(row.recipient_email),
-    subject: normalize(row.subject),
-    idempotencyKey: normalize(row.idempotency_key),
-    queuedAt: normalize(row.queued_at),
-    sentAt: normalize(row.sent_at),
-    createdAt: normalize(row.created_at)
-  }));
+  return (data as EmailRuntimeRow[]).map((row) => {
+    const metadata = row.metadata || null;
+    return {
+      emailType: normalize(row.email_type),
+      status: normalize(row.status),
+      provider: normalize(row.provider),
+      recipientEmail: normalize(row.recipient_email),
+      subject: normalize(row.subject),
+      idempotencyKey: normalize(row.idempotency_key),
+      queuedAt: normalize(row.queued_at),
+      sentAt: normalize(row.sent_at),
+      failedAt: normalize(row.failed_at),
+      retryAfter: normalize(row.retry_after),
+      lastError: normalize(row.last_error),
+      attemptCount: toNumber(row.attempt_count),
+      providerMessageId: metadataString(metadata, "providerMessageId"),
+      resendEmailId: metadataString(metadata, "resendEmailId"),
+      accessUrl: metadataString(metadata, "accessUrl"),
+      createdAt: normalize(row.created_at)
+    };
+  });
 }
 
 export async function getAdminOrderPostPaymentRuntime(orderId: string): Promise<AdminOrderPostPaymentRuntime> {

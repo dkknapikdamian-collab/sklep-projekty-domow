@@ -177,6 +177,27 @@ function OrderPostPaymentAutomationPanel({
     if (type === "payment_confirmation") return "Potwierdzenie płatności";
     return type || "Wiadomość";
   };
+  const emailStatusLabel = (status: string) => {
+    if (status === "sent") return "Wysłano";
+    if (status === "failed") return "Błąd";
+    if (status === "queued") return "W kolejce";
+    if (status === "retry_pending") return "Do ponowienia";
+    if (status === "skipped") return "Pominięto";
+    return status || "Brak";
+  };
+  const emailStatusTone = (status: string) => {
+    if (status === "sent") return "ok";
+    if (status === "failed") return "error";
+    if (status === "queued" || status === "retry_pending") return "pending";
+    if (status === "skipped") return "muted";
+    return "unknown";
+  };
+  const emailMainDate = (email: AdminOrderPostPaymentRuntime["latestEmails"][number] | undefined) => {
+    if (!email) return "-";
+    return formatDate(email.sentAt || email.failedAt || email.queuedAt || email.createdAt);
+  };
+  const paymentConfirmationEmail = runtime.latestEmails.find((email) => email.emailType === "payment_confirmation");
+  const projectFilesAccessEmail = runtime.latestEmails.find((email) => email.emailType === "project_files_access");
 
   return (
     <section className="admin-order-detail-panel" data-admin-order-post-payment-readiness-v41b="true">
@@ -206,6 +227,22 @@ function OrderPostPaymentAutomationPanel({
           <strong>{runtime.hasPaidPayment ? "Potwierdzona" : "Brak"}</strong>
           <p>{runtime.hasPaidPayment ? "ID płatności: " + runtime.paidPaymentId : "Brak potwierdzonej płatności."}</p>
           <small>{runtime.paidAt ? "Opłacono: " + formatDate(runtime.paidAt) : "-"}</small>
+        </article>
+      </div>
+
+      <div className="admin-order-fulfillment-grid" data-admin-email-outbox-summary-v42d="true">
+        <article data-admin-email-outbox-summary-card-v42d="payment_confirmation" data-admin-email-outbox-status-v42d={paymentConfirmationEmail?.status || "missing"} data-admin-email-outbox-tone-v42d={emailStatusTone(paymentConfirmationEmail?.status || "")}> 
+          <span>E-mail płatności</span>
+          <strong>{emailStatusLabel(paymentConfirmationEmail?.status || "")}</strong>
+          <p>{paymentConfirmationEmail ? paymentConfirmationEmail.recipientEmail : "Brak wiadomości w outbox."}</p>
+          <small>{emailMainDate(paymentConfirmationEmail)}</small>
+        </article>
+
+        <article data-admin-email-outbox-summary-card-v42d="project_files_access" data-admin-email-outbox-status-v42d={projectFilesAccessEmail?.status || "missing"} data-admin-email-outbox-tone-v42d={emailStatusTone(projectFilesAccessEmail?.status || "")}> 
+          <span>E-mail z dostępem</span>
+          <strong>{emailStatusLabel(projectFilesAccessEmail?.status || "")}</strong>
+          <p>{projectFilesAccessEmail?.accessUrl ? "Link do panelu pobrania zapisany." : projectFilesAccessEmail ? "Wiadomość bez linku dostępu." : "Brak wiadomości w outbox."}</p>
+          <small>{emailMainDate(projectFilesAccessEmail)}</small>
         </article>
       </div>
 
@@ -251,18 +288,48 @@ function OrderPostPaymentAutomationPanel({
       </form>
 
       {runtime.latestEmails.length > 0 && (
-        <div className="admin-order-private-files-fulfillment-list" data-admin-email-outbox-latest-v41b="true">
+        <div className="admin-order-private-files-fulfillment-list" data-admin-email-outbox-latest-v41b="true" data-admin-email-outbox-latest-v42d="true">
+          <header className="admin-order-private-files-project" data-admin-email-outbox-header-v42d="true">
+            <div>
+              <span>ADMIN / WIADOMOŚCI</span>
+              <h3>Ostatnie wiadomości</h3>
+              <p>Statusy wysyłki, błędy i identyfikatory providera.</p>
+            </div>
+          </header>
           {runtime.latestEmails.map((email) => (
-            <article className="admin-order-private-files-project" key={email.idempotencyKey || email.emailType + "-" + email.createdAt}>
+            <article
+              className="admin-order-private-files-project"
+              key={email.idempotencyKey || email.emailType + "-" + email.createdAt}
+              data-admin-email-outbox-row-v42d="true"
+              data-admin-email-outbox-type-v42d={email.emailType}
+              data-admin-email-outbox-status-v42d={email.status}
+              data-admin-email-outbox-tone-v42d={emailStatusTone(email.status)}
+            >
               <header>
                 <div>
                   <span>{emailTypeLabel(email.emailType)}</span>
                   <h3>{email.subject}</h3>
                   <p>{email.recipientEmail}</p>
                 </div>
-                <strong>{email.status}</strong>
+                <strong>{emailStatusLabel(email.status)}</strong>
               </header>
-              <small>Dodano: {formatDate(email.queuedAt || email.createdAt)} / Wysłano: {formatDate(email.sentAt)}</small>
+              <div className="admin-order-priority-row" data-admin-email-outbox-meta-v42d="true">
+                <small>Provider: {email.provider || "-"}</small>
+                <small>Próby: {email.attemptCount}</small>
+                <small>{emailStatusLabel(email.status)}: {formatDate(email.sentAt || email.failedAt || email.queuedAt || email.createdAt)}</small>
+              </div>
+              {(email.providerMessageId || email.resendEmailId) && (
+                <code data-admin-email-outbox-provider-id-v42d="true">{email.providerMessageId || email.resendEmailId}</code>
+              )}
+              {email.accessUrl && (
+                <small data-admin-email-outbox-access-url-v42d="true">Link do panelu pobrania jest zapisany w wiadomości.</small>
+              )}
+              {email.retryAfter && email.status !== "sent" && (
+                <small data-admin-email-outbox-retry-after-v42d="true">Ponowienie po: {formatDate(email.retryAfter)}</small>
+              )}
+              {email.lastError && (
+                <p className="admin-form-error" data-admin-email-outbox-last-error-v42d="true">{email.lastError}</p>
+              )}
             </article>
           ))}
         </div>
@@ -276,7 +343,7 @@ function ManualEmailDraftCard({ draft }: { draft: ManualOrderEmailDraft }) {
     <article className="admin-manual-email-draft" data-admin-manual-email-draft={draft.key}>
       <header>
         <div>
-          <span>Roboczy e-mail</span>
+          <span>Awaryjnie</span>
           <h3>{draft.title}</h3>
           <p>{draft.copyHint}</p>
         </div>
@@ -306,7 +373,7 @@ function ManualEmailDraftsPanel({ order }: { order: AdminOrderListItem }) {
   return (
     <section className="admin-order-detail-panel admin-manual-email-drafts" data-admin-manual-email-drafts-v47="true">
       <div>
-        <h2>Wiadomości do klienta</h2>
+        <h2>Awaryjne wiadomości do skopiowania</h2>
         <p>
           Szablony wiadomości dla klienta.
         </p>
